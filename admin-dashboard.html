@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libraryreeds | Master Admin Dashboard</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #090a0f;
+      --bg-surface: #11131a;
+      --bg-surface-elevated: #181b24;
+      --border-subtle: #232734;
+      --border-focus: #3d445a;
+      --text-primary: #f1f3f7;
+      --text-secondary: #8e95a5;
+      --text-muted: #525866;
+      --accent-gold: #c5a880;
+      --accent-gold-hover: #d9be9b;
+      --accent-gold-dim: rgba(197, 168, 128, 0.12);
+      --font-serif: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* Top Nav */
+    .admin-nav {
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(9, 10, 15, 0.95);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 70px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-container {
+      width: 100%;
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-group { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--accent-gold); }
+    .brand-title { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .admin-badge {
+      background: #e67e22;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-actions { display: flex; align-items: center; gap: 20px; }
+    .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 0.825rem; font-weight: 500; text-transform: uppercase; transition: var(--transition-smooth); }
+    .nav-link:hover { color: var(--accent-gold); }
+
+    /* Workspace */
+    .admin-workspace { display: flex; flex: 1; width: 100%; max-width: 1540px; margin: 0 auto; }
+
+    /* Sidebar */
+    .admin-sidebar {
+      width: 260px;
+      border-right: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      padding: 28px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-menu { display: flex; flex-direction: column; gap: 4px; }
+    
+    .nav-btn-item {
+      display: flex;
+      align-items: center;
+      padding: 11px 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 2px;
+      transition: var(--transition-smooth);
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-btn-item:hover { background: var(--bg-surface-elevated); color: var(--text-primary); }
+    .nav-btn-item.active { background: var(--accent-gold-dim); color: var(--accent-gold); font-weight: 600; }
+
+    .sidebar-bottom-actions { display: flex; flex-direction: column; gap: 8px; }
+    
+    .sidebar-back-btn {
+      color: var(--accent-gold);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 2px;
+      transition: var(--transition-smooth);
+    }
+
+    .sidebar-back-btn:hover { background: var(--accent-gold-dim); }
+
+    .logout-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: 2px;
+      cursor: pointer;
+      text-align: left;
+      transition: var(--transition-smooth);
+    }
+
+    .logout-btn:hover { border-color: #ff6b6b; color: #ff6b6b; background: rgba(255, 107, 107, 0.08); }
+
+    /* Main Area */
+    .admin-main { flex: 1; padding: 32px 48px 64px; display: flex; flex-direction: column; gap: 28px; overflow-y: auto; }
+    .view-section { display: none; flex-direction: column; gap: 24px; }
+    .view-section.active-view { display: flex; }
+
+    .page-title { font-family: var(--font-serif); font-size: 2rem; font-weight: 500; color: var(--text-primary); margin-top: 4px; }
+    .breadcrumb { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+    .breadcrumb span { color: var(--accent-gold); }
+
+    .settings-panel { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 4px; overflow: hidden; }
+    .panel-header { padding: 16px 24px; border-bottom: 1px solid var(--border-subtle); background: var(--bg-surface-elevated); display: flex; align-items: center; justify-content: space-between; }
+    .panel-title { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; color: var(--text-primary); }
+    .panel-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-size: 0.775rem; font-weight: 600; letter-spacing: 0.04em; color: var(--text-secondary); text-transform: uppercase; }
+    
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 2px;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      outline: none;
+      font-family: var(--font-sans);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent-gold); }
+
+    .form-actions-row { display: flex; align-items: center; gap: 12px; }
+
+    .primary-btn {
+      background: var(--accent-gold);
+      color: var(--bg-base);
+      border: none;
+      padding: 11px 24px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .primary-btn:hover { background: var(--accent-gold-hover); }
+
+    .cancel-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 10px 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      display: none;
+      transition: var(--transition-smooth);
+    }
+    .cancel-btn:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+
+    /* Tables */
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+    .data-table th { padding: 12px 16px; background: var(--bg-surface-elevated); color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle); text-transform: uppercase; font-size: 0.725rem; }
+    .data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-subtle); color: var(--text-primary); vertical-align: middle; }
+
+    .action-group { display: flex; gap: 8px; align-items: center; }
+
+    .action-btn-edit {
+      background: transparent;
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .action-btn-edit:hover { background: var(--accent-gold-dim); }
+
+    .action-btn-del {
+      background: transparent;
+      border: 1px solid #ff6b6b;
+      color: #ff6b6b;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .action-btn-del:hover { background: rgba(255, 107, 107, 0.1); }
+  </style>
+</head>
+<body>
+
+  <!-- Admin Navigation Header -->
+  <header class="admin-nav">
+    <div class="nav-container">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <a href="./index.html" class="brand-group">
+          <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
+          <span class="brand-title">Libraryreeds</span>
+        </a>
+        <span class="admin-badge">Admin System</span>
+      </div>
+
+      <div class="nav-actions">
+        <a href="./index.html" class="nav-link">Storefront</a>
+        <a href="./shop.html" class="nav-link">Shop</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-workspace">
+    <aside class="admin-sidebar">
+      <nav class="sidebar-menu">
+        <button type="button" class="nav-btn-item active" data-target="books">📚 Book Inventory</button>
+        <button type="button" class="nav-btn-item" data-target="announcement">📢 Announcement Bar</button>
+        <button type="button" class="nav-btn-item" data-target="rates">💰 Store Rates &amp; Tax</button>
+        <button type="button" class="nav-btn-item" data-target="orders">📦 Global Store Orders</button>
+      </nav>
+
+      <div class="sidebar-bottom-actions">
+        <a href="./index.html" class="sidebar-back-btn"><span>←</span> Return to Storefront</a>
+        <button type="button" class="logout-btn" id="logoutBtn">Admin Sign Out</button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <div>
+        <p class="breadcrumb">Admin Control Panel &gt; <span id="breadcrumbTitle">Book Inventory</span></p>
+        <h1 class="page-title" id="pageHeading">Book Upload &amp; Catalog Management</h1>
+      </div>
+
+      <!-- 1. BOOK MANAGER VIEW (Add & Re-Edit Books) -->
+      <section id="view-books" class="view-section active-view">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title" id="formHeaderTitle">➕ Add New Book to Catalog</h2>
+          </div>
+          <div class="panel-body">
+            <form id="addBookForm" style="display: flex; flex-direction: column; gap: 16px;">
+              <input type="hidden" id="editingBookId" value="">
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Book Title:</label>
+                  <input type="text" class="form-input" id="bookTitle" placeholder="e.g. The Hidden Wings" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Author Name:</label>
+                  <input type="text" class="form-input" id="bookAuthor" placeholder="e.g. Eleanor Sterling" required>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Price (USD $):</label>
+                  <input type="number" step="0.01" class="form-input" id="bookPrice" placeholder="24.00" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Book Format:</label>
+                  <select class="form-select" id="bookFormat">
+                    <option value="EPUB">EPUB (Digital)</option>
+                    <option value="Hardcover">Hardcover (Physical)</option>
+                    <option value="Audiobook">Audiobook (Audio Format)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Cover Image URL (Direct image link):</label>
+                <input type="url" class="form-input" id="bookCoverUrl" placeholder="https://example.com/cover.jpg" required>
+              </div>
+
+              <div class="form-group" id="epubFileGroup">
+                <label class="form-label">Direct Digital File URL (.EPUB or Audio Link):</label>
+                <input type="url" class="form-input" id="bookEpubUrl" placeholder="https://firebasestorage.googleapis.com/.../book.epub">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Book Summary / Archival Description:</label>
+                <textarea class="form-textarea" id="bookDesc" rows="3" placeholder="Description of the book..." required></textarea>
+              </div>
+
+              <div class="form-actions-row">
+                <button type="submit" class="primary-btn" id="submitBookBtn">Publish Book to Storefront</button>
+                <button type="button" class="cancel-btn" id="cancelEditBtn">Cancel Edit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Live Catalog Table -->
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">📖 Active Catalog Inventory</h2>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Cover</th>
+                  <th>Title &amp; Author</th>
+                  <th>Format</th>
+                  <th>Price</th>
+                  <th>Digital File</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminBooksTbody">
+                <tr>
+                  <td colspan="6" style="text-align: center; color: var(--text-muted);">Loading catalog...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. ANNOUNCEMENT BAR VIEW -->
+      <section id="view-announcement" class="view-section">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">📢 Live Homepage Announcement Bar</h2>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; color: var(--accent-gold);">
+              <input type="checkbox" id="announcementEnabled" style="accent-color: var(--accent-gold); width: 16px; height: 16px;">
+              Active on Storefront
+            </label>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="form-label">Banner Text Message:</label>
+              <input type="text" class="form-input" id="announcementMsg" placeholder="⚡ Midsummer Vault Sale: 15% off with code VAULT15">
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Action Button Text (Optional):</label>
+                <input type="text" class="form-input" id="announcementBtn" placeholder="Browse Catalog">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Target Link URL:</label>
+                <input type="text" class="form-input" id="announcementLink" placeholder="./shop.html">
+              </div>
+            </div>
+
+            <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); padding: 14px 16px; border-radius: 4px; display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <strong style="font-size: 0.85rem; color: var(--text-primary); display: block;">Text Motion / Marquee</strong>
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">Animate text scrolling smoothly across to the right</span>
+              </div>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; color: var(--accent-gold);">
+                <input type="checkbox" id="announcementScrollRight" style="accent-color: var(--accent-gold); width: 16px; height: 16px;">
+                Scroll to Right
+              </label>
+            </div>
+
+            <button type="button" class="primary-btn" id="saveAnnouncementBtn">Update Storefront Announcement</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. STORE RATES VIEW -->
+      <section id="view-rates" class="view-section">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">💰 Store Rates, Tax &amp; Promo Configurations</h2>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Sales Tax / VAT (%):</label>
+                <input type="number" step="0.1" class="form-input" id="cfgTax" value="8.0">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Physical Shipping Fee ($):</label>
+                <input type="number" step="0.01" class="form-input" id="cfgShipping" value="3.99">
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Global Discount ($):</label>
+                <input type="number" step="0.01" class="form-input" id="cfgDiscount" value="0.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Active Promo Code:</label>
+                <input type="text" class="form-input" id="cfgPromo" value="VAULT">
+              </div>
+            </div>
+
+            <button type="button" class="primary-btn" id="saveRatesBtn">Save Rates</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. ORDERS VIEW -->
+      <section id="view-orders" class="view-section">
+        <div class="settings-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">📦 Customer Purchases &amp; Orders</h2>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Customer</th>
+                  <th>Book Purchased</th>
+                  <th>Total</th>
+                  <th>Payment</th>
+                </tr>
+              </thead>
+              <tbody id="globalOrdersTbody">
+                <tr>
+                  <td colspan="5" style="text-align: center; color: var(--text-muted);">No orders recorded yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Tab Navigation -->
+  <script>
+    const sections = document.querySelectorAll('.view-section');
+    window.switchTab = function(targetId) {
+      sections.forEach(sec => sec.classList.remove('active-view'));
+      const activeSection = document.getElementById(`view-${targetId}`);
+      if (activeSection) activeSection.classList.add('active-view');
+
+      document.querySelectorAll('.admin-sidebar .nav-btn-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.target === targetId);
+      });
+
+      const titleMap = {
+        books: "Book Inventory",
+        announcement: "Storefront Announcement Bar",
+        rates: "Store Rates & Tax",
+        orders: "Global Orders"
+      };
+      document.getElementById('breadcrumbTitle').textContent = titleMap[targetId] || "Admin Control";
+      document.getElementById('pageHeading').textContent = titleMap[targetId] || "Admin Control";
+    };
+
+    document.querySelectorAll('.admin-sidebar .nav-btn-item').forEach(button => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.target;
+        if (target) switchTab(target);
+      });
+    });
+  </script>
+
+  <!-- Firebase Admin Core -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let localBooksCache = {};
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.replace("./login.html");
+        return;
+      }
+
+      const cleanEmail = (user.email || "").toLowerCase().trim();
+      const isAdmin = cleanEmail === "firelily@libraryreeds.com" || 
+                      cleanEmail.includes("admin") || 
+                      cleanEmail.includes("libraryreeds");
+
+      if (!isAdmin) {
+        window.location.replace("./account.html");
+        return;
+      }
+
+      loadAdminData();
+      listenToBooks();
+      listenToOrders();
+    });
+
+    async function loadAdminData() {
+      try {
+        const annSnap = await getDoc(doc(db, "settings", "announcement"));
+        if (annSnap.exists()) {
+          const a = annSnap.data();
+          document.getElementById("announcementEnabled").checked = a.enabled || false;
+          document.getElementById("announcementMsg").value = a.message || "";
+          document.getElementById("announcementBtn").value = a.buttonText || "";
+          document.getElementById("announcementLink").value = a.link || "";
+          document.getElementById("announcementScrollRight").checked = a.scrollRight || false;
+        }
+
+        const priceSnap = await getDoc(doc(db, "settings", "storeConfig"));
+        if (priceSnap.exists()) {
+          const p = priceSnap.data();
+          document.getElementById("cfgTax").value = p.taxRate ?? 8.0;
+          document.getElementById("cfgShipping").value = p.shippingFee ?? 3.99;
+          document.getElementById("cfgDiscount").value = p.discountAmount ?? 0.00;
+          document.getElementById("cfgPromo").value = p.promoCode || "VAULT";
+        }
+      } catch (err) {
+        console.warn("Admin load error:", err);
+      }
+    }
+
+    function listenToBooks() {
+      const tbody = document.getElementById("adminBooksTbody");
+      onSnapshot(collection(db, "books"), (snapshot) => {
+        tbody.innerHTML = "";
+        localBooksCache = {};
+
+        if (snapshot.empty) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No books published in Firestore yet. Add one above!</td></tr>`;
+          return;
+        }
+
+        snapshot.forEach((docSnap) => {
+          const b = docSnap.data();
+          localBooksCache[docSnap.id] = b;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><img src="${b.coverUrl}" style="width: 36px; height: 50px; object-fit: cover; border-radius: 2px;"></td>
+            <td><strong>${b.title}</strong><br><span style="color: var(--text-muted); font-size: 0.75rem;">${b.author}</span></td>
+            <td><span style="color: var(--accent-gold); font-weight: 600;">${b.format}</span></td>
+            <td><strong>$${parseFloat(b.price).toFixed(2)}</strong></td>
+            <td>${b.epubUrl ? `<a href="${b.epubUrl}" target="_blank" style="color: #69db7c; font-size: 0.75rem; text-decoration: none;">View File ↗</a>` : '<span style="color: var(--text-muted); font-size: 0.75rem;">None</span>'}</td>
+            <td>
+              <div class="action-group">
+                <button class="action-btn-edit" onclick="startEditBook('${docSnap.id}')">✏️ Edit</button>
+                <button class="action-btn-del" onclick="deleteBook('${docSnap.id}')">Delete</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+
+    window.startEditBook = function(id) {
+      const b = localBooksCache[id];
+      if (!b) return;
+
+      document.getElementById("editingBookId").value = id;
+      document.getElementById("bookTitle").value = b.title || "";
+      document.getElementById("bookAuthor").value = b.author || "";
+      document.getElementById("bookPrice").value = b.price || "";
+      document.getElementById("bookFormat").value = b.format || "EPUB";
+      document.getElementById("bookCoverUrl").value = b.coverUrl || "";
+      document.getElementById("bookEpubUrl").value = b.epubUrl || "";
+      document.getElementById("bookDesc").value = b.description || "";
+
+      document.getElementById("formHeaderTitle").textContent = "✏️ Edit Book Details";
+      document.getElementById("submitBookBtn").textContent = "Save Changes to Book";
+      document.getElementById("cancelEditBtn").style.display = "inline-block";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    function resetBookForm() {
+      document.getElementById("editingBookId").value = "";
+      document.getElementById("addBookForm").reset();
+      document.getElementById("formHeaderTitle").textContent = "➕ Add New Book to Catalog";
+      document.getElementById("submitBookBtn").textContent = "Publish Book to Storefront";
+      document.getElementById("cancelEditBtn").style.display = "none";
+    }
+
+    document.getElementById("cancelEditBtn").addEventListener("click", resetBookForm);
+
+    document.getElementById("addBookForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById("editingBookId").value.trim();
+
+      const bookData = {
+        title: document.getElementById("bookTitle").value.trim(),
+        author: document.getElementById("bookAuthor").value.trim(),
+        price: parseFloat(document.getElementById("bookPrice").value) || 0,
+        format: document.getElementById("bookFormat").value,
+        coverUrl: document.getElementById("bookCoverUrl").value.trim(),
+        epubUrl: document.getElementById("bookEpubUrl").value.trim(),
+        description: document.getElementById("bookDesc").value.trim(),
+        updatedAt: new Date()
+      };
+
+      try {
+        if (editId) {
+          await updateDoc(doc(db, "books", editId), bookData);
+          alert("✓ Book details updated successfully!");
+        } else {
+          bookData.createdAt = new Date();
+          await addDoc(collection(db, "books"), bookData);
+          alert("✓ Book published successfully to storefront!");
+        }
+        resetBookForm();
+      } catch (err) {
+        alert("Error saving book: " + err.message);
+      }
+    });
+
+    function listenToOrders() {
+      const tbody = document.getElementById("globalOrdersTbody");
+      onSnapshot(collection(db, "orders"), (snapshot) => {
+        if (snapshot.empty) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No orders recorded yet.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = "";
+        snapshot.forEach((docSnap) => {
+          const o = docSnap.data();
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><strong>${o.orderId || docSnap.id.slice(0, 8)}</strong></td>
+            <td>${o.customerName || 'Reader'}<br><span style="color: var(--text-muted); font-size: 0.75rem;">${o.email || ''}</span></td>
+            <td><strong>${o.title || 'Book Title'}</strong> (${o.format || 'Digital'})</td>
+            <td style="color: var(--accent-gold);"><strong>$${parseFloat(o.total || o.price || 0).toFixed(2)}</strong></td>
+            <td><span style="color: #69db7c;">● Majority Paid</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+
+    window.deleteBook = async function(id) {
+      if (confirm("Are you sure you want to remove this book from the catalog?")) {
+        try {
+          await deleteDoc(doc(db, "books", id));
+          if (document.getElementById("editingBookId").value === id) {
+            resetBookForm();
+          }
+        } catch (err) {
+          alert("Error: " + err.message);
+        }
+      }
+    };
+
+    document.getElementById("saveAnnouncementBtn").addEventListener("click", async () => {
+      try {
+        await setDoc(doc(db, "settings", "announcement"), {
+          enabled: document.getElementById("announcementEnabled").checked,
+          message: document.getElementById("announcementMsg").value.trim(),
+          buttonText: document.getElementById("announcementBtn").value.trim(),
+          link: document.getElementById("announcementLink").value.trim(),
+          scrollRight: document.getElementById("announcementScrollRight").checked
+        }, { merge: true });
+        alert("✓ Announcement updated on storefront!");
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
+
+    document.getElementById("saveRatesBtn").addEventListener("click", async () => {
+      try {
+        await setDoc(doc(db, "settings", "storeConfig"), {
+          taxRate: parseFloat(document.getElementById("cfgTax").value) || 0,
+          shippingFee: parseFloat(document.getElementById("cfgShipping").value) || 0,
+          discountAmount: parseFloat(document.getElementById("cfgDiscount").value) || 0,
+          promoCode: document.getElementById("cfgPromo").value.trim() || "VAULT"
+        }, { merge: true });
+        alert("✓ Store rates saved!");
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
+
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          localStorage.clear();
+          sessionStorage.clear();
+        } catch (err) {
+          console.warn("Sign out error:", err);
+        } finally {
+          window.location.replace("./index.html");
+        }
+      });
+    }
+  </script>
+</body>
+</html>

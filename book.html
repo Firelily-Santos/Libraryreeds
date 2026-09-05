@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Libraryreeds | Volume Details</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0a0c10;
+      --bg-surface: #11141c;
+      --bg-surface-elevated: #161b26;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(197, 168, 128, 0.4);
+      --text-primary: #f0f2f5;
+      --text-secondary: #9ba1b0;
+      --text-muted: #5d6373;
+      --accent-gold: #c5a880;
+      --accent-gold-hover: #d8be9b;
+      --font-serif: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Anti-flash auth loading guard */
+    .nav-actions { visibility: hidden; }
+    .nav-actions.auth-loaded { visibility: visible; }
+
+    html { scroll-behavior: smooth; }
+
+    html, body {
+      margin: 0; padding: 0; background-color: var(--bg-base);
+      font-family: var(--font-sans);
+      color: var(--text-primary); min-height: 100vh; -webkit-font-smoothing: antialiased;
+      display: flex; flex-direction: column;
+    }
+
+    /* Top Navigation Header & Search Bar */
+    .top-nav { border-bottom: 1px solid var(--border-subtle); background: rgba(10, 12, 16, 0.94); backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 100; }
+    .nav-container { max-width: 1400px; margin: 0 auto; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; flex-shrink: 0; }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+    .brand-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary); letter-spacing: 0.06em; text-transform: uppercase; }
+    
+    /* Search Bar Styling */
+    .nav-search-container { flex: 1; max-width: 400px; position: relative; display: flex; align-items: center; }
+    .nav-search-input { width: 100%; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 8px 16px 8px 38px; color: var(--text-primary); font-size: 0.8rem; outline: none; transition: all 0.22s ease; }
+    .nav-search-input:focus { border-color: var(--border-focus); background: var(--bg-surface-elevated); }
+    .nav-search-icon { position: absolute; left: 12px; width: 16px; height: 16px; stroke: var(--text-muted); fill: none; pointer-events: none; }
+
+    .nav-actions { display: flex; align-items: center; gap: 24px; }
+    .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.22s ease; }
+    .nav-link:hover, .nav-link.active { color: var(--accent-gold); }
+
+    .cart-icon-link, .wishlist-icon-link { color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; position: relative; transition: all 0.22s ease; }
+    .cart-icon-link:hover, .wishlist-icon-link:hover { color: var(--accent-gold); }
+    .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent-gold); stroke-width: 2; }
+
+    .user-profile-menu { position: relative; display: none; }
+    .profile-trigger-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px 14px; border-radius: 3px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+    .nav-user-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+    
+    .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 42px; width: 220px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 3px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
+    .dropdown-user-header { padding: 14px 16px; background: var(--bg-surface-elevated); border-bottom: 1px solid var(--border-subtle); }
+    .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--text-primary); }
+    .dropdown-user-email { font-size: 0.725rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+    .dropdown-link-item { padding: 11px 16px; color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
+    .dropdown-link-item:hover { background: var(--bg-surface-elevated); color: var(--accent-gold); }
+    .auth-btn-nav { background: var(--accent-gold); color: var(--bg-base); padding: 9px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 2px; text-decoration: none; }
+
+    /* PDP Layout */
+    .pdp-page-container { background-color: var(--bg-base); width: 100%; padding: 40px 0 80px 0; flex: 1; }
+    .pdp-wrapper { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 360px 1fr 320px; gap: 48px; align-items: start; }
+
+    /* Column 1: Media & Mockup */
+    .media-card { position: sticky; top: 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .cover-stage { width: 100%; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 24px 20px; display: flex; justify-content: center; align-items: center; perspective: 1000px; }
+    .cover-viewport { width: 240px; aspect-ratio: 1 / 1.5; position: relative; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease; transform-style: preserve-3d; }
+    .cover-viewport.view-flat { transform: rotateY(0deg); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4); border-radius: 4px; }
+    .cover-viewport.view-3d { transform: rotateY(-18deg) rotateX(4deg) scale(0.96); box-shadow: -15px 20px 35px -10px rgba(0, 0, 0, 0.6); border-radius: 2px; }
+    .cover-img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
+    .spine-accent { position: absolute; top: 0; left: 0; bottom: 0; width: 14px; background: linear-gradient(to right, rgba(255,255,255,0.35) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.2) 100%); pointer-events: none; border-top-left-radius: inherit; border-bottom-left-radius: inherit; }
+
+    .media-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+    .view-toggle-bar { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg-surface); padding: 3px; border-radius: 8px; border: 1px solid var(--border-subtle); }
+    .view-toggle-btn { background: transparent; border: none; font-size: 12px; font-weight: 500; color: var(--text-secondary); padding: 6px 0; border-radius: 6px; cursor: pointer; }
+    .view-toggle-btn.active { background: var(--bg-surface-elevated); color: var(--accent-gold); font-weight: 600; }
+
+    .btn-look-inside { width: 100%; height: 38px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-primary); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-look-inside:hover { border-color: var(--border-focus); }
+    .btn-look-inside svg { width: 14px; height: 14px; stroke: var(--text-primary); fill: none; }
+
+    /* Column 2: Editorial & Specs */
+    .info-card { display: flex; flex-direction: column; gap: 20px; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 32px; border-radius: 8px; }
+    .tags-badge-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .genre-pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; background-color: var(--accent-gold); color: var(--bg-base); }
+    .trope-pill { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; background-color: var(--bg-surface-elevated); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+
+    .book-header h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: var(--text-primary); font-family: var(--font-serif); }
+    .author-name { color: var(--text-secondary); font-size: 15px; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .section-divider { border: 0; border-top: 1px solid var(--border-subtle); margin: 2px 0; }
+
+    .rating-row { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+    .stars { color: var(--accent-gold); letter-spacing: 2px; font-size: 13px; }
+    .rating-score { font-weight: 600; color: var(--text-primary); }
+    .review-link { color: var(--text-secondary); text-decoration: none; }
+    .review-link:hover { color: var(--accent-gold); text-decoration: underline; }
+
+    /* Editorial Praise Box */
+    .editorial-praise-box { background-color: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; }
+    .praise-quote { font-family: Georgia, serif; font-size: 13.5px; font-style: italic; color: var(--text-primary); line-height: 1.5; margin: 0; }
+    .praise-attribution { font-size: 11.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+    /* Rating Breakdown */
+    .rating-breakdown-card { border: 1px solid var(--border-subtle); border-radius: 8px; padding: 16px 18px; background-color: var(--bg-surface-elevated); }
+    .breakdown-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .breakdown-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0; }
+    .breakdown-bars-stack { display: flex; flex-direction: column; gap: 7px; }
+    .rating-bar-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-secondary); }
+    .star-label { width: 42px; font-weight: 500; white-space: nowrap; }
+    .bar-track { flex: 1; height: 6px; background-color: var(--bg-base); border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; background-color: var(--accent-gold); border-radius: 3px; }
+    .percentage-label { width: 30px; text-align: right; font-weight: 500; }
+
+    /* Formats Grid */
+    .formats-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 10px; }
+    .formats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .format-option { border: 1px solid var(--border-subtle); border-radius: 6px; padding: 12px 14px; cursor: pointer; transition: all 0.15s ease; background-color: var(--bg-surface-elevated); }
+    .format-option.selected { border-color: var(--accent-gold); background-color: var(--bg-base); }
+    .format-name { font-size: 13px; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 2px; }
+    .format-price-label { font-size: 13px; color: var(--accent-gold); }
+
+    /* Description */
+    .description-section { display: flex; flex-direction: column; gap: 10px; }
+    .book-tagline { font-size: 15px; line-height: 1.5; font-weight: 600; font-style: italic; color: var(--text-primary); margin: 0; border-left: 2px solid var(--accent-gold); padding-left: 12px; }
+    .blurb-container { position: relative; }
+    .blurb-text-wrap { max-height: 120px; overflow: hidden; position: relative; transition: max-height 0.35s ease; display: flex; flex-direction: column; gap: 12px; }
+    .blurb-text-wrap.expanded { max-height: 1000px; }
+    .blurb-paragraph { line-height: 1.6; color: var(--text-secondary); font-size: 14px; margin: 0; }
+    .btn-toggle-blurb { background: none; border: none; padding: 0; margin-top: 6px; font-size: 13px; font-weight: 600; color: var(--accent-gold); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-toggle-blurb svg { width: 14px; height: 14px; stroke: var(--accent-gold); fill: none; transition: transform 0.2s ease; }
+    .btn-toggle-blurb.active svg { transform: rotate(180deg); }
+
+    /* Advisory & Specs */
+    .advisory-details { border: 1px solid var(--border-subtle); border-radius: 8px; background-color: var(--bg-surface-elevated); overflow: hidden; }
+    .advisory-summary { padding: 12px 16px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between; }
+    .advisory-badge { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background-color: var(--bg-base); color: var(--accent-gold); }
+    .advisory-content { padding: 10px 16px 14px 16px; font-size: 13px; color: var(--text-secondary); border-top: 1px solid var(--border-subtle); }
+    .advisory-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .advisory-tag { font-size: 11px; background-color: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 2px 8px; color: var(--text-secondary); }
+
+    .specs-box { border: 1px solid var(--border-subtle); border-radius: 8px; padding: 18px 20px; background-color: var(--bg-surface-elevated); }
+    .specs-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 10px; }
+    .specs-table { width: 100%; border-collapse: collapse; }
+    .specs-table tr:not(:last-child) td { border-bottom: 1px solid var(--border-subtle); }
+    .specs-table td { padding: 9px 0; font-size: 13px; }
+    .spec-label { font-weight: 500; color: var(--text-muted); width: 40%; }
+    .spec-value { color: var(--text-primary); font-weight: 500; }
+
+    /* Column 3: Buy Card */
+    .buy-card { background: var(--bg-surface); padding: 24px; border-radius: 8px; border: 1px solid var(--border-subtle); position: sticky; top: 40px; display: flex; flex-direction: column; gap: 20px; }
+    .price-header { display: flex; flex-direction: column; gap: 4px; }
+    .price-row { display: flex; align-items: baseline; gap: 10px; }
+    .current-price { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: var(--accent-gold); }
+    .original-price { color: var(--text-muted); text-decoration: line-through; font-size: 14px; }
+    .stock-indicator { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #40c057; margin-top: 2px; }
+    .stock-dot { width: 6px; height: 6px; border-radius: 50%; background-color: #40c057; }
+    
+    /* Quantity Selector */
+    .quantity-row { display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+    .quantity-select { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 13px; outline: none; cursor: pointer; }
+
+    .cta-stack { display: flex; flex-direction: column; gap: 8px; }
+    .btn-primary-action { width: 100%; height: 42px; background-color: var(--accent-gold); color: var(--bg-base); border: 1px solid var(--accent-gold); border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none; }
+    .btn-primary-action:hover { background-color: var(--accent-gold-hover); }
+    .btn-subscription-action { width: 100%; height: 42px; background-color: var(--bg-surface-elevated); color: var(--text-primary); border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    
+    /* Wishlist Heart Button inside Buy Card */
+    .btn-wishlist-heart { width: 100%; height: 38px; background: transparent; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; margin-top: 4px; }
+    .btn-wishlist-heart svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; transition: fill 0.2s, stroke 0.2s; }
+    .btn-wishlist-heart:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+    .btn-wishlist-heart.active { border-color: var(--accent-gold); color: var(--accent-gold); background: var(--bg-surface-elevated); }
+    .btn-wishlist-heart.active svg { fill: var(--accent-gold); stroke: var(--accent-gold); }
+
+    .guarantee-note { font-size: 11px; color: var(--text-muted); text-align: center; line-height: 1.4; margin: 0; }
+
+    /* Series Carousel */
+    .series-section-container { max-width: 1400px; margin: 56px auto 0 auto; padding: 0 32px; width: 100%; }
+    .series-card { border-top: 1px solid var(--border-subtle); padding-top: 36px; }
+    .series-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
+    .series-title-wrap h2 { font-size: 18px; font-weight: 600; margin: 0 0 4px 0; color: var(--text-primary); }
+    .series-subtitle { font-size: 13px; color: var(--text-secondary); margin: 0; }
+    .carousel-nav-controls { display: flex; gap: 8px; }
+    .carousel-btn { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border-subtle); background: var(--bg-surface); color: var(--text-primary); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
+    .carousel-btn:hover { background: var(--bg-surface-elevated); border-color: var(--border-focus); }
+    .carousel-btn svg { width: 16px; height: 16px; stroke: var(--text-primary); fill: none; }
+    .series-carousel-viewport { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding-bottom: 12px; scrollbar-width: none; -ms-overflow-style: none; }
+    .series-carousel-viewport::-webkit-scrollbar { display: none; }
+    .series-item-card { flex: 0 0 216px; scroll-snap-align: start; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: inherit; transition: border-color 0.15s ease; position: relative; }
+    .series-item-card:hover { border-color: var(--border-focus); }
+    .series-item-card.is-current { border-color: var(--accent-gold); background-color: var(--bg-surface-elevated); }
+    .series-item-cover-wrapper { width: 100%; aspect-ratio: 1 / 1.5; border-radius: 4px; overflow: hidden; background: var(--bg-surface-elevated); position: relative; }
+    .series-item-cover-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    .series-order-badge { position: absolute; top: 8px; left: 8px; background: rgba(10, 12, 16, 0.85); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+    .series-item-details { display: flex; flex-direction: column; gap: 2px; }
+    .series-item-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 0; }
+    .series-item-meta { font-size: 12px; color: var(--text-secondary); }
+    .series-item-price { font-size: 12px; font-weight: 600; color: var(--accent-gold); margin-top: 4px; }
+
+    /* Related Items Carousel (Amazon-Style Compact Grid) */
+    .related-section-container { max-width: 1400px; margin: 40px auto 0 auto; padding: 0 32px; width: 100%; }
+    .related-card { border-top: 1px solid var(--border-subtle); padding-top: 36px; }
+    .related-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
+    .related-title-wrap h2 { font-size: 18px; font-weight: 600; margin: 0 0 4px 0; color: var(--text-primary); }
+    .related-subtitle { font-size: 13px; color: var(--text-secondary); margin: 0; }
+    .related-carousel-viewport { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding-bottom: 12px; scrollbar-width: none; -ms-overflow-style: none; }
+    .related-carousel-viewport::-webkit-scrollbar { display: none; }
+    .related-item-card { flex: 0 0 160px; scroll-snap-align: start; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; transition: border-color 0.15s ease; position: relative; }
+    .related-item-card:hover { border-color: var(--border-focus); }
+    .related-item-cover-wrapper { width: 100%; aspect-ratio: 1 / 1.5; border-radius: 4px; overflow: hidden; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); position: relative; }
+    .related-item-cover-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    .related-item-details { display: flex; flex-direction: column; gap: 2px; }
+    .related-item-title { font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .related-item-author { font-size: 11px; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .related-item-price { font-size: 12px; font-weight: 600; color: var(--accent-gold); margin-top: 2px; }
+
+    /* Reviews & Discussion */
+    .reviews-section-container { max-width: 1400px; margin: 56px auto 0 auto; padding: 0 32px; width: 100%; }
+    .reviews-card { border-top: 1px solid var(--border-subtle); padding-top: 36px; }
+    .feed-controls { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle); }
+    .feed-controls-label { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .sort-dropdown { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-subtle); background-color: var(--bg-surface); font-size: 13px; color: var(--text-primary); outline: none; cursor: pointer; }
+    .reviews-list { display: flex; flex-direction: column; gap: 24px; margin-top: 20px; }
+    .review-card { padding-bottom: 24px; border-bottom: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 10px; }
+    .review-user-header { display: flex; align-items: center; justify-content: space-between; }
+    .user-meta-left { display: flex; align-items: center; gap: 10px; }
+    .user-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .verified-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; color: #40c057; background-color: rgba(64,192,87,0.1); border: 1px solid rgba(64,192,87,0.3); padding: 2px 6px; border-radius: 4px; }
+    .verified-badge svg { width: 12px; height: 12px; stroke: #40c057; fill: none; }
+    .review-body { font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0; }
+    
+    /* Spoiler Toggle Styles */
+    .spoiler-checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; cursor: pointer; }
+    .spoiler-checkbox-row input { accent-color: var(--accent-gold); cursor: pointer; }
+    .spoiler-toggle-btn { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: var(--accent-gold); cursor: pointer; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 4px; width: fit-content; }
+    .spoiler-toggle-btn:hover { background: var(--border-subtle); }
+    .spoiler-content { display: none; background: var(--bg-surface); border-left: 2px solid var(--accent-gold); padding: 8px 12px; margin-top: 4px; font-size: 13px; color: var(--text-secondary); font-style: italic; }
+    .spoiler-container.revealed .spoiler-content { display: block; }
+    .spoiler-container.revealed .spoiler-toggle-btn { display: none; }
+
+    .btn-helpful { background: transparent; border: 1px solid var(--border-subtle); border-radius: 4px; padding: 4px 10px; font-size: 12px; color: var(--text-secondary); cursor: pointer; }
+
+    /* Footer Styles */
+    footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
+    .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border-subtle); }
+    .footer-col { display: flex; flex-direction: column; gap: 14px; }
+    .footer-col-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); text-transform: uppercase; }
+    .footer-links-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; }
+    .footer-link:hover { color: var(--accent-gold); }
+    .footer-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+    .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 12, 16, 0.8); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal-dialog { background: var(--bg-surface); border: 1px solid var(--border-subtle); width: 100%; max-width: 680px; max-height: 85vh; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75); }
+    .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; }
+    .modal-header h3 { font-size: 15px; font-weight: 600; margin: 0; color: var(--text-primary); }
+    .modal-close-btn { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-secondary); }
+    .modal-body { padding: 32px 40px; overflow-y: auto; font-family: var(--font-serif); font-size: 18px; line-height: 1.8; color: var(--text-secondary); }
+
+    @media (max-width: 1024px) {
+      .pdp-wrapper { grid-template-columns: 1fr; gap: 32px; }
+      .media-card, .buy-card { position: static; }
+      .cover-viewport { width: 200px; }
+      .nav-search-container { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <div class="nav-container">
+      <a href="./index.html" class="brand-group">
+        <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
+        <span class="brand-title">Libraryreeds</span>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="nav-search-container">
+        <svg class="nav-search-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Search volumes, authors, or vault records...">
+      </div>
+
+      <div class="nav-actions">
+        <a href="./index.html" class="nav-link">Home</a>
+        <a href="./shop.html" class="nav-link">Shop</a>
+        <a href="./fanart.html" class="nav-link">Fanart</a>
+        <a href="./about.html" class="nav-link">About</a>
+        <a href="./giftshop.html" class="nav-link">Gift Shop</a>
+        <a href="./wishlist.html" class="wishlist-icon-link" title="Wishlist">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+        </a>
+        <a href="./cart.html" class="cart-icon-link" title="Review Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+        </a>
+        <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
+        <div class="user-profile-menu" id="navProfileMenu">
+          <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
+            <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+            <span id="navUserName">Patron</span>
+          </button>
+          <div class="dropdown-menu-popover" id="profileDropdown">
+            <div class="dropdown-user-header">
+              <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
+            </div>
+            <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+            <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pdp-page-container">
+    <div class="pdp-wrapper">
+      
+      <div class="media-card">
+        <div class="cover-stage">
+          <div class="cover-viewport view-flat" id="book-cover-viewport">
+            <img class="cover-img" id="bookCoverImg" src="" alt="Book Cover" />
+            <div class="spine-accent"></div>
+          </div>
+        </div>
+
+        <div class="media-actions">
+          <div class="view-toggle-bar">
+            <button class="view-toggle-btn active" id="btn-view-flat" type="button">Front View</button>
+            <button class="view-toggle-btn" id="btn-view-3d" type="button">3D Angle</button>
+          </div>
+
+          <button class="btn-look-inside" id="open-sample-modal" type="button">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            Look Inside / Read Excerpt
+          </button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="tags-badge-row">
+          <span class="genre-pill" id="bookFormatPill">Digital Archive</span>
+          <span class="trope-pill">Collector Hardcover</span>
+          <span class="trope-pill">Vault Exclusive</span>
+        </div>
+
+        <div class="book-header">
+          <h1 id="bookTitleDisplay">Loading Volume...</h1>
+          <div class="author-name" id="bookAuthorDisplay">Author Name</div>
+        </div>
+
+        <hr class="section-divider" />
+        <div class="rating-row">
+          <span class="stars">★★★★★</span>
+          <span class="rating-score">4.8</span>
+          <span style="color: var(--text-muted);">/</span>
+          <a href="#customer-reviews" class="review-link">2,491 ratings</a>
+        </div>
+        <hr class="section-divider" />
+
+        <div class="editorial-praise-box">
+          <p class="praise-quote">"An extraordinary and indispensable handbook for living in a world overloaded with poorly thought-out objects."</p>
+          <span class="praise-attribution">— The New York Times Book Review</span>
+        </div>
+
+        <div class="rating-breakdown-card">
+          <div class="breakdown-header">
+            <h3 class="breakdown-title">Rating Breakdown</h3>
+            <span style="font-size: 12px; color: var(--text-muted);">94% positive</span>
+          </div>
+          <div class="breakdown-bars-stack">
+            <div class="rating-bar-row"><span class="star-label">5 star</span><div class="bar-track"><div class="bar-fill" style="width: 82%;"></div></div><span class="percentage-label">82%</span></div>
+            <div class="rating-bar-row"><span class="star-label">4 star</span><div class="bar-track"><div class="bar-fill" style="width: 12%;"></div></div><span class="percentage-label">12%</span></div>
+            <div class="rating-bar-row"><span class="star-label">3 star</span><div class="bar-track"><div class="bar-fill" style="width: 4%;"></div></div><span class="percentage-label">4%</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="formats-title">Format / Edition</div>
+          <div class="formats-grid" id="formatsGridOptions" style="grid-template-columns: repeat(2, 1fr);">
+            <div class="format-option selected" data-format="EPUB" id="formatOptionEpub">
+              <span class="format-name">ePub</span>
+              <span class="format-price-label" id="epubPriceLabel">$0.00</span>
+            </div>
+            <div class="format-option" data-format="Paperback" id="formatOptionPaperback">
+              <span class="format-name">Paperback</span>
+              <span class="format-price-label" style="color: var(--text-muted); font-size: 11px;">Coming Soon</span>
+            </div>
+            <div class="format-option" data-format="Hardcover" id="formatOptionHardcover">
+              <span class="format-name">Hardcover</span>
+              <span class="format-price-label" style="color: var(--text-muted); font-size: 11px;">Coming Soon</span>
+            </div>
+            <div class="format-option" data-format="Audio" id="formatOptionAudio">
+              <span class="format-name">Audio</span>
+              <span class="format-price-label" style="color: var(--text-muted); font-size: 11px;">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="description-section">
+          <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 2px 0;">Description &amp; Overview</h3>
+          <div class="blurb-container">
+            <div class="blurb-text-wrap" id="blurb-text">
+              <p class="blurb-paragraph" id="bookDescDisplay">Retrieving volume overview from the vault repository...</p>
+            </div>
+            <button class="btn-toggle-blurb" id="btn-toggle-blurb" type="button">
+              <span>Read more</span>
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </div>
+        </div>
+
+        <details class="advisory-details">
+          <summary class="advisory-summary">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="advisory-badge">General Audience / 12+</span>
+              <span>Content &amp; Age Advisory</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </summary>
+          <div class="advisory-content">
+            <p style="margin: 0;">Suitable for young adults and general readership. Verified authentic archival text.</p>
+            <div class="advisory-tags"><span class="advisory-tag">Age: 12+</span><span class="advisory-tag">Verified Edition</span></div>
+          </div>
+        </details>
+
+        <div class="specs-box">
+          <div class="specs-title">Specifications</div>
+          <table class="specs-table">
+            <tr><td class="spec-label">Publication Date</td><td class="spec-value" id="bookPubDateDisplay">—</td></tr>
+            <tr><td class="spec-label">Page Count</td><td class="spec-value" id="bookPagesDisplay">—</td></tr>
+            <tr><td class="spec-label">Publisher / Imprint</td><td class="spec-value" id="bookPublisherDisplay">Libraryreeds Archive</td></tr>
+            <tr><td class="spec-label">Language</td><td class="spec-value" id="bookLanguageDisplay">English</td></tr>
+            <tr><td class="spec-label">ISBN-13</td><td class="spec-value" id="bookIsbnDisplay">—</td></tr>
+            <tr><td class="spec-label">License</td><td class="spec-value" id="bookLicenseDisplay">Digital &amp; Physical</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="buy-card">
+        <div class="price-header">
+          <div class="price-row">
+            <span class="current-price" id="buyCardPrice">$0.00</span>
+          </div>
+          <div class="stock-indicator" id="buyCardStockIndicator">
+            <span class="stock-dot"></span>
+            <span id="bookNoticeDisplay">Instant Digital / Archival Access</span>
+          </div>
+        </div>
+
+        <!-- Quantity Selector -->
+        <div class="quantity-row">
+          <span>Quantity:</span>
+          <select class="quantity-select" id="bookQuantitySelect">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+
+        <div class="cta-stack">
+          <button type="button" class="btn-primary-action" id="primary-cta-btn">Add to Cart</button>
+          <button class="btn-subscription-action">
+            Read with <strong>Rakuten Kobo Plus</strong>
+          </button>
+        </div>
+
+        <!-- Wishlist Heart Button -->
+        <button type="button" class="btn-wishlist-heart" id="wishlistHeartBtn">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span id="wishlistBtnText">Add to Wishlist</span>
+        </button>
+
+        <p class="guarantee-note">Secure database checkout &bull; Instant access</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="series-section-container">
+    <div class="series-card">
+      <div class="series-header">
+        <div class="series-title-wrap">
+          <h2>Book Series</h2>
+          <p class="series-subtitle">Scroll left or right to explore more books in the series</p>
+        </div>
+        <div class="carousel-nav-controls">
+          <button class="carousel-btn" id="carousel-prev" aria-label="Previous series item" type="button">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="carousel-btn" id="carousel-next" aria-label="Next series item" type="button">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+      <div class="series-carousel-viewport" id="series-carousel">
+        <div class="series-item-card is-current">
+          <div class="series-item-cover-wrapper">
+            <img id="carouselThumbImg" src="" alt="Current Volume" />
+            <span class="series-order-badge">Current Book</span>
+          </div>
+          <div class="series-item-details">
+            <h3 class="series-item-title" id="carouselThumbTitle">Active Volume</h3>
+            <span class="series-item-price" id="carouselThumbPrice">$0.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="related-section-container">
+    <div class="related-card">
+      <div class="related-header">
+        <div class="related-title-wrap">
+          <h2>Customers Who Bought This Item Also Bought</h2>
+          <p class="related-subtitle">Explore related volumes from the catalog</p>
+        </div>
+      </div>
+      <div class="related-carousel-viewport" id="related-carousel">
+        <p style="color: var(--text-muted); font-size: 13px;">Loading related items...</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-section-container" id="customer-reviews">
+    <div class="reviews-card">
+      <h2 style="font-size: 18px; font-weight: 600; margin: 0 0 16px 0; color: var(--text-primary);">Verified Reader Reviews &amp; Discussion</h2>
+      
+      <form id="reviewSubmitForm" class="review-card" style="border:1px solid var(--border-subtle); padding:20px; border-radius:8px; background:var(--bg-surface-elevated); margin-bottom:24px;">
+        <h4 style="font-size: 13px; font-weight: 600; margin: 0 0 10px 0; color: var(--text-primary);">Leave a Review or Discussion Comment</h4>
+        <input type="text" id="reviewerNameInput" class="sort-dropdown" placeholder="Your Name" required style="width:100%; margin-bottom:10px; box-sizing:border-box;">
+        <textarea id="reviewBodyInput" class="sort-dropdown" rows="3" placeholder="Share your thoughts, theories, or discussion points on this volume..." required style="width:100%; margin-bottom:10px; resize:vertical; box-sizing:border-box;"></textarea>
+        <label class="spoiler-checkbox-row">
+          <input type="checkbox" id="isSpoilerInput"> Mark as containing spoilers
+        </label>
+        <button type="submit" class="btn-primary-action" style="width:auto; padding:0 24px; height:36px; font-size:12px;">Post Comment</button>
+      </form>
+
+      <div class="feed-controls">
+        <span class="feed-controls-label" id="review-count-display">Community feedback &amp; discussion feed</span>
+      </div>
+
+      <div class="reviews-list" id="reviewsFeedList">
+        <p style="color: var(--text-muted); font-size: 13px;">Loading community reviews and discussions...</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4 class="footer-col-title">Libraryreeds</h4>
+        <p class="footer-text">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">Quick Shortcuts</h4>
+        <ul class="footer-links-list">
+          <li><a href="./index.html" class="footer-link">Home</a></li>
+          <li><a href="./shop.html" class="footer-link">Browse Catalog</a></li>
+          <li><a href="./fanart.html" class="footer-link">Fanart Gallery</a></li>
+          <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
+          <li><a href="./giftshop.html" class="footer-link">Gift Shop</a></li>
+          <li><a href="./account.html" class="footer-link">Master Account Center</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Libraryreeds. All rights reserved.</span>
+      <span>Official Archival Repository</span>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="sample-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalBookTitle">Sample Excerpt</h3>
+        <button class="modal-close-btn" id="close-sample-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="modalExcerptContent">
+        <p>Loading excerpt from manuscript vault...</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, onSnapshot, collection, addDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    function updateCartBadge() {
+      const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+      let totalQty = 0;
+      cart.forEach(ci => { totalQty += parseInt(ci.quantity || 1); });
+
+      const badge = document.getElementById('cartBadgeCount');
+      if (badge) {
+        if (totalQty > 0) {
+          badge.textContent = totalQty;
+          badge.style.display = "flex";
+        } else {
+          badge.style.display = "none";
+        }
+      }
+    }
+
+    function updateWishlistBadge() {
+      const wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
+      const badge = document.getElementById('wishlistBadgeCount');
+      if (badge) {
+        if (wishlist.length > 0) {
+          badge.textContent = wishlist.length;
+          badge.style.display = "flex";
+        } else {
+          badge.style.display = "none";
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCartBadge();
+      updateWishlistBadge();
+    });
+
+    const navLoginBtn = document.getElementById("navLoginBtn");
+    const navProfileMenu = document.getElementById("navProfileMenu");
+    const navUserName = document.getElementById("navUserName");
+    const dropdownUserName = document.getElementById("dropdownUserName");
+    const dropdownUserEmail = document.getElementById("dropdownUserEmail");
+    const profileTriggerBtn = document.getElementById("profileTriggerBtn");
+    const profileDropdown = document.getElementById("profileDropdown");
+
+    onAuthStateChanged(auth, async (user) => {
+      const navActions = document.querySelector('.nav-actions');
+      if (navActions) navActions.classList.add('auth-loaded');
+
+      if (user) {
+        if (navLoginBtn) navLoginBtn.style.display = "none";
+        if (navProfileMenu) navProfileMenu.style.display = "block";
+
+        const displayName = user.displayName || user.email.split("@")[0];
+        if (navUserName) navUserName.textContent = displayName;
+        if (dropdownUserName) dropdownUserName.textContent = displayName;
+        if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
+
+        let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
+
+        if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
+          try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists() && userDoc.data().photoURL) {
+              resolvedAvatar = userDoc.data().photoURL;
+            }
+          } catch(e) {}
+        }
+
+        if ((!resolvedAvatar || resolvedAvatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
+          resolvedAvatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
+        }
+
+        if (resolvedAvatar) {
+          localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
+        }
+
+        document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => {
+          if (resolvedAvatar) img.src = resolvedAvatar;
+        });
+      } else {
+        localStorage.removeItem('libraryreeds_user_avatar');
+        if (navLoginBtn) navLoginBtn.style.display = "inline-block";
+        if (navProfileMenu) navProfileMenu.style.display = "none";
+      }
+    });
+
+    if (profileTriggerBtn && profileDropdown) {
+      profileTriggerBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
+      });
+      document.addEventListener("click", () => {
+        profileDropdown.style.display = "none";
+      });
+    }
+
+    const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+    if (dropdownLogoutBtn) {
+      dropdownLogoutBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          localStorage.clear();
+          sessionStorage.clear();
+        } catch (err) {
+          console.warn("Sign out error:", err);
+        } finally {
+          window.location.replace("index.html");
+        }
+      });
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookId = urlParams.get('id');
+    const itemType = urlParams.get('type');
+
+    let currentBookData = null;
+    let selectedFormat = 'EPUB';
+    let currentBookPrice = 0;
+
+    async function loadBookDetails() {
+      if (!bookId) {
+        document.getElementById('bookTitleDisplay').textContent = "Item Not Found";
+        document.getElementById('bookDescDisplay').textContent = "No item identifier was provided in the link.";
+        return;
+      }
+
+      try {
+        const collectionName = itemType === 'gift' ? 'giftshop_items' : 'books';
+        const docSnap = await getDoc(doc(db, collectionName, bookId));
+        
+        if (docSnap.exists()) {
+          const item = docSnap.data();
+          currentBookData = item;
+          const title = item.title || 'Untitled Item';
+          const author = item.author || 'Libraryreeds Curator';
+          currentBookPrice = parseFloat(item.price || 0);
+          const formattedPrice = currentBookPrice.toFixed(2);
+          const coverUrl = item.imageUrl || item.coverUrl || '';
+          const description = item.description || 'No additional details provided for this item.';
+
+          document.getElementById('bookTitleDisplay').textContent = title;
+          document.getElementById('bookAuthorDisplay').textContent = author;
+          document.getElementById('buyCardPrice').textContent = `$${formattedPrice}`;
+          document.getElementById('epubPriceLabel').textContent = `$${formattedPrice}`;
+          document.getElementById('bookFormatPill').textContent = itemType === 'gift' ? 'Virtual Voucher' : 'ePub';
+          document.getElementById('bookCoverImg').src = coverUrl;
+          document.getElementById('modalBookTitle').textContent = `Details — ${title}`;
+
+          const primaryCtaBtn = document.getElementById('primary-cta-btn');
+          const bookNoticeDisplay = document.getElementById('bookNoticeDisplay');
+
+          if (itemType === 'gift') {
+            if (primaryCtaBtn) {
+              primaryCtaBtn.textContent = "Place Order";
+              primaryCtaBtn.style.background = "var(--accent-gold)";
+            }
+            if (bookNoticeDisplay) bookNoticeDisplay.textContent = "Instant Digital Gift Card / Voucher";
+          } else {
+            const pubDateStr = item.publicationDate || item.pubDate || '';
+            const isUnpublished = item.isUnpublished || item.comingSoon || (pubDateStr && new Date(pubDateStr) > new Date());
+            if (isUnpublished) {
+              if (primaryCtaBtn) primaryCtaBtn.textContent = "Pre-Order Now";
+              if (bookNoticeDisplay) bookNoticeDisplay.textContent = "Upcoming Release — Pre-Order Available";
+            }
+          }
+
+          const wishlistHeartBtn = document.getElementById('wishlistHeartBtn');
+          let wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
+          
+          if (wishlist.includes(bookId)) {
+            wishlistHeartBtn.classList.add('active');
+            document.getElementById('wishlistBtnText').textContent = "In Wishlist";
+          }
+
+          wishlistHeartBtn.onclick = () => {
+            let currentList = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
+            if (!currentList.includes(bookId)) {
+              currentList.push(bookId);
+              localStorage.setItem('literalis_wishlist', JSON.stringify(currentList));
+            }
+            window.location.href = "wishlist.html";
+          };
+
+          document.getElementById('bookPubDateDisplay').textContent = item.publicationDate || item.pubDate || '—';
+          document.getElementById('bookPagesDisplay').textContent = item.pageCount || '—';
+          document.getElementById('bookPublisherDisplay').textContent = item.publisher || 'Libraryreeds Repository';
+          document.getElementById('bookLanguageDisplay').textContent = item.language || 'English';
+          document.getElementById('bookIsbnDisplay').textContent = item.isbn || '—';
+          document.getElementById('bookLicenseDisplay').textContent = item.license || 'Digital / Physical';
+
+          document.getElementById('carouselThumbImg').src = coverUrl;
+          document.getElementById('carouselThumbTitle').textContent = title;
+          document.getElementById('carouselThumbPrice').textContent = `$${formattedPrice}`;
+
+          const descEl = document.getElementById('bookDescDisplay');
+          const paragraphs = description.split('\n\n').filter(p => p.trim().length > 0);
+          descEl.innerHTML = paragraphs.map(p => `<p class="blurb-paragraph">${p}</p>`).join('');
+
+          const excerptEl = document.getElementById('modalExcerptContent');
+          excerptEl.innerHTML = `<h4>Overview for ${title}</h4><p>${paragraphs[0] || description}</p>`;
+        } else {
+          document.getElementById('bookTitleDisplay').textContent = "Item Missing from Vault";
+        }
+      } catch (err) {
+        console.error("Error loading item details:", err);
+      }
+    }
+
+    loadBookDetails();
+
+    const formatOptions = document.querySelectorAll('.format-option');
+    const primaryCtaBtn = document.getElementById('primary-cta-btn');
+    const buyCardPrice = document.getElementById('buyCardPrice');
+
+    formatOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (itemType === 'gift') return; // Keep gift card fixed
+        formatOptions.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        selectedFormat = opt.getAttribute('data-format');
+
+        if (selectedFormat === 'EPUB') {
+          buyCardPrice.textContent = `$${currentBookPrice.toFixed(2)}`;
+          buyCardPrice.style.display = "block";
+          document.getElementById('buyCardStockIndicator').style.display = "flex";
+          document.getElementById('bookNoticeDisplay').textContent = "Instant Digital / Archival Access";
+          primaryCtaBtn.textContent = "Add to Cart";
+          primaryCtaBtn.style.opacity = "1";
+          primaryCtaBtn.style.pointerEvents = "auto";
+        } else {
+          buyCardPrice.style.display = "none";
+          document.getElementById('buyCardStockIndicator').style.display = "flex";
+          document.getElementById('bookNoticeDisplay').textContent = `${selectedFormat} Edition Coming Soon`;
+          primaryCtaBtn.textContent = "Coming Soon";
+          primaryCtaBtn.style.opacity = "0.6";
+          primaryCtaBtn.style.pointerEvents = "none";
+        }
+      });
+    });
+
+    if (primaryCtaBtn) {
+      primaryCtaBtn.addEventListener('click', () => {
+        if (!currentBookData) return;
+
+        // If it's a gift shop item / gift card, redirect directly to the Gift Up order link
+        if (itemType === 'gift') {
+          window.location.href = "https://giftup.app/place-order/e32b70cc-3b00-481d-8321-d3b8fc68fd9f?platform=hosted";
+          return;
+        }
+
+        if (selectedFormat !== 'EPUB') return;
+        const qtySelect = document.getElementById('bookQuantitySelect');
+        const quantity = qtySelect ? parseInt(qtySelect.value) || 1 : 1;
+
+        let cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+        
+        const itemPrice = parseFloat(currentBookData.price || 0);
+        const itemShipping = parseFloat(currentBookData.shippingCost || 0);
+        const itemTaxRate = parseFloat(currentBookData.taxRate !== undefined ? currentBookData.taxRate : 6);
+        const itemDiscount = parseFloat(currentBookData.discountAmount || 0);
+
+        const pubDateStr = currentBookData.publicationDate || currentBookData.pubDate || '';
+        const isUnpublished = currentBookData.isUnpublished || currentBookData.comingSoon || (pubDateStr && new Date(pubDateStr) > new Date());
+        const titleSuffix = isUnpublished ? " (Pre-Order)" : "";
+
+        cart.push({
+          title: currentBookData.title + titleSuffix,
+          author: currentBookData.author,
+          price: itemPrice,
+          shippingCost: itemShipping,
+          taxRate: itemTaxRate,
+          discountAmount: itemDiscount,
+          promoCode: currentBookData.promoCode || '',
+          format: selectedFormat,
+          coverUrl: currentBookData.coverUrl || currentBookData.imageUrl,
+          quantity: quantity
+        });
+
+        localStorage.setItem('libraryreeds_cart', JSON.stringify(cart));
+        updateCartBadge();
+        alert(`${quantity} copy/copies of "${currentBookData.title}" added to your shopping bag!`);
+      });
+    }
+
+    const seriesCarousel = document.getElementById('series-carousel');
+    if (seriesCarousel) {
+      onSnapshot(collection(db, "books"), (snapshot) => {
+        if (!snapshot.empty) {
+          let booksList = [];
+          snapshot.forEach((docSnap) => {
+            booksList.push({ id: docSnap.id, ...docSnap.data() });
+          });
+          booksList.sort((a, b) => (parseInt(a.volumeNumber) || 1) - (parseInt(b.volumeNumber) || 1));
+          seriesCarousel.innerHTML = "";
+          booksList.forEach((b) => {
+            const isCurrent = b.id === bookId;
+            const volNum = b.volumeNumber || 1;
+            const item = document.createElement('a');
+            item.href = `book.html?id=${b.id}`;
+            item.className = `series-item-card ${isCurrent ? 'is-current' : ''}`;
+            item.innerHTML = `
+              <div class="series-item-cover-wrapper">
+                <img src="${b.coverUrl || ''}" alt="${b.title || 'Book'}" />
+                <span class="series-order-badge">${isCurrent ? 'Current' : `Book ${volNum}`}</span>
+              </div>
+              <div class="series-item-details">
+                <h3 class="series-item-title">${b.title || 'Untitled'}</h3>
+                <span class="series-item-meta">Book ${volNum}</span>
+                <span class="series-item-price">$${parseFloat(b.price || 0).toFixed(2)}</span>
+              </div>
+            `;
+            seriesCarousel.appendChild(item);
+          });
+        }
+      });
+    }
+
+    const relatedCarousel = document.getElementById('related-carousel');
+    if (relatedCarousel) {
+      onSnapshot(collection(db, "books"), (snapshot) => {
+        if (!snapshot.empty) {
+          let relatedList = [];
+          snapshot.forEach((docSnap) => {
+            if (docSnap.id !== bookId) relatedList.push({ id: docSnap.id, ...docSnap.data() });
+          });
+          relatedCarousel.innerHTML = "";
+          if (relatedList.length === 0) {
+            relatedCarousel.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">No related items found.</p>`;
+            return;
+          }
+          relatedList.forEach((b) => {
+            const item = document.createElement('a');
+            item.href = `book.html?id=${b.id}`;
+            item.className = 'related-item-card';
+            item.innerHTML = `
+              <div class="related-item-cover-wrapper">
+                <img src="${b.coverUrl || ''}" alt="${b.title || 'Book'}" />
+              </div>
+              <div class="related-item-details">
+                <h3 class="related-item-title">${b.title || 'Untitled'}</h3>
+                <span class="related-item-author">${b.author || 'Firelily Santos'}</span>
+                <span class="related-item-price">$${parseFloat(b.price || 0).toFixed(2)}</span>
+              </div>
+            `;
+            relatedCarousel.appendChild(item);
+          });
+        }
+      });
+    }
+
+    const reviewsFeedList = document.getElementById('reviewsFeedList');
+    if (bookId && itemType !== 'gift') {
+      onSnapshot(collection(db, "books", bookId, "reviews"), (snapshot) => {
+        if (!snapshot.empty) {
+          reviewsFeedList.innerHTML = "";
+          snapshot.forEach((docSnap) => {
+            const rev = docSnap.data();
+            const revId = docSnap.id;
+            const isSpoiler = rev.isSpoiler || false;
+            const reviewCard = document.createElement('div');
+            reviewCard.className = 'review-card';
+            let commentBodyHTML = isSpoiler ? `
+              <div class="spoiler-container">
+                <button type="button" class="spoiler-toggle-btn" onclick="this.parentElement.classList.toggle('revealed')">⚠️ Contains Spoilers — Click to Reveal</button>
+                <div class="spoiler-content"><p class="review-body" style="margin: 0;">${rev.comment || ''}</p></div>
+              </div>` : `<p class="review-body">${rev.comment || ''}</p>`;
+
+            reviewCard.innerHTML = `
+              <div class="review-user-header">
+                <div class="user-meta-left">
+                  <span class="user-name">${rev.name || 'Anonymous Reader'}</span>
+                  <span class="verified-badge">Verified Patron</span>
+                </div>
+              </div>
+              ${commentBodyHTML}
+            `;
+            reviewsFeedList.appendChild(reviewCard);
+          });
+        } else {
+          reviewsFeedList.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">No reviews or discussion comments yet.</p>`;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

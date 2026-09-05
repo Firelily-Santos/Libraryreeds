@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libraryreeds Digital - Scroll Order Receipt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --bg-base: #1f1815;
+          --bg-surface: #11141c;
+          --border-subtle: rgba(255, 255, 255, 0.08);
+          --accent-gold: #c5a880;
+          --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+          --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        
+        body {
+            background-color: var(--bg-base);
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-y: auto;
+            padding-bottom: 40px;
+        }
+
+        /* Top Navigation Header */
+        .top-nav {
+          border-bottom: 1px solid var(--border-subtle);
+          background: rgba(31, 24, 21, 0.94);
+          backdrop-filter: blur(14px);
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          width: 100%;
+        }
+        .nav-container { 
+          max-width: 1400px; 
+          margin: 0 auto; 
+          padding: 14px 32px; 
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center; 
+        }
+        .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+        .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+        .brand-title { font-family: 'Georgia', serif; font-size: 1.5rem; font-weight: 600; color: #f4ebd0; letter-spacing: 0.06em; text-transform: uppercase; }
+
+        /* Checkout Steps Progress Bar */
+        .checkout-steps-bar {
+          max-width: 500px;
+          margin: 28px auto 20px;
+          padding: 0 24px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: relative;
+          width: 100%;
+        }
+        .step-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          position: relative;
+          z-index: 2;
+          font-family: var(--font-sans);
+        }
+        .step-circle {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: #2c221e;
+          border: 1px solid #b59b75;
+          color: #b59b75;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.8rem;
+          font-weight: 700;
+        }
+        .step-item.completed .step-circle {
+          background: rgba(197, 168, 128, 0.25);
+          border-color: var(--accent-gold);
+          color: var(--accent-gold);
+        }
+        .step-label {
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--accent-gold);
+          font-weight: 600;
+        }
+
+        .scene {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+            transition: transform 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .scene:hover {
+            transform: scale(1.01);
+        }
+
+        /* Top and Bottom Cylindrical Wooden Rollers */
+        .roller {
+            width: 450px;
+            height: 22px;
+            background: linear-gradient(
+                to bottom,
+                #6e5335 0%, 
+                #b08d5b 25%, 
+                #f3e0be 50%, 
+                #82633f 75%, 
+                #42311d 100%
+            );
+            border-radius: 12px;
+            position: relative;
+            z-index: 20;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.4);
+        }
+
+        /* Wooden knobs on the sides of the rollers */
+        .roller::before, .roller::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            width: 12px;
+            height: 28px;
+            background: linear-gradient(to right, #5c4228, #9c784e, #42311d);
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .roller::before { left: -10px; }
+        .roller::after { right: -10px; }
+
+        /* The parchment paper wrapper */
+        .paper-container {
+            width: 420px;
+            height: 25px; /* Fully rolled state */
+            background: #f4ebd0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(0,0,0,0.12) 100%),
+                              url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            position: relative;
+            overflow: hidden;
+            transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: -9px 0;
+            z-index: 10;
+            box-shadow: inset 0 0 30px rgba(110, 85, 50, 0.4);
+        }
+
+        /* Shadow cast by the top roller */
+        .paper-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 18px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.35), transparent);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* Receipt Content */
+        .receipt-content {
+            padding: 25px 30px;
+            opacity: 0;
+            transform: translateY(-15px);
+            transition: opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s;
+            color: #2c221e;
+        }
+
+        .paper-container.unrolled .receipt-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Large Logo Slot */
+        .logo-container {
+            width: 260px;
+            height: 110px;
+            margin: 0 auto 5px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 19px;
+            margin: 0 0 2px 0;
+            color: #423023;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #70533c;
+            margin-bottom: 10px;
+            border-bottom: 2px dashed #b59b75;
+            padding-bottom: 8px;
+        }
+
+        .congrats {
+            text-align: center;
+            font-style: italic;
+            color: #70533c;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .details-box {
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #d4c5a9;
+            padding-bottom: 8px;
+        }
+
+        .details-box p {
+            margin: 2px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #5c473a;
+        }
+
+        .book-card {
+            background: rgba(212, 195, 169, 0.25);
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border: 1px solid #d4c5a9;
+        }
+
+        .book-card h3 {
+            margin: 0 0 3px 0;
+            font-size: 14px;
+            color: #3b2d24;
+        }
+
+        .book-card p {
+            margin: 2px 0;
+            font-size: 11px;
+            color: #554235;
+        }
+
+        /* Financial summary block */
+        .financial-summary {
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            border-top: 1px solid #d4c5a9;
+            border-bottom: 1px solid #d4c5a9;
+            padding: 8px 0;
+        }
+
+        .financial-summary p {
+            margin: 3px 0;
+            display: flex;
+            justify-content: space-between;
+            color: #5c473a;
+        }
+
+        .total-row {
+            font-size: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            color: #2c221e;
+        }
+
+        /* Personalized Warm Closing Message */
+        .thank-you-note {
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #5c473a;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        /* Support / Inquiries Note */
+        .support-note {
+            font-size: 11px;
+            line-height: 1.5;
+            color: #5c473a;
+            margin-bottom: 10px;
+            background: rgba(212, 195, 169, 0.15);
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px dashed #b59b75;
+            text-align: center;
+        }
+
+        .support-note strong {
+            color: #3b2d24;
+        }
+
+        /* Return / Refund Policy Note */
+        .policy-note {
+            font-size: 10px;
+            line-height: 1.4;
+            color: #70533c;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8c735f;
+            border-top: 1px dashed #d4c5a9;
+            padding-top: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+            width: 100%;
+            font-family: var(--font-sans);
+        }
+
+        .receipt-btn {
+            background: #5c4228;
+            color: #f4ebd0;
+            border: 1px solid #82633f;
+            padding: 8px 14px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+        .receipt-btn:hover { background: #7c5836; }
+
+        .instruction {
+            color: #a89078;
+            font-size: 12px;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+            font-family: var(--font-sans);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+      <div class="nav-container">
+        <a href="./index.html" class="brand-group">
+          <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
+          <span class="brand-title">Libraryreeds</span>
+        </a>
+        <a href="./index.html" style="color: #9ba1b0; text-decoration: none; font-size: 0.775rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font-sans);">Return Home &rarr;</a>
+      </div>
+    </nav>
+
+    <!-- Checkout Steps Progress Bar -->
+    <div class="checkout-steps-bar">
+      <div class="step-item completed"><div class="step-circle">&check;</div><span class="step-label">Review</span></div>
+      <div class="step-item completed"><div class="step-circle">&check;</div><span class="step-label">Shipping</span></div>
+      <div class="step-item completed"><div class="step-circle">&check;</div><span class="step-label">Payment</span></div>
+      <div class="step-item completed"><div class="step-circle">&check;</div><span class="step-label">Confirmed</span></div>
+    </div>
+
+    <div class="scene" id="scrollScene">
+        <!-- Top Scroll Roller -->
+        <div class="roller"></div>
+
+        <!-- The Expanding Parchment Sheet -->
+        <div class="paper-container" id="paperContainer">
+            <div class="receipt-content">
+                <!-- Large Logo Slot -->
+                <div class="logo-container">
+                    <img src="https://www.image2url.com/r2/default/images/1787525509568-20b848b3-96ab-4521-b335-655cb0ca3dff.png" alt="Libraryreeds Digital Logo">
+                </div>
+
+                <h2>ORDER RECEIPT</h2>
+                <div class="subtitle">Libraryreeds Digital</div>
+                
+                <div class="congrats">✨ Congratulations on your book order! ✨</div>
+
+                <div class="details-box">
+                    <p><span class="label">Customer:</span> <span id="recCustomerName">Reader Patron</span></p>
+                    <p><span class="label">Customer Email:</span> <span id="recEmail">patron@example.com</span></p>
+                    <p><span class="label">Order Number:</span> <span id="recOrderNum">#LRD-94812</span></p>
+                    <p><span class="label">Date & Time:</span> <span id="recDate">August 26, 2026</span></p>
+                    <p><span class="label">Payment Method:</span> <span>Majority Pay Secure Gateway</span></p>
+                </div>
+
+                <div class="book-card" id="recBookCard">
+                    <h3 id="recBookTitle">The Hidden Wings: Flames of Fate</h3>
+                    <p><strong>Author:</strong> <span id="recBookAuthor">Firelily Santos</span></p>
+                    <p><strong>Format:</strong> <span id="recBookFormat">Clothbound Hardcover</span></p>
+                </div>
+
+                <div class="financial-summary">
+                    <p><span>Subtotal:</span> <span id="recSubtotal">$24.00</span></p>
+                    <p><span>Shipping & Handling:</span> <span>$3.99</span></p>
+                    <div class="total-row" style="margin-top: 6px;">
+                        <span>Total Paid:</span>
+                        <span id="recTotal">$27.99</span>
+                    </div>
+                </div>
+
+                <div class="thank-you-note">
+                    "Thank you so much for choosing Libraryreeds Digital! Your support means the world to us and helps independent storytelling thrive. May your new read open up countless worlds of wonder and imagination!"
+                </div>
+
+                <div class="support-note">
+                    <strong>Questions about your order?</strong><br>
+                    Contact support at <strong>support@libraryreeds.com</strong>.
+                </div>
+
+                <div class="policy-note">
+                    <strong>Return Policy:</strong> Physical items accepted within 30 days. Digital licenses are final sale.
+                </div>
+
+                <div class="action-buttons">
+                    <a href="./account.html" class="receipt-btn">My Library</a>
+                    <a href="./index.html" class="receipt-btn">Home Storefront</a>
+                </div>
+
+                <div class="footer" style="margin-top: 12px;">
+                    Libraryreeds Digital • www.libraryreeds.com • All Rights Reserved
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Scroll Roller -->
+        <div class="roller"></div>
+    </div>
+
+    <div class="instruction" id="instructionText">Click anywhere on the scroll to unroll it</div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+            authDomain: "libraryreeds-638f4.firebaseapp.com",
+            projectId: "libraryreeds-638f4",
+            storageBucket: "libraryreeds-638f4.firebasestorage.app",
+            messagingSenderId: "768304310517",
+            appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const scene = document.getElementById('scrollScene');
+        const paperContainer = document.getElementById('paperContainer');
+        const instructionText = document.getElementById('instructionText');
+
+        let isOpen = false;
+
+        window.addEventListener('load', async () => {
+            const params = new URLSearchParams(window.location.search);
+            let orderId = params.get('order');
+            let totalPaid = params.get('total');
+
+            const user = auth.currentUser;
+            try {
+                const ordersRef = collection(db, user ? `users/${user.uid}/orders` : "orders");
+                const q = query(ordersRef, orderBy("createdAt", "desc"), limit(1));
+                const snap = await getDocs(q);
+
+                if (!snap.empty) {
+                    const latest = snap.docs[0].data();
+                    orderId = orderId || latest.orderId;
+                    totalPaid = totalPaid || latest.total;
+
+                    if (latest.customerName) document.getElementById('recCustomerName').textContent = latest.customerName;
+                    if (latest.email) document.getElementById('recEmail').textContent = latest.email;
+                    if (latest.createdAt && latest.createdAt.toDate) {
+                        document.getElementById('recDate').textContent = latest.createdAt.toDate().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                    }
+
+                    if (latest.items && latest.items.length > 0) {
+                        const item = latest.items[0];
+                        document.getElementById('recBookTitle').textContent = item.title;
+                        document.getElementById('recBookAuthor').textContent = item.author || 'Firelily Santos';
+                        document.getElementById('recBookFormat').textContent = item.format || 'Hardcover';
+                        document.getElementById('recSubtotal').textContent = `$${parseFloat(item.price).toFixed(2)}`;
+                    }
+                }
+            } catch(e) {}
+
+            if (orderId) document.getElementById('recOrderNum').textContent = `#${orderId}`;
+            if (totalPaid) {
+                const numTotal = parseFloat(totalPaid);
+                document.getElementById('recTotal').textContent = `$${numTotal.toFixed(2)}`;
+                if (!document.getElementById('recSubtotal').textContent || document.getElementById('recSubtotal').textContent === '$24.00') {
+                    document.getElementById('recSubtotal').textContent = `$${Math.max(0, numTotal - 3.99).toFixed(2)}`;
+                }
+            }
+
+            // Clean up temp storage
+            localStorage.removeItem('libraryreeds_order_subtotal');
+            localStorage.removeItem('libraryreeds_order_total');
+            localStorage.removeItem('libraryreeds_shipping_address');
+
+            setTimeout(() => {
+                toggleScroll();
+            }, 500);
+        });
+
+        scene.addEventListener('click', () => {
+            toggleScroll();
+        });
+
+        function toggleScroll() {
+            if (!isOpen) {
+                const targetHeight = paperContainer.scrollHeight + 35; 
+                paperContainer.style.height = targetHeight + 'px';
+                paperContainer.classList.add('unrolled');
+                instructionText.textContent = "Click the scroll to roll it back up";
+                isOpen = true;
+            } else {
+                paperContainer.style.height = '25px';
+                paperContainer.classList.remove('unrolled');
+                instructionText.textContent = "Click anywhere on the scroll to unroll it";
+                isOpen = false;
+            }
+        }
+    </script>
+</body>
+</html>
