@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Books & Settings can be read by anyone, written only by Admin
+    match /books/{bookId} {
+      allow read: if true;
+      allow write: if request.auth != null && (request.auth.token.email.matches('.*admin.*') || request.auth.token.email.matches('.*libraryreeds.*'));
+    }
+    
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null && (request.auth.token.email.matches('.*admin.*') || request.auth.token.email.matches('.*libraryreeds.*'));
+    }
+
+    // Global Orders written at checkout, readable by Admin
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null && (request.auth.token.email.matches('.*admin.*') || request.auth.token.email.matches('.*libraryreeds.*'));
+    }
+
+    // Individual User documents & personal order history
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

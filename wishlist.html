@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0c10;
+            --bg-secondary: #11141c;
+            --bg-card: #161b26;
+            --accent: #c5a880;
+            --accent-hover: #d8be9b;
+            --text-main: #f0f2f5;
+            --text-muted: #9ba1b0;
+            --border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: 0.05em;
+            text-decoration: none;
+        }
+
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: var(--transition); }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+        .wishlist-icon-link { color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; position: relative; }
+        .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent); stroke-width: 2; }
+        .wishlist-count { position: absolute; top: -6px; right: -8px; background-color: var(--accent); color: var(--bg-primary); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        main { max-width: 1200px; width: 100%; margin: 2.5rem auto; padding: 0 1.5rem; flex: 1; }
+
+        .page-header { margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2.25rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .page-header p { color: var(--text-muted); font-size: 0.95rem; }
+
+        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+
+        .book-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .book-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+
+        .book-cover { height: 320px; background-color: var(--bg-secondary); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .book-cover img { width: 100%; height: 100%; object-fit: cover; }
+
+        .upcoming-badge {
+            position: absolute; top: 12px; left: 12px;
+            background-color: rgba(15, 17, 21, 0.85); backdrop-filter: blur(4px);
+            border: 1px solid var(--border); color: var(--accent);
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+            padding: 4px 8px; border-radius: 4px; font-weight: 500;
+        }
+
+        .book-details { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+        .book-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-bottom: 0.25rem; font-weight: 600; }
+        .book-author { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; }
+        .release-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+
+        .action-container { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+        .btn { width: 100%; padding: 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: var(--transition); border: 1px solid transparent; text-align: center; text-decoration: none; }
+        .btn-outline { background-color: transparent; border-color: var(--border); color: var(--text-main); }
+        .btn-outline:hover { border-color: #ff6b6b; color: #ff6b6b; }
+        .btn-primary { background-color: var(--accent); color: var(--bg-primary); }
+        .btn-primary:hover { background-color: var(--accent-hover); }
+
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+        .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text-main); margin-bottom: 0.5rem; }
+
+        footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; background-color: var(--bg-secondary); margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="./index.html" class="logo">LIBRARYREEDS</a>
+        <nav class="nav-links">
+            <a href="./index.html">Home</a>
+            <a href="./shop.html">Shop</a>
+            <a href="./wishlist.html" class="active">Wishlist</a>
+            <a href="./cart.html" class="cart-icon-link">Cart</a>
+        </nav>
+    </header>
+
+    <main>
+        <div id="wishlist-view">
+            <div class="page-header">
+                <h1>Wishlist</h1>
+                <p>Manage your saved titles and track items you wish to read.</p>
+            </div>
+            <div class="book-grid" id="wishlist-grid">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Loading wishlist items...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Libraryreeds. All rights reserved.</p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+            authDomain: "libraryreeds-638f4.firebaseapp.com",
+            projectId: "libraryreeds-638f4",
+            storageBucket: "libraryreeds-638f4.firebasestorage.app",
+            messagingSenderId: "768304310517",
+            appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function renderWishlist() {
+            const grid = document.getElementById('wishlist-grid');
+            let wishlist = JSON.parse(localStorage.getItem('literalis_wishlist')) || [];
+
+            if (wishlist.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>Your wishlist is currently empty</h3>
+                        <p>Explore our catalogue and add books on their detail pages to track them here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "books"));
+                let allBooks = [];
+                querySnapshot.forEach((docSnap) => {
+                    allBooks.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                const wishlistedBooks = allBooks.filter(book => wishlist.includes(book.id));
+
+                if (wishlistedBooks.length === 0) {
+                    grid.innerHTML = `
+                        <div class="empty-state">
+                            <h3>Your wishlist is currently empty</h3>
+                            <p>Explore our catalogue and add books on their detail pages to track them here.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                grid.innerHTML = '';
+                wishlistedBooks.forEach(book => {
+                    const card = document.createElement('div');
+                    card.className = 'book-card';
+                    
+                    card.innerHTML = `
+                        <div class="book-cover">
+                            <span class="upcoming-badge">Saved Edition</span>
+                            <img src="${book.coverUrl || ''}" alt="${book.title || 'Book'}" loading="lazy">
+                        </div>
+                        <div class="book-details">
+                            <h3 class="book-title">${book.title || 'Untitled'}</h3>
+                            <p class="book-author">By ${book.author || 'Author'}</p>
+                            <div class="release-info">
+                                <span>Release: ${book.publicationDate || 'Available'}</span><br>
+                                <strong style="color: var(--accent);">$${parseFloat(book.price || 0).toFixed(2)}</strong>
+                            </div>
+                            <div class="action-container">
+                                <a href="book.html?id=${book.id}" class="btn btn-primary">View Volume</a>
+                                <button class="btn btn-outline" onclick="removeFromWishlist('${book.id}')">Remove from Wishlist</button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (err) {
+                console.error("Error fetching wishlist books:", err);
+                grid.innerHTML = `<p style="color: #ff6b6b;">Error loading wishlist items from database.</p>`;
+            }
+        }
+
+        window.removeFromWishlist = function(bookId) {
+            let wishlist = JSON.parse(localStorage.getItem('literalis_wishlist')) || [];
+            wishlist = wishlist.filter(id => id != bookId);
+            localStorage.setItem('literalis_wishlist', JSON.stringify(wishlist));
+            renderWishlist();
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderWishlist();
+        });
+    </script>
+</body>
+</html>

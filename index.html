@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libraryreeds | Official Archival Repository &amp; Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0a0c10;
+      --bg-surface: #11141c;
+      --bg-surface-elevated: #161b26;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(197, 168, 128, 0.4);
+      --text-primary: #f0f2f5;
+      --text-secondary: #9ba1b0;
+      --text-muted: #5d6373;
+      --accent-gold: #c5a880;
+      --accent-gold-hover: #d8be9b;
+      --font-serif: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Anti-flash auth loading guard */
+    .nav-actions { visibility: hidden; }
+    .nav-actions.auth-loaded { visibility: visible; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
+
+    #siteAnnouncementBannerContainer {
+      overflow: hidden; white-space: nowrap; background: var(--accent-gold); color: var(--bg-base); font-size: 0.75rem; font-weight: 700; padding: 8px 16px; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    .top-nav { border-bottom: 1px solid var(--border-subtle); background: rgba(10, 12, 16, 0.94); backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 100; }
+    .nav-container { max-width: 1400px; margin: 0 auto; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; }
+    .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+    .brand-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary); letter-spacing: 0.06em; text-transform: uppercase; }
+    
+    .nav-actions { display: flex; align-items: center; gap: 24px; }
+    .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: var(--transition-smooth); }
+    .nav-link:hover, .nav-link.active { color: var(--accent-gold); }
+    
+    .cart-icon-link, .wishlist-icon-link { color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; position: relative; transition: var(--transition-smooth); }
+    .cart-icon-link:hover, .wishlist-icon-link:hover { color: var(--accent-gold); }
+    .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent-gold); stroke-width: 2; }
+
+    .user-profile-menu { position: relative; display: none; }
+    .profile-trigger-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px 14px; border-radius: 3px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+    .nav-user-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+    
+    .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 42px; width: 220px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 3px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
+    .dropdown-user-header { padding: 14px 16px; background: var(--bg-surface-elevated); border-bottom: 1px solid var(--border-subtle); }
+    .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--text-primary); }
+    .dropdown-user-email { font-size: 0.725rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+    .dropdown-link-item { padding: 11px 16px; color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
+    .dropdown-link-item:hover { background: var(--bg-surface-elevated); color: var(--accent-gold); }
+    .auth-btn-nav { background: var(--accent-gold); color: var(--bg-base); padding: 9px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 2px; text-decoration: none; }
+
+    /* Manuscript Progress Tracker Embedded Component Styles */
+    .tracker-wrapper { max-width: 1400px; margin: 32px auto 0; padding: 0 32px; width: 100%; }
+    .tracker-container { background-color: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 32px; width: 100%; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4); }
+    .tracker-container .header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+    .tracker-container .title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary); }
+    .tracker-container .completion-percentage { font-size: 1.5rem; font-weight: 700; color: var(--accent-gold); }
+    .tracker-container .progress-track { background-color: var(--border-subtle); border-radius: 4px; height: 10px; width: 100%; overflow: hidden; margin-bottom: 32px; }
+    .tracker-container .progress-fill { background-color: var(--accent-gold); height: 100%; width: 0%; border-radius: 4px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 12px rgba(197, 168, 128, 0.2); }
+    .tracker-container .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; border-top: 1px solid var(--border-subtle); padding-top: 24px; }
+    .tracker-container .metric-item { display: flex; flex-direction: column; gap: 6px; }
+    .tracker-container .metric-label { font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); }
+    .tracker-container .metric-value { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
+    @media(max-width: 900px) { .tracker-container .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .hero-main { max-width: 1400px; margin: 0 auto; padding: 48px 32px 80px; width: 100%; display: flex; flex-direction: column; gap: 56px; flex: 1; }
+    
+    .hero-banner-box { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 64px 56px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; position: relative; overflow: hidden; }
+    .hero-banner-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 50%, rgba(197, 168, 128, 0.07), transparent 60%); pointer-events: none; }
+    .hero-content { display: flex; flex-direction: column; gap: 20px; z-index: 1; }
+    .hero-title { font-family: var(--font-serif); font-size: 3rem; font-weight: 500; color: var(--text-primary); line-height: 1.2; }
+    .hero-subtitle { font-size: 1rem; color: var(--text-secondary); max-width: 700px; line-height: 1.6; }
+    .hero-cta-btn { display: inline-flex; align-items: center; justify-content: center; background: var(--accent-gold); color: var(--bg-base); padding: 12px 28px; font-size: 0.775rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border-radius: 2px; text-decoration: none; transition: var(--transition-smooth); width: fit-content; margin-top: 8px; }
+    .hero-cta-btn:hover { background: var(--accent-gold-hover); }
+
+    .hero-visual { position: relative; width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; z-index: 1; }
+    .hero-visual-card { position: absolute; width: 180px; aspect-ratio: 1/1.45; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-focus); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); background: var(--bg-surface-elevated); }
+    .hero-visual-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-visual-card:nth-child(1) { transform: rotate(-8deg) translateX(-60px) translateY(10px); z-index: 1; filter: brightness(0.85); }
+    .hero-visual-card:nth-child(2) { transform: rotate(6deg) translateX(40px) translateY(-15px); z-index: 2; border-color: var(--accent-gold); }
+    .hero-visual-card:hover { transform: translateY(-5px) scale(1.03); z-index: 3; }
+
+    @media(max-width: 900px) {
+      .hero-banner-box { grid-template-columns: 1fr; padding: 40px 24px; }
+      .hero-visual { display: none; }
+    }
+
+    .perks-newsletter-section { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .perks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .perk-item { display: flex; flex-direction: column; gap: 8px; }
+    .perk-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
+    .perk-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
+    .newsletter-box { display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 32px; border-radius: 4px; border: 1px solid var(--border-subtle); }
+    .newsletter-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 500; color: var(--text-primary); }
+    .newsletter-desc { font-size: 0.825rem; color: var(--text-secondary); line-height: 1.5; }
+    .newsletter-form { display: flex; gap: 10px; }
+    .newsletter-input { flex: 1; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 10px 14px; font-size: 0.8rem; border-radius: 2px; outline: none; }
+    .newsletter-input:focus { border-color: var(--border-focus); }
+    .newsletter-btn { background: var(--accent-gold); color: var(--bg-base); padding: 10px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 2px; border: none; cursor: pointer; transition: var(--transition-smooth); }
+    .newsletter-btn:hover { background: var(--accent-gold-hover); }
+
+    @media(max-width: 900px) {
+      .perks-newsletter-section { grid-template-columns: 1fr; padding: 32px 24px; }
+    }
+
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; }
+    .section-title { font-family: var(--font-serif); font-size: 2rem; font-weight: 500; color: var(--text-primary); }
+
+    .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; width: 100%; text-align: left; }
+    .book-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 12px; display: flex; flex-direction: column; gap: 10px; text-decoration: none; transition: var(--transition-smooth); cursor: pointer; align-items: center; }
+    .book-card:hover { border-color: var(--border-focus); transform: translateY(-2px); }
+
+    .book-cover-wrap { width: 120px; height: 175px; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; margin: 0 auto; }
+    .book-cover-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .book-meta { display: flex; flex-direction: column; gap: 3px; width: 100%; }
+    .book-item-title { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; color: var(--text-primary); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .book-item-author { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .book-item-price { font-family: var(--font-serif); font-size: 1rem; font-weight: 700; color: var(--accent-gold); margin-top: 2px; }
+
+    .btn-book-details {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--bg-surface-elevated); color: var(--accent-gold); border: 1px solid var(--border-focus);
+      padding: 6px 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      border-radius: 2px; text-decoration: none; transition: var(--transition-smooth); margin-top: 2px; width: 100%;
+    }
+    .btn-book-details:hover { background: var(--accent-gold); color: var(--bg-base); }
+
+    footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
+    .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border-subtle); }
+    .footer-col { display: flex; flex-direction: column; gap: 14px; }
+    .footer-col-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); text-transform: uppercase; }
+    .footer-links-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; }
+    .footer-link:hover { color: var(--accent-gold); }
+    .footer-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+    .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <div id="siteAnnouncementBannerContainer">
+    <div id="siteAnnouncementBannerText" style="text-align: center;">Welcome to Libraryreeds | Explore our catalog</div>
+  </div>
+
+  <nav class="top-nav">
+    <div class="nav-container">
+      <a href="./index.html" class="brand-group">
+        <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
+        <span class="brand-title">Libraryreeds</span>
+      </a>
+      <div class="nav-actions">
+        <a href="./index.html" class="nav-link active">Home</a>
+        <a href="./shop.html" class="nav-link">Shop</a>
+        <a href="./fanart.html" class="nav-link">Fanart</a>
+        <a href="./about.html" class="nav-link">About</a>
+        <a href="./giftshop.html" class="nav-link">Gift Shop</a>
+        <a href="./wishlist.html" class="wishlist-icon-link" title="Wishlist">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+        </a>
+        <a href="./cart.html" class="cart-icon-link" title="Review Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+        </a>
+        <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
+        <div class="user-profile-menu" id="navProfileMenu">
+          <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
+            <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+            <span id="navUserName">Patron</span>
+          </button>
+          <div class="dropdown-menu-popover" id="profileDropdown">
+            <div class="dropdown-user-header">
+              <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
+            </div>
+            <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+            <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Manuscript Progress Tracker Component -->
+  <div class="tracker-wrapper">
+      <div class="tracker-container">
+          <div class="header">
+              <span class="title" id="trackerTitleText">Manuscript Progress</span>
+              <span class="completion-percentage" id="completionPercentage">0%</span>
+          </div>
+
+          <div class="progress-track">
+              <div class="progress-fill" id="progressFill"></div>
+          </div>
+
+          <div class="metrics-grid">
+              <div class="metric-item">
+                  <span class="metric-label">Current Word Count</span>
+                  <span class="metric-value" id="currentWords">0 / 80,000</span>
+              </div>
+              <div class="metric-item">
+                  <span class="metric-label">Current Position</span>
+                  <span class="metric-value" id="currentChapter">Chapter 1</span>
+              </div>
+              <div class="metric-item">
+                  <span class="metric-label">Project Completion</span>
+                  <span class="metric-value" id="targetDate">TBD</span>
+              </div>
+              <div class="metric-item">
+                  <span class="metric-label">Daily Writing Velocity</span>
+                  <span class="metric-value" id="writingVelocity">-- words/day</span>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <main class="hero-main">
+    <section class="hero-banner-box">
+      <div class="hero-content">
+        <h1 class="hero-title" id="homeHeroTitleText">Unearth Your Next Obsession.</h1>
+        <p class="hero-subtitle">Romance, mystery, magic, and modern love—bound for the discerning reader.</p>
+        <a href="./shop.html" class="hero-cta-btn">Shop the Books</a>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-visual-card">
+          <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80" alt="Dark Fantasy Volume">
+        </div>
+        <div class="hero-visual-card">
+          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80" alt="Archival Edition">
+        </div>
+      </div>
+    </section>
+
+    <!-- Row 1: Featured Books -->
+    <section style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="section-header">
+        <h2 class="section-title">Featured Books</h2>
+        <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View All Volumes &rarr;</a>
+      </div>
+      <div class="books-grid" id="homeJourneyGrid">
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Loading featured items...</p>
+      </div>
+    </section>
+
+    <!-- Row 2: Released / New Releases -->
+    <section style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="section-header">
+        <h2 class="section-title">Released / New Releases</h2>
+        <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View All Volumes &rarr;</a>
+      </div>
+      <div class="books-grid" id="homeFreshGrid">
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Loading new releases...</p>
+      </div>
+    </section>
+
+    <!-- Row 3: Popular / Bestsellers -->
+    <section style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="section-header">
+        <h2 class="section-title">Popular / Bestsellers</h2>
+        <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View All Volumes &rarr;</a>
+      </div>
+      <div class="books-grid" id="homeFavoritesGrid">
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Loading bestsellers...</p>
+      </div>
+    </section>
+
+    <!-- Middle Section: Newsletter Sign-up & Why Buy Direct Perks -->
+    <section class="perks-newsletter-section">
+      <div class="perks-grid">
+        <div class="perk-item">
+          <h4 class="perk-title">Support Independent</h4>
+          <p class="perk-desc">Direct purchases ensure authors and creators get the maximum support for future works.</p>
+        </div>
+        <div class="perk-item">
+          <h4 class="perk-title">Exclusive Editions</h4>
+          <p class="perk-desc">Access special book bindings, signed copies, and custom merchandise found nowhere else.</p>
+        </div>
+        <div class="perk-item">
+          <h4 class="perk-title">Secure Vault Shipping</h4>
+          <p class="perk-desc">Carefully packaged and tracked safely straight from our repository to your personal shelf.</p>
+        </div>
+        <div class="perk-item">
+          <h4 class="perk-title">Community Perks</h4>
+          <p class="perk-desc">Join our reader community to submit fanart, review rare volumes, and unlock insider updates.</p>
+        </div>
+      </div>
+      <div class="newsletter-box">
+        <h3 class="newsletter-title">Join the Archive Dispatch</h3>
+        <p class="newsletter-desc">Subscribe to receive early chapter previews, release date announcements, and private sales straight to your inbox.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to Libraryreeds!');">
+          <input type="email" class="newsletter-input" placeholder="Enter your email address..." required>
+          <button type="submit" class="newsletter-btn">Subscribe</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Row 4: The Complete Collection -->
+    <section style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="section-header">
+        <h2 class="section-title">The Complete Collection</h2>
+        <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View Full Shop Page &rarr;</a>
+      </div>
+      <div class="books-grid" id="homeCompleteGrid">
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Loading complete collection...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4 class="footer-col-title">Libraryreeds</h4>
+        <p class="footer-text">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">Quick Shortcuts</h4>
+        <ul class="footer-links-list">
+          <li><a href="./index.html" class="footer-link">Home</a></li>
+          <li><a href="./shop.html" class="footer-link">Browse Catalog</a></li>
+          <li><a href="./fanart.html" class="footer-link">Fanart Gallery</a></li>
+          <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
+          <li><a href="./giftshop.html" class="footer-link">Gift Shop</a></li>
+          <li><a href="./account.html" class="footer-link">Master Account Center</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Libraryreeds. All rights reserved.</span>
+      <span>Project fandomart-92133</span>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onSnapshot(doc(db, "settings", "manuscript_progress"), (snap) => {
+        const percentageEl = document.getElementById('completionPercentage');
+        const fillEl = document.getElementById('progressFill');
+        const wordsEl = document.getElementById('currentWords');
+        const chapterEl = document.getElementById('currentChapter');
+        const dateEl = document.getElementById('targetDate');
+        const velocityEl = document.getElementById('writingVelocity');
+        const titleEl = document.getElementById('trackerTitleText');
+
+        if (snap.exists()) {
+            const data = snap.data();
+            const currentWords = parseInt(data.currentWords) || 0;
+            const targetWords = parseInt(data.targetWords) || 80000;
+            const percentage = Math.min(Math.round((currentWords / targetWords) * 100), 100);
+
+            if (titleEl && data.manuscriptTitle) titleEl.textContent = data.manuscriptTitle;
+            if (percentageEl) percentageEl.textContent = `${percentage}%`;
+            if (fillEl) fillEl.style.width = `${percentage}%`;
+            if (wordsEl) wordsEl.textContent = `${currentWords.toLocaleString()} / ${targetWords.toLocaleString()}`;
+            if (chapterEl) chapterEl.textContent = data.currentChapter || 'Chapter 1';
+            if (dateEl) dateEl.textContent = data.targetCompletionDate || 'TBD';
+            if (velocityEl) velocityEl.textContent = data.writingVelocity ? `${parseInt(data.writingVelocity).toLocaleString()} words/day` : '-- words/day';
+        } else {
+            if (percentageEl) percentageEl.textContent = `0%`;
+            if (fillEl) fillEl.style.width = `0%`;
+            if (wordsEl) wordsEl.textContent = `0 / 80,000`;
+            if (chapterEl) chapterEl.textContent = `Chapter 1`;
+            if (dateEl) dateEl.textContent = `TBD`;
+            if (velocityEl) velocityEl.textContent = `-- words/day`;
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+      let totalQty = 0;
+      cart.forEach(ci => { totalQty += parseInt(ci.quantity || 1); });
+      const badge = document.getElementById('cartBadgeCount');
+      if (totalQty > 0 && badge) {
+        badge.textContent = totalQty;
+        badge.style.display = "flex";
+      }
+
+      const wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
+      const wishlistBadge = document.getElementById('wishlistBadgeCount');
+      if (wishlist.length > 0 && wishlistBadge) {
+        wishlistBadge.textContent = wishlist.length;
+        wishlistBadge.style.display = "flex";
+      }
+    });
+
+    const navLoginBtn = document.getElementById("navLoginBtn");
+    const navProfileMenu = document.getElementById("navProfileMenu");
+    const navUserName = document.getElementById("navUserName");
+    const dropdownUserName = document.getElementById("dropdownUserName");
+    const dropdownUserEmail = document.getElementById("dropdownUserEmail");
+    const profileTriggerBtn = document.getElementById("profileTriggerBtn");
+    const profileDropdown = document.getElementById("profileDropdown");
+
+    onAuthStateChanged(auth, async (user) => {
+      const navActions = document.querySelector('.nav-actions');
+      if (navActions) navActions.classList.add('auth-loaded');
+
+      if (user) {
+        if (navLoginBtn) navLoginBtn.style.display = "none";
+        if (navProfileMenu) navProfileMenu.style.display = "block";
+
+        const displayName = user.displayName || user.email.split("@")[0];
+        if (navUserName) navUserName.textContent = displayName;
+        if (dropdownUserName) dropdownUserName.textContent = displayName;
+        if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
+
+        let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
+
+        if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
+          try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists() && userDoc.data().photoURL) {
+              resolvedAvatar = userDoc.data().photoURL;
+            }
+          } catch(e) {}
+        }
+
+        if ((!resolvedAvatar || resolvedAvatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
+          resolvedAvatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
+        }
+
+        if (resolvedAvatar) {
+          localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
+        }
+
+        document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => {
+          if (resolvedAvatar) img.src = resolvedAvatar;
+        });
+      } else {
+        localStorage.removeItem('libraryreeds_user_avatar');
+        if (navLoginBtn) navLoginBtn.style.display = "inline-block";
+        if (navProfileMenu) navProfileMenu.style.display = "none";
+      }
+    });
+
+    if (profileTriggerBtn && profileDropdown) {
+      profileTriggerBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
+      });
+      document.addEventListener("click", () => {
+        profileDropdown.style.display = "none";
+      });
+    }
+
+    const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+    if (dropdownLogoutBtn) {
+      dropdownLogoutBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          localStorage.clear();
+          sessionStorage.clear();
+        } catch (err) {
+          console.warn("Sign out error:", err);
+        } finally {
+          window.location.replace("index.html");
+        }
+      });
+    }
+
+    onSnapshot(doc(db, "settings", "announcement"), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const container = document.getElementById('siteAnnouncementBannerContainer');
+        if (container) {
+          if (data.behavior === 'scroll-left') {
+            container.innerHTML = `<marquee direction="left" scrollamount="5">${data.bannerText || ''}</marquee>`;
+          } else if (data.behavior === 'scroll-right') {
+            container.innerHTML = `<marquee direction="right" scrollamount="5">${data.bannerText || ''}</marquee>`;
+          } else {
+            container.innerHTML = `<div style="text-align: center;">${data.bannerText || ''}</div>`;
+          }
+        }
+      }
+    });
+
+    onSnapshot(doc(db, "settings", "home_cms"), (snap) => {
+      if (snap.exists()) {
+        const d = snap.data();
+        const heroTitle = document.getElementById('homeHeroTitleText');
+        if (heroTitle && d.heroTitle) heroTitle.textContent = d.heroTitle;
+      }
+    });
+
+    function renderBookCards(gridElement, booksArray) {
+      if (!gridElement) return;
+      if (booksArray.length > 0) {
+        gridElement.innerHTML = "";
+        booksArray.forEach((b) => {
+          const card = document.createElement('div');
+          card.className = 'book-card';
+          card.style.cursor = 'pointer';
+          
+          card.innerHTML = `
+            <div class="book-cover-wrap">
+              <img src="${b.coverUrl || ''}" alt="${b.title || 'Book'}" class="book-cover-img">
+            </div>
+            <div class="book-meta">
+              <span class="book-item-author">${b.author || 'Author'} (Vol. ${b.volumeNumber || 1})</span>
+              <h3 class="book-item-title">${b.title || 'Untitled'}</h3>
+              <span class="book-item-price">$${parseFloat(b.price || 0).toFixed(2)}</span>
+            </div>
+            <a href="book.html?id=${b.id}" class="btn-book-details">View Book Details</a>
+          `;
+
+          card.addEventListener('click', (e) => {
+            if (!e.target.closest('a')) {
+              window.location.href = `book.html?id=${b.id}`;
+            }
+          });
+
+          gridElement.appendChild(card);
+        });
+      } else {
+        gridElement.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available in this section.</p>`;
+      }
+    }
+
+    const journeyGrid = document.getElementById('homeJourneyGrid');
+    const freshGrid = document.getElementById('homeFreshGrid');
+    const favoritesGrid = document.getElementById('homeFavoritesGrid');
+    const completeGrid = document.getElementById('homeCompleteGrid');
+
+    if (journeyGrid || freshGrid || favoritesGrid || completeGrid) {
+      onSnapshot(collection(db, "books"), (snapshot) => {
+        if (!snapshot.empty) {
+          let booksArray = [];
+          snapshot.forEach((docSnap) => {
+            booksArray.push({ id: docSnap.id, ...docSnap.data() });
+          });
+
+          let journeyBooks = [...booksArray].sort((a, b) => (parseInt(a.volumeNumber) || 1) - (parseInt(b.volumeNumber) || 1));
+          renderBookCards(journeyGrid, journeyBooks.slice(0, 4));
+
+          let freshBooks = [...booksArray].reverse();
+          renderBookCards(freshGrid, freshBooks.slice(0, 4));
+
+          let favoriteBooks = [...booksArray];
+          renderBookCards(favoritesGrid, favoriteBooks.slice(0, 4));
+
+          let completeBooks = [...booksArray];
+          renderBookCards(completeGrid, completeBooks.slice(4, 8).length > 0 ? completeBooks.slice(4, 8) : completeBooks.slice(0, 4));
+
+        } else {
+          if (journeyGrid) journeyGrid.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
+          if (freshGrid) freshGrid.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
+          if (favoritesGrid) favoritesGrid.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
+          if (completeGrid) completeGrid.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

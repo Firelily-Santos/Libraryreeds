@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libraryreeds | Master Admin &amp; Account Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0a0c10;
+      --bg-surface: #11141c;
+      --bg-surface-elevated: #161b26;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(197, 168, 128, 0.4);
+      --text-primary: #f0f2f5;
+      --text-secondary: #9ba1b0;
+      --text-muted: #5d6373;
+      --accent-gold: #c5a880;
+      --accent-gold-hover: #d8be9b;
+      --accent-gold-dim: rgba(197, 168, 128, 0.08);
+      --font-serif: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Anti-flash auth loading guard */
+    .nav-actions { visibility: hidden; }
+    .nav-actions.auth-loaded { visibility: visible; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .top-nav {
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(10, 12, 16, 0.94);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-container { 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      padding: 14px 32px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+    }
+    .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+    .brand-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary); letter-spacing: 0.06em; text-transform: uppercase; }
+    
+    .nav-actions { display: flex; align-items: center; gap: 24px; }
+    .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: var(--transition-smooth); }
+    .nav-link:hover, .nav-link.active { color: var(--accent-gold); }
+
+    .user-profile-menu { position: relative; display: none; }
+    .profile-trigger-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px 14px; border-radius: 3px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+    .nav-user-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+    
+    .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 42px; width: 220px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 3px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
+    .dropdown-user-header { padding: 14px 16px; background: var(--bg-surface-elevated); border-bottom: 1px solid var(--border-subtle); }
+    .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--text-primary); }
+    .dropdown-user-email { font-size: 0.725rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+    .dropdown-link-item { padding: 11px 16px; color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
+    .dropdown-link-item:hover { background: var(--bg-surface-elevated); color: var(--accent-gold); }
+    .auth-btn-nav { background: var(--accent-gold); color: var(--bg-base); padding: 9px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 2px; text-decoration: none; }
+
+    .dashboard-main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px 32px 80px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      flex: 1;
+    }
+
+    .dashboard-header {
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .dashboard-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 36px;
+      align-items: start;
+    }
+
+    .sidebar-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .sidebar-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--accent-gold);
+    }
+
+    .sidebar-user-meta { display: flex; flex-direction: column; }
+    .sidebar-user-name { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); }
+    .sidebar-user-role { font-size: 0.7rem; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+
+    .sidebar-category-header {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-top: 12px;
+      margin-bottom: 4px;
+      padding-left: 4px;
+    }
+
+    .sidebar-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .sidebar-tab-btn:hover { background: var(--bg-surface-elevated); color: var(--text-primary); }
+    .sidebar-tab-btn.active { background: var(--bg-surface-elevated); color: var(--accent-gold); border-left: 3px solid var(--accent-gold); }
+
+    .content-panel { display: flex; flex-direction: column; gap: 32px; }
+
+    .settings-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card-title {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-size: 0.725rem; font-weight: 600; letter-spacing: 0.04em; color: var(--text-secondary); text-transform: uppercase; }
+    .form-input { width: 100%; padding: 12px 16px; background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 2px; color: var(--text-primary); font-size: 0.85rem; outline: none; font-family: var(--font-sans); }
+    .form-input:focus { border-color: var(--border-focus); }
+
+    .btn-primary {
+      background: var(--accent-gold);
+      color: var(--bg-base);
+      border: none;
+      padding: 12px 24px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .btn-primary:hover { background: var(--accent-gold-hover); }
+
+    .btn-danger-action {
+      background: transparent;
+      color: #ff6b6b;
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      padding: 6px 12px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .btn-danger-action:hover { background: rgba(255, 107, 107, 0.1); }
+
+    .btn-danger {
+      background: transparent;
+      color: #ff6b6b;
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      padding: 10px 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      width: 100%;
+    }
+    .btn-danger:hover { background: rgba(255, 107, 107, 0.1); }
+
+    .success-msg { font-size: 0.8rem; color: var(--accent-gold); display: none; margin-top: 4px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    .inventory-table, .orders-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    .inventory-table th, .inventory-table td, .orders-table th, .orders-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border-subtle); font-size: 0.85rem; }
+    .inventory-table th, .orders-table th { font-size: 0.725rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-weight: 700; background: var(--bg-surface-elevated); }
+    .inventory-table td, .orders-table td { color: var(--text-secondary); }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; color: #40c057; font-weight: 600; font-size: 0.8rem; }
+    .status-dot { width: 7px; height: 7px; background: #40c057; border-radius: 50%; }
+
+    footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
+    .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border-subtle); }
+    .footer-col { display: flex; flex-direction: column; gap: 14px; }
+    .footer-col-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); text-transform: uppercase; }
+    .footer-links-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; }
+    .footer-link:hover { color: var(--accent-gold); }
+    .footer-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+    .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+
+    @media (max-width: 900px) {
+      .dashboard-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <div class="nav-container">
+      <a href="./index.html" class="brand-group">
+        <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
+        <span class="brand-title">Libraryreeds</span>
+      </a>
+      <div class="nav-actions">
+        <a href="./index.html" class="nav-link">Home</a>
+        <a href="./shop.html" class="nav-link">Shop</a>
+        <a href="./fanart.html" class="nav-link">Fanart</a>
+        <a href="./about.html" class="nav-link">About</a>
+        <a href="./cart.html" class="cart-icon-link" title="Review Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+        </a>
+        <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
+        <div class="user-profile-menu" id="navProfileMenu">
+          <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
+            <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+            <span id="navUserName">Patron</span>
+          </button>
+          <div class="dropdown-menu-popover" id="profileDropdown">
+            <div class="dropdown-user-header">
+              <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
+            </div>
+            <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+            <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="dashboard-main">
+    <header class="dashboard-header">
+      <h1 class="dashboard-title" id="panelHeaderTitle">Account Dashboard</h1>
+    </header>
+
+    <div class="dashboard-layout">
+      <aside class="sidebar-panel">
+        <div class="sidebar-profile">
+          <img id="sidebarAvatarImg" class="sidebar-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Avatar">
+          <div class="sidebar-user-meta">
+            <span class="sidebar-user-name" id="sidebarDisplayName">Patron</span>
+            <span class="sidebar-user-role" id="sidebarUserRole">Reader Account</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav-list" id="sidebarNavList">
+          <div class="sidebar-category-header">Overview</div>
+          <button type="button" class="sidebar-tab-btn active" onclick="switchPanel('general', 'Account Dashboard', event)">My Profile</button>
+          <button type="button" class="sidebar-tab-btn" onclick="switchPanel('userorders', 'My Order History', event)">My Orders</button>
+        </nav>
+
+        <button type="button" class="btn-danger" id="logoutBtn" style="margin-top: auto;">Sign Out</button>
+      </aside>
+
+      <div class="content-panel">
+        <div id="panel-general" class="settings-card">
+          <h2 class="card-title">Profile Settings</h2>
+          <form id="profileUpdateForm" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Display Name:</label>
+              <input type="text" class="form-input" id="profileNameInput" placeholder="Your Name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Upload Profile Image from Device:</label>
+              <input type="file" class="form-input" id="profileImageFile" accept="image/*" style="padding: 9px; cursor: pointer;">
+            </div>
+            <button type="submit" class="btn-primary" style="align-self: flex-start;">Save Profile &amp; Upload Image</button>
+            <div id="profileSaveStatus" class="success-msg">Profile updated successfully.</div>
+          </form>
+        </div>
+
+        <div id="panel-userorders" class="settings-card" style="display: none;">
+          <h2 class="card-title">My Order History &amp; Library Downloads</h2>
+          <div id="userOrdersContainer">
+            <p style="color: var(--text-muted); font-size: 0.85rem;">No past orders found in your account.</p>
+          </div>
+        </div>
+
+        <div id="panel-epubtracker" class="settings-card" style="display: none;">
+          <h2 class="card-title">Live Manuscript &amp; EPUB Progress Tracker</h2>
+          <form id="epubProgressForm" style="display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle);">
+            <div class="form-group">
+              <label class="form-label">Book / Manuscript Title:</label>
+              <input type="text" class="form-input" id="adminManuscriptTitle" placeholder="e.g. The Hidden Wings: Flames of Fate" required>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Target Total Word Count:</label>
+                <input type="text" class="form-input" id="adminTargetWords" value="80,000" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Manual Words Written (Supports Commas):</label>
+                <input type="text" class="form-input" id="adminManualWords" placeholder="e.g. 24,500">
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Current Chapter Title:</label>
+                <input type="text" class="form-input" id="adminCurrentChapter" placeholder="e.g. Chapter 12">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Manual Total Chapters Written:</label>
+                <input type="text" class="form-input" id="adminManualChapters" placeholder="e.g. 12">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Upload EPUB File (Optional Auto-Detect):</label>
+              <input type="file" class="form-input" id="adminEpubFile" accept=".epub" style="padding: 9px; cursor: pointer;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Project Completion Date / TBD:</label>
+              <input type="text" class="form-input" id="adminTargetDate" placeholder="e.g. Dec 2026">
+            </div>
+            <button type="submit" class="btn-primary" style="align-self: flex-start;">Publish Progress &amp; Save</button>
+            <div id="epubUploadStatus" class="success-msg">Progress updated successfully!</div>
+          </form>
+        </div>
+
+        <div id="panel-orders" class="settings-card" style="display: none;">
+          <h2 class="card-title">Global Customer Orders</h2>
+          <div style="overflow-x: auto;">
+            <table class="orders-table">
+              <thead>
+                <tr><th>Order #</th><th>Customer</th><th>Book Purchased</th><th>Total</th><th>Payment</th></tr>
+              </thead>
+              <tbody id="globalOrdersTableBody">
+                <tr>
+                  <td>#LRD-17793</td>
+                  <td>Firelily Santos<br><span style="font-size:0.75rem; color:var(--text-muted);">firelily@libraryreeds.com</span></td>
+                  <td>The Hidden Wings: Flames Of Fate (EPUB)</td>
+                  <td style="color:var(--accent-gold); font-weight:600;">$24.99</td>
+                  <td><span class="status-badge"><span class="status-dot"></span> Majority Paid</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="panel-inventory" class="settings-card" style="display: none;">
+          <h2 class="card-title">Catalog Inventory, Pricing &amp; Specifications Control</h2>
+          <form id="adminBookForm" style="display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle);">
+            <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary);" id="bookFormLegend">Add New Book to Catalog</h3>
+            <input type="hidden" id="editBookDocId">
+            
+            <div class="form-group">
+              <label class="form-label">Book Title:</label>
+              <input type="text" class="form-input" id="adminBookTitle" required>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Author Name:</label>
+              <input type="text" class="form-input" id="adminBookAuthor" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Price ($ USD):</label>
+                <input type="number" step="0.01" class="form-input" id="adminBookPrice" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Stock Quantity:</label>
+                <input type="number" class="form-input" id="adminBookStock" placeholder="10" value="10" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Shipping Cost ($):</label>
+                <input type="number" step="0.01" class="form-input" id="adminBookShipping" placeholder="0.00" value="0.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tax Rate (%):</label>
+                <input type="number" step="0.01" class="form-input" id="adminBookTax" placeholder="6.00" value="6.00" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Discount Amount ($):</label>
+                <input type="number" step="0.01" class="form-input" id="adminBookDiscount" placeholder="0.00" value="0.00">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Promo Code (e.g., REEDS10):</label>
+                <input type="text" class="form-input" id="adminBookPromo" placeholder="Optional promo code">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Series Volume Number:</label>
+                <input type="number" class="form-input" id="adminBookVolume" placeholder="1" value="1">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Format / Edition:</label>
+              <select class="form-input" id="adminBookFormat">
+                <option value="EPUB (Digital License)">EPUB (Digital License)</option>
+                <option value="Clothbound Hardcover">Clothbound Hardcover</option>
+                <option value="Paperback Edition">Paperback Edition</option>
+              </select>
+            </div>
+
+            <div style="border-top: 1px dashed var(--border-subtle); padding-top: 14px; margin-top: 4px;">
+              <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-gold); margin-bottom: 10px; font-weight: 700;">Book Specifications</h4>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group">
+                  <label class="form-label">Publication Date:</label>
+                  <input type="text" class="form-input" id="adminBookPubDate" placeholder="e.g. August 2026">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Page Count:</label>
+                  <input type="text" class="form-input" id="adminBookPages" placeholder="e.g. 340">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group">
+                  <label class="form-label">Publisher / Imprint:</label>
+                  <input type="text" class="form-input" id="adminBookPublisher" value="Libraryreeds Archive">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Language:</label>
+                  <input type="text" class="form-input" id="adminBookLanguage" value="English">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label class="form-label">ISBN-13:</label>
+                  <input type="text" class="form-input" id="adminBookIsbn" placeholder="e.g. 978-1-23456-789-0">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">License Type:</label>
+                  <input type="text" class="form-input" id="adminBookLicense" value="Digital &amp; Physical">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+              <label class="form-label">Cover Image URL:</label>
+              <input type="url" class="form-input" id="adminBookCover" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Synopsis / Description:</label>
+              <textarea class="form-input" id="adminBookDesc" rows="3" style="resize: vertical;"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <button type="submit" class="btn-primary">Save Book &amp; Specs to Vault</button>
+              <button type="button" id="cancelEditBookBtn" class="btn-primary" style="background: var(--bg-surface); color: var(--text-secondary); border: 1px solid var(--border-subtle); display: none;">Cancel Edit</button>
+            </div>
+          </form>
+
+          <div style="overflow-x: auto;">
+            <table class="inventory-table">
+              <thead>
+                <tr><th>Title</th><th>Author</th><th>Price</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="adminInventoryTableBody">
+                <tr><td colspan="4" style="color: var(--text-muted); text-align: center;">Loading inventory...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="panel-giftshop" class="settings-card" style="display: none;">
+            <div class="admin-card" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 32px; margin-top: 24px;">
+                <h3 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--accent-gold); margin-bottom: 16px;">Manage Gift Shop &amp; Virtual Cards</h3>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 24px;">Add new merchandise or virtual gift cards to your gift shop inventory.</p>
+                
+                <form id="addGiftItemForm" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div>
+                        <label style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Item / Card Title</label>
+                        <input type="text" id="giftTitleInput" placeholder="e.g., $50 Digital Gift Card or Special Edition Bookmark" required style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 10px 14px; border-radius: 4px; outline: none;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Price ($)</label>
+                            <input type="number" step="0.01" id="giftPriceInput" placeholder="25.00" required style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 10px 14px; border-radius: 4px; outline: none;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Item Type</label>
+                            <select id="giftTypeInput" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 10px 14px; border-radius: 4px; outline: none; cursor: pointer;">
+                                <option value="Virtual Gift Card">Virtual Gift Card</option>
+                                <option value="Merchandise / Physical">Merchandise / Physical Product</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Image URL</label>
+                        <input type="url" id="giftImageUrlInput" placeholder="https://images.unsplash.com/..." required style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 10px 14px; border-radius: 4px; outline: none;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Description / Details</label>
+                        <textarea id="giftDescInput" rows="3" placeholder="Enter instructions or product details..." style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 10px 14px; border-radius: 4px; outline: none; resize: vertical;"></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="background: var(--accent-gold); color: var(--bg-base); padding: 12px; font-weight: 700; border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase;">Publish to Gift Shop</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="panel-announcement" class="settings-card" style="display: none;">
+          <h2 class="card-title">Announcement Bar Management</h2>
+          <form id="announcementForm" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Banner Text Message:</label>
+              <input type="text" class="form-input" id="announceText" placeholder="Chapter 5 live in the vault! Use code REEDS10 for 10% off.">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Behavior / Animation Style:</label>
+              <select class="form-input" id="announceBehavior">
+                <option value="stationary">Stationary (Top It - No Motion)</option>
+                <option value="scroll-left">Scroll Left (Marquee)</option>
+                <option value="scroll-right">Scroll Right (Marquee)</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-primary" style="align-self: flex-start;">Publish Banner</button>
+            <div id="announceSaveStatus" class="success-msg">Announcement bar updated.</div>
+          </form>
+        </div>
+
+        <div id="panel-abouteditor" class="settings-card" style="display: none;">
+          <h2 class="card-title">About Page Content Management</h2>
+          <form id="adminAboutForm" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Headline / Subtitle:</label>
+              <input type="text" class="form-input" id="aboutAdminHeading" placeholder="Refusing to be boxed into just one world.">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Featured Quote:</label>
+              <input type="text" class="form-input" id="aboutAdminQuote" placeholder="This is my very first novel...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Author Circular Image URL:</label>
+              <input type="url" class="form-input" id="aboutAuthorImageUrl" placeholder="https://image-url.com/avatar.jpg">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Full Bio Paragraphs:</label>
+              <textarea class="form-input" id="aboutAdminBody" rows="6" style="resize: vertical;"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="align-self: flex-start;">Publish to About Page</button>
+            <div id="aboutSaveStatus" class="success-msg">About page updated successfully.</div>
+          </form>
+        </div>
+
+        <div id="panel-bookdetailcms" class="settings-card" style="display: none;">
+          <h2 class="card-title">Book Detail Page Template Management</h2>
+          <form id="bookDetailCmsForm" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Default Call-To-Action Button Text:</label>
+              <input type="text" class="form-input" id="detailCtaText" placeholder="Add to Cart">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Digital License Notice / Disclaimer:</label>
+              <textarea class="form-input" id="detailNoticeText" rows="3" placeholder="Instant digital access delivered securely upon purchase."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="align-self: flex-start;">Update Book Detail Template</button>
+            <div id="bookDetailSaveStatus" class="success-msg">Book detail template updated successfully.</div>
+          </form>
+        </div>
+
+        <div id="panel-homecms" class="settings-card" style="display: none;">
+          <h2 class="card-title">Homepage CMS &amp; Featured Books</h2>
+          <form id="homeCmsForm" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Hero Banner Title:</label>
+              <input type="text" class="form-input" id="homeHeroTitle" placeholder="Preserving Rare Literature &amp; Records">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Active Promo Code:</label>
+              <input type="text" class="form-input" id="homePromoCode" placeholder="REEDS10">
+            </div>
+            <button type="submit" class="btn-primary" style="align-self: flex-start;">Update Homepage</button>
+            <div id="homeSaveStatus" class="success-msg">Homepage updated successfully.</div>
+          </form>
+        </div>
+
+        <div id="panel-fanartcms" class="settings-card" style="display: none;">
+          <h2 class="card-title">Fanart Page Banner Control</h2>
+          <form id="fanartCmsForm" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Fanart Banner Image URL:</label>
+              <input type="url" class="form-input" id="fanartBannerImgInput" placeholder="https://example.com/banner.jpg" required>
+              <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Paste an image URL to customize the main header banner on your Fanart gallery page.</span>
+            </div>
+            <button type="submit" class="btn-primary" style="align-self: flex-start;">Publish Fanart Banner</button>
+            <div id="fanartSaveStatus" class="success-msg">Fanart banner updated successfully!</div>
+          </form>
+        </div>
+
+        <div id="panel-policies" class="settings-card" style="display: none;">
+          <h2 class="card-title">Store Policies &amp; Shipping Rules</h2>
+          <form id="adminPoliciesForm" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Support Email Address:</label>
+              <input type="email" class="form-input" id="policySupportEmail" value="support@libraryreeds.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Shipping &amp; Return Terms:</label>
+              <textarea class="form-input" id="policyShippingText" rows="4" style="resize: vertical;"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="align-self: flex-start;">Save Policies</button>
+            <div id="policySaveStatus" class="success-msg">Policies updated successfully.</div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4 class="footer-col-title">Libraryreeds</h4>
+        <p class="footer-text">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">Quick Shortcuts</h4>
+        <ul class="footer-links-list">
+          <li><a href="./index.html" class="footer-link">Home</a></li>
+          <li><a href="./shop.html" class="footer-link">Browse Catalog</a></li>
+          <li><a href="./fanart.html" class="footer-link">Fanart Gallery</a></li>
+          <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Libraryreeds. All rights reserved.</span>
+      <span>Account Center</span>
+    </div>
+  </footer>
+
+  <script>
+    function switchPanel(panelId, titleText, event) {
+      document.querySelectorAll('.settings-card').forEach(card => card.style.display = 'none');
+      document.querySelectorAll('.sidebar-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const target = document.getElementById('panel-' + panelId);
+      if (target) target.style.display = 'flex';
+      document.getElementById('panelHeaderTitle').textContent = titleText;
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+      }
+    }
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const ADMIN_EMAIL = "firelily@libraryreeds.com";
+
+    onAuthStateChanged(auth, async (user) => {
+      const navActions = document.querySelector('.nav-actions');
+      if (navActions) navActions.classList.add('auth-loaded');
+
+      if (user) {
+        if (navLoginBtn) navLoginBtn.style.display = "none";
+        if (navProfileMenu) navProfileMenu.style.display = "block";
+
+        const name = user.displayName || user.email.split('@')[0];
+        document.getElementById('sidebarDisplayName').textContent = name;
+        document.getElementById('profileNameInput').value = user.displayName || '';
+
+        const dropdownUserName = document.getElementById("dropdownUserName");
+        const dropdownUserEmail = document.getElementById("dropdownUserEmail");
+        if (dropdownUserName) dropdownUserName.textContent = name;
+        if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
+
+        const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || user.email.toLowerCase().includes('admin');
+
+        if (isAdmin) {
+          document.getElementById('sidebarUserRole').textContent = "Administrator";
+          injectAdminSidebarLinks();
+          loadCmsData();
+          loadAdminInventory();
+        } else {
+          document.getElementById('sidebarUserRole').textContent = "Reader Account";
+        }
+
+        let avatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
+        if (!avatar || avatar.includes('unsplash')) {
+          try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists() && userDoc.data().photoURL) avatar = userDoc.data().photoURL;
+          } catch(e) {}
+        }
+        if ((!avatar || avatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
+          avatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
+        }
+        if (avatar) {
+          document.getElementById('sidebarAvatarImg').src = avatar;
+          localStorage.setItem('libraryreeds_user_avatar', avatar);
+        }
+
+        document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => {
+          if (avatar) img.src = avatar;
+        });
+      } else {
+        localStorage.removeItem('libraryreeds_user_avatar');
+        window.location.replace("login.html");
+      }
+    });
+
+    const navLoginBtn = document.getElementById("navLoginBtn");
+    const navProfileMenu = document.getElementById("navProfileMenu");
+    const profileTriggerBtn = document.getElementById("profileTriggerBtn");
+    const profileDropdown = document.getElementById("profileDropdown");
+
+    if (profileTriggerBtn && profileDropdown) {
+      profileTriggerBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
+      });
+      document.addEventListener("click", () => {
+        profileDropdown.style.display = "none";
+      });
+    }
+
+    function injectAdminSidebarLinks() {
+      const navList = document.getElementById('sidebarNavList');
+      if (document.getElementById('panel-orders').dataset.injected) return;
+      document.getElementById('panel-orders').dataset.injected = "true";
+
+      navList.innerHTML += `
+        <div class="sidebar-category-header">Store Management</div>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('epubtracker', 'Manuscript EPUB Tracker', event)">Manuscript Progress</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('orders', 'Global Store Orders', event)">Global Orders</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('inventory', 'Catalog Inventory Management', event)">Inventory &amp; Pricing</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('giftshop', 'Manage Gift Shop & Virtual Cards', event)">Gift Shop &amp; Cards</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('announcement', 'Announcement Bar Control', event)">Announcement Bar</button>
+
+        <div class="sidebar-category-header">Content Management</div>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('abouteditor', 'About Page CMS', event)">About Author Page</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('bookdetailcms', 'Book Detail Page CMS', event)">Book Detail Page</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('homecms', 'Homepage CMS & Featured Books', event)">Homepage CMS</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('fanartcms', 'Fanart Banner CMS', event)">Fanart Banner</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('policies', 'Store Policies &amp; Terms', event)">Policies &amp; Shipping</button>
+      `;
+    }
+
+    const addGiftForm = document.getElementById('addGiftItemForm');
+    if (addGiftForm) {
+        addGiftForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('giftTitleInput').value.trim();
+            const price = parseFloat(document.getElementById('giftPriceInput').value) || 0;
+            const type = document.getElementById('giftTypeInput').value;
+            const imageUrl = document.getElementById('giftImageUrlInput').value.trim();
+            const description = document.getElementById('giftDescInput').value.trim();
+
+            try {
+                await addDoc(collection(db, "giftshop_items"), {
+                    title: title,
+                    price: price,
+                    category: type,
+                    imageUrl: imageUrl,
+                    coverUrl: imageUrl, // Compatibility fallback for book.html
+                    description: description,
+                    createdAt: serverTimestamp()
+                });
+                alert("Successfully published item to the Gift Shop!");
+                addGiftForm.reset();
+            } catch (err) {
+                console.error("Error adding gift shop item:", err);
+                alert("Failed to publish item. Ensure you have admin privileges.");
+            }
+        });
+    }
+
+    async function loadCmsData() {
+      try {
+        const annDoc = await getDoc(doc(db, "settings", "announcement"));
+        if (annDoc.exists()) {
+          const d = annDoc.data();
+          if (d.bannerText) document.getElementById('announceText').value = d.bannerText;
+          if (d.behavior) document.getElementById('announceBehavior').value = d.behavior;
+        }
+
+        const aboutDoc = await getDoc(doc(db, "settings", "about_content"));
+        if (aboutDoc.exists()) {
+          const d = aboutDoc.data();
+          if (d.heading) document.getElementById('aboutAdminHeading').value = d.heading;
+          if (d.quote) document.getElementById('aboutAdminQuote').value = d.quote;
+          if (d.authorImageUrl) document.getElementById('aboutAuthorImageUrl').value = d.authorImageUrl;
+          if (d.body) document.getElementById('aboutAdminBody').value = d.body;
+        }
+
+        const detailDoc = await getDoc(doc(db, "settings", "book_detail_cms"));
+        if (detailDoc.exists()) {
+          const d = detailDoc.data();
+          if (d.ctaText) document.getElementById('detailCtaText').value = d.ctaText;
+          if (d.noticeText) document.getElementById('detailNoticeText').value = d.noticeText;
+        }
+
+        const homeDoc = await getDoc(doc(db, "settings", "home_cms"));
+        if (homeDoc.exists()) {
+          const d = homeDoc.data();
+          if (d.heroTitle) document.getElementById('homeHeroTitle').value = d.heroTitle;
+          if (d.promoCode) document.getElementById('homePromoCode').value = d.promoCode;
+        }
+
+        const fanartDoc = await getDoc(doc(db, "settings", "fanart_cms"));
+        if (fanartDoc.exists()) {
+          const d = fanartDoc.data();
+          if (d.bannerUrl) document.getElementById('fanartBannerImgInput').value = d.bannerUrl;
+        }
+
+        const polDoc = await getDoc(doc(db, "settings", "policies"));
+        if (polDoc.exists()) {
+          const d = polDoc.data();
+          if (d.supportEmail) document.getElementById('policySupportEmail').value = d.supportEmail;
+          if (d.shippingText) document.getElementById('policyShippingText').value = d.shippingText;
+        }
+      } catch(e) {}
+    }
+
+    document.getElementById('profileUpdateForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      const newName = document.getElementById('profileNameInput').value.trim();
+      const fileInput = document.getElementById('profileImageFile');
+      const statusMsg = document.getElementById('profileSaveStatus');
+
+      try {
+        if (newName) await updateProfile(user, { displayName: newName });
+        if (fileInput.files && fileInput.files[0]) {
+          const file = fileInput.files[0];
+          const storageRef = ref(storage, `profile_avatars/${user.uid}_${Date.now()}`);
+          const snapshot = await uploadBytes(storageRef, file);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          await updateProfile(user, { photoURL: downloadURL });
+          await setDoc(doc(db, "users", user.uid), { photoURL: downloadURL, displayName: newName }, { merge: true });
+          localStorage.setItem('libraryreeds_user_avatar', downloadURL);
+          document.getElementById('sidebarAvatarImg').src = downloadURL;
+        }
+        statusMsg.style.display = 'block';
+        setTimeout(() => { statusMsg.style.display = 'none'; window.location.reload(); }, 2000);
+      } catch (err) { alert("Error: " + err.message); }
+    });
+
+    document.getElementById('announcementForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const bannerText = document.getElementById('announceText').value;
+      const behavior = document.getElementById('announceBehavior').value;
+      try {
+        await setDoc(doc(db, "settings", "announcement"), { bannerText, behavior, updatedAt: serverTimestamp() }, { merge: true });
+        const st = document.getElementById('announceSaveStatus');
+        st.style.display = 'block';
+        setTimeout(() => { st.style.display = 'none'; }, 3000);
+      } catch (err) { alert("Error: " + err.message); }
+    });
+
+    document.getElementById('adminAboutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const heading = document.getElementById('aboutAdminHeading').value;
+      const quote = document.getElementById('aboutAdminQuote').value;
+      const authorImageUrl = document.getElementById('aboutAuthorImageUrl').value;
+      const body = document.getElementById('aboutAdminBody').value;
+      try {
+        await setDoc(doc(db, "settings", "about_content"), { heading, quote, authorImageUrl, body, updatedAt: serverTimestamp() }, { merge: true });
+        const st = document.getElementById('aboutSaveStatus');
+        st.style.display = 'block';
+        setTimeout(() => { st.style.display = 'none'; }, 3000);
+      } catch (err) { alert("Error: " + err.message); }
+    });
+
+    document.getElementById('bookDetailCmsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ctaText = document.getElementById('detailCtaText').value;
+      const noticeText = document.getElementById('detailNoticeText').value;
+      try {
+        await setDoc(doc(db, "settings", "book_detail_cms"), { ctaText, noticeText, updatedAt: serverTimestamp() }, { merge: true });
+        const st = document.getElementById('bookDetailSaveStatus');
+        st.style.display = 'block';
+        setTimeout(() => { st.style.display = 'none'; }, 3000);
+      } catch (err) { alert("Error: " + err.message); }
+    });
+
+    document.getElementById('homeCmsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const heroTitle = document.getElementById('homeHeroTitle').value;
+      const promoCode = document.getElementById('homePromoCode').value;
+      try {
+        await setDoc(doc(db, "settings", "home_cms"), { heroTitle, promoCode, updatedAt: serverTimestamp() }, { merge: true });
+        const st = document.getElementById('homeSaveStatus');
+        st.style.display = 'block';
+        setTimeout(() => { st.style.display = 'none'; }, 3000);
+      } catch (err) { alert("Error: " + err.message); }
+    });
+
+    document.getElementById('fanartCmsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const bannerUrl = document.getElementById('fanartBannerImgInput').value.trim();
+      const st = document.getElementById('fanartSaveStatus');
+      try {
+        await setDoc(doc(db, "settings", "fanart_cms"), { bannerUrl, updatedAt: serverTimestamp() }, { merge: true });
+        st.style.display = 'block';
+        setTimeout(() => { st.style.display = 'none'; }, 3000);
+      } catch (err) { alert("Error: " + err.message); }
+    });
+
+    document.getElementById('adminPoliciesForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const supportEmail = document.getElementById('policySupportEmail').value;
+      const shippingText = document.getElementById('policyShippingText').value;
+      try {
+        await setDoc(doc(db, "settings", "policies"), { supportEmail, shippingText, updatedAt: serverTimestamp() }, { merge: true });
+        const st = document.getElementById('policySaveStatus');
+        st.style.display = 'block';
+        setTimeout(() => { st.style.display = 'none'; }, 3000);
+      } catch (err) { alert("Error: " + err.message); }
+    });
+
+    const adminBookForm = document.getElementById('adminBookForm');
+    adminBookForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const docId = document.getElementById('editBookDocId').value;
+      const title = document.getElementById('adminBookTitle').value.trim();
+      const author = document.getElementById('adminBookAuthor').value.trim();
+      const price = parseFloat(document.getElementById('adminBookPrice').value);
+      const stockQuantity = parseInt(document.getElementById('adminBookStock').value) || 0;
+      const shippingCost = parseFloat(document.getElementById('adminBookShipping').value) || 0;
+      const taxRate = parseFloat(document.getElementById('adminBookTax').value) || 0;
+      const discountAmount = parseFloat(document.getElementById('adminBookDiscount').value) || 0;
+      const promoCode = document.getElementById('adminBookPromo').value.trim();
+      const volumeNumber = parseInt(document.getElementById('adminBookVolume').value) || 1;
+      const format = document.getElementById('adminBookFormat').value;
+      const coverUrl = document.getElementById('adminBookCover').value.trim();
+      const description = document.getElementById('adminBookDesc').value.trim();
+
+      // Specifications
+      const publicationDate = document.getElementById('adminBookPubDate').value.trim();
+      const pageCount = document.getElementById('adminBookPages').value.trim();
+      const publisher = document.getElementById('adminBookPublisher').value.trim();
+      const language = document.getElementById('adminBookLanguage').value.trim();
+      const isbn = document.getElementById('adminBookIsbn').value.trim();
+      const license = document.getElementById('adminBookLicense').value.trim();
+
+      const bData = { 
+        title, author, price, stockQuantity, shippingCost, taxRate, discountAmount, 
+        promoCode, volumeNumber, format, coverUrl, description, 
+        publicationDate, pageCount, publisher, language, isbn, license,
+        updatedAt: serverTimestamp() 
+      };
+
+      try {
+        if (docId) {
+          await updateDoc(doc(db, "books", docId), bData);
+          alert("Book inventory, pricing and specifications updated successfully.");
+        } else {
+          bData.createdAt = serverTimestamp();
+          await addDoc(collection(db, "books"), bData);
+          alert("New book added successfully to inventory.");
+        }
+        adminBookForm.reset();
+        document.getElementById('editBookDocId').value = "";
+        document.getElementById('bookFormLegend').textContent = "Add New Book to Catalog";
+        document.getElementById('cancelEditBookBtn').style.display = 'none';
+      } catch (err) { alert("Error: " + err.message); }
+    });
+
+    function loadAdminInventory() {
+      const tbody = document.getElementById('adminInventoryTableBody');
+      onSnapshot(collection(db, "books"), (snapshot) => {
+        if (!snapshot.empty) {
+          tbody.innerHTML = "";
+          snapshot.forEach((docSnap) => {
+            const b = docSnap.data();
+            const id = docSnap.id;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><strong>${b.title || 'Untitled'}</strong> (Vol. ${b.volumeNumber || 1})<br><span style="font-size:0.7rem; color:var(--accent-gold);">$${parseFloat(b.price||0).toFixed(2)} | Stock: ${b.stockQuantity || 0} | Tax: ${b.taxRate || 6}%</span></td>
+              <td>${b.author || 'Author'}</td>
+              <td>$${parseFloat(b.price || 0).toFixed(2)}</td>
+              <td>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <button type="button" class="btn-primary edit-book-btn" style="padding: 6px 12px; font-size: 0.65rem;"
+                    data-id="${id}"
+                    data-title="${encodeURIComponent(b.title || '')}"
+                    data-author="${encodeURIComponent(b.author || '')}"
+                    data-price="${b.price || 0}"
+                    data-stock="${b.stockQuantity || 10}"
+                    data-shipping="${b.shippingCost || 0}"
+                    data-tax="${b.taxRate || 6}"
+                    data-discount="${b.discountAmount || 0}"
+                    data-promo="${encodeURIComponent(b.promoCode || '')}"
+                    data-volume="${b.volumeNumber || 1}"
+                    data-format="${encodeURIComponent(b.format || 'EPUB (Digital License)')}"
+                    data-cover="${encodeURIComponent(b.coverUrl || '')}"
+                    data-desc="${encodeURIComponent(b.description || '')}"
+                    data-pubdate="${encodeURIComponent(b.publicationDate || '')}"
+                    data-pages="${encodeURIComponent(b.pageCount || '')}"
+                    data-publisher="${encodeURIComponent(b.publisher || '')}"
+                    data-lang="${encodeURIComponent(b.language || '')}"
+                    data-isbn="${encodeURIComponent(b.isbn || '')}"
+                    data-license="${encodeURIComponent(b.license || '')}">Edit</button>
+                  <button type="button" class="btn-danger-action delete-book-btn"
+                    data-id="${id}"
+                    data-title="${encodeURIComponent(b.title || '')}">Delete</button>
+              </div>
+            </td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          tbody.querySelectorAll('.edit-book-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const dataset = e.currentTarget.dataset;
+              document.getElementById('editBookDocId').value = dataset.id;
+              document.getElementById('adminBookTitle').value = decodeURIComponent(dataset.title);
+              document.getElementById('adminBookAuthor').value = decodeURIComponent(dataset.author);
+              document.getElementById('adminBookPrice').value = dataset.price;
+              document.getElementById('adminBookStock').value = dataset.stock || 10;
+              document.getElementById('adminBookShipping').value = dataset.shipping || 0;
+              document.getElementById('adminBookTax').value = dataset.tax || 6;
+              document.getElementById('adminBookDiscount').value = dataset.discount || 0;
+              document.getElementById('adminBookPromo').value = decodeURIComponent(dataset.promo || '');
+              document.getElementById('adminBookVolume').value = dataset.volume || 1;
+              document.getElementById('adminBookFormat').value = decodeURIComponent(dataset.format);
+              document.getElementById('adminBookCover').value = decodeURIComponent(dataset.cover);
+              document.getElementById('adminBookDesc').value = decodeURIComponent(dataset.desc);
+              
+              // Specs
+              document.getElementById('adminBookPubDate').value = decodeURIComponent(dataset.pubdate || '');
+              document.getElementById('adminBookPages').value = decodeURIComponent(dataset.pages || '');
+              document.getElementById('adminBookPublisher').value = decodeURIComponent(dataset.publisher || 'Libraryreeds Archive');
+              document.getElementById('adminBookLanguage').value = decodeURIComponent(dataset.lang || 'English');
+              document.getElementById('adminBookIsbn').value = decodeURIComponent(dataset.isbn || '');
+              document.getElementById('adminBookLicense').value = decodeURIComponent(dataset.license || 'Digital & Physical');
+
+              document.getElementById('bookFormLegend').textContent = `Editing: ${decodeURIComponent(dataset.title)}`;
+              document.getElementById('cancelEditBookBtn').style.display = 'inline-block';
+              switchPanel('inventory', 'Catalog Inventory Management');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+          });
+
+          tbody.querySelectorAll('.delete-book-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+              const dataset = e.currentTarget.dataset;
+              if (confirm(`Are you sure you want to delete "${decodeURIComponent(dataset.title)}" from the catalog?`)) {
+                try {
+                  await deleteDoc(doc(db, "books", dataset.id));
+                  alert("Book deleted successfully.");
+                } catch (err) { alert("Error deleting book: " + err.message); }
+              }
+            });
+          });
+        } else {
+          tbody.innerHTML = `<tr><td colspan="4" style="color: var(--text-muted); text-align: center;">No books found in inventory.</td></tr>`;
+        }
+      });
+    }
+
+    const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+    if (dropdownLogoutBtn) {
+      dropdownLogoutBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          localStorage.clear();
+          sessionStorage.clear();
+        } catch (err) {
+          console.warn("Sign out error:", err);
+        } finally {
+          window.location.replace("index.html");
+        }
+      });
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await signOut(auth);
+      localStorage.clear();
+      window.location.replace("index.html");
+    });
+  </script>
+</body>
+</html>

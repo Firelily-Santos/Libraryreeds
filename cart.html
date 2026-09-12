@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libraryreeds | Secure Online Checkout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0a0c10;
+      --bg-surface: #11141c;
+      --bg-surface-elevated: #161b26;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(197, 168, 128, 0.4);
+      --text-primary: #f0f2f5;
+      --text-secondary: #9ba1b0;
+      --text-muted: #5d6373;
+      --accent-gold: #c5a880;
+      --accent-gold-hover: #d8be9b;
+      --font-serif: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Anti-flash auth loading guard */
+    .nav-actions { visibility: hidden; }
+    .nav-actions.auth-loaded { visibility: visible; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
+
+    #siteAnnouncementBannerContainer {
+      overflow: hidden; white-space: nowrap; background: var(--accent-gold); color: var(--bg-base); font-size: 0.75rem; font-weight: 700; padding: 8px 16px; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    .top-nav { border-bottom: 1px solid var(--border-subtle); background: rgba(10, 12, 16, 0.94); backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 100; }
+    .nav-container { max-width: 1400px; margin: 0 auto; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; }
+    .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+    .brand-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary); letter-spacing: 0.06em; text-transform: uppercase; }
+    
+    .nav-actions { display: flex; align-items: center; gap: 24px; }
+    .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: var(--transition-smooth); }
+    .nav-link:hover, .nav-link.active { color: var(--accent-gold); }
+    
+    .cart-icon-link { color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; position: relative; transition: var(--transition-smooth); }
+    .cart-icon-link:hover { color: var(--accent-gold); }
+
+    .user-profile-menu { position: relative; display: none; }
+    .profile-trigger-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px 14px; border-radius: 3px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+    .nav-user-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+    
+    .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 42px; width: 220px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 3px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
+    .dropdown-user-header { padding: 14px 16px; background: var(--bg-surface-elevated); border-bottom: 1px solid var(--border-subtle); }
+    .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--text-primary); }
+    .dropdown-user-email { font-size: 0.725rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+    .dropdown-link-item { padding: 11px 16px; color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
+    .dropdown-link-item:hover { background: var(--bg-surface-elevated); color: var(--accent-gold); }
+    .auth-btn-nav { background: var(--accent-gold); color: var(--bg-base); padding: 9px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 2px; text-decoration: none; }
+
+    .cart-main { max-width: 1400px; margin: 0 auto; padding: 48px 32px 80px; width: 100%; display: flex; flex-direction: column; gap: 36px; flex: 1; }
+    .cart-header { border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; }
+    .cart-title { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 500; color: var(--text-primary); }
+
+    .cart-layout { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
+    .cart-items-column { display: flex; flex-direction: column; gap: 16px; }
+
+    .cart-summary-box { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 28px; display: flex; flex-direction: column; gap: 16px; position: sticky; top: 40px; }
+    .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-secondary); }
+    .summary-row.total { border-top: 1px solid var(--border-subtle); padding-top: 14px; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+    .summary-row.total span:last-child { color: var(--accent-gold); font-family: var(--font-serif); font-size: 1.5rem; }
+
+    .btn-checkout { background: var(--accent-gold); color: var(--bg-base); border: none; padding: 14px; font-size: 0.775rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border-radius: 2px; cursor: pointer; transition: var(--transition-smooth); width: 100%; text-align: center; }
+    .btn-checkout:hover { background: var(--accent-gold-hover); }
+
+    /* Step 2: Intermediate Checkout Review Page Container */
+    .checkout-step-container { display: none; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 48px; flex-direction: column; gap: 24px; max-width: 800px; margin: 0 auto; width: 100%; }
+    .checkout-step-container.active { display: flex; }
+
+    /* Fulfillment Details Box */
+    .fulfillment-box { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 16px; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; color: var(--text-secondary); }
+    .fulfillment-box h4 { font-size: 0.9rem; color: var(--text-primary); font-family: var(--font-serif); margin-bottom: 4px; }
+
+    /* STEP 3: Scrolling Parchment Receipt Modal Styles */
+    .receipt-overlay { position: fixed; inset: 0; background: rgba(10, 12, 16, 0.88); backdrop-filter: blur(8px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+    .receipt-overlay.active { display: flex; }
+
+    .scroll-receipt-wrapper {
+        background-color: #1f1815;
+        font-family: 'Georgia', serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 20px 0;
+    }
+
+    .scene {
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+        transition: transform 0.2s ease;
+    }
+
+    .scene:hover { transform: scale(1.01); }
+
+    .roller {
+        width: 450px;
+        height: 22px;
+        background: linear-gradient(to bottom, #6e5335 0%, #b08d5b 25%, #f3e0be 50%, #82633f 75%, #42311d 100%);
+        border-radius: 12px;
+        position: relative;
+        z-index: 20;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.4);
+    }
+
+    .roller::before, .roller::after {
+        content: '';
+        position: absolute;
+        top: -3px;
+        width: 12px;
+        height: 28px;
+        background: linear-gradient(to right, #5c4228, #9c784e, #42311d);
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .roller::before { left: -10px; }
+    .roller::after { right: -10px; }
+
+    .paper-container {
+        width: 420px;
+        height: 25px;
+        background: #f4ebd0;
+        background-image: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(0,0,0,0.12) 100%),
+                        url('https://www.transparenttextures.com/patterns/cream-paper.png');
+        position: relative;
+        overflow: hidden;
+        transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        margin: -9px 0;
+        z-index: 10;
+        box-shadow: inset 0 0 30px rgba(110, 85, 50, 0.4);
+    }
+
+    .paper-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 18px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.35), transparent);
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    .receipt-content {
+        padding: 25px 30px;
+        opacity: 0;
+        transform: translateY(-15px);
+        transition: opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s;
+        color: #2c221e;
+    }
+
+    .paper-container.unrolled .receipt-content {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .logo-container {
+        width: 260px;
+        height: 110px;
+        margin: 0 auto 5px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logo-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+    }
+
+    .receipt-content h3 {
+        text-align: center;
+        font-size: 19px;
+        margin: 0 0 2px 0;
+        color: #423023;
+        letter-spacing: 1px;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #70533c;
+        margin-bottom: 10px;
+        border-bottom: 2px dashed #b59b75;
+        padding-bottom: 8px;
+    }
+
+    .congrats {
+        text-align: center;
+        font-style: italic;
+        color: #70533c;
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .details-box {
+        font-size: 12px;
+        line-height: 1.6;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #d4c5a9;
+        padding-bottom: 8px;
+    }
+
+    .details-box p {
+        margin: 2px 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .label {
+        font-weight: bold;
+        color: #5c473a;
+    }
+
+    .book-card-item {
+        background: rgba(212, 195, 169, 0.25);
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        border: 1px solid #d4c5a9;
+    }
+
+    .book-card-item h4 {
+        margin: 0 0 3px 0;
+        font-size: 14px;
+        color: #3b2d24;
+    }
+
+    .book-card-item p {
+        margin: 2px 0;
+        font-size: 11px;
+        color: #554235;
+    }
+
+    .financial-summary {
+        font-size: 12px;
+        line-height: 1.5;
+        margin-bottom: 10px;
+        border-top: 1px solid #d4c5a9;
+        border-bottom: 1px solid #d4c5a9;
+        padding: 8px 0;
+    }
+
+    .financial-summary p {
+        margin: 3px 0;
+        display: flex;
+        justify-content: space-between;
+        color: #5c473a;
+    }
+
+    .discount-row {
+        color: #8b4513 !important;
+        font-style: italic;
+    }
+
+    .total-row {
+        font-size: 15px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        color: #2c221e;
+    }
+
+    .thank-you-note {
+        text-align: center;
+        font-size: 11px;
+        line-height: 1.5;
+        color: #5c473a;
+        margin-bottom: 10px;
+        font-style: italic;
+    }
+
+    .support-note {
+        font-size: 11px;
+        line-height: 1.5;
+        color: #5c473a;
+        margin-bottom: 10px;
+        background: rgba(212, 195, 169, 0.15);
+        padding: 8px 10px;
+        border-radius: 4px;
+        border: 1px dashed #b59b75;
+        text-align: center;
+    }
+
+    .policy-note {
+        font-size: 10px;
+        line-height: 1.4;
+        color: #70533c;
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    .footer-stamp {
+        text-align: center;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #8c735f;
+        border-top: 1px dashed #d4c5a9;
+        padding-top: 8px;
+    }
+
+    .instruction {
+        color: #a89078;
+        font-size: 12px;
+        margin-top: 15px;
+        letter-spacing: 0.5px;
+        animation: pulse 2s infinite;
+        text-align: center;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 0.4; }
+        50% { opacity: 1; }
+        100% { opacity: 0.4; }
+    }
+
+    .btn-close-scroll { background: var(--accent-gold); color: var(--bg-base); border: none; padding: 12px 24px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border-radius: 2px; cursor: pointer; margin-top: 20px; font-family: var(--font-sans); }
+
+    footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
+    .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border-subtle); }
+    .footer-col { display: flex; flex-direction: column; gap: 14px; }
+    .footer-col-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); text-transform: uppercase; }
+    .footer-links-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; }
+    .footer-link:hover { color: var(--accent-gold); }
+    .footer-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+    .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+
+    @media (max-width: 900px) {
+      .cart-layout { grid-template-columns: 1fr; }
+      .cart-summary-box { position: static; }
+      .roller { width: 320px; }
+      .paper-container { width: 300px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="siteAnnouncementBannerContainer">
+    <div id="siteAnnouncementBannerText" style="text-align: center;">Welcome to Libraryreeds | Secure Checkout</div>
+  </div>
+
+  <nav class="top-nav">
+    <div class="nav-container">
+      <a href="./index.html" class="brand-group">
+        <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
+        <span class="brand-title">Libraryreeds</span>
+      </a>
+      <div class="nav-actions">
+        <a href="./index.html" class="nav-link">Home</a>
+        <a href="./shop.html" class="nav-link">Shop</a>
+        <a href="./fanart.html" class="nav-link">Fanart</a>
+        <a href="./about.html" class="nav-link">About</a>
+        <a href="./cart.html" class="cart-icon-link active" title="Review Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+        </a>
+        <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
+        <div class="user-profile-menu" id="navProfileMenu">
+          <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
+            <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+            <span id="navUserName">Patron</span>
+          </button>
+          <div class="dropdown-menu-popover" id="profileDropdown">
+            <div class="dropdown-user-header">
+              <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
+            </div>
+            <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+            <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="cart-main">
+    <header class="cart-header">
+      <h1 class="cart-title" id="checkoutPageHeading">Your Shopping Bag</h1>
+    </header>
+
+    <!-- STEP 1: Main Cart & Order Summary View -->
+    <div class="cart-layout" id="cartStep1View">
+      <div class="cart-items-column" id="cartItemsContainer">
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Your shopping cart is currently empty.</p>
+      </div>
+
+      <div class="cart-summary-box">
+        <h3 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--text-primary);">Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Discounts &amp; Promos</span>
+          <span id="cartDiscount" style="color:#40c057;">-$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping &amp; Handling</span>
+          <span id="cartShipping">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span id="cartTaxLabel">Estimated Tax</span>
+          <span id="cartTax">$0.00</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total Due</span>
+          <span id="cartTotal">$0.00</span>
+        </div>
+        <button type="button" class="btn-checkout" id="proceedCheckoutBtn">Proceed to Secure Checkout</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Interstitial Secure Checkout Page -->
+    <div class="checkout-step-container" id="cartStep2View">
+      <h2 style="font-family: var(--font-serif); font-size: 2rem; color: var(--text-primary);">Secure Gateway Review</h2>
+      
+      <!-- FULFILLMENT DETAILS DISPLAY BOX -->
+      <div class="fulfillment-box" id="fulfillmentDetailsBox">
+        <h4>📦 Fulfillment Details</h4>
+        <p><strong>Estimated Delivery:</strong> <span id="summaryEstDelivery">3-5 Business Days (Instants Available)</span></p>
+        <p><strong>Shipping Address:</strong> <span id="summaryShippingAddress">Loading address from account...</span></p>
+        <p><strong>Billing Address:</strong> <span id="summaryBillingAddress">Loading billing from account...</span></p>
+      </div>
+
+      <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">You are about to be securely redirected to the official kasctrlumw payment gateway to complete your transaction for your selected Libraryreeds volumes.</p>
+      <div style="background: var(--bg-base); padding: 20px; border-radius: 4px; border: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Encrypted SSL Transaction</span>
+        <span style="font-size: 1.25rem; font-weight: 700; color: var(--accent-gold);" id="step2TotalDisplay">$0.00</span>
+      </div>
+      <button type="button" class="btn-checkout" id="continueToCheckoutBtn">Continue to Checkout</button>
+    </div>
+  </main>
+
+  <!-- STEP 3: Scrolling Parchment Receipt Modal Overlay -->
+  <div class="receipt-overlay" id="receiptModalOverlay">
+    <div class="scroll-receipt-wrapper">
+      <div class="scene" id="scrollScene">
+        <!-- Top Scroll Roller -->
+        <div class="roller"></div>
+
+        <!-- The Expanding Parchment Sheet -->
+        <div class="paper-container" id="paperContainer">
+          <div class="receipt-content">
+            <!-- Large Logo Slot -->
+            <div class="logo-container">
+              <img src="https://www.image2url.com/r2/default/images/1787525509568-20b848b3-96ab-4521-b335-655cb0ca3dff.png" alt="Libraryreeds Digital Logo">
+            </div>
+
+            <h3>ORDER RECEIPT</h3>
+            <div class="subtitle">Libraryreeds Digital</div>
+            
+            <div class="congrats">✨ Congratulations on your digital book order! ✨</div>
+
+            <div class="details-box">
+              <p><span class="label">Customer:</span> <span id="receiptCustomerName">Valued Patron</span></p>
+              <p><span class="label">Customer Email:</span> <span id="receiptCustomerEmail">patron@libraryreeds.com</span></p>
+              <p><span class="label">Order Number:</span> <span id="receiptOrderNum">#LRD-94812</span></p>
+              <p><span class="label">Payment Gateway:</span> <span>kasctrlumw Secure</span></p>
+            </div>
+
+            <div id="receiptBookCardsList">
+              <!-- Dynamically populated books -->
+            </div>
+
+            <div class="financial-summary">
+              <p><span>Subtotal:</span> <span id="receiptSubtotal">$0.00</span></p>
+              <p class="discount-row"><span>Discounts &amp; Promos:</span> <span id="receiptDiscount">-$0.00</span></p>
+              <p><span>Shipping &amp; Handling:</span> <span id="receiptShipping">$0.00</span></p>
+              <p><span id="receiptTaxLabel">Estimated Tax:</span> <span id="receiptTax">$0.00</span></p>
+              <div class="total-row" style="margin-top: 6px;">
+                <span>Total Paid:</span>
+                <span id="receiptTotal">$0.00</span>
+              </div>
+            </div>
+
+            <div class="thank-you-note">
+              "Thank you so much for choosing Libraryreeds Digital! Your support means the world to us and helps independent storytelling thrive. May your new read open up countless worlds of wonder and imagination!"
+            </div>
+
+            <div class="support-note">
+              <strong>Questions about your order?</strong><br>
+              Please visit us at <strong>www.libraryreeds.com</strong> or contact support at <strong>support@libraryreeds.com</strong>. We're always here to help!
+            </div>
+
+            <div class="policy-note">
+              <strong>Return Policy:</strong> Digital downloads and license sales are final. Refund requests due to technical issues are accepted within 14 days of purchase.
+            </div>
+
+            <div class="footer-stamp">
+              Libraryreeds Digital • www.libraryreeds.com • All Rights Reserved
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Scroll Roller -->
+        <div class="roller"></div>
+      </div>
+
+      <div class="instruction" id="instructionText">Click anywhere on the scroll to unroll it</div>
+      <button type="button" class="btn-close-scroll" id="closeScrollReceiptBtn">Return to Repository</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4 class="footer-col-title">Libraryreeds</h4>
+        <p class="footer-text">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">Quick Shortcuts</h4>
+        <ul class="footer-links-list">
+          <li><a href="./index.html" class="footer-link">Home</a></li>
+          <li><a href="./shop.html" class="footer-link">Browse Catalog</a></li>
+          <li><a href="./fanart.html" class="footer-link">Fanart Gallery</a></li>
+          <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
+          <li><a href="./account.html" class="footer-link">Master Account Center</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Libraryreeds. All rights reserved.</span>
+      <span>Official Archival Repository</span>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const navLoginBtn = document.getElementById("navLoginBtn");
+    const navProfileMenu = document.getElementById("navProfileMenu");
+    const navUserName = document.getElementById("navUserName");
+    const dropdownUserName = document.getElementById("dropdownUserName");
+    const dropdownUserEmail = document.getElementById("dropdownUserEmail");
+    const profileTriggerBtn = document.getElementById("profileTriggerBtn");
+    const profileDropdown = document.getElementById("profileDropdown");
+
+    onAuthStateChanged(auth, async (user) => {
+      const navActions = document.querySelector('.nav-actions');
+      if (navActions) navActions.classList.add('auth-loaded');
+
+      if (user) {
+        if (navLoginBtn) navLoginBtn.style.display = "none";
+        if (navProfileMenu) navProfileMenu.style.display = "block";
+
+        const displayName = user.displayName || user.email.split("@")[0];
+        if (navUserName) navUserName.textContent = displayName;
+        if (dropdownUserName) dropdownUserName.textContent = displayName;
+        if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
+
+        // Fetch user account fulfillment details from Firestore if present
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists()) {
+            const uData = userDoc.data();
+            if (uData.shippingAddress) document.getElementById('summaryShippingAddress').textContent = uData.shippingAddress;
+            if (uData.billingAddress) document.getElementById('summaryBillingAddress').textContent = uData.billingAddress;
+            if (uData.estimatedDelivery) document.getElementById('summaryEstDelivery').textContent = uData.estimatedDelivery;
+          } else {
+            document.getElementById('summaryShippingAddress').textContent = "Not provided in account profile";
+            document.getElementById('summaryBillingAddress').textContent = "Not provided in account profile";
+          }
+        } catch(e) {
+          document.getElementById('summaryShippingAddress').textContent = "Standard Digital Vault Delivery";
+          document.getElementById('summaryBillingAddress').textContent = "Standard Digital Vault Billing";
+        }
+
+        let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
+
+        if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
+          try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists() && userDoc.data().photoURL) {
+              resolvedAvatar = userDoc.data().photoURL;
+            }
+          } catch(e) {}
+        }
+
+        if ((!resolvedAvatar || resolvedAvatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
+          resolvedAvatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
+        }
+
+        if (resolvedAvatar) {
+          localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
+        }
+
+        document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => {
+          if (resolvedAvatar) img.src = resolvedAvatar;
+        });
+      } else {
+        localStorage.removeItem('libraryreeds_user_avatar');
+        if (navLoginBtn) navLoginBtn.style.display = "inline-block";
+        if (navProfileMenu) navProfileMenu.style.display = "none";
+        document.getElementById('summaryShippingAddress').textContent = "Guest Checkout - Digital Delivery";
+        document.getElementById('summaryBillingAddress').textContent = "Guest Checkout - Digital Billing";
+      }
+    });
+
+    if (profileTriggerBtn && profileDropdown) {
+      profileTriggerBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
+      });
+      document.addEventListener("click", () => {
+        profileDropdown.style.display = "none";
+      });
+    }
+
+    const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+    if (dropdownLogoutBtn) {
+      dropdownLogoutBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          localStorage.clear();
+          sessionStorage.clear();
+        } catch (err) {
+          console.warn("Sign out error:", err);
+        } finally {
+          window.location.replace("index.html");
+        }
+      });
+    }
+
+    onSnapshot(doc(db, "settings", "announcement"), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const container = document.getElementById('siteAnnouncementBannerContainer');
+        if (container) {
+          if (data.behavior === 'scroll-left') {
+            container.innerHTML = `<marquee direction="left" scrollamount="5">${data.bannerText || ''}</marquee>`;
+          } else if (data.behavior === 'scroll-right') {
+            container.innerHTML = `<marquee direction="right" scrollamount="5">${data.bannerText || ''}</marquee>`;
+          } else {
+            container.innerHTML = `<div style="text-align: center;">${data.bannerText || ''}</div>`;
+          }
+        }
+      }
+    });
+
+    // Compute cart totals with quantity support
+    document.addEventListener("DOMContentLoaded", () => {
+      const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+      const container = document.getElementById('cartItemsContainer');
+      const badge = document.getElementById('cartBadgeCount');
+      const subtotalEl = document.getElementById('cartSubtotal');
+      const discountEl = document.getElementById('cartDiscount');
+      const shippingEl = document.getElementById('cartShipping');
+      const taxEl = document.getElementById('cartTax');
+      const taxLabelEl = document.getElementById('cartTaxLabel');
+      const totalEl = document.getElementById('cartTotal');
+
+      let totalCartQty = 0;
+      cart.forEach(ci => { totalCartQty += parseInt(ci.quantity || 1); });
+
+      if (totalCartQty > 0 && badge) {
+        badge.textContent = totalCartQty;
+        badge.style.display = "flex";
+      }
+
+      let grandTotalValue = 0;
+      let totalSub = 0;
+      let totalDisc = 0;
+      let totalShip = 0;
+      let totalTx = 0;
+      let purchasedItemsSummary = "";
+      let avgTaxRate = 6.0;
+
+      if (cart && cart.length > 0 && container) {
+        container.innerHTML = "";
+        let taxSum = 0;
+        cart.forEach((item, index) => {
+          const qty = parseInt(item.quantity || 1);
+          const price = parseFloat(item.price || 0) * qty;
+          const disc = parseFloat(item.discountAmount || 0) * qty;
+          const ship = parseFloat(item.shippingCost || 0);
+          const itemTaxRate = parseFloat(item.taxRate !== undefined ? item.taxRate : 6);
+          const taxAmt = (price - disc) * (itemTaxRate / 100);
+
+          totalSub += price;
+          totalDisc += disc;
+          totalShip += ship;
+          totalTx += taxAmt;
+          taxSum += itemTaxRate;
+
+          purchasedItemsSummary += `${item.title} (Qty: ${qty}, $${price.toFixed(2)}), `;
+
+          container.innerHTML += `
+            <div class="cart-item-card" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); padding:16px; border:1px solid var(--border-subtle); border-radius:4px; margin-bottom:12px;">
+              <div style="display:flex; gap:14px; align-items:center;">
+                <img src="${item.coverUrl || ''}" alt="${item.title}" style="width:50px; height:75px; object-fit:cover; border-radius:2px;">
+                <div>
+                  <h3 style="font-size:1rem; color:var(--text-primary); margin-bottom:4px;">${item.title}</h3>
+                  <p style="font-size:0.8rem; color:var(--text-secondary); margin:0;">
+                    ${item.format || 'Standard Edition'} &bull; Qty: <strong>${qty}</strong> &bull; 
+                    <strong style="color:var(--accent-gold);">$${price.toFixed(2)}</strong> 
+                  </p>
+                </div>
+              </div>
+              <button type="button" onclick="window.removeItem(${index})" style="background:transparent; color:#ff6b6b; border:none; font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase;">Remove</button>
+            </div>
+          `;
+        });
+
+        if (cart.length > 0) avgTaxRate = (taxSum / cart.length).toFixed(1);
+
+        grandTotalValue = totalSub - totalDisc + totalShip + totalTx;
+        if (subtotalEl) subtotalEl.textContent = `$${totalSub.toFixed(2)}`;
+        if (discountEl) discountEl.textContent = `-$${totalDisc.toFixed(2)}`;
+        if (shippingEl) shippingEl.textContent = `$${totalShip.toFixed(2)}`;
+        if (taxLabelEl) taxLabelEl.textContent = `Estimated Tax (${avgTaxRate}%)`;
+        if (taxEl) taxEl.textContent = `$${totalTx.toFixed(2)}`;
+        if (totalEl) totalEl.textContent = `$${grandTotalValue.toFixed(2)}`;
+      } else if (container) {
+        container.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">Your shopping cart is currently empty.</p>`;
+      }
+
+      // Checkout Buttons
+      const proceedCheckoutBtn = document.getElementById('proceedCheckoutBtn');
+      const cartStep1View = document.getElementById('cartStep1View');
+      const cartStep2View = document.getElementById('cartStep2View');
+      const checkoutPageHeading = document.getElementById('checkoutPageHeading');
+      const step2TotalDisplay = document.getElementById('step2TotalDisplay');
+      const continueToCheckoutBtn = document.getElementById('continueToCheckoutBtn');
+      
+      const receiptOverlay = document.getElementById('receiptModalOverlay');
+      const scrollScene = document.getElementById('scrollScene');
+      const paperContainer = document.getElementById('paperContainer');
+      const instructionText = document.getElementById('instructionText');
+      const closeScrollReceiptBtn = document.getElementById('closeScrollReceiptBtn');
+
+      if (proceedCheckoutBtn) {
+        proceedCheckoutBtn.addEventListener('click', () => {
+          const currentCart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+          if (currentCart.length === 0) {
+            alert("Your shopping bag is empty. Please add a volume before proceeding.");
+            return;
+          }
+
+          if (cartStep1View) cartStep1View.style.display = 'none';
+          if (cartStep2View) cartStep2View.classList.add('active');
+          if (checkoutPageHeading) checkoutPageHeading.textContent = "Secure Checkout Review";
+          if (step2TotalDisplay) step2TotalDisplay.textContent = `$${grandTotalValue.toFixed(2)}`;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      if (continueToCheckoutBtn) {
+        continueToCheckoutBtn.addEventListener('click', () => {
+          const buyerEmail = auth.currentUser ? auth.currentUser.email : "Guest Patron";
+          const telegramMessage = encodeURIComponent(`🚨 NEW BOOK PURCHASE!\n\nBuyer: ${buyerEmail}\nItems: ${purchasedItemsSummary}\nTotal: $${grandTotalValue.toFixed(2)}`);
+          
+          const telegramBotToken = "8849364904:AAFIwYz8qyElaJp5Bs3-CcOsW0Gls5LC2Rc";
+          const telegramChatId = "8726195655";
+
+          try {
+            fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramChatId}&text=${telegramMessage}`).catch(() => {});
+          } catch(e) {}
+
+          const kasctrlumwUrl = "https://kasctrlumw.com/pay";
+          window.open(kasctrlumwUrl, "_blank");
+
+          const currentCart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+          document.getElementById('receiptCustomerEmail').textContent = buyerEmail;
+          document.getElementById('receiptCustomerName').textContent = buyerEmail.split('@')[0];
+          document.getElementById('receiptOrderNum').textContent = '#LRD-' + Math.floor(10000 + Math.random() * 90000);
+          document.getElementById('receiptSubtotal').textContent = `$${totalSub.toFixed(2)}`;
+          document.getElementById('receiptDiscount').textContent = `-$${totalDisc.toFixed(2)}`;
+          document.getElementById('receiptShipping').textContent = `$${totalShip.toFixed(2)}`;
+          document.getElementById('receiptTaxLabel').textContent = `Estimated Tax (${avgTaxRate}%):`;
+          document.getElementById('receiptTax').textContent = `$${totalTx.toFixed(2)}`;
+          document.getElementById('receiptTotal').textContent = `$${grandTotalValue.toFixed(2)}`;
+
+          const cardContainer = document.getElementById('receiptBookCardsList');
+          if (cardContainer) {
+            cardContainer.innerHTML = "";
+            currentCart.forEach(ci => {
+              cardContainer.innerHTML += `
+                <div class="book-card-item">
+                  <h4>${ci.title} (Qty: ${ci.quantity || 1})</h4>
+                  <p><strong>Format:</strong> ${ci.format || 'Digital License'}</p>
+                  <p><strong>Price:</strong> $${(parseFloat(ci.price || 0) * (ci.quantity || 1)).toFixed(2)}</p>
+                </div>
+              `;
+            });
+          }
+
+          if (cartStep2View) cartStep2View.style.display = 'none';
+          if (receiptOverlay) receiptOverlay.classList.add('active');
+
+          setTimeout(() => {
+            triggerScrollUnroll(paperContainer, instructionText);
+          }, 400);
+
+          localStorage.removeItem('libraryreeds_cart');
+        });
+      }
+
+      let isOpen = false;
+      if (scrollScene) {
+        scrollScene.addEventListener('click', () => {
+          triggerScrollToggle(paperContainer, instructionText);
+        });
+      }
+
+      function triggerScrollUnroll(container, instruction) {
+        const targetHeight = container.scrollHeight + 20; 
+        container.style.height = targetHeight + 'px';
+        container.classList.add('unrolled');
+        if (instruction) instruction.textContent = "Click the scroll to roll it back up";
+        isOpen = true;
+      }
+
+      function triggerScrollToggle(container, instruction) {
+        if (!isOpen) {
+          triggerScrollUnroll(container, instruction);
+        } else {
+          container.style.height = '25px';
+          container.classList.remove('unrolled');
+          if (instruction) instruction.textContent = "Click anywhere on the scroll to unroll it";
+          isOpen = false;
+        }
+      }
+
+      if (closeScrollReceiptBtn && receiptOverlay) {
+        closeScrollReceiptBtn.addEventListener('click', () => {
+          receiptOverlay.classList.remove('active');
+          window.location.replace("index.html");
+        });
+      }
+    });
+
+    window.removeItem = function(index) {
+      let cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+      cart.splice(index, 1);
+      localStorage.setItem('libraryreeds_cart', JSON.stringify(cart));
+      window.location.reload();
+    };
+  </script>
+</body>
+</html>
