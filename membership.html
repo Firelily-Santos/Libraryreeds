@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Libraryreeds | Membership</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:        #050505;
+    --obsidian:    #09090B;
+    --slate:       #18181B;
+    --perimeter:   #27272A;
+    --zinc:        #F4F4F5;
+    --muted:       #A1A1AA;
+    --zinc-glow:   rgba(244,244,245,0.20);
+    --ease-rise:   cubic-bezier(0.16, 1, 0.3, 1);
+    --accent-gold: #c5a880;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background-color: var(--void);
+    color: var(--zinc);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(800px circle at 20% 15%, #0d0d0f 0%, transparent 60%),
+      radial-gradient(900px circle at 85% 85%, #0b0b0c 0%, transparent 55%),
+      radial-gradient(1200px circle at 50% 50%, #070707 0%, transparent 70%);
+    pointer-events: none;
+    transition: background-position 0.6s ease-out;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.05;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.96 0 0 0 0 0.96 0 0 0 0 0.96 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: screen;
+  }
+
+  /* Unified Top Navigation & Profile Styles */
+  .top-nav { border-bottom: 1px solid var(--perimeter, rgba(255,255,255,0.08)); background: rgba(9, 9, 11, 0.94); backdrop-filter: blur(14px); padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .brand-title { font-family: 'Fraunces', Georgia, serif; font-size: 1.35rem; font-weight: 700; color: var(--zinc); text-transform: uppercase; text-decoration: none; letter-spacing: 0.08em; }
+  .nav-actions { display: flex; gap: 24px; align-items: center; }
+  .nav-link { color: var(--muted); text-decoration: none; font-size: 0.775rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.22s ease; }
+  .nav-link:hover, .nav-link.active { color: var(--zinc); }
+
+  .user-profile-menu { position: relative; display: none; }
+  .profile-trigger-btn { background: var(--slate); border: 1px solid var(--perimeter); color: var(--zinc); padding: 6px 14px; border-radius: 4px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+  .nav-user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+
+  .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 44px; width: 220px; background: var(--slate); border: 1px solid var(--perimeter); border-radius: 4px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
+  .dropdown-user-header { padding: 14px 16px; background: var(--obsidian); border-bottom: 1px solid var(--perimeter); }
+  .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--zinc); }
+  .dropdown-user-email { font-size: 0.725rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+  .dropdown-link-item { padding: 11px 16px; color: var(--muted); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
+  .dropdown-link-item:hover { background: var(--obsidian); color: var(--accent-gold); }
+  .auth-btn-nav { background: var(--zinc); color: var(--void); padding: 8px 16px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 3px; text-decoration: none; }
+
+  .vault {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .entrance {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: rise 0.9s var(--ease-rise) 0.1s forwards;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .entrance h1 {
+    font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 5vw, 3.75rem);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    color: var(--zinc);
+  }
+
+  .entrance h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .entrance .sub {
+    margin-top: 1.25rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    max-width: 38ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .toggle-shell {
+    margin: 2.75rem auto 0;
+    background: var(--slate);
+    border: 1px solid var(--perimeter);
+    border-radius: 4px;
+    padding: 4px;
+    display: inline-flex;
+    position: relative;
+    transition: box-shadow 0.4s ease;
+  }
+  .toggle-shell:hover { box-shadow: 0 0 20px var(--zinc-glow); }
+
+  .toggle-shell button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: color 0.3s ease;
+    position: relative;
+    z-index: 2;
+  }
+  .toggle-shell button.active { color: var(--void); }
+  .toggle-shell button .save {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    opacity: 0.65;
+    margin-left: 0.4rem;
+  }
+
+  .toggle-thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    width: 92px;
+    background: var(--zinc);
+    border-radius: 3px;
+    transition: transform 0.45s var(--ease-rise);
+    z-index: 1;
+  }
+  .toggle-shell.yearly .toggle-thumb { transform: translateX(110px); }
+
+  .trinity {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    align-items: start;
+    margin-top: 4.5rem;
+  }
+
+  .slab {
+    position: relative;
+    background: var(--obsidian);
+    border: 1px solid var(--perimeter);
+    border-radius: 6px;
+    padding: 2.5rem 2rem 2.25rem;
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    transform: translateY(40px);
+    animation: rise 0.9s var(--ease-rise) forwards;
+    transition: transform 0.5s var(--ease-rise), box-shadow 0.5s ease, border-color 0.5s ease;
+  }
+  .slab:nth-child(1) { animation-delay: 0.25s; }
+  .slab:nth-child(2) { animation-delay: 0.4s; transform: translateY(-40px); }
+  .slab:nth-child(3) { animation-delay: 0.55s; }
+
+  .trinity .slab:nth-child(2) {
+    margin-top: -40px;
+  }
+
+  .slab::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 7px;
+    padding: 1px;
+    background: conic-gradient(from 140deg, transparent 0deg, var(--zinc-glow) 90deg, transparent 200deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+  .slab:hover::before { opacity: 1; }
+  .slab:hover {
+    transform: translateY(-44px) scale(1.02);
+    box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 80px rgba(244,244,245,0.06);
+  }
+  .trinity .slab:nth-child(2):hover { transform: translateY(-4px) scale(1.02); }
+
+  .slab.collector { border-color: #3f3f46; }
+
+  .beacon {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    pointer-events: none;
+  }
+  .beacon::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 7px;
+    padding: 1.5px;
+    background: conic-gradient(from var(--beam-angle, 0deg), transparent 0deg, var(--zinc) 25deg, transparent 60deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    animation: beam 5s linear infinite;
+    opacity: 0.7;
+  }
+
+  @keyframes beam { to { --beam-angle: 360deg; } }
+  @property --beam-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+
+  .tier-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .tier-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 2.1rem;
+    letter-spacing: 0.01em;
+    color: var(--zinc);
+    margin-bottom: 0.35rem;
+  }
+  .tier-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 1.1rem;
+    display: block;
+    margin-top: 0.15rem;
+  }
+
+  .tier-blurb {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin: 1rem 0 1.75rem;
+    min-height: 3.2em;
+  }
+
+  .price-frame {
+    display: flex;
+    align-items: baseline;
+    gap: 0.15rem;
+    margin-bottom: 1.75rem;
+    height: 3.2rem;
+    overflow: hidden;
+  }
+
+  .price-currency {
+    font-size: 1.1rem;
+    color: var(--muted);
+    align-self: flex-start;
+    margin-top: 0.65rem;
+    margin-right: 0.1rem;
+  }
+
+  .price-roll {
+    height: 3.2rem;
+    overflow: hidden;
+    display: inline-flex;
+    flex-direction: column;
+    font-size: 2.8rem;
+    font-weight: 500;
+    line-height: 3.2rem;
+    color: var(--zinc);
+  }
+  .price-roll .digits {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.6s var(--ease-rise), filter 0.5s ease;
+  }
+  .price-roll .digits .num { display: block; line-height: 3.2rem; }
+  .price-roll .digits.yearly { transform: translateY(-3.2rem); }
+
+  .price-frame.switching .price-roll .digits { filter: blur(3px); }
+
+  .price-cycle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-left: 0.25rem;
+    margin-bottom: 0.2rem;
+    align-self: flex-end;
+  }
+
+  .features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--perimeter);
+  }
+
+  .features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .features li .mark {
+    color: var(--zinc);
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+  .features li.off { opacity: 0.35; text-decoration: line-through; text-decoration-color: #3f3f46; }
+
+  .cta {
+    display: block;
+    width: 100%;
+    background: var(--zinc);
+    color: var(--void);
+    border: 1px solid var(--zinc);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.95rem 1.25rem;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta .cta-text { display: inline-flex; align-items: center; gap: 0.5rem; transition: transform 0.4s var(--ease-rise); }
+  .cta .arrow { display: inline-block; transition: transform 0.4s var(--ease-rise); }
+
+  .cta:hover {
+    background: transparent;
+    color: var(--zinc);
+    box-shadow: 0 0 20px var(--zinc-glow);
+  }
+  .cta:hover .cta-text { transform: translateX(4px); }
+  .cta:hover .arrow { transform: translateX(6px); }
+
+  .vault-note {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; }
+  }
+
+  @media (max-width: 900px) {
+    .trinity { grid-template-columns: 1fr; gap: 1.25rem; max-width: 420px; }
+    .trinity .slab:nth-child(2) { margin-top: 0; animation-delay: 0.25s; }
+    .slab:hover { transform: translateY(-4px) scale(1.01); }
+    .trinity .slab:nth-child(2):hover { transform: translateY(-4px) scale(1.01); }
+    .vault { padding: 4rem 1.25rem 4rem; }
+    .toggle-shell button { padding: 0.6rem 1rem; }
+    .toggle-thumb { width: 78px; }
+    .toggle-shell.yearly .toggle-thumb { transform: translateX(92px); }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="./index.html" class="brand-title">Libraryreeds</a>
+    <div class="nav-actions">
+      <a href="./index.html" class="nav-link">Home</a>
+      <a href="./shop.html" class="nav-link">Shop</a>
+      <a href="./fanart.html" class="nav-link">Fanart</a>
+      <a href="./about.html" class="nav-link">About</a>
+      <a href="./giftshop.html" class="nav-link">Gift Shop</a>
+      <a href="./membership.html" class="nav-link active">Membership</a>
+      <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
+      <div class="user-profile-menu" id="navProfileMenu">
+        <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
+          <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+          <span id="navUserName">Patron</span>
+        </button>
+        <div class="dropdown-menu-popover" id="profileDropdown">
+          <div class="dropdown-user-header">
+            <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
+            <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
+          </div>
+          <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+          <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
+          <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="vault">
+    <header class="entrance">
+      <p class="eyebrow">Membership</p>
+      <h1>Join the <em>Collector's Vault</em></h1>
+      <p class="sub">A private membership for patrons of books, fanart, and tangible creation. Choose your tier of access to the archive.</p>
+
+      <div class="toggle-shell" id="toggle" role="tablist" aria-label="Billing cycle">
+        <span class="toggle-thumb"></span>
+        <button class="active" data-cycle="monthly" role="tab" aria-selected="true">Monthly</button>
+        <button data-cycle="yearly" role="tab" aria-selected="false">Yearly<span class="save">−20%</span></button>
+      </div>
+    </header>
+
+    <section class="trinity" aria-label="Membership tiers">
+      <article class="slab">
+        <p class="tier-label">Tier 01</p>
+        <h2 class="tier-title">FanArt Supporter <em>The Observer</em></h2>
+        <p class="tier-blurb">For those who wish to follow the work and receive the occasional signal from the studio.</p>
+
+        <div class="price-frame">
+          <span class="price-currency">$</span>
+          <span class="price-roll"><span class="digits"><span class="num">9.99</span><span class="num">89.99</span></span></span>
+          <span class="price-cycle">/mo</span>
+        </div>
+
+        <ul class="features">
+          <li><span class="mark">+</span> Behind-the-scenes studio posts</li>
+          <li><span class="mark">+</span> Early access to new artwork</li>
+          <li><span class="mark">+</span> Members-only Discord channel</li>
+          <li class="off"><span class="mark">−</span> Monthly print drops</li>
+          <li class="off"><span class="mark">−</span> Signed book editions</li>
+        </ul>
+
+        <button class="cta" data-tier="Fan">
+          <span class="cta-text">Select FanArt Supporter <span class="arrow">→</span></span>
+        </button>
+      </article>
+
+      <article class="slab">
+        <p class="tier-label">Tier 02 · Most Chosen</p>
+        <h2 class="tier-title">Reader <em>The Patron</em></h2>
+        <p class="tier-blurb">For the devoted reader who wants every story delivered and a place in the inner circle.</p>
+
+        <div class="price-frame">
+          <span class="price-currency">$</span>
+          <span class="price-roll"><span class="digits"><span class="num">4.00</span><span class="num">49.99</span></span></span>
+          <span class="price-cycle">/mo</span>
+        </div>
+
+        <ul class="features">
+          <li><span class="mark">+</span> Everything in FanArt Supporter</li>
+          <li><span class="mark">+</span> Unlimited books & digital access</li>
+          <li><span class="mark">+</span> Monthly print & sticker drops</li>
+          <li><span class="mark">+</span> Digital first-reads of all chapters</li>
+          <li><span class="mark">+</span> Member name in book acknowledgements</li>
+          <li class="off"><span class="mark">−</span> Signed & numbered editions</li>
+        </ul>
+
+        <button class="cta" data-tier="Reader">
+          <span class="cta-text">Select Reader <span class="arrow">→</span></span>
+        </button>
+      </article>
+
+      <article class="slab collector">
+        <span class="beacon" aria-hidden="true"></span>
+        <p class="tier-label">Tier 03 · Limited</p>
+        <h2 class="tier-title">Collector <em>The Curator</em></h2>
+        <p class="tier-blurb">For the collector who wants the physical artifacts — signed editions, exclusive fanart, and the full archive.</p>
+
+        <div class="price-frame">
+          <span class="price-currency">$</span>
+          <span class="price-roll"><span class="digits"><span class="num">14.99</span><span class="num">149.99</span></span></span>
+          <span class="price-cycle">/mo</span>
+        </div>
+
+        <ul class="features">
+          <li><span class="mark">+</span> Everything in Reader</li>
+          <li><span class="mark">+</span> Signed & numbered book editions</li>
+          <li><span class="mark">+</span> Quarterly exclusive fanart print</li>
+          <li><span class="mark">+</span> Giftshop store credit ($10/mo)</li>
+          <li><span class="mark">+</span> Annual hand-bound limited edition</li>
+        </ul>
+
+        <button class="cta" data-tier="Collector">
+          <span class="cta-text">Select Collector <span class="arrow">→</span></span>
+        </button>
+      </article>
+    </section>
+
+    <p class="vault-note">Cancel anytime · Secure checkout · All prices in USD</p>
+  </main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+    authDomain: "libraryreeds-638f4.firebaseapp.com",
+    projectId: "libraryreeds-638f4",
+    storageBucket: "libraryreeds-638f4.firebasestorage.app",
+    messagingSenderId: "768304310517",
+    appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const navLoginBtn = document.getElementById("navLoginBtn");
+  const navProfileMenu = document.getElementById("navProfileMenu");
+  const navUserName = document.getElementById("navUserName");
+  const dropdownUserName = document.getElementById("dropdownUserName");
+  const dropdownUserEmail = document.getElementById("dropdownUserEmail");
+  const profileTriggerBtn = document.getElementById("profileTriggerBtn");
+  const profileDropdown = document.getElementById("profileDropdown");
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      if (navLoginBtn) navLoginBtn.style.display = "none";
+      if (navProfileMenu) navProfileMenu.style.display = "block";
+      const displayName = user.displayName || user.email.split("@")[0];
+      if (navUserName) navUserName.textContent = displayName;
+      if (dropdownUserName) dropdownUserName.textContent = displayName;
+      if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
+
+      let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
+      if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists() && userDoc.data().photoURL) resolvedAvatar = userDoc.data().photoURL;
+        } catch(e) {}
+      }
+      if ((!resolvedAvatar || resolvedAvatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
+        resolvedAvatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
+      }
+      if (resolvedAvatar) {
+        localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
+        document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => { img.src = resolvedAvatar; });
+      }
+    } else {
+      localStorage.removeItem('libraryreeds_user_avatar');
+      if (navLoginBtn) navLoginBtn.style.display = "inline-block";
+      if (navProfileMenu) navProfileMenu.style.display = "none";
+    }
+  });
+
+  if (profileTriggerBtn && profileDropdown) {
+    profileTriggerBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
+    });
+    document.addEventListener("click", () => { profileDropdown.style.display = "none"; });
+  }
+
+  const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+  if (dropdownLogoutBtn) {
+    dropdownLogoutBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      try {
+        await signOut(auth);
+        localStorage.clear();
+        sessionStorage.clear();
+      } finally {
+        window.location.replace("index.html");
+      }
+    });
+  }
+
+  const CHECKOUT_LINKS = {
+    Fan: { monthly: 'https://buy.stripe.com/bJedR83VocnB8mYbyG8ww04', yearly: 'https://buy.stripe.com/6oUaEW4Zs3R5fPq0U28ww05' },
+    Reader: { monthly: 'https://buy.stripe.com/fZuaEW2RkcnB46I9qy8ww02', yearly: 'https://buy.stripe.com/7sYaEWfE62N132E1Y68ww03' },
+    Collector: { monthly: 'https://buy.stripe.com/cNi3cueA2fzNfPqgT08ww06', yearly: 'https://buy.stripe.com/14A9AS3VocnBcDeeKS8ww07' }
+  };
+
+  const toggleShell = document.getElementById('toggle');
+  const buttons = toggleShell.querySelectorAll('button');
+  const priceFrames = document.querySelectorAll('.price-frame');
+  const cycles = document.querySelectorAll('.price-cycle');
+
+  function setCycle(cycle) {
+    buttons.forEach(b => {
+      const active = b.dataset.cycle === cycle;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active);
+    });
+    toggleShell.classList.toggle('yearly', cycle === 'yearly');
+
+    priceFrames.forEach(f => f.classList.add('switching'));
+    setTimeout(() => {
+      document.querySelectorAll('.price-roll .digits').forEach(d => {
+        d.classList.toggle('yearly', cycle === 'yearly');
+      });
+      cycles.forEach(c => c.textContent = cycle === 'yearly' ? '/yr' : '/mo');
+      setTimeout(() => priceFrames.forEach(f => f.classList.remove('switching')), 200);
+    }, 250);
+  }
+
+  buttons.forEach(b => b.addEventListener('click', () => setCycle(b.dataset.cycle)));
+
+  document.querySelectorAll('.cta').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cycle = toggleShell.classList.contains('yearly') ? 'yearly' : 'monthly';
+      const tier = btn.dataset.tier;
+      const link = CHECKOUT_LINKS[tier] && CHECKOUT_LINKS[tier][cycle];
+      if (link) window.open(link, '_blank', 'noopener,noreferrer');
+    });
+  });
+
+  let raf = null;
+  document.addEventListener('mousemove', (e) => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      document.body.style.setProperty('background-position', `${x}% ${y}%`);
+      raf = null;
+    });
+  });
+</script>
+</body>
+</html>

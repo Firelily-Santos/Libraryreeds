@@ -423,7 +423,8 @@
                     <p><span class="label">Customer:</span> <span id="recCustomerName">Reader Patron</span></p>
                     <p><span class="label">Customer Email:</span> <span id="recEmail">patron@example.com</span></p>
                     <p><span class="label">Order Number:</span> <span id="recOrderNum">#LRD-94812</span></p>
-                    <p><span class="label">Date & Time:</span> <span id="recDate">August 26, 2026</span></p>
+                    <p><span class="label">Date:</span> <span id="recDate">August 26, 2026</span></p>
+                    <p><span class="label">Time Paid:</span> <span id="recTime">--:--:--</span></p>
                     <p><span class="label">Payment Method:</span> <span>Majority Pay Secure Gateway</span></p>
                 </div>
 
@@ -431,6 +432,13 @@
                     <h3 id="recBookTitle">The Hidden Wings: Flames of Fate</h3>
                     <p><strong>Author:</strong> <span id="recBookAuthor">Firelily Santos</span></p>
                     <p><strong>Format:</strong> <span id="recBookFormat">Clothbound Hardcover</span></p>
+                </div>
+
+                <!-- Digital Bonus Coupon Card -->
+                <div class="coupon-reward-card" style="background: rgba(197, 168, 128, 0.18); border: 1px dashed #b59b75; border-radius: 6px; padding: 12px; margin-bottom: 12px; text-align: center;">
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #70533c; font-weight: 700; margin-bottom: 4px;">Your Digital Bonus Coupon</div>
+                    <div id="recRewardCouponCode" style="font-size: 16px; font-weight: 800; font-family: monospace; letter-spacing: 2px; color: #3b2d24; background: rgba(255,255,255,0.7); padding: 6px 12px; border-radius: 4px; display: inline-block; margin-bottom: 4px;">Generating...</div>
+                    <p style="font-size: 10.5px; color: #5c473a; margin-top: 4px;">A copy of this 9-digit coupon code has been dispatched to your email address.</p>
                 </div>
 
                 <div class="financial-summary">
@@ -475,7 +483,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
@@ -490,57 +498,161 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // --- TELEGRAM NOTIFICATION HELPER ---
+        const TELEGRAM_BOT_TOKEN = "8849364904:AAFIwYz8qyElaJp5Bs3-CcOsW0Gls5LC2Rc"; 
+        const TELEGRAM_CHAT_ID = "8726195655";
+
+        async function notifyAdminViaTelegram(details) {
+            if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return;
+
+            const message = `🔔 *New Order & Coupon Issued!* \n\n` +
+                `👤 *Customer:* ${details.name}\n` +
+                `📧 *Email:* ${details.email}\n` +
+                `📦 *Order:* ${details.orderId}\n` +
+                `🎟️ *Coupon Code:* \`${details.code}\`\n` +
+                `💰 *Total Paid:* ${details.total}\n` +
+                `⏱️ *Time It Was Paid:* ${details.time}\n`;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+            } catch (err) {
+                console.error("Failed to send Telegram admin notification:", err);
+            }
+        }
+
         const scene = document.getElementById('scrollScene');
         const paperContainer = document.getElementById('paperContainer');
         const instructionText = document.getElementById('instructionText');
 
         let isOpen = false;
 
+        function generate9DigitCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < 9; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return `REEDS-${result}`;
+        }
+
         window.addEventListener('load', async () => {
+            const now = new Date();
+            const formattedTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+            const formattedDate = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
             const params = new URLSearchParams(window.location.search);
             let orderId = params.get('order');
             let totalPaid = params.get('total');
 
+            const pending = JSON.parse(localStorage.getItem('libraryreeds_pending_order') || '{}');
             const user = auth.currentUser;
-            try {
-                const ordersRef = collection(db, user ? `users/${user.uid}/orders` : "orders");
-                const q = query(ordersRef, orderBy("createdAt", "desc"), limit(1));
-                const snap = await getDocs(q);
+            const userEmail = user?.email || pending.email || "patron@libraryreeds.com";
+            const userName = user?.displayName || "Reader Patron";
 
-                if (!snap.empty) {
-                    const latest = snap.docs[0].data();
-                    orderId = orderId || latest.orderId;
-                    totalPaid = totalPaid || latest.total;
+            const rewardCode = pending.rewardCoupon || generate9DigitCode();
 
-                    if (latest.customerName) document.getElementById('recCustomerName').textContent = latest.customerName;
-                    if (latest.email) document.getElementById('recEmail').textContent = latest.email;
-                    if (latest.createdAt && latest.createdAt.toDate) {
-                        document.getElementById('recDate').textContent = latest.createdAt.toDate().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-                    }
-
-                    if (latest.items && latest.items.length > 0) {
-                        const item = latest.items[0];
-                        document.getElementById('recBookTitle').textContent = item.title;
-                        document.getElementById('recBookAuthor').textContent = item.author || 'Firelily Santos';
-                        document.getElementById('recBookFormat').textContent = item.format || 'Hardcover';
-                        document.getElementById('recSubtotal').textContent = `$${parseFloat(item.price).toFixed(2)}`;
-                    }
-                }
-            } catch(e) {}
-
-            if (orderId) document.getElementById('recOrderNum').textContent = `#${orderId}`;
-            if (totalPaid) {
-                const numTotal = parseFloat(totalPaid);
-                document.getElementById('recTotal').textContent = `$${numTotal.toFixed(2)}`;
-                if (!document.getElementById('recSubtotal').textContent || document.getElementById('recSubtotal').textContent === '$24.00') {
-                    document.getElementById('recSubtotal').textContent = `$${Math.max(0, numTotal - 3.99).toFixed(2)}`;
-                }
+            // 1. Populate Order Data
+            if (pending.orderId) {
+                orderId = pending.orderId;
+                document.getElementById('recBookTitle').textContent = pending.title || "Selected Item";
+                document.getElementById('recBookAuthor').textContent = pending.author || "Firelily Santos";
+                document.getElementById('recBookFormat').textContent = pending.format || "Digital Edition";
+                document.getElementById('recSubtotal').textContent = `$${parseFloat(pending.unitPrice || 24.00).toFixed(2)}`;
+                document.getElementById('recTotal').textContent = `$${parseFloat(pending.total || 27.99).toFixed(2)}`;
             }
 
-            // Clean up temp storage
-            localStorage.removeItem('libraryreeds_order_subtotal');
-            localStorage.removeItem('libraryreeds_order_total');
-            localStorage.removeItem('libraryreeds_shipping_address');
+            if (orderId) document.getElementById('recOrderNum').textContent = `#${orderId}`;
+            document.getElementById('recCustomerName').textContent = userName;
+            document.getElementById('recEmail').textContent = userEmail;
+            document.getElementById('recRewardCouponCode').textContent = rewardCode;
+            document.getElementById('recDate').textContent = formattedDate;
+            document.getElementById('recTime').textContent = formattedTime;
+
+            const finalTotal = document.getElementById('recTotal').textContent;
+
+            // 2. Persist Coupon to Firestore
+            try {
+                await setDoc(doc(db, "coupons", rewardCode), {
+                    code: rewardCode,
+                    discountPercent: 15,
+                    isActive: true,
+                    description: "Digital Purchase Reward (15% OFF)",
+                    createdByOrder: orderId || "DIRECT-MAJORITY",
+                    createdAt: serverTimestamp(),
+                    validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+                }, { merge: true });
+
+                // 3. Queue Email Trigger in Firestore
+                await addDoc(collection(db, "mail"), {
+                    to: [userEmail],
+                    message: {
+                        subject: "Your Libraryreeds Digital Order & Bonus Coupon!",
+                        html: `
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 30px auto; background-color: #11141c; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; overflow: hidden; font-family: 'Georgia', serif; color: #f4ebd0;">
+                              <tr>
+                                <td align="center" style="padding: 28px 20px 10px 20px; background-color: #161b26; border-bottom: 1px solid rgba(197, 168, 128, 0.3);">
+                                  <h1 style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #c5a880;">Libraryreeds</h1>
+                                  <p style="margin: 4px 0 0 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #9ba1b0;">Digital Vault &amp; Archival Storefront</p>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td style="padding: 30px 32px 20px 32px; font-size: 14px; line-height: 1.7; color: #f0f2f5;">
+                                  <p style="margin-top: 0;">Hi <strong style="color: #c5a880;">${userName}</strong>,</p>
+                                  <p>Thank you for your recent purchase and for being part of the <strong>Libraryreeds</strong> community!</p>
+                                  <p>Here is your exclusive, one-time digital voucher for your next checkout:</p>
+                                  <table align="center" border="0" cellpadding="0" cellspacing="0" style="margin: 24px auto;">
+                                    <tr>
+                                      <td align="center" style="background-color: #f4ebd0; border: 2px dashed #b59b75; border-radius: 6px; padding: 14px 28px;">
+                                        <span style="display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #70533c; font-weight: bold; margin-bottom: 4px;">Exclusive Coupon Code</span>
+                                        <span style="font-family: 'Courier New', Courier, monospace; font-size: 20px; font-weight: 800; color: #3b2d24; letter-spacing: 2px;">${rewardCode}</span>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                  <p style="font-size: 12px; color: #9ba1b0; text-align: center; margin-top: -10px; margin-bottom: 24px;"><em>(Copy and paste the exact code above — it is case-sensitive!)</em></p>
+                                  <strong style="color: #c5a880; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">How to redeem:</strong>
+                                  <ol style="margin: 8px 0 20px 20px; padding: 0; color: #cfd4dc; font-size: 13px; line-height: 1.8;">
+                                    <li>Visit <a href="https://libraryreeds.com" style="color: #c5a880; text-decoration: underline;">Libraryreeds.com</a>.</li>
+                                    <li>Add any eligible volumes or archival items to your cart.</li>
+                                    <li>Enter your code into the <strong>Promo / Coupon Code</strong> field at checkout.</li>
+                                  </ol>
+                                  <p style="font-size: 13px; color: #9ba1b0;">If you have any questions or need assistance accessing your order, simply reply directly to this email.</p>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td align="center" style="padding: 20px; background-color: #161b26; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 11px; color: #5d6373;">
+                                  Happy reading,<br><strong style="color: #9ba1b0;">The Libraryreeds Team</strong><br>
+                                  <a href="https://libraryreeds.com" style="color: #c5a880; text-decoration: none; margin-top: 6px; display: inline-block;">www.libraryreeds.com</a>
+                                </td>
+                              </tr>
+                            </table>
+                        `
+                    }
+                });
+
+                // 4. Fire the Telegram Admin Notification with Payment Time
+                await notifyAdminViaTelegram({
+                    name: userName,
+                    email: userEmail,
+                    orderId: orderId || "DIRECT-MAJORITY",
+                    code: rewardCode,
+                    total: finalTotal,
+                    time: formattedTime
+                });
+
+            } catch (err) {
+                console.error("Error processing post-checkout tasks:", err);
+            }
+
+            // Clean up temporary session data
+            localStorage.removeItem('libraryreeds_pending_order');
 
             setTimeout(() => {
                 toggleScroll();
