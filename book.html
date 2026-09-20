@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Libraryreeds | Volume Details</title>
+  <title>Libraryreeds | Volume &amp; Item Details</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -21,9 +21,8 @@
       --accent-gold-hover: #d8be9b;
       --font-serif: "Cormorant Garamond", Georgia, serif;
       --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
+    } 
 
-    /* Anti-flash auth loading guard */
     .nav-actions { visibility: hidden; }
     .nav-actions.auth-loaded { visibility: visible; }
 
@@ -36,14 +35,12 @@
       display: flex; flex-direction: column;
     }
 
-    /* Top Navigation Header & Search Bar */
     .top-nav { border-bottom: 1px solid var(--border-subtle); background: rgba(10, 12, 16, 0.94); backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 100; }
     .nav-container { max-width: 1400px; margin: 0 auto; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
     .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; flex-shrink: 0; }
     .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
     .brand-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary); letter-spacing: 0.06em; text-transform: uppercase; }
-    
-    /* Search Bar Styling */
+     
     .nav-search-container { flex: 1; max-width: 400px; position: relative; display: flex; align-items: center; }
     .nav-search-input { width: 100%; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 8px 16px 8px 38px; color: var(--text-primary); font-size: 0.8rem; outline: none; transition: all 0.22s ease; }
     .nav-search-input:focus { border-color: var(--border-focus); background: var(--bg-surface-elevated); }
@@ -60,7 +57,7 @@
     .user-profile-menu { position: relative; display: none; }
     .profile-trigger-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px 14px; border-radius: 3px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
     .nav-user-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
-    
+     
     .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 42px; width: 220px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 3px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
     .dropdown-user-header { padding: 14px 16px; background: var(--bg-surface-elevated); border-bottom: 1px solid var(--border-subtle); }
     .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--text-primary); }
@@ -69,17 +66,15 @@
     .dropdown-link-item:hover { background: var(--bg-surface-elevated); color: var(--accent-gold); }
     .auth-btn-nav { background: var(--accent-gold); color: var(--bg-base); padding: 9px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 2px; text-decoration: none; }
 
-    /* PDP Layout */
     .pdp-page-container { background-color: var(--bg-base); width: 100%; padding: 40px 0 80px 0; flex: 1; }
     .pdp-wrapper { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 360px 1fr 320px; gap: 48px; align-items: start; }
 
-    /* Column 1: Media & Mockup */
-    .media-card { position: sticky; top: 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .media-card { position: sticky; top: 40px; display: flex; flex-direction: column; gap: 16px; }
     .cover-stage { width: 100%; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 24px 20px; display: flex; justify-content: center; align-items: center; perspective: 1000px; }
-    .cover-viewport { width: 240px; aspect-ratio: 1 / 1.5; position: relative; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease; transform-style: preserve-3d; }
-    .cover-viewport.view-flat { transform: rotateY(0deg); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4); border-radius: 4px; }
-    .cover-viewport.view-3d { transform: rotateY(-18deg) rotateX(4deg) scale(0.96); box-shadow: -15px 20px 35px -10px rgba(0, 0, 0, 0.6); border-radius: 2px; }
-    .cover-img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
+    .cover-viewport { width: 240px; aspect-ratio: 1 / 1.5; position: relative; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease; transform-style: preserve-3d; transform: rotateY(0deg); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4); border-radius: 4px; }
+    .cover-viewport.is-gift-item { transform: none !important; perspective: none !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); aspect-ratio: 1 / 1; }
+    .cover-viewport.is-gift-item .spine-accent { display: none; }
+    .cover-img { width: 100%; height: 100%; object-fit: contain; background-color: var(--bg-surface-elevated, #161b26); display: block; border-radius: inherit; transition: opacity 0.25s ease; }
     .spine-accent { position: absolute; top: 0; left: 0; bottom: 0; width: 14px; background: linear-gradient(to right, rgba(255,255,255,0.35) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.2) 100%); pointer-events: none; border-top-left-radius: inherit; border-bottom-left-radius: inherit; }
 
     .media-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
@@ -91,7 +86,6 @@
     .btn-look-inside:hover { border-color: var(--border-focus); }
     .btn-look-inside svg { width: 14px; height: 14px; stroke: var(--text-primary); fill: none; }
 
-    /* Column 2: Editorial & Specs */
     .info-card { display: flex; flex-direction: column; gap: 20px; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 32px; border-radius: 8px; }
     .tags-badge-row { display: flex; flex-wrap: wrap; gap: 6px; }
     .genre-pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; background-color: var(--accent-gold); color: var(--bg-base); }
@@ -107,12 +101,10 @@
     .review-link { color: var(--text-secondary); text-decoration: none; }
     .review-link:hover { color: var(--accent-gold); text-decoration: underline; }
 
-    /* Editorial Praise Box */
     .editorial-praise-box { background-color: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; }
     .praise-quote { font-family: Georgia, serif; font-size: 13.5px; font-style: italic; color: var(--text-primary); line-height: 1.5; margin: 0; }
     .praise-attribution { font-size: 11.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
 
-    /* Rating Breakdown */
     .rating-breakdown-card { border: 1px solid var(--border-subtle); border-radius: 8px; padding: 16px 18px; background-color: var(--bg-surface-elevated); }
     .breakdown-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .breakdown-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0; }
@@ -120,20 +112,18 @@
     .rating-bar-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-secondary); }
     .star-label { width: 42px; font-weight: 500; white-space: nowrap; }
     .bar-track { flex: 1; height: 6px; background-color: var(--bg-base); border-radius: 3px; overflow: hidden; }
-    .bar-fill { height: 100%; background-color: var(--accent-gold); border-radius: 3px; }
+    .bar-fill { height: 100%; background-color: var(--accent-gold); border-radius: 3px; transition: width 0.3s ease; }
     .percentage-label { width: 30px; text-align: right; font-weight: 500; }
 
-    /* Formats Grid */
     .formats-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 10px; }
     .formats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .format-option { border: 1px solid var(--border-subtle); border-radius: 6px; padding: 12px 14px; cursor: pointer; transition: all 0.15s ease; background-color: var(--bg-surface-elevated); }
     .format-option.selected { border-color: var(--accent-gold); background-color: var(--bg-base); }
+    .format-option.disabled { opacity: 0.5; pointer-events: none; }
     .format-name { font-size: 13px; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 2px; }
     .format-price-label { font-size: 13px; color: var(--accent-gold); }
 
-    /* Description */
     .description-section { display: flex; flex-direction: column; gap: 10px; }
-    .book-tagline { font-size: 15px; line-height: 1.5; font-weight: 600; font-style: italic; color: var(--text-primary); margin: 0; border-left: 2px solid var(--accent-gold); padding-left: 12px; }
     .blurb-container { position: relative; }
     .blurb-text-wrap { max-height: 120px; overflow: hidden; position: relative; transition: max-height 0.35s ease; display: flex; flex-direction: column; gap: 12px; }
     .blurb-text-wrap.expanded { max-height: 1000px; }
@@ -142,7 +132,6 @@
     .btn-toggle-blurb svg { width: 14px; height: 14px; stroke: var(--accent-gold); fill: none; transition: transform 0.2s ease; }
     .btn-toggle-blurb.active svg { transform: rotate(180deg); }
 
-    /* Advisory & Specs */
     .advisory-details { border: 1px solid var(--border-subtle); border-radius: 8px; background-color: var(--bg-surface-elevated); overflow: hidden; }
     .advisory-summary { padding: 12px 16px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between; }
     .advisory-badge { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background-color: var(--bg-base); color: var(--accent-gold); }
@@ -158,100 +147,150 @@
     .spec-label { font-weight: 500; color: var(--text-muted); width: 40%; }
     .spec-value { color: var(--text-primary); font-weight: 500; }
 
-    /* Column 3: Buy Card */
     .buy-card { background: var(--bg-surface); padding: 24px; border-radius: 8px; border: 1px solid var(--border-subtle); position: sticky; top: 40px; display: flex; flex-direction: column; gap: 20px; }
     .price-header { display: flex; flex-direction: column; gap: 4px; }
-    .price-row { display: flex; align-items: baseline; gap: 10px; }
+    .price-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .price-action-group { display: flex; align-items: center; gap: 8px; }
     .current-price { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: var(--accent-gold); }
-    .original-price { color: var(--text-muted); text-decoration: line-through; font-size: 14px; }
     .stock-indicator { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #40c057; margin-top: 2px; }
     .stock-dot { width: 6px; height: 6px; border-radius: 50%; background-color: #40c057; }
-    
-    /* Quantity Selector */
+
+    .btn-price-info {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--border-focus);
+      background: var(--bg-surface-elevated);
+      color: var(--accent-gold);
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--font-serif);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: all 0.2s ease;
+    }
+    .btn-price-info:hover {
+      background: var(--accent-gold);
+      color: var(--bg-base);
+    }
+
+    .btn-price-coupon {
+      border: 1px solid #7c2d12;
+      background: #451a03;
+      color: #fed7aa;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 14px;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-price-coupon:hover {
+      background: #7c2d12;
+      color: #fff;
+    }
+     
     .quantity-row { display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: 500; color: var(--text-secondary); }
-    .quantity-select { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 13px; outline: none; cursor: pointer; }
+    .quantity-input { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 13px; width: 64px; text-align: center; outline: none; }
+    .quantity-input:focus { border-color: var(--border-focus); }
+
+    .libraryreeds-promo-banner {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--accent-gold);
+      border-radius: 6px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin: 8px 0;
+    }
+    .promo-banner-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+    .promo-banner-desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .shipping-widget-box { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 16px; display: none; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .shipping-widget-box.active { display: flex; }
+    .shipping-widget-title { font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0 0 2px 0; }
+    .shipping-widget-eta { font-size: 14px; font-weight: 600; color: #40c057; margin: 0; }
+    .shipping-widget-promo { font-size: 13px; font-weight: 600; color: #e03131; margin: 0; }
+
+    .gift-options-drawer { background: var(--bg-surface-elevated); border: 1px dashed var(--border-focus); border-radius: 6px; padding: 12px; display: none; flex-direction: column; gap: 10px; }
+    .gift-options-drawer.active { display: flex; }
+    .gift-input-field { background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 8px 10px; color: var(--text-primary); font-size: 12px; outline: none; }
+    .gift-input-field:focus { border-color: var(--border-focus); }
 
     .cta-stack { display: flex; flex-direction: column; gap: 8px; }
+    
+    /* Unlimited Book Button Styles */
+    .btn-unlimited-action {
+      width: 100%;
+      min-height: 48px;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, rgba(197, 168, 128, 0.15) 0%, rgba(197, 168, 128, 0.05) 100%);
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-unlimited-action:hover {
+      background: linear-gradient(135deg, rgba(197, 168, 128, 0.28) 0%, rgba(197, 168, 128, 0.12) 100%);
+      border-color: var(--accent-gold-hover);
+      transform: translateY(-1px);
+    }
+    .unlimited-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      line-height: 1.2;
+    }
+    .unlimited-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      margin-top: 1px;
+    }
+
     .btn-primary-action { width: 100%; height: 42px; background-color: var(--accent-gold); color: var(--bg-base); border: 1px solid var(--accent-gold); border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none; }
     .btn-primary-action:hover { background-color: var(--accent-gold-hover); }
-    .btn-subscription-action { width: 100%; height: 42px; background-color: var(--bg-surface-elevated); color: var(--text-primary); border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-    
-    /* Wishlist Heart Button inside Buy Card */
-    .btn-wishlist-heart { width: 100%; height: 38px; background: transparent; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; margin-top: 4px; }
-    .btn-wishlist-heart svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; transition: fill 0.2s, stroke 0.2s; }
-    .btn-wishlist-heart:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
-    .btn-wishlist-heart.active { border-color: var(--accent-gold); color: var(--accent-gold); background: var(--bg-surface-elevated); }
-    .btn-wishlist-heart.active svg { fill: var(--accent-gold); stroke: var(--accent-gold); }
+
+    .btn-buy-now-action { width: 100%; height: 42px; background-color: #40c057; color: #fff; border: 1px solid #40c057; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none; transition: background-color 0.2s ease; }
+    .btn-buy-now-action:hover { background-color: #37b24d; }
+     
+    .btn-wishlist-action, .btn-gift-action { width: 100%; height: 42px; background-color: var(--bg-surface-elevated); color: var(--text-primary); border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; }
+    .btn-wishlist-action svg, .btn-gift-action svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .btn-wishlist-action:hover, .btn-gift-action:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+    .btn-wishlist-action.active, .btn-gift-action.active { border-color: var(--accent-gold); color: var(--accent-gold); background: var(--bg-base); }
+    .btn-gift-action.active svg { fill: rgba(197, 168, 128, 0.2); stroke: var(--accent-gold); }
 
     .guarantee-note { font-size: 11px; color: var(--text-muted); text-align: center; line-height: 1.4; margin: 0; }
 
-    /* Series Carousel */
-    .series-section-container { max-width: 1400px; margin: 56px auto 0 auto; padding: 0 32px; width: 100%; }
-    .series-card { border-top: 1px solid var(--border-subtle); padding-top: 36px; }
-    .series-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
-    .series-title-wrap h2 { font-size: 18px; font-weight: 600; margin: 0 0 4px 0; color: var(--text-primary); }
-    .series-subtitle { font-size: 13px; color: var(--text-secondary); margin: 0; }
-    .carousel-nav-controls { display: flex; gap: 8px; }
-    .carousel-btn { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border-subtle); background: var(--bg-surface); color: var(--text-primary); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
-    .carousel-btn:hover { background: var(--bg-surface-elevated); border-color: var(--border-focus); }
-    .carousel-btn svg { width: 16px; height: 16px; stroke: var(--text-primary); fill: none; }
-    .series-carousel-viewport { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding-bottom: 12px; scrollbar-width: none; -ms-overflow-style: none; }
-    .series-carousel-viewport::-webkit-scrollbar { display: none; }
-    .series-item-card { flex: 0 0 216px; scroll-snap-align: start; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: inherit; transition: border-color 0.15s ease; position: relative; }
-    .series-item-card:hover { border-color: var(--border-focus); }
-    .series-item-card.is-current { border-color: var(--accent-gold); background-color: var(--bg-surface-elevated); }
-    .series-item-cover-wrapper { width: 100%; aspect-ratio: 1 / 1.5; border-radius: 4px; overflow: hidden; background: var(--bg-surface-elevated); position: relative; }
-    .series-item-cover-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-    .series-order-badge { position: absolute; top: 8px; left: 8px; background: rgba(10, 12, 16, 0.85); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
-    .series-item-details { display: flex; flex-direction: column; gap: 2px; }
-    .series-item-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 0; }
-    .series-item-meta { font-size: 12px; color: var(--text-secondary); }
-    .series-item-price { font-size: 12px; font-weight: 600; color: var(--accent-gold); margin-top: 4px; }
-
-    /* Related Items Carousel (Amazon-Style Compact Grid) */
-    .related-section-container { max-width: 1400px; margin: 40px auto 0 auto; padding: 0 32px; width: 100%; }
-    .related-card { border-top: 1px solid var(--border-subtle); padding-top: 36px; }
-    .related-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
-    .related-title-wrap h2 { font-size: 18px; font-weight: 600; margin: 0 0 4px 0; color: var(--text-primary); }
-    .related-subtitle { font-size: 13px; color: var(--text-secondary); margin: 0; }
-    .related-carousel-viewport { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding-bottom: 12px; scrollbar-width: none; -ms-overflow-style: none; }
-    .related-carousel-viewport::-webkit-scrollbar { display: none; }
-    .related-item-card { flex: 0 0 160px; scroll-snap-align: start; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; transition: border-color 0.15s ease; position: relative; }
-    .related-item-card:hover { border-color: var(--border-focus); }
-    .related-item-cover-wrapper { width: 100%; aspect-ratio: 1 / 1.5; border-radius: 4px; overflow: hidden; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); position: relative; }
-    .related-item-cover-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-    .related-item-details { display: flex; flex-direction: column; gap: 2px; }
-    .related-item-title { font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .related-item-author { font-size: 11px; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .related-item-price { font-size: 12px; font-weight: 600; color: var(--accent-gold); margin-top: 2px; }
-
-    /* Reviews & Discussion */
-    .reviews-section-container { max-width: 1400px; margin: 56px auto 0 auto; padding: 0 32px; width: 100%; }
+    .reviews-section-container { max-width: 1200px; margin: 56px auto 0 auto; padding: 0 24px; width: 100%; }
     .reviews-card { border-top: 1px solid var(--border-subtle); padding-top: 36px; }
-    .feed-controls { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle); }
-    .feed-controls-label { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-    .sort-dropdown { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-subtle); background-color: var(--bg-surface); font-size: 13px; color: var(--text-primary); outline: none; cursor: pointer; }
-    .reviews-list { display: flex; flex-direction: column; gap: 24px; margin-top: 20px; }
-    .review-card { padding-bottom: 24px; border-bottom: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 10px; }
-    .review-user-header { display: flex; align-items: center; justify-content: space-between; }
-    .user-meta-left { display: flex; align-items: center; gap: 10px; }
-    .user-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-    .verified-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; color: #40c057; background-color: rgba(64,192,87,0.1); border: 1px solid rgba(64,192,87,0.3); padding: 2px 6px; border-radius: 4px; }
-    .verified-badge svg { width: 12px; height: 12px; stroke: #40c057; fill: none; }
-    .review-body { font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0; }
-    
-    /* Spoiler Toggle Styles */
-    .spoiler-checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; cursor: pointer; }
-    .spoiler-checkbox-row input { accent-color: var(--accent-gold); cursor: pointer; }
-    .spoiler-toggle-btn { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: var(--accent-gold); cursor: pointer; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 4px; width: fit-content; }
-    .spoiler-toggle-btn:hover { background: var(--border-subtle); }
-    .spoiler-content { display: none; background: var(--bg-surface); border-left: 2px solid var(--accent-gold); padding: 8px 12px; margin-top: 4px; font-size: 13px; color: var(--text-secondary); font-style: italic; }
-    .spoiler-container.revealed .spoiler-content { display: block; }
-    .spoiler-container.revealed .spoiler-toggle-btn { display: none; }
+    .section-tabs-header { display: flex; gap: 12px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px; }
+    .section-tab-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-bottom: none; border-top-left-radius: 8px; border-top-right-radius: 8px; padding: 12px 28px; font-size: 15px; font-weight: 700; color: var(--text-secondary); cursor: pointer; position: relative; bottom: -1px; transition: all 0.2s ease; }
+    .section-tab-btn.active { background: var(--bg-surface-elevated); color: var(--text-primary); border-color: var(--border-focus); border-bottom: 1px solid var(--bg-surface-elevated); }
+    .tab-panel { display: none; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 24px; }
+    .tab-panel.active { display: block; }
 
-    .btn-helpful { background: transparent; border: 1px solid var(--border-subtle); border-radius: 4px; padding: 4px 10px; font-size: 12px; color: var(--text-secondary); cursor: pointer; }
-
-    /* Footer Styles */
     footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
     .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border-subtle); }
     .footer-col { display: flex; flex-direction: column; gap: 14px; }
@@ -262,14 +301,57 @@
     .footer-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
     .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
 
-    /* Modal */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 12, 16, 0.8); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .modal-overlay.active { display: flex; }
-    .modal-dialog { background: var(--bg-surface); border: 1px solid var(--border-subtle); width: 100%; max-width: 680px; max-height: 85vh; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75); }
-    .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; }
-    .modal-header h3 { font-size: 15px; font-weight: 600; margin: 0; color: var(--text-primary); }
-    .modal-close-btn { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-secondary); }
-    .modal-body { padding: 32px 40px; overflow-y: auto; font-family: var(--font-serif); font-size: 18px; line-height: 1.8; color: var(--text-secondary); }
+    .offer-sidebar-backdrop {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
+      z-index: 998; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .offer-sidebar-backdrop.open { opacity: 1; visibility: visible; }
+
+    .offer-sidebar-panel {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 420px;
+      background: var(--bg-surface); border-left: 1px solid var(--border-subtle); z-index: 999;
+      transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex; flex-direction: column; box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6);
+    }
+    .offer-sidebar-panel.open { transform: translateX(0); }
+
+    .offer-sidebar-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg-surface-elevated);
+    }
+    .offer-sidebar-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin: 0; }
+    .offer-sidebar-close {
+      width: 32px; height: 32px; border-radius: 50%; background: var(--bg-surface);
+      border: 1px solid var(--border-subtle); color: var(--text-secondary); font-size: 16px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer; line-height: 1;
+      transition: all 0.2s ease;
+    }
+    .offer-sidebar-close:hover { color: var(--text-primary); border-color: var(--accent-gold); }
+    .offer-sidebar-body { flex: 1; overflow-y: auto; padding: 20px; }
+
+    .excerpt-modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
+      z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .excerpt-modal-backdrop.open { opacity: 1; visibility: visible; }
+    .excerpt-modal-panel {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
+      width: 90%; max-width: 680px; max-height: 85vh; background: var(--bg-surface);
+      border: 1px solid var(--border-subtle); border-radius: 12px; z-index: 1001;
+      display: flex; flex-direction: column; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+      opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .excerpt-modal-panel.open { transform: translate(-50%, -50%) scale(1); opacity: 1; visibility: visible; }
+    .excerpt-modal-header {
+      padding: 16px 24px; border-bottom: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg-surface-elevated); border-top-left-radius: 12px; border-top-right-radius: 12px;
+    }
+    .excerpt-modal-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin: 0; font-family: var(--font-serif); }
+    .excerpt-modal-close { background: transparent; border: none; color: var(--text-secondary); font-size: 1.25rem; cursor: pointer; padding: 4px 8px; }
+    .excerpt-modal-close:hover { color: var(--accent-gold); }
+    .excerpt-modal-body { padding: 24px; overflow-y: auto; flex: 1; }
 
     @media (max-width: 1024px) {
       .pdp-wrapper { grid-template-columns: 1fr; gap: 32px; }
@@ -288,7 +370,6 @@
         <span class="brand-title">Libraryreeds</span>
       </a>
 
-      <!-- Search Bar -->
       <div class="nav-search-container">
         <svg class="nav-search-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Search volumes, authors, or vault records...">
@@ -300,6 +381,7 @@
         <a href="./fanart.html" class="nav-link">Fanart</a>
         <a href="./about.html" class="nav-link">About</a>
         <a href="./giftshop.html" class="nav-link">Gift Shop</a>
+        <a href="./membership.html" class="nav-link">Membership</a>
         <a href="./wishlist.html" class="wishlist-icon-link" title="Wishlist">
           <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
@@ -320,6 +402,7 @@
               <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
             </div>
             <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+            <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
             <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
           </div>
         </div>
@@ -332,16 +415,16 @@
       
       <div class="media-card">
         <div class="cover-stage">
-          <div class="cover-viewport view-flat" id="book-cover-viewport">
-            <img class="cover-img" id="bookCoverImg" src="" alt="Book Cover" />
+          <div class="cover-viewport" id="book-cover-viewport">
+            <img class="cover-img" id="bookCoverImg" src="" alt="Product Media" />
             <div class="spine-accent"></div>
           </div>
         </div>
 
         <div class="media-actions">
-          <div class="view-toggle-bar">
-            <button class="view-toggle-btn active" id="btn-view-flat" type="button">Front View</button>
-            <button class="view-toggle-btn" id="btn-view-3d" type="button">3D Angle</button>
+          <div class="view-toggle-bar" id="viewToggleBar">
+            <button class="view-toggle-btn active" id="btn-view-front" type="button">Front View</button>
+            <button class="view-toggle-btn" id="btn-view-back" type="button">Back View</button>
           </div>
 
           <button class="btn-look-inside" id="open-sample-modal" type="button">
@@ -355,10 +438,10 @@
       </div>
 
       <div class="info-card">
-        <div class="tags-badge-row">
-          <span class="genre-pill" id="bookFormatPill">Digital Archive</span>
-          <span class="trope-pill">Collector Hardcover</span>
-          <span class="trope-pill">Vault Exclusive</span>
+        <div class="tags-badge-row" id="bookBadgesRow">
+          <span class="genre-pill" id="badgePrimary">Digital Archive</span>
+          <span class="trope-pill" id="badgeSecondary">Vault Exclusive</span>
+          <span class="trope-pill" id="badgeTertiary">Collector Item</span>
         </div>
 
         <div class="book-header">
@@ -366,33 +449,41 @@
           <div class="author-name" id="bookAuthorDisplay">Author Name</div>
         </div>
 
+        <div class="libraryreeds-promo-banner" id="pdpPromoBannerBox" style="display: none;">
+          <span class="promo-banner-title" id="pdpPromoBannerTitle">Loading Offer...</span>
+          <span class="promo-banner-desc" id="pdpPromoBannerDesc"></span>
+        </div>
+
         <hr class="section-divider" />
         <div class="rating-row">
-          <span class="stars">★★★★★</span>
-          <span class="rating-score">4.8</span>
+          <span class="stars" id="liveStarsDisplay">★★★★★</span>
+          <span class="rating-score" id="ratingScoreDisplay">5.0</span>
           <span style="color: var(--text-muted);">/</span>
-          <a href="#customer-reviews" class="review-link">2,491 ratings</a>
+          <a href="#customer-reviews" class="review-link" id="ratingCountDisplay">0 ratings</a>
         </div>
         <hr class="section-divider" />
 
-        <div class="editorial-praise-box">
-          <p class="praise-quote">"An extraordinary and indispensable handbook for living in a world overloaded with poorly thought-out objects."</p>
-          <span class="praise-attribution">— The New York Times Book Review</span>
+        <div class="editorial-praise-box" id="editorialPraiseBox">
+          <p class="praise-quote">"An extraordinary and indispensable item safeguarded for genuine collectors and vault patrons."</p>
+          <span class="praise-attribution">— Libraryreeds Editorial Review</span>
         </div>
 
         <div class="rating-breakdown-card">
           <div class="breakdown-header">
             <h3 class="breakdown-title">Rating Breakdown</h3>
-            <span style="font-size: 12px; color: var(--text-muted);">94% positive</span>
+            <span style="font-size: 12px; color: var(--text-muted);" id="positivePercentageDisplay">100% positive</span>
           </div>
-          <div class="breakdown-bars-stack">
-            <div class="rating-bar-row"><span class="star-label">5 star</span><div class="bar-track"><div class="bar-fill" style="width: 82%;"></div></div><span class="percentage-label">82%</span></div>
-            <div class="rating-bar-row"><span class="star-label">4 star</span><div class="bar-track"><div class="bar-fill" style="width: 12%;"></div></div><span class="percentage-label">12%</span></div>
-            <div class="rating-bar-row"><span class="star-label">3 star</span><div class="bar-track"><div class="bar-fill" style="width: 4%;"></div></div><span class="percentage-label">4%</span></div>
+          <div class="breakdown-bars-stack" id="breakdownBarsStack">
+            <div class="rating-bar-row"><span class="star-label">5 star</span><div class="bar-track"><div class="bar-fill" id="bar5" style="width: 100%;"></div></div><span class="percentage-label" id="pct5">100%</span></div>
+            <div class="rating-bar-row"><span class="star-label">4 star</span><div class="bar-track"><div class="bar-fill" id="bar4" style="width: 0%;"></div></div><span class="percentage-label" id="pct4">0%</span></div>
+            <div class="rating-bar-row"><span class="star-label">3 star</span><div class="bar-track"><div class="bar-fill" id="bar3" style="width: 0%;"></div></div><span class="percentage-label" id="pct3">0%</span></div>
+            <div class="rating-bar-row"><span class="star-label">2 star</span><div class="bar-track"><div class="bar-fill" id="bar2" style="width: 0%;"></div></div><span class="percentage-label" id="pct2">0%</span></div>
+            <div class="rating-bar-row"><span class="star-label">1 star</span><div class="bar-track"><div class="bar-fill" id="bar1" style="width: 0%;"></div></div><span class="percentage-label" id="pct1">0%</span></div>
           </div>
         </div>
 
-        <div>
+        <!-- Format / Edition Section -->
+        <div id="formatsSection">
           <div class="formats-title">Format / Edition</div>
           <div class="formats-grid" id="formatsGridOptions" style="grid-template-columns: repeat(2, 1fr);">
             <div class="format-option selected" data-format="EPUB" id="formatOptionEpub">
@@ -401,15 +492,15 @@
             </div>
             <div class="format-option" data-format="Paperback" id="formatOptionPaperback">
               <span class="format-name">Paperback</span>
-              <span class="format-price-label" style="color: var(--text-muted); font-size: 11px;">Coming Soon</span>
+              <span class="format-price-label" id="paperbackPriceLabel">$0.00</span>
             </div>
             <div class="format-option" data-format="Hardcover" id="formatOptionHardcover">
               <span class="format-name">Hardcover</span>
-              <span class="format-price-label" style="color: var(--text-muted); font-size: 11px;">Coming Soon</span>
+              <span class="format-price-label" id="hardcoverPriceLabel">$0.00</span>
             </div>
             <div class="format-option" data-format="Audio" id="formatOptionAudio">
               <span class="format-name">Audio</span>
-              <span class="format-price-label" style="color: var(--text-muted); font-size: 11px;">Coming Soon</span>
+              <span class="format-price-label" id="audioPriceLabel">$0.00</span>
             </div>
           </div>
         </div>
@@ -418,7 +509,7 @@
           <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 2px 0;">Description &amp; Overview</h3>
           <div class="blurb-container">
             <div class="blurb-text-wrap" id="blurb-text">
-              <p class="blurb-paragraph" id="bookDescDisplay">Retrieving volume overview from the vault repository...</p>
+              <p class="blurb-paragraph" id="bookDescDisplay">Retrieving item overview from the vault repository...</p>
             </div>
             <button class="btn-toggle-blurb" id="btn-toggle-blurb" type="button">
               <span>Read more</span>
@@ -427,29 +518,30 @@
           </div>
         </div>
 
-        <details class="advisory-details">
+        <details class="advisory-details" id="advisoryDetails">
           <summary class="advisory-summary">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span class="advisory-badge">General Audience / 12+</span>
-              <span>Content &amp; Age Advisory</span>
+              <span class="advisory-badge" id="advisoryBadge">General</span>
+              <span>Archival &amp; Vault Advisory</span>
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </summary>
           <div class="advisory-content">
-            <p style="margin: 0;">Suitable for young adults and general readership. Verified authentic archival text.</p>
-            <div class="advisory-tags"><span class="advisory-tag">Age: 12+</span><span class="advisory-tag">Verified Edition</span></div>
+            <p style="margin: 0;" id="advisoryText">Verified authentic archival product issued under official Libraryreeds licensing.</p>
+            <div class="advisory-tags"><span class="advisory-tag">Vault Verified</span><span class="advisory-tag">Direct Fulfillment</span></div>
           </div>
         </details>
 
-        <div class="specs-box">
-          <div class="specs-title">Specifications</div>
+        <!-- Specifications Box -->
+        <div class="specs-box" id="specsSection">
+          <div class="specs-title">Item Specifications</div>
           <table class="specs-table">
-            <tr><td class="spec-label">Publication Date</td><td class="spec-value" id="bookPubDateDisplay">—</td></tr>
-            <tr><td class="spec-label">Page Count</td><td class="spec-value" id="bookPagesDisplay">—</td></tr>
-            <tr><td class="spec-label">Publisher / Imprint</td><td class="spec-value" id="bookPublisherDisplay">Libraryreeds Archive</td></tr>
-            <tr><td class="spec-label">Language</td><td class="spec-value" id="bookLanguageDisplay">English</td></tr>
-            <tr><td class="spec-label">ISBN-13</td><td class="spec-value" id="bookIsbnDisplay">—</td></tr>
-            <tr><td class="spec-label">License</td><td class="spec-value" id="bookLicenseDisplay">Digital &amp; Physical</td></tr>
+            <tr id="rowPubDate"><td class="spec-label">Release Date</td><td class="spec-value" id="bookPubDateDisplay">—</td></tr>
+            <tr id="rowPages"><td class="spec-label">Length / Units</td><td class="spec-value" id="bookPagesDisplay">—</td></tr>
+            <tr><td class="spec-label">Catalog / Vault</td><td class="spec-value" id="bookPublisherDisplay">Libraryreeds Archive</td></tr>
+            <tr id="rowLanguage"><td class="spec-label">Category</td><td class="spec-value" id="bookLanguageDisplay">Standard</td></tr>
+            <tr id="rowIsbn"><td class="spec-label">Identifier / SKU</td><td class="spec-value" id="bookIsbnDisplay">—</td></tr>
+            <tr><td class="spec-label">Access License</td><td class="spec-value" id="bookLicenseDisplay">Personal Edition</td></tr>
           </table>
         </div>
       </div>
@@ -458,38 +550,72 @@
         <div class="price-header">
           <div class="price-row">
             <span class="current-price" id="buyCardPrice">$0.00</span>
+            <div class="price-action-group">
+              <button type="button" class="btn-price-info" id="openOfferSidebarBtn" title="Offer Details">i</button>
+              <button type="button" class="btn-price-coupon" id="priceApplyCouponBtn">Apply Coupon</button>
+            </div>
           </div>
           <div class="stock-indicator" id="buyCardStockIndicator">
             <span class="stock-dot"></span>
-            <span id="bookNoticeDisplay">Instant Digital / Archival Access</span>
+            <span id="bookNoticeDisplay">In Stock &bull; Instant Access</span>
           </div>
         </div>
 
-        <!-- Quantity Selector -->
         <div class="quantity-row">
           <span>Quantity:</span>
-          <select class="quantity-select" id="bookQuantitySelect">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-          </select>
+          <input type="number" class="quantity-input" id="bookQuantityInput" value="1" min="1" max="99" />
+        </div>
+
+        <!-- Coupon Code Input Box -->
+        <div class="coupon-box" id="couponBoxContainer" style="display: flex; flex-direction: column; gap: 6px; background: var(--bg-surface-elevated); padding: 12px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+          <label style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Promo / Coupon Code</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="couponCodeInput" class="form-input" placeholder="e.g. REEDS10" style="padding: 8px 10px; font-size: 0.8rem; text-transform: uppercase; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px; outline: none; flex: 1;">
+            <button type="button" id="applyCouponBtn" class="btn-primary" style="padding: 8px 12px; font-size: 0.7rem; white-space: nowrap; background: var(--accent-gold); color: var(--bg-base); border: none; border-radius: 4px; font-weight: 700; cursor: pointer;">Apply</button>
+          </div>
+          <span id="couponMsg" style="font-size: 0.7rem; color: var(--accent-gold); display: none;"></span>
+        </div>
+
+        <div style="display:none;">
+          <input type="hidden" id="adminTargetCatalog" value="books">
+          <input type="hidden" id="adminItemId" value="">
+          <input type="hidden" id="adminItemPromoCode" value="">
+          <input type="hidden" id="adminItemDiscountPct" value="0">
+          <button type="button" id="saveCatalogItemBtn">Save</button>
+        </div>
+
+        <div class="shipping-widget-box" id="shippingWidgetBox">
+          <h4 class="shipping-widget-title">Shipping</h4>
+          <p class="shipping-widget-eta">Standard Vault Delivery (3–5 Days)</p>
+          <p class="shipping-widget-promo">Free With a $49 Total Purchase</p>
+        </div>
+
+        <div class="gift-options-drawer" id="giftOptionsDrawer">
+          <span style="font-size: 11px; font-weight: 600; color: var(--accent-gold); text-transform: uppercase;">Gift Recipient Details</span>
+          <input type="email" id="giftRecipientEmail" class="gift-input-field" placeholder="Recipient's Email Address">
+          <input type="text" id="giftRecipientName" class="gift-input-field" placeholder="Recipient's Name (Optional)">
+          <textarea id="giftMessageNote" class="gift-input-field" rows="2" placeholder="Personalized vault note (optional)..." style="resize:vertical;"></textarea>
         </div>
 
         <div class="cta-stack">
+          <!-- Unlimited Book Button -->
+          <button type="button" class="btn-unlimited-action" id="btnUnlimitedRead">
+            <span class="unlimited-label">Read with Unlimited</span>
+            <span class="unlimited-sub">$0.00</span>
+          </button>
+
+          <!-- Standard Purchasing & Gifting Buttons -->
           <button type="button" class="btn-primary-action" id="primary-cta-btn">Add to Cart</button>
-          <button class="btn-subscription-action">
-            Read with <strong>Rakuten Kobo Plus</strong>
+          <button type="button" class="btn-buy-now-action" id="btnBuyNowMajority">Buy Now</button>
+          <button type="button" class="btn-gift-action" id="cardGiftBtn">
+            <svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+            <span id="cardGiftBtnText">Give as a Gift</span>
+          </button>
+          <button type="button" class="btn-wishlist-action" id="cardWishlistBtn">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <span id="cardWishlistBtnText">Add as Wish</span>
           </button>
         </div>
-
-        <!-- Wishlist Heart Button -->
-        <button type="button" class="btn-wishlist-heart" id="wishlistHeartBtn">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-          <span id="wishlistBtnText">Add to Wishlist</span>
-        </button>
 
         <p class="guarantee-note">Secure database checkout &bull; Instant access</p>
       </div>
@@ -497,71 +623,39 @@
     </div>
   </div>
 
-  <div class="series-section-container">
-    <div class="series-card">
-      <div class="series-header">
-        <div class="series-title-wrap">
-          <h2>Book Series</h2>
-          <p class="series-subtitle">Scroll left or right to explore more books in the series</p>
-        </div>
-        <div class="carousel-nav-controls">
-          <button class="carousel-btn" id="carousel-prev" aria-label="Previous series item" type="button">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          </button>
-          <button class="carousel-btn" id="carousel-next" aria-label="Next series item" type="button">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-        </div>
-      </div>
-      <div class="series-carousel-viewport" id="series-carousel">
-        <div class="series-item-card is-current">
-          <div class="series-item-cover-wrapper">
-            <img id="carouselThumbImg" src="" alt="Current Volume" />
-            <span class="series-order-badge">Current Book</span>
-          </div>
-          <div class="series-item-details">
-            <h3 class="series-item-title" id="carouselThumbTitle">Active Volume</h3>
-            <span class="series-item-price" id="carouselThumbPrice">$0.00</span>
-          </div>
-        </div>
-      </div>
+  <div class="excerpt-modal-backdrop" id="excerptModalBackdrop"></div>
+  <div class="excerpt-modal-panel" id="excerptModalPanel" aria-hidden="true">
+    <div class="excerpt-modal-header">
+      <h3 class="excerpt-modal-title" id="excerptModalTitle">Excerpt Preview</h3>
+      <button type="button" class="excerpt-modal-close" id="closeExcerptModalBtn" aria-label="Close modal">&times;</button>
     </div>
+    <div class="excerpt-modal-body" id="excerptModalBody"></div>
   </div>
 
-  <div class="related-section-container">
-    <div class="related-card">
-      <div class="related-header">
-        <div class="related-title-wrap">
-          <h2>Customers Who Bought This Item Also Bought</h2>
-          <p class="related-subtitle">Explore related volumes from the catalog</p>
-        </div>
-      </div>
-      <div class="related-carousel-viewport" id="related-carousel">
-        <p style="color: var(--text-muted); font-size: 13px;">Loading related items...</p>
-      </div>
+  <div class="offer-sidebar-backdrop" id="offerSidebarBackdrop"></div>
+  <div class="offer-sidebar-panel" id="offerSidebarPanel" aria-hidden="true">
+    <div class="offer-sidebar-header">
+      <h3 class="offer-sidebar-title">Offer Details</h3>
+      <button type="button" class="offer-sidebar-close" id="closeOfferSidebarBtn" aria-label="Close offer details">&times;</button>
     </div>
+    <div class="offer-sidebar-body" id="offerSidebarBody"></div>
   </div>
 
   <div class="reviews-section-container" id="customer-reviews">
     <div class="reviews-card">
-      <h2 style="font-size: 18px; font-weight: 600; margin: 0 0 16px 0; color: var(--text-primary);">Verified Reader Reviews &amp; Discussion</h2>
+      <div class="section-tabs-header">
+        <button type="button" class="section-tab-btn active" data-tab="reviewsPanel">Ratings &amp; Reviews</button>
+        <button type="button" class="section-tab-btn" data-tab="qaPanel">Q&amp;A</button>
+      </div>
       
-      <form id="reviewSubmitForm" class="review-card" style="border:1px solid var(--border-subtle); padding:20px; border-radius:8px; background:var(--bg-surface-elevated); margin-bottom:24px;">
-        <h4 style="font-size: 13px; font-weight: 600; margin: 0 0 10px 0; color: var(--text-primary);">Leave a Review or Discussion Comment</h4>
-        <input type="text" id="reviewerNameInput" class="sort-dropdown" placeholder="Your Name" required style="width:100%; margin-bottom:10px; box-sizing:border-box;">
-        <textarea id="reviewBodyInput" class="sort-dropdown" rows="3" placeholder="Share your thoughts, theories, or discussion points on this volume..." required style="width:100%; margin-bottom:10px; resize:vertical; box-sizing:border-box;"></textarea>
-        <label class="spoiler-checkbox-row">
-          <input type="checkbox" id="isSpoilerInput"> Mark as containing spoilers
-        </label>
-        <button type="submit" class="btn-primary-action" style="width:auto; padding:0 24px; height:36px; font-size:12px;">Post Comment</button>
-      </form>
-
-      <div class="feed-controls">
-        <span class="feed-controls-label" id="review-count-display">Community feedback &amp; discussion feed</span>
+      <div class="tab-panel active" id="reviewsPanel">
+        <h3 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 12px;">Patron Reviews</h3>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">Verified readers and vault members have rated this volume highly for its pristine archival fidelity and engaging presentation.</p>
       </div>
 
-      <div class="reviews-list" id="reviewsFeedList">
-        <p style="color: var(--text-muted); font-size: 13px;">Loading community reviews and discussions...</p>
+      <div class="tab-panel" id="qaPanel">
+        <h3 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 12px;">Questions &amp; Answers</h3>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">Have questions regarding format compatibility, licensing, or physical editions? Contact curator support or check our FAQ for immediate answers.</p>
       </div>
     </div>
   </div>
@@ -572,40 +666,66 @@
         <h4 class="footer-col-title">Libraryreeds</h4>
         <p class="footer-text">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
       </div>
-      <div class="footer-col">
-        <h4 class="footer-col-title">Quick Shortcuts</h4>
-        <ul class="footer-links-list">
-          <li><a href="./index.html" class="footer-link">Home</a></li>
-          <li><a href="./shop.html" class="footer-link">Browse Catalog</a></li>
-          <li><a href="./fanart.html" class="footer-link">Fanart Gallery</a></li>
-          <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
-          <li><a href="./giftshop.html" class="footer-link">Gift Shop</a></li>
-          <li><a href="./account.html" class="footer-link">Master Account Center</a></li>
-        </ul>
-      </div>
     </div>
     <div class="footer-bottom">
       <span>&copy; 2026 Libraryreeds. All rights reserved.</span>
-      <span>Official Archival Repository</span>
     </div>
   </footer>
 
-  <div class="modal-overlay" id="sample-modal">
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <h3 id="modalBookTitle">Sample Excerpt</h3>
-        <button class="modal-close-btn" id="close-sample-modal">&times;</button>
-      </div>
-      <div class="modal-body" id="modalExcerptContent">
-        <p>Loading excerpt from manuscript vault...</p>
-      </div>
-    </div>
-  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabBtns = document.querySelectorAll('.section-tab-btn');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabPanels.forEach(p => p.classList.remove('active'));
+
+          btn.classList.add('active');
+          const targetPanelId = btn.getAttribute('data-tab');
+          document.getElementById(targetPanelId)?.classList.add('active');
+        });
+      });
+
+      const openBtn = document.getElementById('openOfferSidebarBtn');
+      const closeBtn = document.getElementById('closeOfferSidebarBtn');
+      const backdrop = document.getElementById('offerSidebarBackdrop');
+      const panel = document.getElementById('offerSidebarPanel');
+
+      function openDrawer() {
+        panel?.classList.add('open');
+        backdrop?.classList.add('open');
+        panel?.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDrawer() {
+        panel?.classList.remove('open');
+        backdrop?.classList.remove('open');
+        panel?.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      openBtn?.addEventListener('click', openDrawer);
+      closeBtn?.addEventListener('click', closeDrawer);
+      backdrop?.addEventListener('click', closeDrawer);
+
+      const priceApplyBtn = document.getElementById('priceApplyCouponBtn');
+      priceApplyBtn?.addEventListener('click', () => {
+        const couponInput = document.getElementById('couponCodeInput');
+        if (couponInput) {
+          couponInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          couponInput.focus();
+        }
+      });
+    });
+  </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, onSnapshot, collection, addDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, query, where, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
@@ -620,38 +740,200 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    function updateCartBadge() {
-      const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
-      let totalQty = 0;
-      cart.forEach(ci => { totalQty += parseInt(ci.quantity || 1); });
+    const urlParams = new URLSearchParams(window.location.search);
+    let itemIdParam = urlParams.get('id');
+    let itemSlugParam = urlParams.get('slug');
+    const itemTypeParam = (urlParams.get('type') || '').toLowerCase();
+    const urlCoupon = urlParams.get('coupon');
 
-      const badge = document.getElementById('cartBadgeCount');
-      if (badge) {
-        if (totalQty > 0) {
-          badge.textContent = totalQty;
-          badge.style.display = "flex";
-        } else {
-          badge.style.display = "none";
-        }
+    if (!itemIdParam && !itemSlugParam) {
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      const prodIndex = pathSegments.indexOf('products');
+      if (prodIndex !== -1 && pathSegments[prodIndex + 1]) {
+        itemSlugParam = decodeURIComponent(pathSegments[prodIndex + 1]).replace(/\.html$/i, '');
       }
     }
 
-    function updateWishlistBadge() {
-      const wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
-      const badge = document.getElementById('wishlistBadgeCount');
-      if (badge) {
-        if (wishlist.length > 0) {
-          badge.textContent = wishlist.length;
-          badge.style.display = "flex";
-        } else {
-          badge.style.display = "none";
+    let currentItemData = null;
+    let isBookCatalog = true;
+    let isCouponProduct = false;
+    let selectedFormat = 'EPUB';
+    let baseItemPrice = 0;
+    let formatPrices = { EPUB: 0, Paperback: 0, Hardcover: 0, Audio: 0 };
+    let formatComingSoon = { EPUB: false, Paperback: false, Hardcover: false, Audio: false };
+     
+    let appliedDiscountPercent = 0;
+    let appliedCouponCode = "";
+    let isGiftMode = false;
+
+    // Handle Unlimited Button action
+    const btnUnlimitedRead = document.getElementById('btnUnlimitedRead');
+    btnUnlimitedRead?.addEventListener('click', () => {
+      const user = auth.currentUser;
+      if (!user) {
+        window.location.href = './membership.html';
+      } else {
+        window.location.href = `./membership.html?read=${encodeURIComponent(itemIdParam || itemSlugParam || '')}`;
+      }
+    });
+
+    function generate9DigitCode() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < 9; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return `REEDS-${result}`;
+    }
+
+    const buyNowBtn = document.getElementById('btnBuyNowMajority');
+    buyNowBtn?.addEventListener('click', () => {
+      if (!currentItemData) return;
+
+      const base = isBookCatalog ? (formatPrices[selectedFormat] || baseItemPrice) : baseItemPrice;
+      const finalUnitPrice = (!isCouponProduct && appliedDiscountPercent > 0)
+        ? base * (1 - (appliedDiscountPercent / 100))
+        : base;
+
+      const orderId = `LRD-${Math.floor(10000 + Math.random() * 90000)}`;
+      const couponRewardCode = generate9DigitCode();
+
+      const pendingCheckout = {
+        orderId: orderId,
+        title: currentItemData.title || currentItemData.name,
+        author: currentItemData.author || currentItemData.creator || 'Libraryreeds',
+        format: selectedFormat,
+        unitPrice: finalUnitPrice,
+        quantity: parseInt(document.getElementById('bookQuantityInput')?.value || '1'),
+        total: finalUnitPrice + 3.99,
+        rewardCoupon: couponRewardCode
+      };
+
+      localStorage.setItem('libraryreeds_pending_order', JSON.stringify(pendingCheckout));
+
+      window.location.href = "https://pay.majority.com/pay/kasctrlumw";
+    });
+
+    async function loadDynamicPromoBanner() {
+      const bannerBox = document.getElementById('pdpPromoBannerBox');
+      if (!bannerBox) return;
+
+      const isOnSale = !isCouponProduct && appliedDiscountPercent > 0;
+      if (!isOnSale) {
+        bannerBox.style.display = 'none';
+        return;
+      }
+
+      let targetKey = "global_default";
+      if (itemIdParam) {
+        targetKey = !isBookCatalog || isGiftMode ? `gift_${itemIdParam}` : `book_${itemIdParam}`;
+      }
+
+      try {
+        let docSnap = await getDoc(doc(db, "site_settings_banners", targetKey));
+        if (!docSnap.exists() && targetKey !== "global_default") {
+          docSnap = await getDoc(doc(db, "site_settings_banners", "global_default"));
         }
+        if (!docSnap.exists()) {
+          docSnap = await getDoc(doc(db, "site_settings", "promo_banner"));
+        }
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.title || data.description) {
+            document.getElementById('pdpPromoBannerTitle').textContent = data.title || '';
+            document.getElementById('pdpPromoBannerDesc').textContent = data.description || '';
+            bannerBox.style.display = 'flex';
+          } else {
+            bannerBox.style.display = 'none';
+          }
+        } else {
+          bannerBox.style.display = 'none';
+        }
+      } catch (err) {
+        console.error("Error loading promo banner:", err);
       }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      updateCartBadge();
-      updateWishlistBadge();
+    const btnViewFront = document.getElementById('btn-view-front');
+    const btnViewBack = document.getElementById('btn-view-back');
+    const bookCoverImg = document.getElementById('bookCoverImg');
+
+    btnViewFront?.addEventListener('click', () => {
+      btnViewFront.classList.add('active');
+      btnViewBack?.classList.remove('active');
+      if (currentItemData) {
+        bookCoverImg.src = currentItemData.imageUrl || currentItemData.coverUrl || currentItemData.image || '';
+      }
+    });
+
+    btnViewBack?.addEventListener('click', () => {
+      btnViewBack.classList.add('active');
+      btnViewFront?.classList.remove('active');
+      if (currentItemData) {
+        const backImg = currentItemData.backCoverUrl || currentItemData.backImageUrl;
+        if (backImg && backImg.trim() !== "") {
+          bookCoverImg.src = backImg;
+        } else {
+          alert("Back view preview is currently unavailable for this item.");
+          btnViewFront.click();
+        }
+      }
+    });
+
+    const openSampleModal = document.getElementById('open-sample-modal');
+    const excerptModalBackdrop = document.getElementById('excerptModalBackdrop');
+    const excerptModalPanel = document.getElementById('excerptModalPanel');
+    const closeExcerptModalBtn = document.getElementById('closeExcerptModalBtn');
+    const excerptModalBody = document.getElementById('excerptModalBody');
+    const excerptModalTitle = document.getElementById('excerptModalTitle');
+
+    function openExcerptModal() {
+      if (currentItemData) {
+        excerptModalTitle.textContent = `Details: ${currentItemData.title || currentItemData.name || 'Record'}`;
+        const descText = currentItemData.description || 'Exclusive description preview unavailable for this record.';
+        excerptModalBody.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">
+              <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-gold); font-weight: 700;">Catalog Overview</span>
+              <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-primary); margin-top: 4px;">${currentItemData.title || currentItemData.name || ''}</h3>
+            </div>
+            <p style="line-height: 1.8; color: var(--text-primary); font-size: 0.95rem;">${descText}</p>
+          </div>
+        `;
+      }
+      excerptModalBackdrop?.classList.add('open');
+      excerptModalPanel?.classList.add('open');
+      excerptModalPanel?.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeExcerptModal() {
+      excerptModalBackdrop?.classList.remove('open');
+      excerptModalPanel?.classList.remove('open');
+      excerptModalPanel?.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    openSampleModal?.addEventListener('click', openExcerptModal);
+    closeExcerptModalBtn?.addEventListener('click', closeExcerptModal);
+    excerptModalBackdrop?.addEventListener('click', closeExcerptModal);
+
+    const cardGiftBtn = document.getElementById('cardGiftBtn');
+    const cardGiftBtnText = document.getElementById('cardGiftBtnText');
+    const giftOptionsDrawer = document.getElementById('giftOptionsDrawer');
+
+    cardGiftBtn?.addEventListener('click', () => {
+      isGiftMode = !isGiftMode;
+      if (isGiftMode) {
+        cardGiftBtn.classList.add('active');
+        cardGiftBtnText.textContent = "Gifting Enabled";
+        giftOptionsDrawer?.classList.add('active');
+      } else {
+        cardGiftBtn.classList.remove('active');
+        cardGiftBtnText.textContent = "Give as a Gift";
+        giftOptionsDrawer?.classList.remove('active');
+      }
+      loadDynamicPromoBanner();
     });
 
     const navLoginBtn = document.getElementById("navLoginBtn");
@@ -676,27 +958,19 @@
         if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
 
         let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
-
         if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
           try {
             const userDoc = await getDoc(doc(db, "users", user.uid));
-            if (userDoc.exists() && userDoc.data().photoURL) {
-              resolvedAvatar = userDoc.data().photoURL;
-            }
+            if (userDoc.exists() && userDoc.data().photoURL) resolvedAvatar = userDoc.data().photoURL;
           } catch(e) {}
         }
-
         if ((!resolvedAvatar || resolvedAvatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
           resolvedAvatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
         }
-
         if (resolvedAvatar) {
           localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
+          document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => { img.src = resolvedAvatar; });
         }
-
-        document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => {
-          if (resolvedAvatar) img.src = resolvedAvatar;
-        });
       } else {
         localStorage.removeItem('libraryreeds_user_avatar');
         if (navLoginBtn) navLoginBtn.style.display = "inline-block";
@@ -709,9 +983,7 @@
         e.stopPropagation();
         profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
       });
-      document.addEventListener("click", () => {
-        profileDropdown.style.display = "none";
-      });
+      document.addEventListener("click", () => { profileDropdown.style.display = "none"; });
     }
 
     const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
@@ -722,286 +994,489 @@
           await signOut(auth);
           localStorage.clear();
           sessionStorage.clear();
-        } catch (err) {
-          console.warn("Sign out error:", err);
         } finally {
           window.location.replace("index.html");
         }
       });
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const bookId = urlParams.get('id');
-    const itemType = urlParams.get('type');
+    function syncNavBadges() {
+      const wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
+      const wishlistBadge = document.getElementById('wishlistBadgeCount');
+      if (wishlistBadge) {
+        if (wishlist.length > 0) {
+          wishlistBadge.textContent = wishlist.length;
+          wishlistBadge.style.display = "flex";
+        } else {
+          wishlistBadge.style.display = "none";
+        }
+      }
 
-    let currentBookData = null;
-    let selectedFormat = 'EPUB';
-    let currentBookPrice = 0;
+      const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+      let totalQty = 0;
+      cart.forEach(ci => { totalQty += parseInt(ci.quantity || 1); });
+      const cartBadge = document.getElementById('cartBadgeCount');
+      if (cartBadge) {
+        if (totalQty > 0) {
+          cartBadge.textContent = totalQty;
+          cartBadge.style.display = "flex";
+        } else {
+          cartBadge.style.display = "none";
+        }
+      }
+    }
 
-    async function loadBookDetails() {
-      if (!bookId) {
-        document.getElementById('bookTitleDisplay').textContent = "Item Not Found";
-        document.getElementById('bookDescDisplay').textContent = "No item identifier was provided in the link.";
-        return;
+    async function evaluateCoupon(code) {
+      if (!code) return { valid: false, error: "Please enter a coupon code." };
+      const normalized = code.trim().toUpperCase();
+
+      if (isCouponProduct) {
+        return { valid: false, error: "Coupons cannot be discounted. The purchase price is regular price." };
+      }
+
+      const itemPromo = (currentItemData?.promoCode || currentItemData?.couponCode || "").trim().toUpperCase();
+      if (itemPromo && normalized === itemPromo) {
+        const pct = typeof currentItemData.discountPercent === 'number' && currentItemData.discountPercent > 0 
+          ? currentItemData.discountPercent 
+          : 10;
+        return { valid: true, code: normalized, discountPercent: pct, label: `${pct}% OFF (Special Promo)` };
       }
 
       try {
-        const collectionName = itemType === 'gift' ? 'giftshop_items' : 'books';
-        const docSnap = await getDoc(doc(db, collectionName, bookId));
-        
-        if (docSnap.exists()) {
-          const item = docSnap.data();
-          currentBookData = item;
-          const title = item.title || 'Untitled Item';
-          const author = item.author || 'Libraryreeds Curator';
-          currentBookPrice = parseFloat(item.price || 0);
-          const formattedPrice = currentBookPrice.toFixed(2);
-          const coverUrl = item.imageUrl || item.coverUrl || '';
-          const description = item.description || 'No additional details provided for this item.';
+        const couponDoc = await getDoc(doc(db, "coupons", normalized));
+        if (couponDoc.exists()) {
+          const coupon = couponDoc.data();
 
-          document.getElementById('bookTitleDisplay').textContent = title;
-          document.getElementById('bookAuthorDisplay').textContent = author;
-          document.getElementById('buyCardPrice').textContent = `$${formattedPrice}`;
-          document.getElementById('epubPriceLabel').textContent = `$${formattedPrice}`;
-          document.getElementById('bookFormatPill').textContent = itemType === 'gift' ? 'Virtual Voucher' : 'ePub';
-          document.getElementById('bookCoverImg').src = coverUrl;
-          document.getElementById('modalBookTitle').textContent = `Details — ${title}`;
+          if (coupon.isActive === false) {
+            return { valid: false, error: "This coupon is currently inactive." };
+          }
 
-          const primaryCtaBtn = document.getElementById('primary-cta-btn');
-          const bookNoticeDisplay = document.getElementById('bookNoticeDisplay');
-
-          if (itemType === 'gift') {
-            if (primaryCtaBtn) {
-              primaryCtaBtn.textContent = "Place Order";
-              primaryCtaBtn.style.background = "var(--accent-gold)";
-            }
-            if (bookNoticeDisplay) bookNoticeDisplay.textContent = "Instant Digital Gift Card / Voucher";
-          } else {
-            const pubDateStr = item.publicationDate || item.pubDate || '';
-            const isUnpublished = item.isUnpublished || item.comingSoon || (pubDateStr && new Date(pubDateStr) > new Date());
-            if (isUnpublished) {
-              if (primaryCtaBtn) primaryCtaBtn.textContent = "Pre-Order Now";
-              if (bookNoticeDisplay) bookNoticeDisplay.textContent = "Upcoming Release — Pre-Order Available";
+          if (coupon.validUntil) {
+            const expiry = coupon.validUntil.toDate ? coupon.validUntil.toDate() : new Date(coupon.validUntil);
+            if (new Date() > expiry) {
+              return { valid: false, error: "This promo code has expired." };
             }
           }
 
-          const wishlistHeartBtn = document.getElementById('wishlistHeartBtn');
-          let wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
-          
-          if (wishlist.includes(bookId)) {
-            wishlistHeartBtn.classList.add('active');
-            document.getElementById('wishlistBtnText').textContent = "In Wishlist";
+          const eligibleIds = coupon.applicableItems || coupon.eligibleProductIds || coupon.productIds || [];
+          if (Array.isArray(eligibleIds) && eligibleIds.length > 0 && !eligibleIds.includes(itemIdParam)) {
+            return { valid: false, error: "This promo code is not eligible for this product." };
           }
 
-          wishlistHeartBtn.onclick = () => {
-            let currentList = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
-            if (!currentList.includes(bookId)) {
-              currentList.push(bookId);
-              localStorage.setItem('literalis_wishlist', JSON.stringify(currentList));
-            }
-            window.location.href = "wishlist.html";
+          const discountPct = parseFloat(coupon.discountPercent || coupon.discount || 10);
+          return {
+            valid: true,
+            code: normalized,
+            discountPercent: discountPct,
+            label: coupon.description || `${discountPct}% OFF`
           };
-
-          document.getElementById('bookPubDateDisplay').textContent = item.publicationDate || item.pubDate || '—';
-          document.getElementById('bookPagesDisplay').textContent = item.pageCount || '—';
-          document.getElementById('bookPublisherDisplay').textContent = item.publisher || 'Libraryreeds Repository';
-          document.getElementById('bookLanguageDisplay').textContent = item.language || 'English';
-          document.getElementById('bookIsbnDisplay').textContent = item.isbn || '—';
-          document.getElementById('bookLicenseDisplay').textContent = item.license || 'Digital / Physical';
-
-          document.getElementById('carouselThumbImg').src = coverUrl;
-          document.getElementById('carouselThumbTitle').textContent = title;
-          document.getElementById('carouselThumbPrice').textContent = `$${formattedPrice}`;
-
-          const descEl = document.getElementById('bookDescDisplay');
-          const paragraphs = description.split('\n\n').filter(p => p.trim().length > 0);
-          descEl.innerHTML = paragraphs.map(p => `<p class="blurb-paragraph">${p}</p>`).join('');
-
-          const excerptEl = document.getElementById('modalExcerptContent');
-          excerptEl.innerHTML = `<h4>Overview for ${title}</h4><p>${paragraphs[0] || description}</p>`;
-        } else {
-          document.getElementById('bookTitleDisplay').textContent = "Item Missing from Vault";
         }
       } catch (err) {
-        console.error("Error loading item details:", err);
+        console.warn("Error querying coupons collection:", err);
+      }
+
+      if (normalized === "READ24") {
+        return { valid: true, code: normalized, discountPercent: 20, label: "20% OFF (Reader Special)" };
+      }
+      if (normalized === "REEDS10" || normalized === "LIBRARY10") {
+        return { valid: true, code: normalized, discountPercent: 10, label: "10% OFF" };
+      }
+
+      return { valid: false, error: "Invalid or expired promo code." };
+    }
+
+    async function loadItemDetails() {
+      syncNavBadges();
+
+      const productId = urlParams.get('id');
+
+      if (productId === 'custom-bookmark') {
+        // 1. Grab passed parameters (with fallbacks)
+        const title = urlParams.get('title') || 'Custom Bookmark';
+        const price = parseFloat(urlParams.get('price') || 9.99).toFixed(2);
+        const image = urlParams.get('image') || 'https://cdn.phototourl.com/member/2026-09-20-cfa6b9d6-06be-49a1-b6ea-cab707b45088.png';
+        const desc = urlParams.get('desc') || 'High-quality bookmark, printed and shipped directly to your door.';
+        const category = urlParams.get('cat') || 'Merchandise';
+
+        // 2. Inject text and image into the page (matching page elements with fallbacks)
+        const titleEl = document.getElementById('bookTitleDisplay') || document.getElementById('bookTitle') || document.querySelector('.book-title, h1');
+        const priceEl = document.getElementById('buyCardPrice') || document.getElementById('bookPrice') || document.querySelector('.book-price, .price');
+        const imgEl = document.getElementById('bookCoverImg') || document.getElementById('bookCover') || document.querySelector('.book-cover-img, .product-img img');
+        const descEl = document.getElementById('bookDescDisplay') || document.getElementById('bookDescription') || document.querySelector('.book-description, .description');
+        const catEl = document.getElementById('badgePrimary') || document.getElementById('bookCategory') || document.querySelector('.book-category, .badge');
+
+        if (titleEl) titleEl.textContent = title;
+        if (priceEl) priceEl.textContent = `$${price}`;
+        if (imgEl) {
+          imgEl.src = image;
+          imgEl.alt = title;
+        }
+        if (descEl) descEl.textContent = desc;
+        if (catEl) catEl.textContent = category;
+
+        // 3. Immediately hide any loading screens, overlays, or spinners
+        document.querySelectorAll('.loading-spinner, .loader, #loadingState, #pageLoader, #skeletonLoader').forEach(el => {
+          el.style.display = 'none';
+        });
+
+        // 4. Ensure the main container is visible
+        const mainWrap = document.getElementById('productContainer') || document.querySelector('.pdp-page-container, .product-details-container, main');
+        if (mainWrap) {
+          mainWrap.style.display = 'block';
+        }
+
+        // 5. Store current item data and populate remaining UI properties
+        currentItemData = {
+          title: title,
+          price: parseFloat(price),
+          imageUrl: image,
+          description: desc,
+          category: category,
+          author: 'Custom Product',
+          isPhysical: true,
+          sku: 'CUSTOM-BM-01',
+          type: 'merchandise'
+        };
+
+        isBookCatalog = false;
+        isCouponProduct = false;
+        await populateUI(currentItemData, 'giftshop_items');
+        return;
+
+      } else {
+        // Standard Firebase database loading flow for existing catalog items
+        if (!itemIdParam && !itemSlugParam) return;
+
+        const collectionsToTry = [];
+        if (itemTypeParam === 'gift' || itemTypeParam === 'giftshop') {
+          collectionsToTry.push("giftshop_items", "coupons", "books");
+        } else if (itemTypeParam === 'coupon') {
+          collectionsToTry.push("coupons", "giftshop_items", "books");
+        } else {
+          collectionsToTry.push("giftshop_items", "books", "coupons");
+        }
+
+        let matchedData = null;
+        let matchedCollection = "";
+
+        if (itemIdParam) {
+          for (const colName of collectionsToTry) {
+            try {
+              const snap = await getDoc(doc(db, colName, itemIdParam));
+              if (snap.exists()) {
+                matchedData = snap.data();
+                matchedCollection = colName;
+                break;
+              }
+            } catch (e) {
+              console.warn(`Query on ${colName} failed:`, e);
+            }
+          }
+        }
+
+        if (!matchedData && itemSlugParam) {
+          for (const colName of collectionsToTry) {
+            try {
+              const q = query(collection(db, colName), where("slug", "==", itemSlugParam));
+              const querySnap = await getDocs(q);
+              if (!querySnap.empty) {
+                const firstDoc = querySnap.docs[0];
+                itemIdParam = firstDoc.id;
+                matchedData = firstDoc.data();
+                matchedCollection = colName;
+                break;
+              }
+            } catch (e) {
+              console.warn(`Slug search on ${colName} failed:`, e);
+            }
+          }
+        }
+
+        if (!matchedData && (itemIdParam === 'special-reader-discount' || itemSlugParam === 'special-reader-discount')) {
+          matchedData = {
+            title: "Special Reader Discount Voucher",
+            category: "Gift Cards",
+            subCategory: "Direct Promotion",
+            tag: "Voucher Card",
+            price: 19.99,
+            imageUrl: "https://www.image2url.com/r2/default/images/1789491726379-9e4ce5c4-022f-40f1-a7cb-d3bc64f4df6c.png",
+            description: "Exclusive reader celebration voucher. When purchased, unlocks $20 worth of reading savings for future vault and literature checkouts.",
+            promoCode: "READ24",
+            discountPercent: 20,
+            sku: "OFFER-READ24",
+            dateAdded: "Active Promotion"
+          };
+          matchedCollection = "giftshop_items";
+        }
+
+        if (matchedData) {
+          currentItemData = matchedData;
+          isBookCatalog = (matchedCollection === "books" && matchedData.formatPrices !== undefined);
+          isCouponProduct = Boolean(
+            matchedCollection === "coupons" || 
+            itemTypeParam === 'coupon' || 
+            matchedData.promoCode || 
+            matchedData.category === 'Gift Cards' || 
+            matchedData.category === 'Coupons'
+          );
+
+          await populateUI(matchedData, matchedCollection);
+        } else {
+          document.getElementById('bookTitleDisplay').textContent = "Item Not Found";
+          document.getElementById('bookDescDisplay').textContent = "The requested product or catalog item could not be located in the vault repository.";
+        }
       }
     }
 
-    loadBookDetails();
+    async function populateUI(item, collectionSource) {
+      const coverViewport = document.getElementById('book-cover-viewport');
+      const lookInsideBtn = document.getElementById('open-sample-modal');
+      const formatsSection = document.getElementById('formatsSection');
+      const shippingWidgetBox = document.getElementById('shippingWidgetBox');
+      const unlimitedBtn = document.getElementById('btnUnlimitedRead');
+
+      const isPhysicalProduct = item.isPhysical === true || item.type === 'merchandise' || item.format === 'Physical';
+      shippingWidgetBox.classList.toggle('active', isPhysicalProduct);
+
+      if (!isBookCatalog || collectionSource === 'giftshop_items' || collectionSource === 'coupons') {
+        coverViewport?.classList.add('is-gift-item');
+        if (lookInsideBtn) lookInsideBtn.style.display = 'none';
+        if (formatsSection) formatsSection.style.display = 'none';
+        if (unlimitedBtn) unlimitedBtn.style.display = 'none';
+
+        document.getElementById('badgePrimary').textContent = isCouponProduct ? "Digital Voucher" : (item.category || "Gift Shop");
+        document.getElementById('badgeSecondary').textContent = item.subCategory || "Direct Vault Item";
+        document.getElementById('badgeTertiary').textContent = item.tag || (isCouponProduct ? "Digital Card" : "Authenticated");
+
+        baseItemPrice = parseFloat(item.price || item.cost || 0);
+        selectedFormat = item.category || 'Standard';
+
+        document.getElementById('rowPages').style.display = 'none';
+        document.getElementById('bookPubDateDisplay').textContent = item.createdDate || item.dateAdded || 'Archival Stock';
+        document.getElementById('bookPublisherDisplay').textContent = 'Libraryreeds Gift Shop';
+        document.getElementById('bookLanguageDisplay').textContent = item.category || 'Curated Goods';
+        document.getElementById('bookIsbnDisplay').textContent = item.sku || item.code || item.slug || itemIdParam;
+        document.getElementById('bookLicenseDisplay').textContent = item.license || 'Authentic Merchandise';
+
+        const notice = document.getElementById('bookNoticeDisplay');
+        if (notice) {
+          notice.textContent = isPhysicalProduct ? "Ready for Shipping" : (isCouponProduct ? "In Stock • Digital Delivery" : "In Stock");
+        }
+      } else {
+        coverViewport?.classList.remove('is-gift-item');
+        if (lookInsideBtn) lookInsideBtn.style.display = 'inline-flex';
+        if (formatsSection) formatsSection.style.display = 'block';
+        if (unlimitedBtn) unlimitedBtn.style.display = 'flex';
+
+        baseItemPrice = parseFloat(item.price || 0);
+        formatPrices = {
+          EPUB: baseItemPrice,
+          Paperback: parseFloat(item.formatPrices?.paperback || baseItemPrice),
+          Hardcover: parseFloat(item.formatPrices?.hardcover || (baseItemPrice + 15)),
+          Audio: parseFloat(item.formatPrices?.audiobook || baseItemPrice)
+        };
+
+        const fs = item.formatSettings || {};
+        formatComingSoon = {
+          EPUB: !!fs.ebook?.comingSoon,
+          Paperback: !!fs.paperback?.comingSoon,
+          Hardcover: !!fs.hardcover?.comingSoon,
+          Audio: !!fs.audiobook?.comingSoon
+        };
+
+        ['Epub', 'Paperback', 'Hardcover', 'Audio'].forEach(fmtKey => {
+          const exactKey = fmtKey === 'Epub' ? 'EPUB' : (fmtKey === 'Audio' ? 'Audio' : fmtKey);
+          const priceEl = document.getElementById(`${fmtKey.toLowerCase()}PriceLabel`);
+          const optEl = document.getElementById(`formatOption${fmtKey}`);
+           
+          if (priceEl && optEl) {
+            if (formatComingSoon[exactKey]) {
+              priceEl.textContent = "Coming Soon";
+              priceEl.style.color = "var(--text-muted)";
+              optEl.classList.add('disabled');
+            } else {
+              priceEl.textContent = `$${formatPrices[exactKey].toFixed(2)}`;
+              priceEl.style.color = "var(--accent-gold)";
+              optEl.classList.remove('disabled');
+            }
+          }
+        });
+
+        document.getElementById('rowPages').style.display = '';
+        document.getElementById('bookPubDateDisplay').textContent = item.publicationDate || 'August 2026';
+        document.getElementById('bookPagesDisplay').textContent = item.pageCount || '340';
+        document.getElementById('bookPublisherDisplay').textContent = item.publisher || 'Libraryreeds Archive';
+        document.getElementById('bookLanguageDisplay').textContent = item.language || 'English';
+        document.getElementById('bookIsbnDisplay').textContent = item.isbn || '978-1-23456-789-0';
+        document.getElementById('bookLicenseDisplay').textContent = item.license || 'Digital & Physical';
+      }
+
+      document.getElementById('bookTitleDisplay').textContent = item.title || item.name || 'Untitled Item';
+      document.getElementById('bookAuthorDisplay').textContent = item.author || item.creator || item.category || 'Libraryreeds Curator';
+      document.getElementById('bookCoverImg').src = item.imageUrl || item.coverUrl || item.image || '';
+      document.getElementById('bookDescDisplay').textContent = item.description || 'Exclusive curated item from the Libraryreeds collection.';
+
+      const couponBox = document.getElementById('couponBoxContainer');
+      const priceApplyBtn = document.getElementById('priceApplyCouponBtn');
+
+      if (isCouponProduct) {
+        if (couponBox) couponBox.style.display = 'none';
+        if (priceApplyBtn) priceApplyBtn.style.display = 'none';
+        appliedDiscountPercent = 0;
+        appliedCouponCode = "";
+      } else {
+        if (couponBox) couponBox.style.display = 'flex';
+        if (priceApplyBtn) priceApplyBtn.style.display = 'inline-block';
+
+        const targetCoupon = urlCoupon || item.promoCode || item.couponCode || "";
+        if (targetCoupon) {
+          const couponInput = document.getElementById('couponCodeInput');
+          if (couponInput) couponInput.value = targetCoupon;
+
+          const result = await evaluateCoupon(targetCoupon);
+          const couponMsg = document.getElementById('couponMsg');
+          if (result.valid) {
+            appliedDiscountPercent = result.discountPercent;
+            appliedCouponCode = result.code;
+            if (couponMsg) {
+              couponMsg.style.display = 'block';
+              couponMsg.style.color = '#40c057';
+              couponMsg.textContent = `Success! ${appliedCouponCode} applied (${result.label}).`;
+            }
+          }
+        }
+      }
+
+      updateDisplayedPrice();
+      loadDynamicPromoBanner();
+    }
+
+    loadItemDetails();
 
     const formatOptions = document.querySelectorAll('.format-option');
-    const primaryCtaBtn = document.getElementById('primary-cta-btn');
-    const buyCardPrice = document.getElementById('buyCardPrice');
-
     formatOptions.forEach(opt => {
       opt.addEventListener('click', () => {
-        if (itemType === 'gift') return; // Keep gift card fixed
+        if (!isBookCatalog || opt.classList.contains('disabled')) return;
         formatOptions.forEach(o => o.classList.remove('selected'));
         opt.classList.add('selected');
         selectedFormat = opt.getAttribute('data-format');
-
-        if (selectedFormat === 'EPUB') {
-          buyCardPrice.textContent = `$${currentBookPrice.toFixed(2)}`;
-          buyCardPrice.style.display = "block";
-          document.getElementById('buyCardStockIndicator').style.display = "flex";
-          document.getElementById('bookNoticeDisplay').textContent = "Instant Digital / Archival Access";
-          primaryCtaBtn.textContent = "Add to Cart";
-          primaryCtaBtn.style.opacity = "1";
-          primaryCtaBtn.style.pointerEvents = "auto";
-        } else {
-          buyCardPrice.style.display = "none";
-          document.getElementById('buyCardStockIndicator').style.display = "flex";
-          document.getElementById('bookNoticeDisplay').textContent = `${selectedFormat} Edition Coming Soon`;
-          primaryCtaBtn.textContent = "Coming Soon";
-          primaryCtaBtn.style.opacity = "0.6";
-          primaryCtaBtn.style.pointerEvents = "none";
-        }
+        updateDisplayedPrice();
+         
+        const isPhysical = selectedFormat === 'Hardcover' || selectedFormat === 'Paperback';
+        document.getElementById('shippingWidgetBox').classList.toggle('active', isPhysical);
       });
     });
 
-    if (primaryCtaBtn) {
-      primaryCtaBtn.addEventListener('click', () => {
-        if (!currentBookData) return;
+    const applyCouponBtn = document.getElementById('applyCouponBtn');
+    const couponInput = document.getElementById('couponCodeInput');
+    const couponMsg = document.getElementById('couponMsg');
 
-        // If it's a gift shop item / gift card, redirect directly to the Gift Up order link
-        if (itemType === 'gift') {
-          window.location.href = "https://giftup.app/place-order/e32b70cc-3b00-481d-8321-d3b8fc68fd9f?platform=hosted";
-          return;
-        }
+    if (applyCouponBtn) {
+      applyCouponBtn.addEventListener('click', async () => {
+        const enteredCode = couponInput.value.trim();
+        if (!enteredCode) return;
 
-        if (selectedFormat !== 'EPUB') return;
-        const qtySelect = document.getElementById('bookQuantitySelect');
-        const quantity = qtySelect ? parseInt(qtySelect.value) || 1 : 1;
+        couponMsg.style.display = 'block';
+        couponMsg.style.color = 'var(--text-secondary)';
+        couponMsg.textContent = "Checking coupon...";
 
-        let cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
-        
-        const itemPrice = parseFloat(currentBookData.price || 0);
-        const itemShipping = parseFloat(currentBookData.shippingCost || 0);
-        const itemTaxRate = parseFloat(currentBookData.taxRate !== undefined ? currentBookData.taxRate : 6);
-        const itemDiscount = parseFloat(currentBookData.discountAmount || 0);
+        const result = await evaluateCoupon(enteredCode);
 
-        const pubDateStr = currentBookData.publicationDate || currentBookData.pubDate || '';
-        const isUnpublished = currentBookData.isUnpublished || currentBookData.comingSoon || (pubDateStr && new Date(pubDateStr) > new Date());
-        const titleSuffix = isUnpublished ? " (Pre-Order)" : "";
-
-        cart.push({
-          title: currentBookData.title + titleSuffix,
-          author: currentBookData.author,
-          price: itemPrice,
-          shippingCost: itemShipping,
-          taxRate: itemTaxRate,
-          discountAmount: itemDiscount,
-          promoCode: currentBookData.promoCode || '',
-          format: selectedFormat,
-          coverUrl: currentBookData.coverUrl || currentBookData.imageUrl,
-          quantity: quantity
-        });
-
-        localStorage.setItem('libraryreeds_cart', JSON.stringify(cart));
-        updateCartBadge();
-        alert(`${quantity} copy/copies of "${currentBookData.title}" added to your shopping bag!`);
-      });
-    }
-
-    const seriesCarousel = document.getElementById('series-carousel');
-    if (seriesCarousel) {
-      onSnapshot(collection(db, "books"), (snapshot) => {
-        if (!snapshot.empty) {
-          let booksList = [];
-          snapshot.forEach((docSnap) => {
-            booksList.push({ id: docSnap.id, ...docSnap.data() });
-          });
-          booksList.sort((a, b) => (parseInt(a.volumeNumber) || 1) - (parseInt(b.volumeNumber) || 1));
-          seriesCarousel.innerHTML = "";
-          booksList.forEach((b) => {
-            const isCurrent = b.id === bookId;
-            const volNum = b.volumeNumber || 1;
-            const item = document.createElement('a');
-            item.href = `book.html?id=${b.id}`;
-            item.className = `series-item-card ${isCurrent ? 'is-current' : ''}`;
-            item.innerHTML = `
-              <div class="series-item-cover-wrapper">
-                <img src="${b.coverUrl || ''}" alt="${b.title || 'Book'}" />
-                <span class="series-order-badge">${isCurrent ? 'Current' : `Book ${volNum}`}</span>
-              </div>
-              <div class="series-item-details">
-                <h3 class="series-item-title">${b.title || 'Untitled'}</h3>
-                <span class="series-item-meta">Book ${volNum}</span>
-                <span class="series-item-price">$${parseFloat(b.price || 0).toFixed(2)}</span>
-              </div>
-            `;
-            seriesCarousel.appendChild(item);
-          });
-        }
-      });
-    }
-
-    const relatedCarousel = document.getElementById('related-carousel');
-    if (relatedCarousel) {
-      onSnapshot(collection(db, "books"), (snapshot) => {
-        if (!snapshot.empty) {
-          let relatedList = [];
-          snapshot.forEach((docSnap) => {
-            if (docSnap.id !== bookId) relatedList.push({ id: docSnap.id, ...docSnap.data() });
-          });
-          relatedCarousel.innerHTML = "";
-          if (relatedList.length === 0) {
-            relatedCarousel.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">No related items found.</p>`;
-            return;
-          }
-          relatedList.forEach((b) => {
-            const item = document.createElement('a');
-            item.href = `book.html?id=${b.id}`;
-            item.className = 'related-item-card';
-            item.innerHTML = `
-              <div class="related-item-cover-wrapper">
-                <img src="${b.coverUrl || ''}" alt="${b.title || 'Book'}" />
-              </div>
-              <div class="related-item-details">
-                <h3 class="related-item-title">${b.title || 'Untitled'}</h3>
-                <span class="related-item-author">${b.author || 'Firelily Santos'}</span>
-                <span class="related-item-price">$${parseFloat(b.price || 0).toFixed(2)}</span>
-              </div>
-            `;
-            relatedCarousel.appendChild(item);
-          });
-        }
-      });
-    }
-
-    const reviewsFeedList = document.getElementById('reviewsFeedList');
-    if (bookId && itemType !== 'gift') {
-      onSnapshot(collection(db, "books", bookId, "reviews"), (snapshot) => {
-        if (!snapshot.empty) {
-          reviewsFeedList.innerHTML = "";
-          snapshot.forEach((docSnap) => {
-            const rev = docSnap.data();
-            const revId = docSnap.id;
-            const isSpoiler = rev.isSpoiler || false;
-            const reviewCard = document.createElement('div');
-            reviewCard.className = 'review-card';
-            let commentBodyHTML = isSpoiler ? `
-              <div class="spoiler-container">
-                <button type="button" class="spoiler-toggle-btn" onclick="this.parentElement.classList.toggle('revealed')">⚠️ Contains Spoilers — Click to Reveal</button>
-                <div class="spoiler-content"><p class="review-body" style="margin: 0;">${rev.comment || ''}</p></div>
-              </div>` : `<p class="review-body">${rev.comment || ''}</p>`;
-
-            reviewCard.innerHTML = `
-              <div class="review-user-header">
-                <div class="user-meta-left">
-                  <span class="user-name">${rev.name || 'Anonymous Reader'}</span>
-                  <span class="verified-badge">Verified Patron</span>
-                </div>
-              </div>
-              ${commentBodyHTML}
-            `;
-            reviewsFeedList.appendChild(reviewCard);
-          });
+        if (result.valid) {
+          appliedDiscountPercent = result.discountPercent;
+          appliedCouponCode = result.code;
+          couponMsg.style.color = '#40c057';
+          couponMsg.textContent = `Success! ${appliedCouponCode} applied (${result.label}).`;
         } else {
-          reviewsFeedList.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">No reviews or discussion comments yet.</p>`;
+          appliedDiscountPercent = 0;
+          appliedCouponCode = "";
+          couponMsg.style.color = '#ff6b6b';
+          couponMsg.textContent = result.error || "Invalid or expired promo code.";
         }
+        updateDisplayedPrice();
+        loadDynamicPromoBanner();
       });
     }
+
+    function updateDisplayedPrice() {
+      const base = isBookCatalog ? (formatPrices[selectedFormat] || baseItemPrice) : baseItemPrice;
+      const priceDisplay = document.getElementById('buyCardPrice');
+       
+      if (!isCouponProduct && appliedDiscountPercent > 0) {
+        const discounted = base * (1 - (appliedDiscountPercent / 100));
+        priceDisplay.innerHTML = `<span style="text-decoration: line-through; color: var(--text-muted); font-size: 1rem; margin-right: 8px;">$${base.toFixed(2)}</span>$${discounted.toFixed(2)}`;
+      } else {
+        priceDisplay.textContent = `$${base.toFixed(2)}`;
+      }
+    }
+
+    document.getElementById('primary-cta-btn').addEventListener('click', async () => {
+      if (!currentItemData) return;
+
+      const quantity = parseInt(document.getElementById('bookQuantityInput').value) || 1;
+      const base = isBookCatalog ? (formatPrices[selectedFormat] || baseItemPrice) : baseItemPrice;
+      const finalUnitPrice = (!isCouponProduct && appliedDiscountPercent > 0) 
+        ? base * (1 - (appliedDiscountPercent / 100)) 
+        : base;
+
+      const cartItem = {
+        itemId: itemIdParam || itemSlugParam,
+        title: currentItemData.title || currentItemData.name,
+        author: currentItemData.author || currentItemData.creator || currentItemData.category || 'Libraryreeds',
+        format: selectedFormat,
+        price: finalUnitPrice,
+        originalPrice: base,
+        appliedCoupon: isCouponProduct ? "" : appliedCouponCode,
+        quantity: quantity,
+        imageUrl: currentItemData.imageUrl || currentItemData.coverUrl || currentItemData.image || '',
+        catalogType: isBookCatalog ? 'book' : (currentItemData.type || 'giftshop'),
+        isGift: isGiftMode,
+        giftRecipientEmail: isGiftMode ? document.getElementById('giftRecipientEmail')?.value || '' : '',
+        giftRecipientName: isGiftMode ? document.getElementById('giftRecipientName')?.value || '' : '',
+        giftMessageNote: isGiftMode ? document.getElementById('giftMessageNote')?.value || '' : '',
+        addedAt: new Date().toISOString()
+      };
+
+      let existingCart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+      existingCart.push(cartItem);
+      localStorage.setItem('libraryreeds_cart', JSON.stringify(existingCart));
+      syncNavBadges();
+
+      alert(`Added "${currentItemData.title || currentItemData.name}" to your cart!`);
+    });
+
+    const cardWishlistBtn = document.getElementById('cardWishlistBtn');
+    const cardWishlistBtnText = document.getElementById('cardWishlistBtnText');
+
+    function checkWishlistState() {
+      const activeId = itemIdParam || itemSlugParam;
+      if (!activeId) return;
+      const wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
+      if (wishlist.includes(activeId)) {
+        cardWishlistBtn.classList.add('active');
+        cardWishlistBtnText.textContent = "Saved to Wishlist";
+      } else {
+        cardWishlistBtn.classList.remove('active');
+        cardWishlistBtnText.textContent = "Add to Wishlist";
+      }
+    }
+    checkWishlistState();
+
+    cardWishlistBtn.addEventListener('click', () => {
+      const activeId = itemIdParam || itemSlugParam;
+      if (!activeId) return;
+      let wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
+      if (wishlist.includes(activeId)) {
+        wishlist = wishlist.filter(id => id !== activeId);
+        alert("Removed from wishlist.");
+      } else {
+        wishlist.push(activeId);
+        alert("Added to wishlist!");
+      }
+      localStorage.setItem('literalis_wishlist', JSON.stringify(wishlist));
+      checkWishlistState();
+      syncNavBadges();
+    });
   </script>
 </body>
 </html>
