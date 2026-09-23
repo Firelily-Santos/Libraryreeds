@@ -257,7 +257,7 @@
       font-size: 13px;
       font-weight: 700;
       color: var(--accent-gold);
-      text-transform: uppercase;
+      text-transform: lowercase;
       letter-spacing: 0.06em;
       line-height: 1.2;
     }
@@ -600,7 +600,7 @@
         <div class="cta-stack">
           <!-- Unlimited Book Button -->
           <button type="button" class="btn-unlimited-action" id="btnUnlimitedRead">
-            <span class="unlimited-label">Read with Unlimited</span>
+            <span class="unlimited-label">read with unlimited</span>
             <span class="unlimited-sub">$0.00</span>
           </button>
 
@@ -768,12 +768,26 @@
 
     // Handle Unlimited Button action
     const btnUnlimitedRead = document.getElementById('btnUnlimitedRead');
-    btnUnlimitedRead?.addEventListener('click', () => {
+    btnUnlimitedRead?.addEventListener('click', async () => {
       const user = auth.currentUser;
+      const targetId = itemIdParam || itemSlugParam || '';
+
       if (!user) {
+        // Send guest to membership pitch
         window.location.href = './membership.html';
+        return;
+      }
+
+      // Check if they are already an active subscriber
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      const isMember = userSnap.data()?.membershipStatus === 'active';
+
+      if (isMember) {
+        // Direct reader access (or add to shelf)
+        window.location.href = `./reader.html?bookId=${encodeURIComponent(targetId)}`;
       } else {
-        window.location.href = `./membership.html?read=${encodeURIComponent(itemIdParam || itemSlugParam || '')}`;
+        // Send to plan checkout with the intent preserved
+        window.location.href = `./membership.html?read=${encodeURIComponent(targetId)}`;
       }
     });
 
@@ -971,6 +985,17 @@
           localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
           document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => { img.src = resolvedAvatar; });
         }
+
+        // Check membership status directly on the product page
+        const userSnap = await getDoc(doc(db, "users", user.uid));
+        const isMember = userSnap.data()?.membershipStatus === 'active';
+
+        if (isMember) {
+          const label = document.querySelector('.unlimited-label');
+          const sub = document.querySelector('.unlimited-sub');
+          if (label) label.textContent = "open in library";
+          if (sub) sub.textContent = "unlimited access";
+        }
       } else {
         localStorage.removeItem('libraryreeds_user_avatar');
         if (navLoginBtn) navLoginBtn.style.display = "inline-block";
@@ -1091,14 +1116,12 @@
       const productId = urlParams.get('id');
 
       if (productId === 'custom-bookmark') {
-        // 1. Grab passed parameters (with fallbacks)
         const title = urlParams.get('title') || 'Custom Bookmark';
         const price = parseFloat(urlParams.get('price') || 9.99).toFixed(2);
         const image = urlParams.get('image') || 'https://cdn.phototourl.com/member/2026-09-20-cfa6b9d6-06be-49a1-b6ea-cab707b45088.png';
         const desc = urlParams.get('desc') || 'High-quality bookmark, printed and shipped directly to your door.';
         const category = urlParams.get('cat') || 'Merchandise';
 
-        // 2. Inject text and image into the page (matching page elements with fallbacks)
         const titleEl = document.getElementById('bookTitleDisplay') || document.getElementById('bookTitle') || document.querySelector('.book-title, h1');
         const priceEl = document.getElementById('buyCardPrice') || document.getElementById('bookPrice') || document.querySelector('.book-price, .price');
         const imgEl = document.getElementById('bookCoverImg') || document.getElementById('bookCover') || document.querySelector('.book-cover-img, .product-img img');
@@ -1114,18 +1137,15 @@
         if (descEl) descEl.textContent = desc;
         if (catEl) catEl.textContent = category;
 
-        // 3. Immediately hide any loading screens, overlays, or spinners
         document.querySelectorAll('.loading-spinner, .loader, #loadingState, #pageLoader, #skeletonLoader').forEach(el => {
           el.style.display = 'none';
         });
 
-        // 4. Ensure the main container is visible
         const mainWrap = document.getElementById('productContainer') || document.querySelector('.pdp-page-container, .product-details-container, main');
         if (mainWrap) {
           mainWrap.style.display = 'block';
         }
 
-        // 5. Store current item data and populate remaining UI properties
         currentItemData = {
           title: title,
           price: parseFloat(price),
@@ -1144,7 +1164,6 @@
         return;
 
       } else {
-        // Standard Firebase database loading flow for existing catalog items
         if (!itemIdParam && !itemSlugParam) return;
 
         const collectionsToTry = [];
