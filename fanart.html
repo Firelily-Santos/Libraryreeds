@@ -61,11 +61,35 @@
     .dropdown-link-item:hover { background: var(--bg-surface-elevated); color: var(--accent-gold); }
     .auth-btn-nav { background: var(--accent-gold); color: var(--bg-base); padding: 9px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 2px; text-decoration: none; }
 
-    .fanart-main { max-width: 1400px; margin: 0 auto; padding: 48px 32px 80px; width: 100%; display: flex; flex-direction: column; gap: 40px; flex: 1; }
+    .fanart-main { max-width: 1400px; margin: 0 auto; padding: 48px 16px 80px; width: 100%; display: flex; flex-direction: column; gap: 40px; flex: 1; }
     
-    .fanart-banner-container { width: 100%; height: 320px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-subtle); background: var(--bg-surface); position: relative; display: flex; align-items: center; justify-content: center; }
-    .fanart-banner-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .fanart-banner-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10, 12, 16, 0.85), rgba(10, 12, 16, 0.2)); display: flex; flex-direction: column; justify-content: flex-end; padding: 32px; }
+    /* Auto-adapting Banner: perfectly hugs every side and corner with zero stretching */
+    .fanart-banner-container { 
+      width: 100%; 
+      max-width: 1400px; 
+      height: auto; 
+      margin: 0 auto; 
+      border-radius: 6px; 
+      overflow: hidden; 
+      border: 1px solid var(--border-subtle); 
+      background: var(--bg-surface); 
+      position: relative; 
+      display: block; 
+    }
+    .fanart-banner-img { 
+      width: 100%; 
+      height: auto; 
+      display: block; 
+    }
+    .fanart-banner-overlay { 
+      position: absolute; 
+      inset: 0; 
+      background: linear-gradient(to top, rgba(10, 12, 16, 0.85), rgba(10, 12, 16, 0.15)); 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: flex-end; 
+      padding: 32px; 
+    }
     .fanart-banner-title { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 600; color: var(--text-primary); margin: 0 0 6px 0; }
     .fanart-banner-subtitle { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
 
@@ -101,6 +125,7 @@
         <a href="./fanart.html" class="nav-link active">Fanart</a>
         <a href="./about.html" class="nav-link">About</a>
         <a href="./giftshop.html" class="nav-link">Gift Shop</a>
+        <a href="./membership.html" class="nav-link">Membership</a>
         <a href="./wishlist.html" class="wishlist-icon-link" title="Wishlist">
           <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
@@ -121,6 +146,7 @@
               <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
             </div>
             <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+            <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
             <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
           </div>
         </div>
@@ -130,7 +156,7 @@
 
   <main class="fanart-main">
     <div class="fanart-banner-container">
-      <img id="fanartHeaderBannerImg" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1400&q=80" alt="Fanart Banner" class="fanart-banner-img">
+      <img id="fanartHeaderBannerImg" src="https://cdn.phototourl.com/member/2026-09-17-a425a557-005a-483b-a541-5890a024ea95.png" alt="Fanart Banner" class="fanart-banner-img">
       <div class="fanart-banner-overlay">
         <h1 class="fanart-banner-title">Community Fanart Gallery</h1>
         <p class="fanart-banner-subtitle">Explore stunning artwork inspired by the volumes of Libraryreeds.</p>
