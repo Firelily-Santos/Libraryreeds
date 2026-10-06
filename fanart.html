@@ -100,6 +100,10 @@
     .fanart-gallery-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; }
     .section-title { font-family: var(--font-serif); font-size: 2rem; font-weight: 500; color: var(--text-primary); }
 
+    .character-page-action { display: flex; justify-content: center; margin-top: -14px; }
+    .character-page-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; background: var(--bg-surface-elevated); color: var(--accent-gold); border: 1px solid var(--border-focus); border-radius: 3px; text-decoration: none; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; transition: var(--transition-smooth); }
+    .character-page-button:hover { background: var(--accent-gold); color: var(--bg-base); }
+
     footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
     .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; }
     .footer-col { display: flex; flex-direction: column; gap: 14px; }
@@ -179,6 +183,10 @@
         <h1 class="fanart-banner-title">Community Fanart Gallery</h1>
         <p class="fanart-banner-subtitle">Explore stunning artwork inspired by the volumes of Libraryreeds.</p>
       </div>
+    </div>
+
+    <div class="character-page-action">
+      <a href="./character-wall.html" class="character-page-button">Character Page</a>
     </div>
 
     <div class="fanart-grid" id="publicFanartContainer">
@@ -397,11 +405,21 @@
     }
 
     // Admin Settings -> Fanart Banner CMS: update the public banner live.
+    const fanartBanner = document.getElementById('fanartHeaderBannerImg');
+    const defaultFanartBanner = fanartBanner?.getAttribute('src') || '';
+    if (fanartBanner) {
+      fanartBanner.addEventListener('error', () => {
+        if (defaultFanartBanner && fanartBanner.src !== defaultFanartBanner) {
+          fanartBanner.src = defaultFanartBanner;
+        }
+      });
+    }
+
     onSnapshot(doc(db, "settings", "fanart_cms"), (snap) => {
       if (!snap.exists()) return;
       const data = snap.data();
-      const banner = document.getElementById('fanartHeaderBannerImg');
-      if (banner && data.bannerUrl) banner.src = data.bannerUrl;
+      const savedBannerUrl = String(data.bannerUrl || '').trim();
+      if (fanartBanner && savedBannerUrl) fanartBanner.src = savedBannerUrl;
     }, (error) => console.warn('Fanart CMS listener:', error?.message || error));
 
     const container = document.getElementById('publicFanartContainer');
@@ -418,6 +436,9 @@
         } else {
           container.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No fanart gallery submissions found yet.</p>`;
         }
+      }, (error) => {
+        console.error('Fanart gallery listener failed:', error);
+        container.innerHTML = `<p style="color:#ff6b6b; font-size:0.9rem;">Unable to load the fanart gallery right now.</p>`;
       });
     }
   </script>
