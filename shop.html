@@ -125,6 +125,17 @@
     .nav-icon-link:hover { color: var(--accent-gold, #c5a880); }
     .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent-gold); stroke-width: 2; }
 
+    .notification-badge { position: absolute; top: -8px; right: -10px; display: none; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 50%; background: #dc2626; color: #fff; font-size: 10px; font-weight: 700; line-height: 1; align-items: center; justify-content: center; border: 1px solid var(--bg-base, #0a0c10); }
+    .notification-widget { position: relative; display: inline-flex; }
+    button.notification-icon-link { border: 0; background: transparent; padding: 0; font: inherit; }
+    .notification-panel { position: absolute; top: 34px; right: 0; width: 300px; max-width: calc(100vw - 32px); max-height: 360px; overflow-y: auto; padding: 16px; box-sizing: border-box; background: var(--bg-surface, #11141c); color: var(--text-primary, #f0f2f5); border: 1px solid var(--border-subtle, #333); border-radius: 6px; box-shadow: 0 12px 30px rgba(0,0,0,.5); z-index: 200; }
+    .notification-panel[hidden] { display: none; }
+    .notification-panel-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .notification-panel-header button { background: transparent; border: 0; color: inherit; font-size: 22px; cursor: pointer; }
+    #notificationPanelStatus { font-size: 13px; color: var(--text-secondary, #9ba1b0); }
+    .notification-list { list-style: none; margin: 0; padding: 0; }
+    .notification-list li { padding: 12px 0; border-top: 1px solid var(--border-subtle, #333); font-size: 13px; overflow-wrap: anywhere; }
+
     /* Profile Menu Widget */
     .user-profile-menu { position: relative; display: none; }
     .profile-trigger-btn { background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); color: var(--text-primary, #f0f2f5); padding: 6px 14px; border-radius: 4px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
@@ -184,6 +195,25 @@
           <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -5px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
         </a>
+
+        <!-- Notification Bell and Panel -->
+        <div class="notification-widget" id="notificationWidget">
+          <button type="button" id="notificationBellBtn" aria-expanded="false" aria-controls="notificationPanel" class="nav-icon-link notification-icon-link" title="Notifications" aria-label="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
+            <span id="notificationBadgeCount" class="notification-badge" aria-live="polite" aria-atomic="true"></span>
+          </button>
+          <section class="notification-panel" id="notificationPanel" aria-labelledby="notificationPanelTitle" hidden>
+            <div class="notification-panel-header">
+              <strong id="notificationPanelTitle">Notifications</strong>
+              <span style="display:flex;align-items:center;gap:10px;">
+                <button type="button" id="markAllNotificationsReadBtn" style="background:transparent;border:0;color:var(--accent-gold);font:inherit;font-size:11px;font-weight:700;text-transform:uppercase;cursor:pointer;">Mark All Read</button>
+                <button type="button" id="closeNotificationPanel" aria-label="Close notifications">&times;</button>
+              </span>
+            </div>
+            <p id="notificationPanelStatus">No notifications yet.</p>
+            <ul id="notificationList" class="notification-list"></ul>
+          </section>
+        </div>
         <a href="./cart.html" class="nav-icon-link" title="Review Cart">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
           <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
@@ -253,6 +283,77 @@
       <span>Project fandomart-92133</span>
     </div>
   </footer>
+
+
+
+  <script>
+    (() => {
+      const storageKey = 'libraryreeds_notification_unread_count';
+      const badge = document.getElementById('notificationBadgeCount');
+      const bell = document.getElementById('notificationBellBtn');
+      const widget = document.getElementById('notificationWidget');
+      const panel = document.getElementById('notificationPanel');
+      const status = document.getElementById('notificationPanelStatus');
+      const list = document.getElementById('notificationList');
+      const closeBtn = document.getElementById('closeNotificationPanel');
+      if (!badge || !bell || !widget || !panel || !status || !list || !closeBtn) return;
+      let unreadCount = 0;
+      function updatePanelStatus() {
+        status.hidden = list.children.length > 0;
+        status.textContent = unreadCount > 0 ? `${unreadCount} unread notification${unreadCount === 1 ? '' : 's'}.` : 'No notifications yet.';
+      }
+      function closePanel(returnFocus = false) {
+        panel.hidden = true;
+        bell.setAttribute('aria-expanded', 'false');
+        if (returnFocus) bell.focus();
+      }
+      bell.addEventListener('click', (event) => {
+        event.stopPropagation();
+        panel.hidden = !panel.hidden;
+        bell.setAttribute('aria-expanded', String(!panel.hidden));
+      });
+      panel.addEventListener('click', (event) => event.stopPropagation());
+      closeBtn.addEventListener('click', () => closePanel(true));
+      document.addEventListener('click', (event) => { if (!widget.contains(event.target)) closePanel(); });
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !panel.hidden) closePanel(true); });
+      window.setNotificationItems = (items) => {
+        list.replaceChildren();
+        if (Array.isArray(items)) items.forEach((item) => {
+          const message = typeof item === 'string' ? item : item && (item.message || item.title || item.body);
+          if (typeof message !== 'string' || !message.trim()) return;
+          const row = document.createElement('li');
+          row.textContent = message;
+          list.appendChild(row);
+        });
+        updatePanelStatus();
+      };
+      const normalizeCount = (value) => { const number = Number(value); return Number.isFinite(number) ? Math.max(0, Math.floor(number)) : 0; };
+      function renderCount(value) {
+        const count = normalizeCount(value);
+        unreadCount = count;
+        updatePanelStatus();
+        badge.textContent = count > 99 ? '99+' : String(count);
+        badge.style.display = count > 0 ? 'inline-flex' : 'none';
+        badge.setAttribute('aria-label', `${count} unread notifications`);
+        bell.setAttribute('aria-label', count > 0 ? `Notifications, ${count} unread` : 'Notifications');
+        bell.title = count > 0 ? `Notifications (${count} unread)` : 'Notifications';
+      }
+      function refreshCount() { try { renderCount(localStorage.getItem(storageKey)); } catch (_) { renderCount(0); } }
+      window.setNotificationUnreadCount = (value) => {
+        const count = normalizeCount(value);
+        try { localStorage.setItem(storageKey, String(count)); } catch (_) {}
+        renderCount(count);
+      };
+      window.addEventListener('notifications-updated', (event) => {
+        if (event.detail && Array.isArray(event.detail.notifications)) window.setNotificationItems(event.detail.notifications);
+        const count = event.detail && event.detail.unreadCount;
+        if (count !== undefined) window.setNotificationUnreadCount(count); else refreshCount();
+      });
+      window.addEventListener('storage', (event) => { if (event.key === storageKey || event.key === null) refreshCount(); });
+      window.addEventListener('pageshow', refreshCount);
+      refreshCount();
+    })();
+  </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -487,5 +588,147 @@
       });
     }
   </script>
+
+  <!-- Shared Firebase notification sync: injected 2026-10-06 -->
+  <script type="module" id="libraryreedsSharedNotificationSync">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, query, orderBy, limit, onSnapshot, writeBatch, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+
+    const sharedApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const sharedDb = getFirestore(sharedApp);
+    const SHARED_NOTIFICATION_LIMIT = 50;
+
+    const badge = document.getElementById('notificationBadgeCount') || document.getElementById('notificationBadge');
+    const list = document.getElementById('notificationList') || document.getElementById('notificationDropdownList');
+    const status = document.getElementById('notificationPanelStatus');
+    const markAllButton = document.getElementById('markAllNotificationsReadBtn') || document.getElementById('clearNotificationsBtn');
+
+    function escapeNotificationText(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+    }
+
+    function formatNotificationTime(timestamp) {
+      try {
+        if (!timestamp) return 'Just now';
+        const date = typeof timestamp.toDate === 'function' ? timestamp.toDate() : new Date(timestamp);
+        return date.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      } catch (_) {
+        return 'Just now';
+      }
+    }
+
+    function renderBadge(unreadCount) {
+      if (!badge) return;
+      const count = Math.max(0, Number(unreadCount) || 0);
+      badge.textContent = count > 99 ? '99+' : String(count);
+      badge.style.display = count > 0 ? 'flex' : 'none';
+      badge.setAttribute('aria-label', `${count} unread notifications`);
+      try { localStorage.setItem('libraryreeds_notification_unread_count', String(count)); } catch (_) {}
+      window.dispatchEvent(new CustomEvent('notifications-updated', { detail: { unreadCount: count } }));
+    }
+
+    function renderNotifications(rows) {
+      const unreadCount = rows.reduce((total, row) => total + (row.data.read ? 0 : 1), 0);
+      renderBadge(unreadCount);
+
+      if (markAllButton) {
+        markAllButton.textContent = unreadCount > 0 ? 'Mark All Read' : 'All Read';
+        markAllButton.disabled = unreadCount === 0;
+        markAllButton.style.opacity = unreadCount === 0 ? '0.55' : '1';
+        markAllButton.style.cursor = unreadCount === 0 ? 'default' : 'pointer';
+      }
+
+      if (!list) return;
+
+      if (!rows.length) {
+        if (list.tagName === 'UL') {
+          list.replaceChildren();
+        } else {
+          list.innerHTML = '<p style="padding:16px;color:var(--text-muted);font-size:.8rem;text-align:center;">No notifications found</p>';
+        }
+        if (status) {
+          status.hidden = false;
+          status.textContent = 'No notifications yet.';
+        }
+        return;
+      }
+
+      if (status) status.hidden = true;
+
+      if (list.tagName === 'UL') {
+        list.replaceChildren();
+        rows.forEach(({data}) => {
+          const item = document.createElement('li');
+          item.style.fontWeight = data.read ? '400' : '700';
+          item.style.opacity = data.read ? '0.72' : '1';
+          const message = document.createElement('div');
+          message.textContent = data.message || data.title || data.body || 'New activity';
+          const time = document.createElement('div');
+          time.textContent = formatNotificationTime(data.timestamp);
+          time.style.cssText = 'font-size:11px;margin-top:4px;color:var(--accent-gold,#c5a880);';
+          item.append(message, time);
+          list.appendChild(item);
+        });
+      } else {
+        list.innerHTML = rows.map(({data}) => `
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border-subtle);background:${data.read ? 'transparent' : 'var(--bg-surface-elevated)'};display:flex;flex-direction:column;gap:4px;">
+            <span style="font-size:.8rem;color:var(--text-primary);line-height:1.4;font-weight:${data.read ? '400' : '700'};">${escapeNotificationText(data.message || data.title || data.body || 'New activity')}</span>
+            <span style="font-size:.65rem;color:var(--accent-gold);">${escapeNotificationText(formatNotificationTime(data.timestamp))}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    let latestRows = [];
+    const sharedNotificationQuery = query(
+      collection(sharedDb, 'admin_notifications'),
+      orderBy('timestamp', 'desc'),
+      limit(SHARED_NOTIFICATION_LIMIT)
+    );
+
+    onSnapshot(sharedNotificationQuery, snapshot => {
+      latestRows = snapshot.docs.map(snap => ({ id: snap.id, data: snap.data() }));
+      renderNotifications(latestRows);
+    }, error => {
+      console.warn('Notification sync listener:', error?.message || error);
+    });
+
+    if (markAllButton) {
+      markAllButton.addEventListener('click', async event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const unreadRows = latestRows.filter(row => !row.data.read);
+        if (!unreadRows.length) return;
+
+        markAllButton.disabled = true;
+        markAllButton.textContent = 'Saving...';
+        try {
+          const batch = writeBatch(sharedDb);
+          unreadRows.forEach(row => {
+            batch.update(doc(sharedDb, 'admin_notifications', row.id), {
+              read: true,
+              readAt: serverTimestamp()
+            });
+          });
+          await batch.commit();
+        } catch (error) {
+          console.error('Could not mark notifications read:', error);
+          markAllButton.disabled = false;
+          markAllButton.textContent = 'Mark All Read';
+        }
+      });
+    }
+  </script>
+
 </body>
 </html>

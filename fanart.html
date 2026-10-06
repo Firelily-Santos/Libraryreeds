@@ -145,7 +145,7 @@
         <div id="notificationDropdown" style="display: none; position: absolute; right: 0; top: 32px; width: 320px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); z-index: 300; flex-direction: column; overflow: hidden;">
           <div style="padding: 12px 16px; background: var(--bg-surface-elevated); border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-gold);">Notifications</span>
-            <button id="clearNotificationsBtn" style="background: transparent; border: none; color: var(--text-muted); font-size: 0.65rem; cursor: pointer; text-transform: uppercase;">Mark Read</button>
+            <button id="clearNotificationsBtn" style="background: transparent; border: none; color: var(--text-muted); font-size: 0.65rem; cursor: pointer; text-transform: uppercase;">Mark All Read</button>
           </div>
           <div id="notificationDropdownList" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column;">
             <p style="padding: 16px; color: var(--text-muted); font-size: 0.8rem; text-align: center;">No new alerts</p>
@@ -442,5 +442,147 @@
       });
     }
   </script>
+
+  <!-- Shared Firebase notification sync: injected 2026-10-06 -->
+  <script type="module" id="libraryreedsSharedNotificationSync">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, query, orderBy, limit, onSnapshot, writeBatch, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+
+    const sharedApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const sharedDb = getFirestore(sharedApp);
+    const SHARED_NOTIFICATION_LIMIT = 50;
+
+    const badge = document.getElementById('notificationBadgeCount') || document.getElementById('notificationBadge');
+    const list = document.getElementById('notificationList') || document.getElementById('notificationDropdownList');
+    const status = document.getElementById('notificationPanelStatus');
+    const markAllButton = document.getElementById('markAllNotificationsReadBtn') || document.getElementById('clearNotificationsBtn');
+
+    function escapeNotificationText(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+    }
+
+    function formatNotificationTime(timestamp) {
+      try {
+        if (!timestamp) return 'Just now';
+        const date = typeof timestamp.toDate === 'function' ? timestamp.toDate() : new Date(timestamp);
+        return date.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      } catch (_) {
+        return 'Just now';
+      }
+    }
+
+    function renderBadge(unreadCount) {
+      if (!badge) return;
+      const count = Math.max(0, Number(unreadCount) || 0);
+      badge.textContent = count > 99 ? '99+' : String(count);
+      badge.style.display = count > 0 ? 'flex' : 'none';
+      badge.setAttribute('aria-label', `${count} unread notifications`);
+      try { localStorage.setItem('libraryreeds_notification_unread_count', String(count)); } catch (_) {}
+      window.dispatchEvent(new CustomEvent('notifications-updated', { detail: { unreadCount: count } }));
+    }
+
+    function renderNotifications(rows) {
+      const unreadCount = rows.reduce((total, row) => total + (row.data.read ? 0 : 1), 0);
+      renderBadge(unreadCount);
+
+      if (markAllButton) {
+        markAllButton.textContent = unreadCount > 0 ? 'Mark All Read' : 'All Read';
+        markAllButton.disabled = unreadCount === 0;
+        markAllButton.style.opacity = unreadCount === 0 ? '0.55' : '1';
+        markAllButton.style.cursor = unreadCount === 0 ? 'default' : 'pointer';
+      }
+
+      if (!list) return;
+
+      if (!rows.length) {
+        if (list.tagName === 'UL') {
+          list.replaceChildren();
+        } else {
+          list.innerHTML = '<p style="padding:16px;color:var(--text-muted);font-size:.8rem;text-align:center;">No notifications found</p>';
+        }
+        if (status) {
+          status.hidden = false;
+          status.textContent = 'No notifications yet.';
+        }
+        return;
+      }
+
+      if (status) status.hidden = true;
+
+      if (list.tagName === 'UL') {
+        list.replaceChildren();
+        rows.forEach(({data}) => {
+          const item = document.createElement('li');
+          item.style.fontWeight = data.read ? '400' : '700';
+          item.style.opacity = data.read ? '0.72' : '1';
+          const message = document.createElement('div');
+          message.textContent = data.message || data.title || data.body || 'New activity';
+          const time = document.createElement('div');
+          time.textContent = formatNotificationTime(data.timestamp);
+          time.style.cssText = 'font-size:11px;margin-top:4px;color:var(--accent-gold,#c5a880);';
+          item.append(message, time);
+          list.appendChild(item);
+        });
+      } else {
+        list.innerHTML = rows.map(({data}) => `
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border-subtle);background:${data.read ? 'transparent' : 'var(--bg-surface-elevated)'};display:flex;flex-direction:column;gap:4px;">
+            <span style="font-size:.8rem;color:var(--text-primary);line-height:1.4;font-weight:${data.read ? '400' : '700'};">${escapeNotificationText(data.message || data.title || data.body || 'New activity')}</span>
+            <span style="font-size:.65rem;color:var(--accent-gold);">${escapeNotificationText(formatNotificationTime(data.timestamp))}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    let latestRows = [];
+    const sharedNotificationQuery = query(
+      collection(sharedDb, 'admin_notifications'),
+      orderBy('timestamp', 'desc'),
+      limit(SHARED_NOTIFICATION_LIMIT)
+    );
+
+    onSnapshot(sharedNotificationQuery, snapshot => {
+      latestRows = snapshot.docs.map(snap => ({ id: snap.id, data: snap.data() }));
+      renderNotifications(latestRows);
+    }, error => {
+      console.warn('Notification sync listener:', error?.message || error);
+    });
+
+    if (markAllButton) {
+      markAllButton.addEventListener('click', async event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const unreadRows = latestRows.filter(row => !row.data.read);
+        if (!unreadRows.length) return;
+
+        markAllButton.disabled = true;
+        markAllButton.textContent = 'Saving...';
+        try {
+          const batch = writeBatch(sharedDb);
+          unreadRows.forEach(row => {
+            batch.update(doc(sharedDb, 'admin_notifications', row.id), {
+              read: true,
+              readAt: serverTimestamp()
+            });
+          });
+          await batch.commit();
+        } catch (error) {
+          console.error('Could not mark notifications read:', error);
+          markAllButton.disabled = false;
+          markAllButton.textContent = 'Mark All Read';
+        }
+      });
+    }
+  </script>
+
 </body>
 </html>
