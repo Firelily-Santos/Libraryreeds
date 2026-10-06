@@ -1,2069 +1,4574 @@
-{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "additionalProperties": false,
-    "definitions": {
-        "ActiveRuntime": {
-            "enum": [
-                "dart3",
-                "nodejs18",
-                "nodejs20",
-                "nodejs22",
-                "nodejs24",
-                "python310",
-                "python311",
-                "python312",
-                "python313",
-                "python314"
-            ],
-            "type": "string"
-        },
-        "AiLogicConfig": {
-            "additionalProperties": false,
-            "properties": {
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "templates": {
-                    "description": "Directory of .prompt files deployed as server prompt templates (default: \"prompts\").",
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "AuthConfig": {
-            "additionalProperties": false,
-            "properties": {
-                "providers": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "anonymous": {
-                            "type": "boolean"
-                        },
-                        "emailPassword": {
-                            "type": "boolean"
-                        },
-                        "googleSignIn": {
-                            "additionalProperties": false,
-                            "properties": {
-                                "authorizedRedirectUris": {
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "type": "array"
-                                },
-                                "oAuthBrandDisplayName": {
-                                    "type": "string"
-                                },
-                                "supportEmail": {
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    },
-                    "type": "object"
-                }
-            },
-            "type": "object"
-        },
-        "DataConnectSingle": {
-            "additionalProperties": false,
-            "properties": {
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "source": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "source"
-            ],
-            "type": "object"
-        },
-        "DatabaseSingle": {
-            "additionalProperties": false,
-            "properties": {
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "rules": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "rules"
-            ],
-            "type": "object"
-        },
-        "ExtensionsConfig": {
-            "additionalProperties": false,
-            "type": "object"
-        },
-        "FirestoreSingle": {
-            "additionalProperties": false,
-            "properties": {
-                "dataAccessMode": {
-                    "enum": [
-                        "FIRESTORE_NATIVE",
-                        "MONGODB_COMPATIBLE"
-                    ],
-                    "type": "string"
-                },
-                "database": {
-                    "type": "string"
-                },
-                "edition": {
-                    "type": "string"
-                },
-                "indexes": {
-                    "type": "string"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "rules": {
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "FrameworksBackendOptions": {
-            "additionalProperties": false,
-            "properties": {
-                "concurrency": {
-                    "description": "Number of requests a function can serve at once.",
-                    "type": "number"
-                },
-                "cors": {
-                    "description": "If true, allows CORS on requests to this function.\nIf this is a `string` or `RegExp`, allows requests from domains that match the provided value.\nIf this is an `Array`, allows requests from domains matching at least one entry of the array.\nDefaults to true for {@link https.CallableFunction} and false otherwise.",
-                    "type": [
-                        "string",
-                        "boolean"
-                    ]
-                },
-                "cpu": {
-                    "anyOf": [
-                        {
-                            "const": "gcf_gen1",
-                            "type": "string"
-                        },
-                        {
-                            "type": "number"
-                        }
-                    ],
-                    "description": "Fractional number of CPUs to allocate to a function."
-                },
-                "enforceAppCheck": {
-                    "description": "Determines whether Firebase AppCheck is enforced. Defaults to false.",
-                    "type": "boolean"
-                },
-                "ingressSettings": {
-                    "description": "Ingress settings which control where this function can be called from.",
-                    "enum": [
-                        "ALLOW_ALL",
-                        "ALLOW_INTERNAL_AND_GCLB",
-                        "ALLOW_INTERNAL_ONLY"
-                    ],
-                    "type": "string"
-                },
-                "invoker": {
-                    "const": "public",
-                    "description": "Invoker to set access control on https functions.",
-                    "type": "string"
-                },
-                "labels": {
-                    "$ref": "#/definitions/Record<string,string>",
-                    "description": "User labels to set on the function."
-                },
-                "maxInstances": {
-                    "description": "Max number of instances to be running in parallel.",
-                    "type": "number"
-                },
-                "memory": {
-                    "description": "Amount of memory to allocate to a function.",
-                    "enum": [
-                        "128MiB",
-                        "16GiB",
-                        "1GiB",
-                        "256MiB",
-                        "2GiB",
-                        "32GiB",
-                        "4GiB",
-                        "512MiB",
-                        "8GiB"
-                    ],
-                    "type": "string"
-                },
-                "minInstances": {
-                    "description": "Min number of actual instances to be running at a given time.",
-                    "type": "number"
-                },
-                "omit": {
-                    "description": "If true, do not deploy or emulate this function.",
-                    "type": "boolean"
-                },
-                "preserveExternalChanges": {
-                    "description": "Controls whether function configuration modified outside of function source is preserved. Defaults to false.",
-                    "type": "boolean"
-                },
-                "region": {
-                    "description": "HTTP functions can override global options and can specify multiple regions to deploy to.",
-                    "type": "string"
-                },
-                "secrets": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "serviceAccount": {
-                    "description": "Specific service account for the function to run as.",
-                    "type": "string"
-                },
-                "timeoutSeconds": {
-                    "description": "Timeout for the function in seconds, possible values are 0 to 540.\nHTTPS functions can specify a higher timeout.",
-                    "type": "number"
-                },
-                "vpcConnector": {
-                    "description": "Connect cloud function to specified VPC connector.",
-                    "type": "string"
-                },
-                "vpcConnectorEgressSettings": {
-                    "description": "Egress settings for VPC connector.",
-                    "enum": [
-                        "ALL_TRAFFIC",
-                        "PRIVATE_RANGES_ONLY"
-                    ],
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "FunctionConfig": {
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/KitFunctionConfig"
-                },
-                {
-                    "$ref": "#/definitions/LocalFunctionConfig"
-                },
-                {
-                    "$ref": "#/definitions/RemoteFunctionConfig"
-                }
-            ]
-        },
-        "HostingHeaders": {
-            "anyOf": [
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "glob": {
-                            "type": "string"
-                        },
-                        "headers": {
-                            "items": {
-                                "additionalProperties": false,
-                                "properties": {
-                                    "key": {
-                                        "type": "string"
-                                    },
-                                    "value": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "key",
-                                    "value"
-                                ],
-                                "type": "object"
-                            },
-                            "type": "array"
-                        }
-                    },
-                    "required": [
-                        "glob",
-                        "headers"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "headers": {
-                            "items": {
-                                "additionalProperties": false,
-                                "properties": {
-                                    "key": {
-                                        "type": "string"
-                                    },
-                                    "value": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "key",
-                                    "value"
-                                ],
-                                "type": "object"
-                            },
-                            "type": "array"
-                        },
-                        "source": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "headers",
-                        "source"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "headers": {
-                            "items": {
-                                "additionalProperties": false,
-                                "properties": {
-                                    "key": {
-                                        "type": "string"
-                                    },
-                                    "value": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "key",
-                                    "value"
-                                ],
-                                "type": "object"
-                            },
-                            "type": "array"
-                        },
-                        "regex": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "headers",
-                        "regex"
-                    ],
-                    "type": "object"
-                }
-            ]
-        },
-        "HostingRedirects": {
-            "anyOf": [
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "destination": {
-                            "type": "string"
-                        },
-                        "glob": {
-                            "type": "string"
-                        },
-                        "type": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "destination",
-                        "glob"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "destination": {
-                            "type": "string"
-                        },
-                        "source": {
-                            "type": "string"
-                        },
-                        "type": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "destination",
-                        "source"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "destination": {
-                            "type": "string"
-                        },
-                        "regex": {
-                            "type": "string"
-                        },
-                        "type": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "destination",
-                        "regex"
-                    ],
-                    "type": "object"
-                }
-            ]
-        },
-        "HostingRewrites": {
-            "anyOf": [
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "destination": {
-                            "type": "string"
-                        },
-                        "glob": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "destination",
-                        "glob"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "function": {
-                            "type": "string"
-                        },
-                        "glob": {
-                            "type": "string"
-                        },
-                        "region": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "function",
-                        "glob"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "function": {
-                            "additionalProperties": false,
-                            "properties": {
-                                "functionId": {
-                                    "type": "string"
-                                },
-                                "pinTag": {
-                                    "type": "boolean"
-                                },
-                                "region": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "functionId"
-                            ],
-                            "type": "object"
-                        },
-                        "glob": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "function",
-                        "glob"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "glob": {
-                            "type": "string"
-                        },
-                        "run": {
-                            "additionalProperties": false,
-                            "properties": {
-                                "pinTag": {
-                                    "type": "boolean"
-                                },
-                                "region": {
-                                    "type": "string"
-                                },
-                                "serviceId": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "serviceId"
-                            ],
-                            "type": "object"
-                        }
-                    },
-                    "required": [
-                        "glob",
-                        "run"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "dynamicLinks": {
-                            "type": "boolean"
-                        },
-                        "glob": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "dynamicLinks",
-                        "glob"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "destination": {
-                            "type": "string"
-                        },
-                        "source": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "destination",
-                        "source"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "function": {
-                            "type": "string"
-                        },
-                        "region": {
-                            "type": "string"
-                        },
-                        "source": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "function",
-                        "source"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "function": {
-                            "additionalProperties": false,
-                            "properties": {
-                                "functionId": {
-                                    "type": "string"
-                                },
-                                "pinTag": {
-                                    "type": "boolean"
-                                },
-                                "region": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "functionId"
-                            ],
-                            "type": "object"
-                        },
-                        "source": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "function",
-                        "source"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "run": {
-                            "additionalProperties": false,
-                            "properties": {
-                                "pinTag": {
-                                    "type": "boolean"
-                                },
-                                "region": {
-                                    "type": "string"
-                                },
-                                "serviceId": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "serviceId"
-                            ],
-                            "type": "object"
-                        },
-                        "source": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "run",
-                        "source"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "dynamicLinks": {
-                            "type": "boolean"
-                        },
-                        "source": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "dynamicLinks",
-                        "source"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "destination": {
-                            "type": "string"
-                        },
-                        "regex": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "destination",
-                        "regex"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "function": {
-                            "type": "string"
-                        },
-                        "regex": {
-                            "type": "string"
-                        },
-                        "region": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "function",
-                        "regex"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "function": {
-                            "additionalProperties": false,
-                            "properties": {
-                                "functionId": {
-                                    "type": "string"
-                                },
-                                "pinTag": {
-                                    "type": "boolean"
-                                },
-                                "region": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "functionId"
-                            ],
-                            "type": "object"
-                        },
-                        "regex": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "function",
-                        "regex"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "regex": {
-                            "type": "string"
-                        },
-                        "run": {
-                            "additionalProperties": false,
-                            "properties": {
-                                "pinTag": {
-                                    "type": "boolean"
-                                },
-                                "region": {
-                                    "type": "string"
-                                },
-                                "serviceId": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "serviceId"
-                            ],
-                            "type": "object"
-                        }
-                    },
-                    "required": [
-                        "regex",
-                        "run"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "dynamicLinks": {
-                            "type": "boolean"
-                        },
-                        "regex": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "dynamicLinks",
-                        "regex"
-                    ],
-                    "type": "object"
-                }
-            ]
-        },
-        "HostingSingle": {
-            "additionalProperties": false,
-            "properties": {
-                "appAssociation": {
-                    "enum": [
-                        "AUTO",
-                        "NONE"
-                    ],
-                    "type": "string"
-                },
-                "cleanUrls": {
-                    "type": "boolean"
-                },
-                "frameworksBackend": {
-                    "$ref": "#/definitions/FrameworksBackendOptions"
-                },
-                "headers": {
-                    "items": {
-                        "$ref": "#/definitions/HostingHeaders"
-                    },
-                    "type": "array"
-                },
-                "i18n": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "root": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "root"
-                    ],
-                    "type": "object"
-                },
-                "ignore": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "public": {
-                    "type": "string"
-                },
-                "redirects": {
-                    "items": {
-                        "$ref": "#/definitions/HostingRedirects"
-                    },
-                    "type": "array"
-                },
-                "rewrites": {
-                    "items": {
-                        "$ref": "#/definitions/HostingRewrites"
-                    },
-                    "type": "array"
-                },
-                "site": {
-                    "type": "string"
-                },
-                "source": {
-                    "type": "string"
-                },
-                "target": {
-                    "type": "string"
-                },
-                "trailingSlash": {
-                    "type": "boolean"
-                }
-            },
-            "type": "object"
-        },
-        "KitFunctionConfig": {
-            "additionalProperties": false,
-            "properties": {
-                "ignore": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "instances": {
-                    "additionalProperties": {
-                        "type": "string"
-                    },
-                    "description": "Dictionary mapping instance IDs to their configuration directories",
-                    "type": "object"
-                },
-                "kit": {
-                    "description": "Unique identifier for the functions kit (peer to codebase)",
-                    "type": "string"
-                },
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "runtime": {
-                    "enum": [
-                        "dart3",
-                        "nodejs18",
-                        "nodejs20",
-                        "nodejs22",
-                        "nodejs24",
-                        "python310",
-                        "python311",
-                        "python312",
-                        "python313",
-                        "python314"
-                    ],
-                    "type": "string"
-                },
-                "source": {
-                    "description": "Local directory containing the kit source code.",
-                    "type": "string"
-                },
-                "sourcePackage": {
-                    "additionalProperties": false,
-                    "description": "Package details when resolved from a package repository.",
-                    "properties": {
-                        "name": {
-                            "description": "Package name (e.g., \"@firebase-function-kits/firestore-bigquery-export\")",
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "name"
-                    ],
-                    "type": "object"
-                }
-            },
-            "required": [
-                "instances",
-                "kit",
-                "source"
-            ],
-            "type": "object"
-        },
-        "LocalFunctionConfig": {
-            "additionalProperties": false,
-            "properties": {
-                "codebase": {
-                    "type": "string"
-                },
-                "configDir": {
-                    "type": "string"
-                },
-                "disallowLegacyRuntimeConfig": {
-                    "type": "boolean"
-                },
-                "ignore": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "prefix": {
-                    "type": "string"
-                },
-                "runtime": {
-                    "enum": [
-                        "dart3",
-                        "nodejs18",
-                        "nodejs20",
-                        "nodejs22",
-                        "nodejs24",
-                        "python310",
-                        "python311",
-                        "python312",
-                        "python313",
-                        "python314"
-                    ],
-                    "type": "string"
-                },
-                "source": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "source"
-            ],
-            "type": "object"
-        },
-        "Record<string,string>": {
-            "additionalProperties": false,
-            "type": "object"
-        },
-        "RemoteConfigConfig": {
-            "additionalProperties": false,
-            "properties": {
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "template": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "template"
-            ],
-            "type": "object"
-        },
-        "RemoteFunctionConfig": {
-            "additionalProperties": false,
-            "properties": {
-                "codebase": {
-                    "type": "string"
-                },
-                "configDir": {
-                    "type": "string"
-                },
-                "ignore": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "prefix": {
-                    "type": "string"
-                },
-                "remoteSource": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "dir": {
-                            "type": "string"
-                        },
-                        "ref": {
-                            "type": "string"
-                        },
-                        "repository": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "ref",
-                        "repository"
-                    ],
-                    "type": "object"
-                },
-                "runtime": {
-                    "$ref": "#/definitions/ActiveRuntime"
-                }
-            },
-            "required": [
-                "remoteSource",
-                "runtime"
-            ],
-            "type": "object"
-        },
-        "StorageSingle": {
-            "additionalProperties": false,
-            "properties": {
-                "postdeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "predeploy": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ]
-                },
-                "rules": {
-                    "type": "string"
-                },
-                "target": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "rules"
-            ],
-            "type": "object"
-        }
-    },
-    "properties": {
-        "$schema": {
-            "type": "string"
-        },
-        "ailogic": {
-            "$ref": "#/definitions/AiLogicConfig"
-        },
-        "apphosting": {
-            "anyOf": [
-                {
-                    "additionalProperties": false,
-                    "properties": {
-                        "alwaysDeployFromSource": {
-                            "type": "boolean"
-                        },
-                        "backendId": {
-                            "type": "string"
-                        },
-                        "ignore": {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        "localBuild": {
-                            "type": "boolean"
-                        },
-                        "rootDir": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "backendId",
-                        "ignore",
-                        "rootDir"
-                    ],
-                    "type": "object"
-                },
-                {
-                    "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                            "alwaysDeployFromSource": {
-                                "type": "boolean"
-                            },
-                            "backendId": {
-                                "type": "string"
-                            },
-                            "ignore": {
-                                "items": {
-                                    "type": "string"
-                                },
-                                "type": "array"
-                            },
-                            "localBuild": {
-                                "type": "boolean"
-                            },
-                            "rootDir": {
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "backendId",
-                            "ignore",
-                            "rootDir"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                }
-            ]
-        },
-        "auth": {
-            "$ref": "#/definitions/AuthConfig"
-        },
-        "database": {
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/DatabaseSingle"
-                },
-                {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "additionalProperties": false,
-                                "properties": {
-                                    "instance": {
-                                        "type": "string"
-                                    },
-                                    "postdeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "predeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "rules": {
-                                        "type": "string"
-                                    },
-                                    "target": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "instance",
-                                    "rules"
-                                ],
-                                "type": "object"
-                            },
-                            {
-                                "additionalProperties": false,
-                                "properties": {
-                                    "instance": {
-                                        "type": "string"
-                                    },
-                                    "postdeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "predeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "rules": {
-                                        "type": "string"
-                                    },
-                                    "target": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "rules",
-                                    "target"
-                                ],
-                                "type": "object"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                }
-            ]
-        },
-        "dataconnect": {
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/DataConnectSingle"
-                },
-                {
-                    "items": {
-                        "$ref": "#/definitions/DataConnectSingle"
-                    },
-                    "type": "array"
-                }
-            ]
-        },
-        "emulators": {
-            "additionalProperties": false,
-            "properties": {
-                "apphosting": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        },
-                        "rootDirectory": {
-                            "type": "string"
-                        },
-                        "startCommand": {
-                            "type": "string"
-                        },
-                        "startCommandOverride": {
-                            "type": "string"
-                        }
-                    },
-                    "type": "object"
-                },
-                "auth": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "database": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "dataconnect": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "dataDir": {
-                            "type": "string"
-                        },
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        },
-                        "postgresHost": {
-                            "type": "string"
-                        },
-                        "postgresPort": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "eventarc": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "extensions": {
-                    "properties": {},
-                    "type": "object"
-                },
-                "firestore": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "edition": {
-                            "type": "string"
-                        },
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        },
-                        "websocketPort": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "functions": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "hosting": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "hub": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "logging": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "pubsub": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "singleProjectMode": {
-                    "type": "boolean"
-                },
-                "storage": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "tasks": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                },
-                "ui": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "host": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "number"
-                        }
-                    },
-                    "type": "object"
-                }
-            },
-            "type": "object"
-        },
-        "extensions": {
-            "$ref": "#/definitions/ExtensionsConfig"
-        },
-        "firestore": {
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/FirestoreSingle"
-                },
-                {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "additionalProperties": false,
-                                "properties": {
-                                    "database": {
-                                        "type": "string"
-                                    },
-                                    "indexes": {
-                                        "type": "string"
-                                    },
-                                    "postdeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "predeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "rules": {
-                                        "type": "string"
-                                    },
-                                    "target": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "target"
-                                ],
-                                "type": "object"
-                            },
-                            {
-                                "additionalProperties": false,
-                                "properties": {
-                                    "database": {
-                                        "type": "string"
-                                    },
-                                    "indexes": {
-                                        "type": "string"
-                                    },
-                                    "postdeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "predeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "rules": {
-                                        "type": "string"
-                                    },
-                                    "target": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "database"
-                                ],
-                                "type": "object"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                }
-            ]
-        },
-        "functions": {
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/KitFunctionConfig"
-                },
-                {
-                    "$ref": "#/definitions/LocalFunctionConfig"
-                },
-                {
-                    "$ref": "#/definitions/RemoteFunctionConfig"
-                },
-                {
-                    "items": {
-                        "$ref": "#/definitions/FunctionConfig"
-                    },
-                    "type": "array"
-                }
-            ]
-        },
-        "hosting": {
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/HostingSingle"
-                },
-                {
-                    "items": {
-                        "anyOf": [
-                            {
-                                "additionalProperties": false,
-                                "properties": {
-                                    "appAssociation": {
-                                        "enum": [
-                                            "AUTO",
-                                            "NONE"
-                                        ],
-                                        "type": "string"
-                                    },
-                                    "cleanUrls": {
-                                        "type": "boolean"
-                                    },
-                                    "frameworksBackend": {
-                                        "$ref": "#/definitions/FrameworksBackendOptions"
-                                    },
-                                    "headers": {
-                                        "items": {
-                                            "$ref": "#/definitions/HostingHeaders"
-                                        },
-                                        "type": "array"
-                                    },
-                                    "i18n": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                            "root": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "root"
-                                        ],
-                                        "type": "object"
-                                    },
-                                    "ignore": {
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "type": "array"
-                                    },
-                                    "postdeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "predeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "public": {
-                                        "type": "string"
-                                    },
-                                    "redirects": {
-                                        "items": {
-                                            "$ref": "#/definitions/HostingRedirects"
-                                        },
-                                        "type": "array"
-                                    },
-                                    "rewrites": {
-                                        "items": {
-                                            "$ref": "#/definitions/HostingRewrites"
-                                        },
-                                        "type": "array"
-                                    },
-                                    "site": {
-                                        "type": "string"
-                                    },
-                                    "source": {
-                                        "type": "string"
-                                    },
-                                    "target": {
-                                        "type": "string"
-                                    },
-                                    "trailingSlash": {
-                                        "type": "boolean"
-                                    }
-                                },
-                                "required": [
-                                    "target"
-                                ],
-                                "type": "object"
-                            },
-                            {
-                                "additionalProperties": false,
-                                "properties": {
-                                    "appAssociation": {
-                                        "enum": [
-                                            "AUTO",
-                                            "NONE"
-                                        ],
-                                        "type": "string"
-                                    },
-                                    "cleanUrls": {
-                                        "type": "boolean"
-                                    },
-                                    "frameworksBackend": {
-                                        "$ref": "#/definitions/FrameworksBackendOptions"
-                                    },
-                                    "headers": {
-                                        "items": {
-                                            "$ref": "#/definitions/HostingHeaders"
-                                        },
-                                        "type": "array"
-                                    },
-                                    "i18n": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                            "root": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "root"
-                                        ],
-                                        "type": "object"
-                                    },
-                                    "ignore": {
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "type": "array"
-                                    },
-                                    "postdeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "predeploy": {
-                                        "anyOf": [
-                                            {
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "type": "array"
-                                            },
-                                            {
-                                                "type": "string"
-                                            }
-                                        ]
-                                    },
-                                    "public": {
-                                        "type": "string"
-                                    },
-                                    "redirects": {
-                                        "items": {
-                                            "$ref": "#/definitions/HostingRedirects"
-                                        },
-                                        "type": "array"
-                                    },
-                                    "rewrites": {
-                                        "items": {
-                                            "$ref": "#/definitions/HostingRewrites"
-                                        },
-                                        "type": "array"
-                                    },
-                                    "site": {
-                                        "type": "string"
-                                    },
-                                    "source": {
-                                        "type": "string"
-                                    },
-                                    "target": {
-                                        "type": "string"
-                                    },
-                                    "trailingSlash": {
-                                        "type": "boolean"
-                                    }
-                                },
-                                "required": [
-                                    "site"
-                                ],
-                                "type": "object"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                }
-            ]
-        },
-        "remoteconfig": {
-            "$ref": "#/definitions/RemoteConfigConfig"
-        },
-        "storage": {
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/StorageSingle"
-                },
-                {
-                    "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                            "bucket": {
-                                "type": "string"
-                            },
-                            "postdeploy": {
-                                "anyOf": [
-                                    {
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "type": "array"
-                                    },
-                                    {
-                                        "type": "string"
-                                    }
-                                ]
-                            },
-                            "predeploy": {
-                                "anyOf": [
-                                    {
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "type": "array"
-                                    },
-                                    {
-                                        "type": "string"
-                                    }
-                                ]
-                            },
-                            "rules": {
-                                "type": "string"
-                            },
-                            "target": {
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "bucket",
-                            "rules"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                }
-            ]
-        }
-    },
-    "type": "object"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Character Archive Wall</title>
+
+<style>
+
+:root {
+    --page: #181817;
+
+    --wood-dark: #24150f;
+    --wood-mid: #4b2a1b;
+    --wood-light: #6a4029;
+
+    --board: #45443f;
+
+    --paper: #f4f0e7;
+
+    --ink: #24231f;
+
+    --hero: #486d7c;
+    --villain: #7b4445;
+    --antihero: #776441;
+    --other: #58675b;
+
+    --shadow:
+        0 18px 35px rgba(0,0,0,.30),
+        0 5px 12px rgba(0,0,0,.18);
 }
 
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 28px;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #34322e 0,
+            #1d1c1a 42%,
+            #111110 100%
+        );
+
+    color: #eeeae1;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+}
+
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+
+/* ==================================================
+   OUTER FRAME
+================================================== */
+
+.archive-frame {
+    width: min(1500px, 100%);
+    margin: auto;
+    padding: 28px;
+
+    border-radius: 6px;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent 0 8%,
+            rgba(255,255,255,.06) 9%,
+            transparent 10% 25%,
+            rgba(0,0,0,.10) 26%,
+            transparent 27% 58%,
+            rgba(255,255,255,.05) 59%,
+            transparent 60%
+        ),
+        linear-gradient(
+            90deg,
+            var(--wood-dark),
+            var(--wood-light) 18%,
+            var(--wood-mid) 43%,
+            #301b12 68%,
+            #59351f
+        );
+
+    box-shadow:
+        0 32px 70px rgba(0,0,0,.65),
+        inset 0 2px 1px rgba(255,255,255,.12),
+        inset 0 -4px 8px rgba(0,0,0,.5);
+}
+
+
+/* ==================================================
+   BOARD
+================================================== */
+
+.archive-board {
+    min-height: 100vh;
+    padding: 46px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.05);
+
+    background-color:
+        var(--board);
+
+    background-image:
+        radial-gradient(
+            rgba(255,255,255,.035) 1px,
+            transparent 1px
+        ),
+        radial-gradient(
+            rgba(0,0,0,.10) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        9px 9px,
+        6px 6px;
+
+    background-position:
+        0 0,
+        3px 3px;
+
+    box-shadow:
+        inset 0 25px 35px rgba(0,0,0,.35),
+        inset 18px 0 30px rgba(0,0,0,.26),
+        inset -18px 0 30px rgba(0,0,0,.26);
+}
+
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.wall-header {
+    position: relative;
+
+    max-width: 820px;
+
+    margin:
+        0 auto
+        32px;
+
+    padding:
+        28px
+        40px;
+
+    text-align: center;
+
+    color:
+        var(--ink);
+
+    background:
+        linear-gradient(
+            145deg,
+            #faf7ef,
+            #e9e3d7
+        );
+
+    border:
+        1px solid
+        #c8bdab;
+
+    box-shadow:
+        var(--shadow);
+}
+
+
+.wall-header::before,
+.section-banner::before {
+    content: "";
+
+    position: absolute;
+
+    width: 13px;
+    height: 13px;
+
+    border-radius: 50%;
+
+    left: 50%;
+    top: -7px;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #fff3be 0,
+            #c59b48 28%,
+            #755727 62%,
+            #272116 100%
+        );
+
+    box-shadow:
+        1px 3px 5px
+        rgba(0,0,0,.55);
+}
+
+
+.wall-kicker {
+    margin-bottom: 6px;
+
+    color: #796a54;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: .22em;
+
+    text-transform: uppercase;
+}
+
+
+.wall-header h1 {
+    margin: 0;
+
+    font-size:
+        clamp(34px, 6vw, 65px);
+
+    font-weight: normal;
+}
+
+
+.wall-header p {
+    max-width: 600px;
+
+    margin:
+        10px auto
+        0;
+
+    color:
+        #716c62;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+
+/* ==================================================
+   BACK TO FANART BUTTON
+================================================== */
+
+.back-to-fanart-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 22px;
+}
+
+.back-to-fanart-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 16px;
+
+    border: 1px solid #c7bdad;
+    border-radius: 5px;
+
+    background: #f7f2e8;
+    color: #3f3a32;
+
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    box-shadow: 0 8px 18px rgba(0,0,0,.18);
+    transition: transform .18s ease, background .18s ease, color .18s ease;
+}
+
+.back-to-fanart-button:hover {
+    background: #292923;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.back-to-fanart-button svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+}
+
+
+/* Public Character Wall is managed from Admin Settings */
+#addCharacterButton,
+.delete-button {
+    display: none !important;
+}
+
+/* ==================================================
+   CONTROLS
+================================================== */
+
+.wall-controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 44px;
+}
+
+
+.control-panel {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    padding: 7px;
+
+    background:
+        rgba(238,233,222,.92);
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 8px 18px
+        rgba(0,0,0,.18);
+}
+
+
+.filter-button,
+.add-button {
+    min-height: 37px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        #c9c0b2;
+
+    border-radius: 5px;
+
+    background:
+        #faf8f3;
+
+    color:
+        #4c4840;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.filter-button:hover,
+.filter-button.active {
+    background:
+        #292923;
+
+    border-color:
+        #292923;
+
+    color: white;
+}
+
+
+.main-filter {
+    color: #745c2d;
+    border-color: #b99c61;
+}
+
+
+.main-filter.active {
+    background:
+        #7f6635;
+
+    border-color:
+        #7f6635;
+
+    color: white;
+}
+
+
+.add-button {
+    background:
+        #2d2d28;
+
+    border-color:
+        #2d2d28;
+
+    color: white;
+}
+
+
+.search-input {
+    min-width: 220px;
+
+    height: 37px;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid
+        #c9c0b2;
+
+    border-radius: 5px;
+
+    outline: none;
+
+    background:
+        white;
+
+    font-family:
+        Arial,
+        sans-serif;
+}
+
+
+/* ==================================================
+   SECTIONS
+================================================== */
+
+.character-section {
+    margin-bottom: 60px;
+}
+
+
+.section-banner {
+    position: relative;
+
+    max-width: 650px;
+
+    margin:
+        0 auto
+        35px;
+
+    padding:
+        15px
+        24px;
+
+    text-align: center;
+
+    background:
+        #f3eee4;
+
+    color:
+        var(--ink);
+
+    border:
+        1px solid
+        #c7beae;
+
+    box-shadow:
+        0 10px 20px
+        rgba(0,0,0,.23);
+}
+
+
+.section-banner h2 {
+    margin: 0;
+
+    font-size: 20px;
+
+    font-weight: normal;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+}
+
+
+.section-banner p {
+    margin:
+        4px 0
+        0;
+
+    color:
+        #7a746a;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 11px;
+}
+
+
+.hero-section .section-banner {
+    border-bottom:
+        4px solid
+        var(--hero);
+}
+
+
+.villain-section .section-banner {
+    border-bottom:
+        4px solid
+        var(--villain);
+}
+
+
+.antihero-section .section-banner {
+    border-bottom:
+        4px solid
+        var(--antihero);
+}
+
+
+.other-section .section-banner {
+    border-bottom:
+        4px solid
+        var(--other);
+}
+
+
+/* ==================================================
+   GRID
+================================================== */
+
+.character-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(245px, 1fr)
+        );
+
+    gap:
+        50px
+        32px;
+
+    justify-items: center;
+}
+
+
+/* ==================================================
+   CARD
+================================================== */
+
+.character-rig {
+    position: relative;
+
+    width: 100%;
+
+    max-width: 280px;
+
+    perspective: 1300px;
+}
+
+
+.pin {
+    position: absolute;
+
+    left: 50%;
+    top: -7px;
+
+    z-index: 20;
+
+    width: 13px;
+    height: 13px;
+
+    transform:
+        translateX(-50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #faf1c2,
+            #b88b37 30%,
+            #62471e 68%,
+            #292014
+        );
+
+    box-shadow:
+        1px 3px 4px
+        rgba(0,0,0,.6);
+}
+
+
+.card-flipper {
+    position: relative;
+
+    width: 100%;
+
+    transform-style:
+        preserve-3d;
+
+    transition:
+        transform .65s
+        cubic-bezier(.2,.75,.25,1);
+}
+
+
+.card-flipper.flipped {
+    transform:
+        rotateY(180deg);
+}
+
+
+.card-face {
+    width: 100%;
+
+    backface-visibility:
+        hidden;
+
+    -webkit-backface-visibility:
+        hidden;
+}
+
+
+/* ==================================================
+   FRONT
+================================================== */
+
+.card-front {
+    position: relative;
+
+    padding:
+        13px
+        13px
+        18px;
+
+    background:
+        #fafafa;
+
+    border:
+        1px solid
+        #ddd9d1;
+
+    box-shadow:
+        var(--shadow);
+
+    transform:
+        rotate(
+            var(--rotation, 0deg)
+        );
+}
+
+
+/* ==================================================
+   PHOTO
+================================================== */
+
+.photo-frame {
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    background:
+        #171816;
+}
+
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    object-position: center;
+
+    display: block;
+}
+
+
+.image-placeholder {
+    color:
+        #77766f;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 11px;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+}
+
+
+/* ==================================================
+   ROLE
+================================================== */
+
+.role-strip {
+    position: absolute;
+
+    left: 13px;
+    top: 13px;
+
+    z-index: 8;
+
+    padding:
+        5px 9px;
+
+    color: white;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .12em;
+
+    text-transform: uppercase;
+}
+
+
+.role-Hero {
+    background:
+        rgba(57,93,109,.92);
+}
+
+
+.role-Villain {
+    background:
+        rgba(112,55,57,.92);
+}
+
+
+.role-Anti-Hero {
+    background:
+        rgba(105,87,53,.92);
+}
+
+
+.role-Other {
+    background:
+        rgba(73,89,76,.92);
+}
+
+
+/* ==================================================
+   MAIN CHARACTER
+================================================== */
+
+.main-character-marker {
+    position: absolute;
+
+    right: 13px;
+    top: 13px;
+
+    z-index: 9;
+
+    padding:
+        5px 8px;
+
+    border:
+        1px solid
+        rgba(210,174,92,.7);
+
+    background:
+        rgba(28,27,23,.94);
+
+    color:
+        #e8ca83;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    letter-spacing: .12em;
+
+    text-transform: uppercase;
+}
+
+
+/* ==================================================
+   CAPTION
+================================================== */
+
+.front-caption {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding:
+        14px 3px
+        0;
+}
+
+
+.name-area {
+    min-width: 0;
+}
+
+
+.character-name {
+    margin: 0;
+
+    overflow: hidden;
+
+    color:
+        #292823;
+
+    font-size: 21px;
+
+    font-weight: normal;
+
+    text-overflow:
+        ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.character-species {
+    margin-top: 3px;
+
+    color:
+        #858077;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+}
+
+
+.book-line {
+    margin-top: 4px;
+
+    color: #79684a;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.flip-button {
+    flex-shrink: 0;
+
+    padding:
+        5px 8px;
+
+    border:
+        1px solid
+        #d4d0c8;
+
+    border-radius: 4px;
+
+    background:
+        transparent;
+
+    color:
+        #716c62;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   BACK
+================================================== */
+
+.card-back {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    transform:
+        rotateY(180deg);
+
+    padding: 16px;
+
+    background-color:
+        var(--paper);
+
+    background-image:
+        repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent 23px,
+            rgba(74,66,50,.05) 24px
+        );
+
+    border:
+        1px solid
+        #cfc5b5;
+
+    box-shadow:
+        var(--shadow);
+
+    color:
+        var(--ink);
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+
+.back-accent {
+    height: 3px;
+
+    margin:
+        -16px
+        -16px
+        13px;
+
+    background:
+        var(--role-accent);
+
+    flex-shrink: 0;
+}
+
+
+.back-hero {
+    --role-accent:
+        var(--hero);
+}
+
+
+.back-villain {
+    --role-accent:
+        var(--villain);
+}
+
+
+.back-anti-hero {
+    --role-accent:
+        var(--antihero);
+}
+
+
+.back-other {
+    --role-accent:
+        var(--other);
+}
+
+
+.back-header {
+    display: flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap: 10px;
+
+    padding-bottom: 9px;
+
+    border-bottom:
+        1px solid
+        #cfc6b8;
+
+    flex-shrink: 0;
+}
+
+
+.back-name {
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: normal;
+}
+
+
+.back-role {
+    margin-top: 3px;
+
+    color:
+        #777066;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: .12em;
+
+    text-transform: uppercase;
+}
+
+
+/* ==================================================
+   SCROLL HINT
+================================================== */
+
+.scroll-hint {
+    flex-shrink: 0;
+
+    margin-top: 8px;
+
+    padding:
+        5px
+        7px;
+
+    border:
+        1px solid
+        #d0c7b8;
+
+    background:
+        rgba(255,255,255,.38);
+
+    color:
+        #847b6e;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: .10em;
+
+    text-align: center;
+
+    text-transform: uppercase;
+}
+
+
+/* ==================================================
+   SCROLLABLE BACK INFORMATION
+================================================== */
+
+.card-information {
+    flex: 1;
+
+    min-height: 0;
+
+    margin-top: 9px;
+
+    padding-right: 9px;
+
+    padding-bottom: 12px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    overscroll-behavior:
+        contain;
+
+    -webkit-overflow-scrolling:
+        touch;
+
+    scrollbar-width:
+        thin;
+
+    scrollbar-color:
+        #a99e8d
+        transparent;
+}
+
+
+.card-information::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+.card-information::-webkit-scrollbar-track {
+    background:
+        rgba(80,70,55,.05);
+
+    border-radius: 10px;
+}
+
+
+.card-information::-webkit-scrollbar-thumb {
+    background:
+        #aaa08f;
+
+    border-radius: 10px;
+}
+
+
+.card-information::-webkit-scrollbar-thumb:hover {
+    background:
+        #7f7566;
+}
+
+
+/* ==================================================
+   BOOK INFORMATION
+================================================== */
+
+.book-information-card {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 10px;
+    margin-bottom: 11px;
+    padding: 9px;
+    border: 1px solid #c8bcaa;
+    background: rgba(255,255,255,.60);
+}
+
+.book-cover-display {
+    width: 76px;
+    height: 112px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #b4a58e;
+    background: #24231f;
+    box-shadow: 2px 4px 8px rgba(0,0,0,.22);
+}
+
+.book-cover-display img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+}
+
+.book-cover-missing {
+    padding: 6px;
+    color: #aaa296;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.book-information-text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.book-information-heading {
+    margin-bottom: 4px;
+    color: #817665;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.book-information-title {
+    color: #332d27;
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+/* ==================================================
+   INFORMATION
+================================================== */
+
+.info-row {
+    display: grid;
+
+    grid-template-columns:
+        82px 1fr;
+
+    gap: 7px;
+
+    padding:
+        6px 0;
+
+    border-bottom:
+        1px solid
+        rgba(80,70,55,.10);
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 10px;
+}
+
+
+.info-label {
+    color:
+        #766f64;
+
+    font-weight: 800;
+
+    text-transform:
+        uppercase;
+}
+
+
+.info-value {
+    color:
+        #292823;
+}
+
+
+.main-info {
+    color:
+        #856827;
+
+    font-weight: 800;
+}
+
+
+.detail-block {
+    margin-top: 10px;
+}
+
+
+.detail-title {
+    margin-bottom: 3px;
+
+    color:
+        #766f64;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .09em;
+
+    text-transform: uppercase;
+}
+
+
+.detail-text {
+    font-size: 11px;
+
+    line-height: 1.45;
+
+    white-space: pre-wrap;
+}
+
+
+/* ==================================================
+   VOICE
+================================================== */
+
+.voice-panel {
+    margin-top: 12px;
+
+    padding: 8px;
+
+    border:
+        1px solid
+        #cbc1b0;
+
+    background:
+        rgba(255,255,255,.46);
+
+    font-family:
+        Arial,
+        sans-serif;
+}
+
+
+.voice-heading {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    gap: 8px;
+
+    margin-bottom: 4px;
+
+    color:
+        #6e665c;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    text-transform:
+        uppercase;
+}
+
+
+.audio-coming-soon {
+    color:
+        #8b7954;
+}
+
+
+.voice-description {
+    font-size: 10px;
+
+    line-height: 1.45;
+}
+
+
+/* ==================================================
+   ACTIONS
+================================================== */
+
+.card-actions {
+    display: grid;
+
+    grid-template-columns:
+        1fr auto;
+
+    gap: 7px;
+
+    margin-top: 10px;
+
+    padding-top: 10px;
+
+    border-top:
+        1px dashed
+        #c6bcac;
+
+    background:
+        var(--paper);
+
+    flex-shrink: 0;
+}
+
+
+.share-button,
+.delete-button {
+    min-height: 31px;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    text-transform:
+        uppercase;
+
+    cursor: pointer;
+}
+
+
+.share-button {
+    border:
+        1px solid
+        #373731;
+
+    background:
+        #2b2b27;
+
+    color:
+        white;
+}
+
+
+.delete-button {
+    border:
+        1px solid
+        #bbaead;
+
+    background:
+        transparent;
+
+    color:
+        #814b4a;
+}
+
+
+/* ==================================================
+   EMPTY
+================================================== */
+
+.empty-section {
+    grid-column:
+        1 / -1;
+
+    width: 100%;
+
+    padding: 35px;
+
+    border:
+        1px dashed
+        rgba(255,255,255,.18);
+
+    color:
+        rgba(255,255,255,.46);
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+
+/* ==================================================
+   MODAL
+================================================== */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 5000;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+        rgba(12,12,11,.82);
+
+    backdrop-filter:
+        blur(8px);
+}
+
+
+.modal.active {
+    display: flex;
+}
+
+
+.modal-sheet {
+    width:
+        min(780px, 100%);
+
+    max-height:
+        90vh;
+
+    overflow-y: auto;
+
+    background:
+        var(--paper);
+
+    color:
+        var(--ink);
+
+    border:
+        1px solid
+        #c7bcaa;
+
+    box-shadow:
+        0 35px 80px
+        rgba(0,0,0,.6);
+}
+
+
+.modal-header {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    padding:
+        23px
+        25px;
+
+    border-bottom:
+        1px solid
+        #d1c7b7;
+}
+
+
+.modal-header-label {
+    color:
+        #7a7265;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+
+.modal-header h2 {
+    margin: 4px 0 0;
+
+    font-size: 28px;
+
+    font-weight: normal;
+}
+
+
+.modal-close {
+    width: 36px;
+    height: 36px;
+
+    border:
+        1px solid
+        #c7bdae;
+
+    background:
+        transparent;
+
+    cursor: pointer;
+}
+
+
+.modal-body {
+    padding: 25px;
+}
+
+
+/* ==================================================
+   FORM
+================================================== */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 15px;
+}
+
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+
+.form-group.full {
+    grid-column:
+        1 / -1;
+}
+
+
+.form-group label {
+    color:
+        #625d54;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform:
+        uppercase;
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    border:
+        1px solid
+        #c7bdad;
+
+    background:
+        #fdfcf8;
+
+    color:
+        #2d2c27;
+
+    font-family:
+        Arial,
+        sans-serif;
+}
+
+
+.form-group input,
+.form-group select {
+    height: 41px;
+
+    padding:
+        0 10px;
+}
+
+
+.form-group textarea {
+    min-height: 90px;
+
+    padding: 10px;
+
+    resize: vertical;
+}
+
+
+/* ==================================================
+   IMAGE UPLOAD
+================================================== */
+
+.image-upload {
+    display: grid;
+
+    grid-template-columns:
+        180px 1fr;
+
+    gap: 18px;
+
+    padding: 15px;
+
+    background:
+        #e8e1d5;
+}
+
+
+.image-preview {
+    width: 180px;
+    height: 180px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    background:
+        #272824;
+
+    color:
+        #aaa69e;
+}
+
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+
+.upload-help {
+    color:
+        #736d63;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 11px;
+}
+
+
+/* ==================================================
+   SCHOOL / JOB
+================================================== */
+
+.school-job-panel {
+    padding: 15px;
+
+    background:
+        #e9e2d6;
+}
+
+
+.conditional {
+    margin-top: 13px;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+/* ==================================================
+   MODAL ACTIONS
+================================================== */
+
+.modal-actions {
+    display: flex;
+
+    justify-content:
+        flex-end;
+
+    gap: 8px;
+
+    margin-top: 22px;
+
+    padding-top: 18px;
+
+    border-top:
+        1px solid
+        #cfc5b4;
+}
+
+
+.cancel-button,
+.save-button {
+    min-height: 39px;
+
+    padding:
+        0 17px;
+
+    cursor: pointer;
+}
+
+
+.cancel-button {
+    background:
+        transparent;
+}
+
+
+.save-button {
+    background:
+        #292923;
+
+    color: white;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 750px) {
+
+    body {
+        padding: 0;
+    }
+
+
+    .archive-frame {
+        padding: 12px;
+    }
+
+
+    .archive-board {
+        padding:
+            34px
+            15px;
+    }
+
+
+    .wall-controls {
+        flex-direction: column;
+    }
+
+
+    .character-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .character-rig {
+        max-width: 310px;
+    }
+
+
+    .form-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .form-group.full {
+        grid-column: auto;
+    }
+
+
+    .image-upload {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .image-preview {
+        width: 100%;
+
+        height: 240px;
+    }
+
+}
+
+
+/* ==================================================
+   CRESTS, MAP & FAMILY TREE
+================================================== */
+.character-media-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    margin-top:12px;
+}
+.character-media-card {
+    padding:7px;
+    border:1px solid #c8beaf;
+    background:rgba(255,255,255,.5);
+    text-align:center;
+}
+.character-media-card.world-map-card { grid-column:1 / -1; }
+.character-media-label {
+    margin-bottom:5px;
+    color:#766f64;
+    font-family:Arial,sans-serif;
+    font-size:8px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.character-media-image {
+    width:100%;
+    height:82px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:#292823;
+}
+.world-map-card .character-media-image { height:105px; }
+.character-media-image img {
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center;
+}
+.character-media-button, .family-tree-button {
+    width:100%;
+    margin-top:6px;
+    min-height:29px;
+    border:1px solid #8e806c;
+    background:#eee7db;
+    color:#51483e;
+    font-family:Arial,sans-serif;
+    font-size:8px;
+    font-weight:800;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.family-tree-button {
+    margin-top:12px;
+    background:#45382b;
+    color:white;
+    border-color:#45382b;
+}
+
+
+/* ==================================================
+   CREST IMAGE VIEWER
+================================================== */
+.character-media-image.crest-clickable,
+.crest-view-button {
+    cursor: zoom-in;
+}
+.character-media-image.crest-clickable {
+    position: relative;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.character-media-image.crest-clickable:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 16px rgba(0,0,0,.24);
+}
+.crest-image-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(9,9,8,.88);
+    backdrop-filter: blur(8px);
+}
+.crest-image-modal.active {
+    display: flex;
+}
+.crest-image-dialog {
+    position: relative;
+    width: min(900px, 94vw);
+    max-height: 92vh;
+    padding: 20px;
+    border: 1px solid #cfc5b5;
+    background: #f4f0e7;
+    box-shadow: 0 35px 90px rgba(0,0,0,.72);
+}
+.crest-image-title {
+    margin: 0 46px 14px 0;
+    color: #302d27;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+    font-weight: normal;
+}
+.crest-image-large-wrap {
+    width: 100%;
+    max-height: calc(92vh - 95px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    background: #252520;
+}
+.crest-image-large-wrap img {
+    display: block;
+    max-width: 100%;
+    max-height: calc(92vh - 115px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+.crest-image-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #a99d8b;
+    background: #fffdf7;
+    color: #332f29;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+@media (max-width: 600px) {
+    .crest-image-modal { padding: 12px; }
+    .crest-image-dialog { padding: 14px; }
+    .crest-image-title { font-size: 18px; }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="archive-frame">
+
+<div class="archive-board">
+
+
+<header class="wall-header">
+
+    <div class="wall-kicker">
+        Private Character Collection
+    </div>
+
+    <h1>
+        Character Wall
+    </h1>
+
+    <p>
+        An evolving archive of protagonists,
+        heroes, villains, anti-heroes and
+        supporting characters across your books.
+    </p>
+
+</header>
+
+<div class="back-to-fanart-wrap">
+    <a href="./fanart.html" class="back-to-fanart-button" aria-label="Back to Fanart">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5"></path>
+            <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+        Back to Fanart
+    </a>
+</div>
+
+
+<div style="text-align:center; margin:-8px auto 18px; font-family:Arial,sans-serif; font-size:10px; color:rgba(255,255,255,.55); letter-spacing:.08em; text-transform:uppercase;">
+    Profiles are maintained by the site administrator.
+</div>
+
+<div class="wall-controls">
+
+
+    <div class="control-panel">
+
+        <button
+            class="filter-button active"
+            data-filter="All"
+        >
+            All
+        </button>
+
+
+        <button
+            class="filter-button main-filter"
+            data-filter="Main"
+        >
+            Main Characters
+        </button>
+
+
+        <button
+            class="filter-button"
+            data-filter="Hero"
+        >
+            Heroes
+        </button>
+
+
+        <button
+            class="filter-button"
+            data-filter="Villain"
+        >
+            Villains
+        </button>
+
+
+        <button
+            class="filter-button"
+            data-filter="Anti-Hero"
+        >
+            Anti-Heroes
+        </button>
+
+
+        <button
+            class="filter-button"
+            data-filter="Other"
+        >
+            Supporting
+        </button>
+
+    </div>
+
+
+    <div class="control-panel">
+
+        <input
+            class="search-input"
+            id="search"
+            type="search"
+            placeholder="Search character or book..."
+        >
+
+
+
+
+    </div>
+
+
+</div>
+
+
+<section
+    class="character-section hero-section"
+    data-section="Hero"
+>
+
+    <div class="section-banner">
+
+        <h2>Heroes</h2>
+
+        <p>
+            Protectors, protagonists and champions.
+        </p>
+
+    </div>
+
+    <div
+        class="character-grid"
+        id="heroGrid"
+    ></div>
+
+</section>
+
+
+<section
+    class="character-section villain-section"
+    data-section="Villain"
+>
+
+    <div class="section-banner">
+
+        <h2>Villains</h2>
+
+        <p>
+            Antagonists, rivals and dangerous forces.
+        </p>
+
+    </div>
+
+    <div
+        class="character-grid"
+        id="villainGrid"
+    ></div>
+
+</section>
+
+
+<section
+    class="character-section antihero-section"
+    data-section="Anti-Hero"
+>
+
+    <div class="section-banner">
+
+        <h2>Anti-Heroes</h2>
+
+        <p>
+            Complex characters living between both sides.
+        </p>
+
+    </div>
+
+    <div
+        class="character-grid"
+        id="antiHeroGrid"
+    ></div>
+
+</section>
+
+
+<section
+    class="character-section other-section"
+    data-section="Other"
+>
+
+    <div class="section-banner">
+
+        <h2>Supporting Characters</h2>
+
+        <p>
+            Friends, family and other important figures.
+        </p>
+
+    </div>
+
+    <div
+        class="character-grid"
+        id="otherGrid"
+    ></div>
+
+</section>
+
+
+</div>
+</div>
+
+
+
+<!-- ==================================================
+     CREST IMAGE VIEWER
+================================================== -->
+<div class="crest-image-modal" id="crestImageModal" aria-hidden="true">
+    <div class="crest-image-dialog" role="dialog" aria-modal="true" aria-labelledby="crestImageTitle">
+        <button class="crest-image-close" id="crestImageClose" type="button" aria-label="Close crest image">×</button>
+        <h2 class="crest-image-title" id="crestImageTitle">Crest</h2>
+        <div class="crest-image-large-wrap">
+            <img id="crestImageLarge" src="" alt="">
+        </div>
+    </div>
+</div>
+
+
+<!-- ADD CHARACTER -->
+
+<div
+    class="modal"
+    id="characterModal"
+>
+
+<div class="modal-sheet">
+
+
+<div class="modal-header">
+
+    <div>
+
+        <div class="modal-header-label">
+            New Archive Record
+        </div>
+
+        <h2>Add Character</h2>
+
+    </div>
+
+
+    <button
+        class="modal-close"
+        id="closeModalButton"
+        type="button"
+    >
+        ×
+    </button>
+
+</div>
+
+
+<div class="modal-body">
+
+<form id="characterForm">
+
+<div class="form-grid">
+
+
+<div class="form-group full">
+
+<label>
+    Character Artwork
+</label>
+
+
+<div class="image-upload">
+
+    <div
+        class="image-preview"
+        id="imagePreview"
+    >
+        No artwork selected
+    </div>
+
+
+    <div>
+
+        <input
+            type="file"
+            id="characterImage"
+            accept="image/*"
+        >
+
+        <p class="upload-help">
+            Your complete character image stays
+            visible and will not be cropped.
+        </p>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Character Name</label>
+
+<input
+    id="name"
+    type="text"
+    placeholder="Enter character name"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Species</label>
+
+<input
+    id="species"
+    type="text"
+    placeholder="Human, alien, dragon..."
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Book / Story</label>
+
+<input
+    id="book"
+    type="text"
+    placeholder="Example: The Broken Crown"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Character Importance</label>
+
+<select id="mainCharacter">
+
+    <option value="No">
+        Supporting Character
+    </option>
+
+    <option value="Yes">
+        Main Character
+    </option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Character Role</label>
+
+<select id="characterRole">
+
+    <option value="">
+        Choose role
+    </option>
+
+    <option value="Hero">
+        Hero
+    </option>
+
+    <option value="Villain">
+        Villain
+    </option>
+
+    <option value="Anti-Hero">
+        Anti-Hero
+    </option>
+
+    <option value="Other">
+        Supporting / Other
+    </option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Age</label>
+
+<input
+    id="age"
+    type="text"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Life Stage</label>
+
+<select id="lifeStage">
+
+    <option value="">
+        Choose stage
+    </option>
+
+    <option value="Child">
+        Child
+    </option>
+
+    <option value="Teenager">
+        Teenager
+    </option>
+
+    <option value="Adult">
+        Adult
+    </option>
+
+    <option value="Elder">
+        Elder
+    </option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Pronouns</label>
+
+<input
+    id="pronouns"
+    type="text"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Place of Birth</label>
+
+<input
+    id="born"
+    type="text"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Birthday</label>
+
+<input
+    id="birthday"
+    type="text"
+>
+
+</div>
+
+
+<div class="form-group full">
+
+<label>Voice Description</label>
+
+<input
+    id="voice"
+    type="text"
+>
+
+</div>
+
+
+<div
+    class="form-group full school-job-panel"
+>
+
+<label>
+    Education / Occupation
+</label>
+
+
+<select id="schoolJobType">
+
+    <option value="">
+        Choose
+    </option>
+
+    <option value="School">
+        School
+    </option>
+
+    <option value="Job">
+        Job
+    </option>
+
+    <option value="Neither">
+        Neither / Other
+    </option>
+
+</select>
+
+
+<div
+    class="form-group conditional hidden"
+    id="schoolArea"
+>
+
+<label>School</label>
+
+<input
+    id="school"
+    type="text"
+>
+
+</div>
+
+
+<div
+    class="form-group conditional hidden"
+    id="jobArea"
+>
+
+<label>Occupation</label>
+
+<input
+    id="job"
+    type="text"
+>
+
+</div>
+
+</div>
+
+
+<div class="form-group full">
+
+<label>Personality</label>
+
+<textarea id="personality"></textarea>
+
+</div>
+
+
+<div class="form-group full">
+
+<label>Abilities / Skills</label>
+
+<textarea id="abilities"></textarea>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Likes</label>
+
+<textarea id="likes"></textarea>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Dislikes</label>
+
+<textarea id="dislikes"></textarea>
+
+</div>
+
+
+<div class="form-group full">
+
+<label>Additional Information</label>
+
+<textarea id="extra"></textarea>
+
+</div>
+
+
+</div>
+
+
+<div class="modal-actions">
+
+<button
+    class="cancel-button"
+    id="cancelButton"
+    type="button"
+>
+    Cancel
+</button>
+
+
+<button
+    class="save-button"
+    type="submit"
+>
+    Add to Wall
+</button>
+
+</div>
+
+
+</form>
+
+</div>
+</div>
+</div>
+
+
+<script>
+
+let characters = [];
+
+
+let selectedImage = "";
+
+let activeFilter = "All";
+
+
+const modal =
+    document.getElementById(
+        "characterModal"
+    );
+
+
+const form =
+    document.getElementById(
+        "characterForm"
+    );
+
+
+const search =
+    document.getElementById(
+        "search"
+    );
+
+
+const publicAddCharacterButton =
+    document.getElementById(
+        "addCharacterButton"
+    );
+
+if (publicAddCharacterButton) {
+    publicAddCharacterButton.addEventListener(
+        "click",
+        openModal
+    );
+}
+
+
+document
+.getElementById(
+    "closeModalButton"
+)
+.addEventListener(
+    "click",
+    closeModal
+);
+
+
+document
+.getElementById(
+    "cancelButton"
+)
+.addEventListener(
+    "click",
+    closeModal
+);
+
+
+modal.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === modal
+        ) {
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+function openModal() {
+
+    modal.classList.add(
+        "active"
+    );
+
+}
+
+
+function closeModal() {
+
+    modal.classList.remove(
+        "active"
+    );
+
+    clearForm();
+
+}
+
+
+/* IMAGE */
+
+document
+.getElementById(
+    "characterImage"
+)
+.addEventListener(
+    "change",
+    function(event) {
+
+        const file =
+            event.target.files[0];
+
+
+        if (!file) {
+            return;
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function(event) {
+
+                selectedImage =
+                    event.target.result;
+
+
+                document
+                .getElementById(
+                    "imagePreview"
+                )
+                .innerHTML = `
+
+                    <img
+                        src="${selectedImage}"
+                        alt="Character preview"
+                    >
+
+                `;
+
+            };
+
+
+        reader.readAsDataURL(
+            file
+        );
+
+    }
+);
+
+
+/* SCHOOL JOB */
+
+document
+.getElementById(
+    "schoolJobType"
+)
+.addEventListener(
+    "change",
+    updateSchoolJob
+);
+
+
+function updateSchoolJob() {
+
+    const type =
+        value(
+            "schoolJobType"
+        );
+
+
+    const school =
+        document.getElementById(
+            "schoolArea"
+        );
+
+
+    const job =
+        document.getElementById(
+            "jobArea"
+        );
+
+
+    school.classList.add(
+        "hidden"
+    );
+
+
+    job.classList.add(
+        "hidden"
+    );
+
+
+    if (
+        type === "School"
+    ) {
+
+        school.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    if (
+        type === "Job"
+    ) {
+
+        job.classList.remove(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+/* LIFE STAGE */
+
+document
+.getElementById(
+    "lifeStage"
+)
+.addEventListener(
+    "change",
+    function() {
+
+        const schoolJob =
+            document.getElementById(
+                "schoolJobType"
+            );
+
+
+        if (
+            !schoolJob.value
+        ) {
+
+            if (
+                this.value === "Child" ||
+                this.value === "Teenager"
+            ) {
+
+                schoolJob.value =
+                    "School";
+
+            }
+
+
+            else if (
+                this.value === "Adult" ||
+                this.value === "Elder"
+            ) {
+
+                schoolJob.value =
+                    "Job";
+
+            }
+
+        }
+
+
+        updateSchoolJob();
+
+    }
+);
+
+
+/* SAVE */
+
+form.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        saveCharacter();
+
+    }
+);
+
+
+function saveCharacter() {
+
+    const name =
+        value("name");
+
+
+    const role =
+        value("characterRole");
+
+
+    if (!name) {
+
+        alert(
+            "Please enter a character name."
+        );
+
+        return;
+
+    }
+
+
+    if (!role) {
+
+        alert(
+            "Please choose a character role."
+        );
+
+        return;
+
+    }
+
+
+    const character = {
+
+        id:
+            String(
+                Date.now()
+            ),
+
+        name:
+            name,
+
+        species:
+            value("species"),
+
+        book:
+            value("book"),
+
+        mainCharacter:
+            value("mainCharacter"),
+
+        role:
+            role,
+
+        age:
+            value("age"),
+
+        lifeStage:
+            value("lifeStage"),
+
+        pronouns:
+            value("pronouns"),
+
+        born:
+            value("born"),
+
+        birthday:
+            value("birthday"),
+
+        voice:
+            value("voice"),
+
+        schoolJobType:
+            value("schoolJobType"),
+
+        school:
+            value("school"),
+
+        job:
+            value("job"),
+
+        personality:
+            value("personality"),
+
+        abilities:
+            value("abilities"),
+
+        likes:
+            value("likes"),
+
+        dislikes:
+            value("dislikes"),
+
+        extra:
+            value("extra"),
+
+        image:
+            selectedImage,
+
+        rotation:
+            randomRotation()
+
+    };
+
+
+    characters.push(
+        character
+    );
+
+
+    saveCharacters();
+
+    applyFilters();
+
+    closeModal();
+
+}
+
+
+function randomRotation() {
+
+    const rotations = [
+
+        "-1.7deg",
+        "-1deg",
+        "-.5deg",
+        ".4deg",
+        ".9deg",
+        "1.5deg"
+
+    ];
+
+
+    return rotations[
+        Math.floor(
+            Math.random()
+            * rotations.length
+        )
+    ];
+
+}
+
+
+/* FILTERS */
+
+document
+.querySelectorAll(
+    ".filter-button"
+)
+.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                activeFilter =
+                    this.dataset.filter;
+
+
+                document
+                .querySelectorAll(
+                    ".filter-button"
+                )
+                .forEach(
+                    button =>
+                        button.classList.remove(
+                            "active"
+                        )
+                );
+
+
+                this.classList.add(
+                    "active"
+                );
+
+
+                applyFilters();
+
+            }
+        );
+
+    }
+);
+
+
+search.addEventListener(
+    "input",
+    applyFilters
+);
+
+
+function applyFilters() {
+
+    const query =
+        search.value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+        characters.filter(
+            function(character) {
+
+                let matchesFilter =
+                    false;
+
+
+                if (
+                    activeFilter === "All"
+                ) {
+
+                    matchesFilter =
+                        true;
+
+                }
+
+
+                else if (
+                    activeFilter === "Main"
+                ) {
+
+                    matchesFilter =
+                        character.mainCharacter ===
+                        "Yes";
+
+                }
+
+
+                else {
+
+                    matchesFilter =
+                        (
+                            character.role ||
+                            "Other"
+                        ) === activeFilter;
+
+                }
+
+
+                const matchesSearch =
+                    !query ||
+                    Object
+                    .values(character)
+                    .join(" ")
+                    .toLowerCase()
+                    .includes(query);
+
+
+                return (
+                    matchesFilter &&
+                    matchesSearch
+                );
+
+            }
+        );
+
+
+    renderCharacters(
+        filtered
+    );
+
+}
+
+
+/* RENDER */
+
+function renderCharacters(
+    list = characters
+) {
+
+    const heroGrid =
+        document.getElementById(
+            "heroGrid"
+        );
+
+
+    const villainGrid =
+        document.getElementById(
+            "villainGrid"
+        );
+
+
+    const antiHeroGrid =
+        document.getElementById(
+            "antiHeroGrid"
+        );
+
+
+    const otherGrid =
+        document.getElementById(
+            "otherGrid"
+        );
+
+
+    heroGrid.innerHTML = "";
+
+    villainGrid.innerHTML = "";
+
+    antiHeroGrid.innerHTML = "";
+
+    otherGrid.innerHTML = "";
+
+
+    list.forEach(
+        function(character) {
+
+            const role =
+                character.role ||
+                "Other";
+
+
+            const card =
+                createCharacterCard(
+                    character
+                );
+
+
+            if (
+                role === "Hero"
+            ) {
+
+                heroGrid.appendChild(
+                    card
+                );
+
+            }
+
+
+            else if (
+                role === "Villain"
+            ) {
+
+                villainGrid.appendChild(
+                    card
+                );
+
+            }
+
+
+            else if (
+                role === "Anti-Hero"
+            ) {
+
+                antiHeroGrid.appendChild(
+                    card
+                );
+
+            }
+
+
+            else {
+
+                otherGrid.appendChild(
+                    card
+                );
+
+            }
+
+        }
+    );
+
+
+    showEmpty(
+        heroGrid,
+        "No heroes currently appear in this view."
+    );
+
+
+    showEmpty(
+        villainGrid,
+        "No villains currently appear in this view."
+    );
+
+
+    showEmpty(
+        antiHeroGrid,
+        "No anti-heroes currently appear in this view."
+    );
+
+
+    showEmpty(
+        otherGrid,
+        "No supporting characters currently appear in this view."
+    );
+
+
+    updateVisibleSections();
+
+}
+
+
+/* CHARACTER CARD */
+
+function createCharacterCard(
+    character
+) {
+
+    const role =
+        character.role ||
+        "Other";
+
+    const houseCrest =
+        character.houseCrest ||
+        character.familyCrest ||
+        "";
+
+
+    const rig =
+        document.createElement(
+            "article"
+        );
+
+
+    rig.className =
+        "character-rig";
+
+
+    const schoolJob =
+        character.schoolJobType === "School"
+
+        ?
+
+        infoRow(
+            "School",
+            character.school
+        )
+
+        :
+
+        character.schoolJobType === "Job"
+
+        ?
+
+        infoRow(
+            "Occupation",
+            character.job
+        )
+
+        :
+
+        "";
+
+
+    rig.innerHTML = `
+
+        <div class="pin"></div>
+
+
+        <div class="card-flipper">
+
+
+            <div
+                class="card-face card-front"
+                style="
+                    --rotation:
+                    ${
+                        character.rotation ||
+                        randomRotation()
+                    };
+                "
+            >
+
+
+                <div
+                    class="role-strip role-${role}"
+                >
+                    ${escapeHTML(
+                        displayRole(role)
+                    )}
+                </div>
+
+
+                ${
+                    character.mainCharacter === "Yes"
+
+                    ?
+
+                    `
+                    <div class="main-character-marker">
+                        Main Character
+                    </div>
+                    `
+
+                    :
+
+                    ""
+                }
+
+
+                <div class="photo-frame">
+
+                    ${
+                        character.image
+
+                        ?
+
+                        `
+                        <img
+                            src="${character.image}"
+                            alt="${escapeHTML(
+                                character.name
+                            )}"
+                        >
+                        `
+
+                        :
+
+                        `
+                        <div class="image-placeholder">
+                            Artwork Pending
+                        </div>
+                        `
+                    }
+
+                </div>
+
+
+                <div class="front-caption">
+
+                    <div class="name-area">
+
+                        <h3 class="character-name">
+
+                            ${escapeHTML(
+                                character.name
+                            )}
+
+                        </h3>
+
+
+                        <div class="character-species">
+
+                            ${
+                                escapeHTML(
+                                    character.species ||
+                                    "Species unspecified"
+                                )
+                            }
+
+                        </div>
+
+
+                        ${
+                            character.book
+
+                            ?
+
+                            `
+                            <div class="book-line">
+
+                                ${escapeHTML(
+                                    character.book
+                                )}
+
+                            </div>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+                    </div>
+
+
+                    <button
+                        class="flip-button"
+                        type="button"
+                    >
+                        View File
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="card-face card-back ${backClass(
+                    role
+                )}"
+            >
+
+                <div class="back-accent"></div>
+
+
+                <div class="back-header">
+
+                    <div>
+
+                        <h3 class="back-name">
+
+                            ${escapeHTML(
+                                character.name
+                            )}
+
+                        </h3>
+
+
+                        <div class="back-role">
+
+                            ${escapeHTML(
+                                displayRole(role)
+                            )}
+
+                            ${
+                                character.mainCharacter ===
+                                "Yes"
+
+                                ?
+
+                                " · Main Character"
+
+                                :
+
+                                ""
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="flip-button"
+                        type="button"
+                    >
+                        Photo
+                    </button>
+
+                </div>
+
+
+                <div class="scroll-hint">
+                    Scroll for full profile
+                </div>
+
+
+                <div class="card-information">
+
+
+                    <div class="book-information-card">
+
+                        <div class="book-cover-display">
+                            ${
+                                character.bookCover
+                                ?
+                                `
+                                <img
+                                    src="${character.bookCover}"
+                                    alt="${escapeHTML(character.book || character.name)} book cover"
+                                >
+                                `
+                                :
+                                `
+                                <div class="book-cover-missing">
+                                    Book Cover Not Added
+                                </div>
+                                `
+                            }
+                        </div>
+
+                        <div class="book-information-text">
+                            <div class="book-information-heading">
+                                Book / Story
+                            </div>
+                            <div class="book-information-title">
+                                ${escapeHTML(character.book || "Book not specified")}
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    ${houseCrest || character.schoolCrest || character.worldMap ? `
+                    <div class="character-media-grid">
+                        ${houseCrest ? `
+                        <div class="character-media-card">
+                            <div class="character-media-label">House / Family Crest</div>
+                            <div
+                                class="character-media-image crest-clickable"
+                                role="button"
+                                tabindex="0"
+                                data-crest-src="${houseCrest}"
+                                data-crest-title="${escapeHTML(character.name)} — House / Family Crest"
+                                aria-label="View ${escapeHTML(character.name)} house or family crest larger"
+                            >
+                                <img src="${houseCrest}" alt="${escapeHTML(character.name)} house crest">
+                            </div>
+                            <button
+                                class="character-media-button crest-view-button"
+                                type="button"
+                                data-crest-src="${houseCrest}"
+                                data-crest-title="${escapeHTML(character.name)} — House / Family Crest"
+                            >
+                                View Crest
+                            </button>
+                        </div>` : ""}
+
+                        ${character.schoolCrest ? `
+                        <div class="character-media-card">
+                            <div class="character-media-label">School Crest</div>
+                            <div
+                                class="character-media-image crest-clickable"
+                                role="button"
+                                tabindex="0"
+                                data-crest-src="${character.schoolCrest}"
+                                data-crest-title="${escapeHTML(character.school || character.name)} — School Crest"
+                                aria-label="View ${escapeHTML(character.school || character.name)} school crest larger"
+                            >
+                                <img src="${character.schoolCrest}" alt="${escapeHTML(character.school || character.name)} school crest">
+                            </div>
+                            <button
+                                class="character-media-button crest-view-button"
+                                type="button"
+                                data-crest-src="${character.schoolCrest}"
+                                data-crest-title="${escapeHTML(character.school || character.name)} — School Crest"
+                            >
+                                View Crest
+                            </button>
+                        </div>` : ""}
+
+                        ${character.worldMap ? `
+                        <div class="character-media-card world-map-card">
+                            <div class="character-media-label">World Map</div>
+                            <div
+                                class="character-media-image crest-clickable"
+                                role="button"
+                                tabindex="0"
+                                data-crest-src="${character.worldMap}"
+                                data-crest-title="${escapeHTML(character.book || character.name)} — World Map"
+                                aria-label="View ${escapeHTML(character.book || character.name)} world map larger"
+                            >
+                                <img src="${character.worldMap}" alt="${escapeHTML(character.book || character.name)} world map">
+                            </div>
+                            <button
+                                class="character-media-button crest-view-button"
+                                type="button"
+                                data-crest-src="${character.worldMap}"
+                                data-crest-title="${escapeHTML(character.book || character.name)} — World Map"
+                            >
+                                View World Map
+                            </button>
+                        </div>` : ""}
+                    </div>` : ""}
+
+                    <a
+                        class="family-tree-button"
+                        href="family-tree.html?id=${encodeURIComponent(character.id || "")}"
+                        target="_blank"
+                        rel="noopener"
+                        aria-label="Open ${escapeHTML(character.name)} family tree"
+                    >
+                        Open Family Tree
+                    </a>
+
+
+                    ${
+                        character.mainCharacter === "Yes"
+
+                        ?
+
+                        `
+                        <div class="info-row">
+
+                            <div class="info-label">
+                                Importance
+                            </div>
+
+                            <div class="info-value main-info">
+                                Main Character
+                            </div>
+
+                        </div>
+                        `
+
+                        :
+
+                        infoRow(
+                            "Importance",
+                            "Supporting Character"
+                        )
+                    }
+
+
+                    ${infoRow(
+                        "Species",
+                        character.species
+                    )}
+
+
+                    ${infoRow(
+                        "Age",
+                        character.age
+                    )}
+
+
+                    ${infoRow(
+                        "Pronouns",
+                        character.pronouns
+                    )}
+
+
+                    ${infoRow(
+                        "Born",
+                        character.born
+                    )}
+
+
+                    ${infoRow(
+                        "Birthday",
+                        character.birthday
+                    )}
+
+
+                    ${schoolJob}
+
+
+                    ${detailBlock(
+                        "Personality",
+                        character.personality
+                    )}
+
+
+                    ${detailBlock(
+                        "Abilities / Skills",
+                        character.abilities
+                    )}
+
+
+                    ${detailBlock(
+                        "Likes",
+                        character.likes
+                    )}
+
+
+                    ${detailBlock(
+                        "Dislikes",
+                        character.dislikes
+                    )}
+
+
+                    ${detailBlock(
+                        "Additional Notes",
+                        character.extra
+                    )}
+
+
+                    <div class="voice-panel">
+
+                        <div class="voice-heading">
+
+                            <span>
+                                Voice Reference
+                            </span>
+
+                            <span class="audio-coming-soon">
+                                Audio Coming Soon
+                            </span>
+
+                        </div>
+
+
+                        <div class="voice-description">
+
+                            ${
+                                escapeHTML(
+                                    character.voice ||
+                                    "No voice description added."
+                                )
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="card-actions">
+
+                    <button
+                        class="share-button"
+                        type="button"
+                    >
+                        Share Character
+                    </button>
+
+
+                    <button
+                        class="delete-button"
+                        type="button"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+
+    const flipper =
+        rig.querySelector(
+            ".card-flipper"
+        );
+
+
+    rig
+    .querySelectorAll(
+        ".flip-button"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    flipper.classList.toggle(
+                        "flipped"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    rig
+    .querySelector(
+        ".share-button"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            shareCharacter(
+                character
+            );
+
+        }
+    );
+
+
+    rig
+    .querySelector(
+        ".delete-button"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            deleteCharacter(
+                character
+            );
+
+        }
+    );
+
+
+    return rig;
+
+}
+
+
+/* VISIBLE SECTIONS */
+
+function updateVisibleSections() {
+
+    document
+    .querySelectorAll(
+        ".character-section"
+    )
+    .forEach(
+        section => {
+
+            const role =
+                section.dataset.section;
+
+
+            if (
+                activeFilter === "All" ||
+                activeFilter === "Main" ||
+                activeFilter === role
+            ) {
+
+                section.style.display =
+                    "";
+
+            }
+
+
+            else {
+
+                section.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* HELPERS */
+
+function displayRole(role) {
+
+    if (
+        role === "Other"
+    ) {
+
+        return "Supporting";
+
+    }
+
+
+    return role;
+
+}
+
+
+function backClass(role) {
+
+    if (
+        role === "Hero"
+    ) {
+
+        return "back-hero";
+
+    }
+
+
+    if (
+        role === "Villain"
+    ) {
+
+        return "back-villain";
+
+    }
+
+
+    if (
+        role === "Anti-Hero"
+    ) {
+
+        return "back-anti-hero";
+
+    }
+
+
+    return "back-other";
+
+}
+
+
+function infoRow(
+    label,
+    rowValue
+) {
+
+    if (!rowValue) {
+
+        return "";
+
+    }
+
+
+    return `
+
+        <div class="info-row">
+
+            <div class="info-label">
+
+                ${escapeHTML(
+                    label
+                )}
+
+            </div>
+
+
+            <div class="info-value">
+
+                ${escapeHTML(
+                    rowValue
+                )}
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+function detailBlock(
+    title,
+    text
+) {
+
+    if (!text) {
+
+        return "";
+
+    }
+
+
+    return `
+
+        <div class="detail-block">
+
+            <div class="detail-title">
+
+                ${escapeHTML(
+                    title
+                )}
+
+            </div>
+
+
+            <div class="detail-text">
+
+                ${escapeHTML(
+                    text
+                )}
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+function showEmpty(
+    grid,
+    message
+) {
+
+    if (
+        grid.children.length === 0
+    ) {
+
+        grid.innerHTML = `
+
+            <div class="empty-section">
+
+                ${escapeHTML(
+                    message
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* DELETE */
+
+function deleteCharacter(
+    character
+) {
+
+    if (
+        !confirm(
+            `Delete ${character.name} from your character wall?`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    characters =
+        characters.filter(
+            item =>
+                item !== character
+        );
+
+
+    saveCharacters();
+
+    applyFilters();
+
+}
+
+
+/* SHARE */
+
+async function shareCharacter(
+    character
+) {
+
+    let occupation = "";
+
+
+    if (
+        character.schoolJobType === "School" &&
+        character.school
+    ) {
+
+        occupation =
+            `School: ${character.school}\n`;
+
+    }
+
+
+    if (
+        character.schoolJobType === "Job" &&
+        character.job
+    ) {
+
+        occupation =
+            `Occupation: ${character.job}\n`;
+
+    }
+
+
+    const shareText = `CHARACTER PROFILE
+
+${character.name}
+
+Book / Story: ${character.book || "Not specified"}
+Importance: ${
+    character.mainCharacter === "Yes"
+    ? "Main Character"
+    : "Supporting Character"
+}
+Role: ${displayRole(character.role || "Other")}
+Species: ${character.species || "Unknown"}
+Age: ${character.age || "Unknown"}
+Life Stage: ${character.lifeStage || "Unknown"}
+Pronouns: ${character.pronouns || "Unknown"}
+Place of Birth: ${character.born || "Unknown"}
+${occupation}Voice: ${character.voice || "Not specified"}
+
+PERSONALITY
+${character.personality || "Not listed"}
+
+ABILITIES
+${character.abilities || "Not listed"}
+
+LIKES
+${character.likes || "Not listed"}
+
+DISLIKES
+${character.dislikes || "Not listed"}
+
+ADDITIONAL INFORMATION
+${character.extra || "None"}`;
+
+
+    if (
+        navigator.share
+    ) {
+
+        try {
+
+            await navigator.share({
+
+                title:
+                    `${character.name} — Character Profile`,
+
+                text:
+                    shareText
+
+            });
+
+
+            return;
+
+        }
+
+
+        catch (error) {
+
+            if (
+                error.name === "AbortError"
+            ) {
+
+                return;
+
+            }
+
+        }
+
+    }
+
+
+    try {
+
+        await navigator
+        .clipboard
+        .writeText(
+            shareText
+        );
+
+
+        alert(
+            `${character.name}'s profile was copied.`
+        );
+
+    }
+
+
+    catch (error) {
+
+        fallbackCopy(
+            shareText
+        );
+
+    }
+
+}
+
+
+function fallbackCopy(text) {
+
+    const area =
+        document.createElement(
+            "textarea"
+        );
+
+
+    area.value =
+        text;
+
+
+    area.style.position =
+        "fixed";
+
+
+    area.style.opacity =
+        "0";
+
+
+    document.body.appendChild(
+        area
+    );
+
+
+    area.select();
+
+
+    try {
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        alert(
+            "Character profile copied."
+        );
+
+    }
+
+
+    catch (error) {
+
+        alert(
+            "Sharing is not supported by this browser."
+        );
+
+    }
+
+
+    area.remove();
+
+}
+
+
+/* STORAGE */
+
+function saveCharacters() {
+
+    localStorage.setItem(
+
+        "characterWall",
+
+        JSON.stringify(
+            characters
+        )
+
+    );
+
+}
+
+
+/* VALUE */
+
+function value(id) {
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    return element
+        ?
+        element.value.trim()
+        :
+        "";
+
+}
+
+
+/* CLEAR */
+
+function clearForm() {
+
+    form.reset();
+
+
+    selectedImage =
+        "";
+
+
+    document
+    .getElementById(
+        "imagePreview"
+    )
+    .textContent =
+        "No artwork selected";
+
+
+    document
+    .getElementById(
+        "schoolArea"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "jobArea"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+}
+
+
+/* SAFE HTML */
+
+function escapeHTML(text) {
+
+    if (
+        text === null ||
+        text === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(text)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* FIREBASE DATA BRIDGE */
+
+window.__setCharacterWallCharacters = function(list) {
+    characters = Array.isArray(list) ? list : [];
+    applyFilters();
+};
+
+
+
+/* ==================================================
+   CREST IMAGE VIEWER
+================================================== */
+const crestImageModal = document.getElementById("crestImageModal");
+const crestImageLarge = document.getElementById("crestImageLarge");
+const crestImageTitle = document.getElementById("crestImageTitle");
+const crestImageClose = document.getElementById("crestImageClose");
+
+function openCrestImage(src, title) {
+    if (!src || !crestImageModal || !crestImageLarge) return;
+
+    crestImageLarge.src = src;
+    crestImageLarge.alt = title || "Crest enlarged image";
+    crestImageTitle.textContent = title || "Crest";
+    crestImageModal.classList.add("active");
+    crestImageModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+function closeCrestImage() {
+    if (!crestImageModal) return;
+
+    crestImageModal.classList.remove("active");
+    crestImageModal.setAttribute("aria-hidden", "true");
+    crestImageLarge.src = "";
+    document.body.style.overflow = "";
+}
+
+document.addEventListener("click", function(event) {
+    const trigger = event.target.closest("[data-crest-src]");
+    if (!trigger) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    openCrestImage(trigger.dataset.crestSrc, trigger.dataset.crestTitle);
+});
+
+document.addEventListener("keydown", function(event) {
+    if ((event.key === "Enter" || event.key === " ") && event.target.matches(".crest-clickable[data-crest-src]")) {
+        event.preventDefault();
+        openCrestImage(event.target.dataset.crestSrc, event.target.dataset.crestTitle);
+        return;
+    }
+
+    if (event.key === "Escape" && crestImageModal && crestImageModal.classList.contains("active")) {
+        closeCrestImage();
+    }
+});
+
+if (crestImageClose) {
+    crestImageClose.addEventListener("click", closeCrestImage);
+}
+
+if (crestImageModal) {
+    crestImageModal.addEventListener("click", function(event) {
+        if (event.target === crestImageModal) closeCrestImage();
+    });
+}
+
+
+/* START */
+
+applyFilters();
+
+</script>
+
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+  authDomain: "libraryreeds-638f4.firebaseapp.com",
+  projectId: "libraryreeds-638f4",
+  storageBucket: "libraryreeds-638f4.firebasestorage.app",
+  messagingSenderId: "768304310517",
+  appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+onSnapshot(
+  collection(db, "character_wall"),
+  (snapshot) => {
+    const list = [];
+    snapshot.forEach((snap) => {
+      list.push({ id: snap.id, ...snap.data() });
+    });
+
+    list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+    if (window.__setCharacterWallCharacters) {
+      window.__setCharacterWallCharacters(list);
+    }
+  },
+  (error) => {
+    console.error("Unable to load Character Wall:", error);
+    if (window.__setCharacterWallCharacters) {
+      window.__setCharacterWallCharacters([]);
+    }
+  }
+);
+</script>
+
+
+<script>
+document.addEventListener("error", function(event) {
+  const img = event.target;
+  if (!(img instanceof HTMLImageElement)) return;
+  if (!img.closest(".character-media-image, .book-cover-display")) return;
+
+  const holder = img.parentElement;
+  if (!holder) return;
+
+  const placeholder = document.createElement("div");
+  placeholder.className = "book-cover-missing";
+  placeholder.textContent = "Image unavailable";
+  holder.replaceChildren(placeholder);
+}, true);
+</script>
+
+</body>
+</html>
