@@ -45,6 +45,18 @@
         .nav-icon-link:hover { color: var(--accent-gold, #c5a880); }
         .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent-gold); stroke-width: 2; }
 
+        /* Shared Firebase Notification Bell */
+        .notification-badge { position: absolute; top: -8px; right: -10px; display: none; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 50%; background: #dc2626; color: #fff; font-size: 10px; font-weight: 700; line-height: 1; align-items: center; justify-content: center; border: 1px solid var(--bg-base); }
+        .notification-widget { position: relative; display: inline-flex; }
+        button.notification-icon-link { border: 0; background: transparent; padding: 0; font: inherit; }
+        .notification-panel { position: absolute; top: 34px; right: 0; width: 320px; max-width: calc(100vw - 32px); max-height: 380px; overflow-y: auto; padding: 16px; box-sizing: border-box; background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-subtle); border-radius: 6px; box-shadow: 0 12px 30px rgba(0,0,0,.5); z-index: 250; }
+        .notification-panel[hidden] { display: none; }
+        .notification-panel-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .notification-panel-header button { background: transparent; border: 0; color: inherit; cursor: pointer; }
+        #notificationPanelStatus { margin: 12px 0 4px; font-size: 13px; color: var(--text-secondary); }
+        .notification-list { list-style: none; margin: 0; padding: 0; }
+        .notification-list li { padding: 12px 0; border-top: 1px solid var(--border-subtle); font-size: 13px; overflow-wrap: anywhere; }
+
         /* Profile Menu Widget */
         .user-profile-menu { position: relative; display: none; }
         .profile-trigger-btn { background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); color: var(--text-primary, #f0f2f5); padding: 6px 14px; border-radius: 4px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
@@ -67,7 +79,7 @@
         .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
 
         .book-card {
-            background-color: var(--bg-card);
+            background-color: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: 6px;
             overflow: hidden;
@@ -78,7 +90,7 @@
 
         .book-card:hover { transform: translateY(-4px); border-color: var(--accent-gold); }
 
-        .book-cover { height: 320px; background-color: var(--bg-secondary); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .book-cover { height: 320px; background-color: var(--bg-surface-elevated); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .book-cover img { width: 100%; height: 100%; object-fit: cover; }
 
         .upcoming-badge {
@@ -96,17 +108,16 @@
 
         .action-container { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
         .btn { width: 100%; padding: 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: var(--transition-smooth); border: 1px solid transparent; text-align: center; text-decoration: none; }
-        .btn-outline { background-color: transparent; border-color: var(--border-subtle); color: var(--text-main); }
+        .btn-outline { background-color: transparent; border-color: var(--border-subtle); color: var(--text-primary); }
         .btn-outline:hover { border-color: #ff6b6b; color: #ff6b6b; }
         .btn-primary { background-color: var(--accent-gold); color: var(--bg-base); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.06em; }
         .btn-primary:hover { background-color: var(--accent-gold-hover); }
 
         .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
-        .empty-state h3 { font-family: var(--font-serif); font-size: 1.5rem; color: var(--text-main); margin-bottom: 0.5rem; }
+        .empty-state h3 { font-family: var(--font-serif); font-size: 1.5rem; color: var(--text-primary); margin-bottom: 0.5rem; }
 
-        footer { border-top: 1px solid var(--border-subtle); padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; background-color: var(--bg-secondary); margin-top: auto; }
+        footer { border-top: 1px solid var(--border-subtle); padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; background-color: var(--bg-surface-elevated); margin-top: auto; }
     </style>
-    <script> var MemberSpace = window.MemberSpace || {"subdomain":"libraryreeds"}; (function(d){ var s = d.createElement("script"); s.src = "https://cdn.memberspace.com/scripts/widgets.js"; var e = d.getElementsByTagName("script")[0]; e.parentNode.insertBefore(s,e); }(document)); </script>
 </head>
 <body>
 
@@ -127,6 +138,24 @@
                     <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
                 </a>
+                <!-- Notification Bell and Panel -->
+                <div class="notification-widget" id="notificationWidget">
+                    <button type="button" id="notificationBellBtn" aria-expanded="false" aria-controls="notificationPanel" class="nav-icon-link notification-icon-link" title="Notifications" aria-label="Notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
+                        <span id="notificationBadgeCount" class="notification-badge" aria-live="polite" aria-atomic="true"></span>
+                    </button>
+                    <section class="notification-panel" id="notificationPanel" aria-labelledby="notificationPanelTitle" hidden>
+                        <div class="notification-panel-header">
+                            <strong id="notificationPanelTitle">Notifications</strong>
+                            <span style="display:flex;align-items:center;gap:10px;">
+                                <button type="button" id="markAllNotificationsReadBtn" style="color:var(--accent-gold);font:inherit;font-size:11px;font-weight:700;text-transform:uppercase;">Mark All Read</button>
+                                <button type="button" id="closeNotificationPanel" aria-label="Close notifications" style="font-size:22px;">&times;</button>
+                            </span>
+                        </div>
+                        <p id="notificationPanelStatus">No notifications yet.</p>
+                        <ul id="notificationList" class="notification-list"></ul>
+                    </section>
+                </div>
                 <a href="./cart.html" class="nav-icon-link cart-trigger-link" id="cartTriggerLink" title="Review Cart">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                     <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
@@ -143,22 +172,14 @@
                             <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
                         </div>
                         <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+                        <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
                         <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
-    <header>
-        <a href="./index.html" class="logo">LIBRARYREEDS</a>
-        <nav class="nav-links">
-            <a href="./index.html">Home</a>
-            <a href="./shop.html">Shop</a>
-            <a href="./membership.html">Membership</a>
-            <a href="./wishlist.html" class="active">Wishlist</a>
-            <a href="./cart.html" class="cart-icon-link">Cart</a>
-        </nav>
-    </header>
+
 
     <main>
         <div id="wishlist-view">
@@ -179,7 +200,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, onSnapshot, query, orderBy, limit, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
@@ -328,7 +349,7 @@
                     card.innerHTML = `
                         <div class="book-cover">
                             <span class="upcoming-badge">Saved Edition</span>
-                            <img src="${book.coverUrl || ''}" alt="${book.title || 'Book'}" loading="lazy">
+                            <img src="${book.coverUrl || book.coverImage || book.imageUrl || ''}" alt="${book.title || 'Book'}" loading="lazy" onerror="this.style.display='none';">
                         </div>
                         <div class="book-details">
                             <h3 class="book-title">${book.title || 'Untitled'}</h3>
@@ -357,6 +378,105 @@
             localStorage.setItem('literalis_wishlist', JSON.stringify(wishlist));
             renderWishlist();
         };
+
+        // Shared notification bell: Firebase read state syncs across every page.
+        const notificationBellBtn = document.getElementById('notificationBellBtn');
+        const notificationPanel = document.getElementById('notificationPanel');
+        const closeNotificationPanel = document.getElementById('closeNotificationPanel');
+        const markAllNotificationsReadBtn = document.getElementById('markAllNotificationsReadBtn');
+        const notificationBadgeCount = document.getElementById('notificationBadgeCount');
+        const notificationList = document.getElementById('notificationList');
+        const notificationPanelStatus = document.getElementById('notificationPanelStatus');
+        let latestNotificationRows = [];
+
+        function setNotificationPanel(open) {
+            if (!notificationPanel || !notificationBellBtn) return;
+            notificationPanel.hidden = !open;
+            notificationBellBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        notificationBellBtn?.addEventListener('click', (event) => {
+            event.stopPropagation();
+            setNotificationPanel(notificationPanel?.hidden !== false);
+        });
+        closeNotificationPanel?.addEventListener('click', (event) => {
+            event.stopPropagation();
+            setNotificationPanel(false);
+        });
+        notificationPanel?.addEventListener('click', event => event.stopPropagation());
+        document.addEventListener('click', () => setNotificationPanel(false));
+
+        function formatNotificationTime(value) {
+            try {
+                const date = value?.toDate ? value.toDate() : new Date(value);
+                if (!date || Number.isNaN(date.getTime())) return '';
+                return date.toLocaleString();
+            } catch (_) { return ''; }
+        }
+
+        function renderSharedNotifications(rows) {
+            const unread = rows.filter(row => !row.data.read).length;
+            if (notificationBadgeCount) {
+                if (unread > 0) {
+                    notificationBadgeCount.textContent = unread > 99 ? '99+' : String(unread);
+                    notificationBadgeCount.style.display = 'flex';
+                } else {
+                    notificationBadgeCount.textContent = '';
+                    notificationBadgeCount.style.display = 'none';
+                }
+            }
+            if (markAllNotificationsReadBtn) {
+                markAllNotificationsReadBtn.disabled = unread === 0;
+                markAllNotificationsReadBtn.textContent = unread === 0 ? 'All Read' : 'Mark All Read';
+                markAllNotificationsReadBtn.style.opacity = unread === 0 ? '.55' : '1';
+            }
+            if (!notificationList) return;
+            notificationList.replaceChildren();
+            if (!rows.length) {
+                if (notificationPanelStatus) {
+                    notificationPanelStatus.hidden = false;
+                    notificationPanelStatus.textContent = 'No notifications yet.';
+                }
+                return;
+            }
+            if (notificationPanelStatus) notificationPanelStatus.hidden = true;
+            rows.forEach(({data}) => {
+                const item = document.createElement('li');
+                item.style.fontWeight = data.read ? '400' : '700';
+                item.style.opacity = data.read ? '.72' : '1';
+                const msg = document.createElement('div');
+                msg.textContent = data.message || data.title || data.body || 'New activity';
+                const tm = document.createElement('div');
+                tm.textContent = formatNotificationTime(data.timestamp);
+                tm.style.cssText = 'font-size:11px;margin-top:4px;color:var(--accent-gold);';
+                item.append(msg, tm);
+                notificationList.appendChild(item);
+            });
+        }
+
+        const notificationQuery = query(collection(db, 'admin_notifications'), orderBy('timestamp', 'desc'), limit(50));
+        onSnapshot(notificationQuery, snapshot => {
+            latestNotificationRows = snapshot.docs.map(snap => ({id: snap.id, data: snap.data()}));
+            renderSharedNotifications(latestNotificationRows);
+        }, error => console.warn('Notification sync listener:', error?.message || error));
+
+        markAllNotificationsReadBtn?.addEventListener('click', async (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            const unreadRows = latestNotificationRows.filter(row => !row.data.read);
+            if (!unreadRows.length) return;
+            markAllNotificationsReadBtn.disabled = true;
+            markAllNotificationsReadBtn.textContent = 'Saving...';
+            try {
+                const batch = writeBatch(db);
+                unreadRows.forEach(row => batch.update(doc(db, 'admin_notifications', row.id), {read: true, readAt: serverTimestamp()}));
+                await batch.commit();
+            } catch (error) {
+                console.error('Could not mark notifications read:', error);
+                markAllNotificationsReadBtn.disabled = false;
+                markAllNotificationsReadBtn.textContent = 'Mark All Read';
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             renderWishlist();
