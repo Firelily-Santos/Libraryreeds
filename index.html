@@ -70,6 +70,19 @@
     .nav-icon-link:hover { color: var(--accent-gold, #c5a880); }
     .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent-gold); stroke-width: 2; }
 
+
+    .notification-badge { position: absolute; top: -8px; right: -10px; display: none; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 50%; background: #dc2626; color: #fff; font-size: 10px; font-weight: 700; line-height: 1; align-items: center; justify-content: center; border: 1px solid var(--bg-base, #0a0c10); }
+
+    .notification-widget { position: relative; display: inline-flex; }
+    button.notification-icon-link { border: 0; background: transparent; padding: 0; font: inherit; }
+    .notification-panel { position: absolute; top: 34px; right: 0; width: 300px; max-width: calc(100vw - 32px); max-height: 360px; overflow-y: auto; padding: 16px; box-sizing: border-box; background: var(--bg-surface, #11141c); color: var(--text-primary, #f0f2f5); border: 1px solid var(--border-subtle, #333); border-radius: 6px; box-shadow: 0 12px 30px rgba(0,0,0,.5); z-index: 200; }
+    .notification-panel[hidden] { display: none; }
+    .notification-panel-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .notification-panel-header button { background: transparent; border: 0; color: inherit; font-size: 22px; cursor: pointer; }
+    #notificationPanelStatus { font-size: 13px; color: var(--text-secondary, #9ba1b0); }
+    .notification-list { list-style: none; margin: 0; padding: 0; }
+    .notification-list li { padding: 12px 0; border-top: 1px solid var(--border-subtle, #333); font-size: 13px; overflow-wrap: anywhere; }
+
     /* Profile Menu Widget */
     .user-profile-menu { position: relative; display: none; }
     .profile-trigger-btn { background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); color: var(--text-primary, #f0f2f5); padding: 6px 14px; border-radius: 4px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
@@ -210,6 +223,23 @@
           <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
         </a>
+
+
+        <!-- Notification Bell and Panel -->
+        <div class="notification-widget" id="notificationWidget">
+          <button type="button" id="notificationBellBtn" aria-expanded="false" aria-controls="notificationPanel" class="nav-icon-link notification-icon-link" title="Notifications" aria-label="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
+            <span id="notificationBadgeCount" class="notification-badge" aria-live="polite" aria-atomic="true"></span>
+          </button>
+          <section class="notification-panel" id="notificationPanel" aria-labelledby="notificationPanelTitle" hidden>
+            <div class="notification-panel-header">
+              <strong id="notificationPanelTitle">Notifications</strong>
+              <button type="button" id="closeNotificationPanel" aria-label="Close notifications">&times;</button>
+            </div>
+            <p id="notificationPanelStatus">No notifications yet.</p>
+            <ul id="notificationList" class="notification-list"></ul>
+          </section>
+        </div>
 
         <!-- Cart Icon -->
         <a href="./cart.html" class="nav-icon-link cart-trigger-link" id="cartTriggerLink" title="Review Cart">
@@ -395,6 +425,92 @@
       <span>Official Archival Repository</span>
     </div>
   </footer>
+
+  <script>
+    // Notification producers can call setNotificationUnreadCount(count), or
+    // dispatch CustomEvent('notifications-updated', { detail: { unreadCount: count } }).
+    (() => {
+      const storageKey = 'libraryreeds_notification_unread_count';
+      const badge = document.getElementById('notificationBadgeCount');
+      const bell = document.getElementById('notificationBellBtn');
+      const widget = document.getElementById('notificationWidget');
+      const panel = document.getElementById('notificationPanel');
+      const status = document.getElementById('notificationPanelStatus');
+      const list = document.getElementById('notificationList');
+      const closeBtn = document.getElementById('closeNotificationPanel');
+      if (!badge || !bell || !widget || !panel || !status || !list || !closeBtn) return;
+      let unreadCount = 0;
+      function updatePanelStatus() {
+        status.hidden = list.children.length > 0;
+        status.textContent = unreadCount > 0
+          ? `${unreadCount} unread notification${unreadCount === 1 ? '' : 's'}.`
+          : 'No notifications yet.';
+      }
+      function closePanel(returnFocus = false) {
+        panel.hidden = true;
+        bell.setAttribute('aria-expanded', 'false');
+        if (returnFocus) bell.focus();
+      }
+      bell.addEventListener('click', (event) => {
+        event.stopPropagation();
+        panel.hidden = !panel.hidden;
+        bell.setAttribute('aria-expanded', String(!panel.hidden));
+      });
+      panel.addEventListener('click', (event) => event.stopPropagation());
+      closeBtn.addEventListener('click', () => closePanel(true));
+      document.addEventListener('click', (event) => {
+        if (!widget.contains(event.target)) closePanel();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !panel.hidden) closePanel(true);
+      });
+      window.setNotificationItems = (items) => {
+        list.replaceChildren();
+        if (Array.isArray(items)) items.forEach((item) => {
+          const message = typeof item === 'string' ? item : item && (item.message || item.title || item.body);
+          if (typeof message !== 'string' || !message.trim()) return;
+          const row = document.createElement('li');
+          row.textContent = message;
+          list.appendChild(row);
+        });
+        updatePanelStatus();
+      };
+      function normalizeCount(value) {
+        const number = Number(value);
+        return Number.isFinite(number) ? Math.max(0, Math.floor(number)) : 0;
+      }
+      function renderCount(value) {
+        const count = normalizeCount(value);
+        unreadCount = count;
+        updatePanelStatus();
+        badge.textContent = count > 99 ? '99+' : String(count);
+        badge.style.display = count > 0 ? 'inline-flex' : 'none';
+        badge.setAttribute('aria-label', `${count} unread notifications`);
+        bell.setAttribute('aria-label', count > 0 ? `Notifications, ${count} unread` : 'Notifications');
+        bell.title = count > 0 ? `Notifications (${count} unread)` : 'Notifications';
+      }
+      function refreshCount() {
+        try { renderCount(localStorage.getItem(storageKey)); }
+        catch (_) { renderCount(0); }
+      }
+      window.setNotificationUnreadCount = (value) => {
+        const count = normalizeCount(value);
+        try { localStorage.setItem(storageKey, String(count)); } catch (_) {}
+        renderCount(count);
+      };
+      window.addEventListener('notifications-updated', (event) => {
+        if (event.detail && Array.isArray(event.detail.notifications)) window.setNotificationItems(event.detail.notifications);
+        const count = event.detail && event.detail.unreadCount;
+        if (count !== undefined) window.setNotificationUnreadCount(count);
+        else refreshCount();
+      });
+      window.addEventListener('storage', (event) => {
+        if (event.key === storageKey || event.key === null) refreshCount();
+      });
+      window.addEventListener('pageshow', refreshCount);
+      refreshCount();
+    })();
+  </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
