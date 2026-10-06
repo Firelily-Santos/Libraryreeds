@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --bg-base: #0a0c10;
@@ -24,7 +25,6 @@
       --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Anti-flash auth loading guard */
     .nav-actions { visibility: hidden; }
     .nav-actions.auth-loaded { visibility: visible; }
 
@@ -32,36 +32,56 @@
     body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
 
     #siteAnnouncementBannerContainer {
-      overflow: hidden; white-space: nowrap; background: var(--accent-gold); color: var(--bg-base); font-size: 0.75rem; font-weight: 700; padding: 8px 16px; letter-spacing: 0.08em; text-transform: uppercase;
+      overflow: hidden;
+      background: var(--accent-gold);
+      color: var(--bg-base);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 8px 0;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      width: 100%;
+      display: none;
+      position: relative;
+      white-space: nowrap;
     }
 
-    .top-nav { border-bottom: 1px solid var(--border-subtle); background: rgba(10, 12, 16, 0.94); backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 100; }
-    .nav-container { max-width: 1400px; margin: 0 auto; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; }
-    .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; }
-    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
-    .brand-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary); letter-spacing: 0.06em; text-transform: uppercase; }
-    
-    .nav-actions { display: flex; align-items: center; gap: 24px; }
-    .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: var(--transition-smooth); }
-    .nav-link:hover, .nav-link.active { color: var(--accent-gold); }
-    
-    .cart-icon-link, .wishlist-icon-link { color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; position: relative; transition: var(--transition-smooth); }
-    .cart-icon-link:hover, .wishlist-icon-link:hover { color: var(--accent-gold); }
+    .marquee-track {
+      display: inline-block;
+      white-space: nowrap;
+      animation: smoothMarquee 22s linear infinite;
+      padding-left: 100%;
+    }
+
+    @keyframes smoothMarquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Unified Top Navigation & Profile Styles */
+    .top-nav { border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); background: rgba(10, 12, 16, 0.94); backdrop-filter: blur(14px); padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .brand-title { font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary, #f0f2f5); text-transform: uppercase; text-decoration: none; letter-spacing: 0.06em; }
+    .nav-actions { display: flex; gap: 20px; align-items: center; }
+    .nav-link { color: var(--text-secondary, #9ba1b0); text-decoration: none; font-size: 0.775rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.2s; }
+    .nav-link:hover, .nav-link.active { color: var(--accent-gold, #c5a880); }
+
+    .nav-icon-link { position: relative; color: var(--text-secondary, #9ba1b0); text-decoration: none; display: flex; align-items: center; transition: color 0.2s; }
+    .nav-icon-link:hover { color: var(--accent-gold, #c5a880); }
     .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent-gold); stroke-width: 2; }
 
+    /* Profile Menu Widget */
     .user-profile-menu { position: relative; display: none; }
-    .profile-trigger-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px 14px; border-radius: 3px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-    .nav-user-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
-    
-    .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 42px; width: 220px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 3px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
-    .dropdown-user-header { padding: 14px 16px; background: var(--bg-surface-elevated); border-bottom: 1px solid var(--border-subtle); }
-    .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--text-primary); }
-    .dropdown-user-email { font-size: 0.725rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
-    .dropdown-link-item { padding: 11px 16px; color: var(--text-secondary); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
-    .dropdown-link-item:hover { background: var(--bg-surface-elevated); color: var(--accent-gold); }
-    .auth-btn-nav { background: var(--accent-gold); color: var(--bg-base); padding: 9px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 2px; text-decoration: none; }
+    .profile-trigger-btn { background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); color: var(--text-primary, #f0f2f5); padding: 6px 14px; border-radius: 4px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+    .nav-user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold, #c5a880); }
 
-    /* Manuscript Progress Tracker Embedded Component Styles */
+    .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 44px; width: 220px; background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); border-radius: 4px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
+    .dropdown-user-header { padding: 14px 16px; background: var(--bg-surface-elevated, #161b26); border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); }
+    .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--text-primary, #f0f2f5); }
+    .dropdown-user-email { font-size: 0.725rem; color: var(--text-muted, #5d6373); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+    .dropdown-link-item { padding: 11px 16px; color: var(--text-secondary, #9ba1b0); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
+    .dropdown-link-item:hover { background: var(--bg-surface-elevated, #161b26); color: var(--accent-gold, #c5a880); }
+    .auth-btn-nav { background: var(--accent-gold, #c5a880); color: var(--bg-base, #0a0c10); padding: 8px 16px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 3px; text-decoration: none; }
+
     .tracker-wrapper { max-width: 1400px; margin: 32px auto 0; padding: 0 32px; width: 100%; }
     .tracker-container { background-color: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 32px; width: 100%; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4); }
     .tracker-container .header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
@@ -76,9 +96,7 @@
     @media(max-width: 900px) { .tracker-container .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
 
     .hero-main { max-width: 1400px; margin: 0 auto; padding: 48px 32px 80px; width: 100%; display: flex; flex-direction: column; gap: 56px; flex: 1; }
-    
     .hero-banner-box { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 64px 56px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; position: relative; overflow: hidden; }
-    .hero-banner-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 50%, rgba(197, 168, 128, 0.07), transparent 60%); pointer-events: none; }
     .hero-content { display: flex; flex-direction: column; gap: 20px; z-index: 1; }
     .hero-title { font-family: var(--font-serif); font-size: 3rem; font-weight: 500; color: var(--text-primary); line-height: 1.2; }
     .hero-subtitle { font-size: 1rem; color: var(--text-secondary); max-width: 700px; line-height: 1.6; }
@@ -124,18 +142,12 @@
 
     .book-cover-wrap { width: 120px; height: 175px; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; margin: 0 auto; }
     .book-cover-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
     .book-meta { display: flex; flex-direction: column; gap: 3px; width: 100%; }
     .book-item-title { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; color: var(--text-primary); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .book-item-author { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
     .book-item-price { font-family: var(--font-serif); font-size: 1rem; font-weight: 700; color: var(--accent-gold); margin-top: 2px; }
 
-    .btn-book-details {
-      display: inline-flex; align-items: center; justify-content: center;
-      background: var(--bg-surface-elevated); color: var(--accent-gold); border: 1px solid var(--border-focus);
-      padding: 6px 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
-      border-radius: 2px; text-decoration: none; transition: var(--transition-smooth); margin-top: 2px; width: 100%;
-    }
+    .btn-book-details { display: inline-flex; align-items: center; justify-content: center; background: var(--bg-surface-elevated); color: var(--accent-gold); border: 1px solid var(--border-focus); padding: 6px 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-radius: 2px; text-decoration: none; transition: var(--transition-smooth); margin-top: 2px; width: 100%; }
     .btn-book-details:hover { background: var(--accent-gold); color: var(--bg-base); }
 
     footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
@@ -147,65 +159,85 @@
     .footer-link:hover { color: var(--accent-gold); }
     .footer-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
     .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+  
+    .admin-controlled-img-error { display: none !important; }
+    
   </style>
 </head>
 <body>
 
   <div id="siteAnnouncementBannerContainer">
-    <div id="siteAnnouncementBannerText" style="text-align: center;">Welcome to Libraryreeds | Explore our catalog</div>
+    <div class="marquee-track" id="siteAnnouncementBannerText">Loading announcement...</div>
   </div>
 
   <nav class="top-nav">
-    <div class="nav-container">
-      <a href="./index.html" class="brand-group">
-        <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
-        <span class="brand-title">Libraryreeds</span>
-      </a>
-      <div class="nav-actions">
+    <a href="./index.html" class="brand-title">Libraryreeds</a>
+    <div class="nav-actions">
         <a href="./index.html" class="nav-link active">Home</a>
         <a href="./shop.html" class="nav-link">Shop</a>
         <a href="./fanart.html" class="nav-link">Fanart</a>
         <a href="./about.html" class="nav-link">About</a>
         <a href="./giftshop.html" class="nav-link">Gift Shop</a>
+        <a href="./membership.html" class="nav-link">Membership</a>
         <a href="./wishlist.html" class="wishlist-icon-link" title="Wishlist">
           <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
         </a>
-        <a href="./cart.html" class="cart-icon-link" title="Review Cart">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-          <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+
+        <!-- Notification Bell Icon with Badge & Chime -->
+        <div id="adminNotificationBell" style="position: relative; cursor: pointer; display: none;" title="Admin Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary, #9ba1b0);">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span id="notificationBadge" style="display: none; position: absolute; top: -6px; right: -8px; background: #ff6b6b; color: #fff; font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+
+            <!-- Dropdown List -->
+            <div id="notificationDropdown" style="display: none; position: absolute; right: 0; top: 32px; width: 300px; background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); border-radius: 4px; box-shadow: 0 16px 36px rgba(0,0,0,0.75); z-index: 300; flex-direction: column; overflow: hidden;">
+                <div style="padding: 10px 14px; background: var(--bg-surface-elevated, #161b26); border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--accent-gold, #c5a880);">Notifications</span>
+                    <button id="clearNotificationsBtn" style="background: transparent; border: none; color: var(--text-muted); font-size: 0.65rem; cursor: pointer; text-transform: uppercase;">Mark Read</button>
+                </div>
+                <div id="notificationDropdownList" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column;">
+                    <p style="padding: 14px; color: var(--text-muted, #5d6373); font-size: 0.75rem; text-align: center;">No new alerts</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shopping Cart Icon with Badge -->
+        <a href="./cart.html" class="nav-icon-link" title="Shopping Cart">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold, #c5a880); color: var(--bg-base, #0a0c10); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
         </a>
+
+        <!-- Auth / User Profile Trigger -->
         <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
         <div class="user-profile-menu" id="navProfileMenu">
-          <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
-            <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
-            <span id="navUserName">Patron</span>
-          </button>
-          <div class="dropdown-menu-popover" id="profileDropdown">
-            <div class="dropdown-user-header">
-              <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
-              <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
+            <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
+                <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+                <span id="navUserName">Patron</span>
+            </button>
+            <div class="dropdown-menu-popover" id="profileDropdown">
+                <div class="dropdown-user-header">
+                    <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
+                    <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
+                </div>
+                <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+                <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
             </div>
-            <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
-            <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
-          </div>
         </div>
-      </div>
     </div>
   </nav>
 
-  <!-- Manuscript Progress Tracker Component -->
   <div class="tracker-wrapper">
       <div class="tracker-container">
           <div class="header">
               <span class="title" id="trackerTitleText">Manuscript Progress</span>
               <span class="completion-percentage" id="completionPercentage">0%</span>
           </div>
-
           <div class="progress-track">
               <div class="progress-fill" id="progressFill"></div>
           </div>
-
           <div class="metrics-grid">
               <div class="metric-item">
                   <span class="metric-label">Current Word Count</span>
@@ -231,23 +263,22 @@
     <section class="hero-banner-box">
       <div class="hero-content">
         <h1 class="hero-title" id="homeHeroTitleText">Unearth Your Next Obsession.</h1>
-        <p class="hero-subtitle">Romance, mystery, magic, and modern love—bound for the discerning reader.</p>
-        <a href="./shop.html" class="hero-cta-btn">Shop the Books</a>
+        <p class="hero-subtitle" id="homeHeroSubtitleText">Romance, mystery, magic, and modern love—bound for the discerning reader.</p>
+        <a href="./shop.html" class="hero-cta-btn" id="homeHeroCtaBtn">Shop the Books</a>
       </div>
       <div class="hero-visual">
         <div class="hero-visual-card">
-          <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80" alt="Dark Fantasy Volume">
+          <img id="homeHeroImageOne" src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80" alt="Dark Fantasy Volume">
         </div>
         <div class="hero-visual-card">
-          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80" alt="Archival Edition">
+          <img id="homeHeroImageTwo" src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80" alt="Archival Edition">
         </div>
       </div>
     </section>
 
-    <!-- Row 1: Featured Books -->
     <section style="display: flex; flex-direction: column; gap: 24px;">
       <div class="section-header">
-        <h2 class="section-title">Featured Books</h2>
+        <h2 class="section-title" id="featuredBooksTitleText">Featured Books</h2>
         <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View All Volumes &rarr;</a>
       </div>
       <div class="books-grid" id="homeJourneyGrid">
@@ -255,10 +286,9 @@
       </div>
     </section>
 
-    <!-- Row 2: Released / New Releases -->
     <section style="display: flex; flex-direction: column; gap: 24px;">
       <div class="section-header">
-        <h2 class="section-title">Released / New Releases</h2>
+        <h2 class="section-title" id="newReleasesTitleText">Released / New Releases</h2>
         <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View All Volumes &rarr;</a>
       </div>
       <div class="books-grid" id="homeFreshGrid">
@@ -266,10 +296,9 @@
       </div>
     </section>
 
-    <!-- Row 3: Popular / Bestsellers -->
     <section style="display: flex; flex-direction: column; gap: 24px;">
       <div class="section-header">
-        <h2 class="section-title">Popular / Bestsellers</h2>
+        <h2 class="section-title" id="popularBooksTitleText">Popular / Bestsellers</h2>
         <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View All Volumes &rarr;</a>
       </div>
       <div class="books-grid" id="homeFavoritesGrid">
@@ -277,29 +306,28 @@
       </div>
     </section>
 
-    <!-- Middle Section: Newsletter Sign-up & Why Buy Direct Perks -->
     <section class="perks-newsletter-section">
       <div class="perks-grid">
         <div class="perk-item">
-          <h4 class="perk-title">Support Independent</h4>
-          <p class="perk-desc">Direct purchases ensure authors and creators get the maximum support for future works.</p>
+          <h4 class="perk-title" id="homePerkOneTitle">Support Independent</h4>
+          <p class="perk-desc" id="homePerkOneDesc">Direct purchases ensure authors and creators get the maximum support for future works.</p>
         </div>
         <div class="perk-item">
-          <h4 class="perk-title">Exclusive Editions</h4>
-          <p class="perk-desc">Access special book bindings, signed copies, and custom merchandise found nowhere else.</p>
+          <h4 class="perk-title" id="homePerkTwoTitle">Exclusive Editions</h4>
+          <p class="perk-desc" id="homePerkTwoDesc">Access special book bindings, signed copies, and custom merchandise found nowhere else.</p>
         </div>
         <div class="perk-item">
-          <h4 class="perk-title">Secure Vault Shipping</h4>
-          <p class="perk-desc">Carefully packaged and tracked safely straight from our repository to your personal shelf.</p>
+          <h4 class="perk-title" id="homePerkThreeTitle">Secure Vault Shipping</h4>
+          <p class="perk-desc" id="homePerkThreeDesc">Carefully packaged and tracked safely straight from our repository to your personal shelf.</p>
         </div>
         <div class="perk-item">
-          <h4 class="perk-title">Community Perks</h4>
-          <p class="perk-desc">Join our reader community to submit fanart, review rare volumes, and unlock insider updates.</p>
+          <h4 class="perk-title" id="homePerkFourTitle">Community Perks</h4>
+          <p class="perk-desc" id="homePerkFourDesc">Join our reader community to submit fanart, review rare volumes, and unlock insider updates.</p>
         </div>
       </div>
       <div class="newsletter-box">
-        <h3 class="newsletter-title">Join the Archive Dispatch</h3>
-        <p class="newsletter-desc">Subscribe to receive early chapter previews, release date announcements, and private sales straight to your inbox.</p>
+        <h3 class="newsletter-title" id="homeNewsletterTitle">Join the Archive Dispatch</h3>
+        <p class="newsletter-desc" id="homeNewsletterDesc">Subscribe to receive early chapter previews, release date announcements, and private sales straight to your inbox.</p>
         <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to Libraryreeds!');">
           <input type="email" class="newsletter-input" placeholder="Enter your email address..." required>
           <button type="submit" class="newsletter-btn">Subscribe</button>
@@ -307,10 +335,9 @@
       </div>
     </section>
 
-    <!-- Row 4: The Complete Collection -->
     <section style="display: flex; flex-direction: column; gap: 24px;">
       <div class="section-header">
-        <h2 class="section-title">The Complete Collection</h2>
+        <h2 class="section-title" id="completeCollectionTitleText">The Complete Collection</h2>
         <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View Full Shop Page &rarr;</a>
       </div>
       <div class="books-grid" id="homeCompleteGrid">
@@ -323,7 +350,7 @@
     <div class="footer-container">
       <div class="footer-col">
         <h4 class="footer-col-title">Libraryreeds</h4>
-        <p class="footer-text">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
+        <p class="footer-text" id="homeFooterText">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
       </div>
       <div class="footer-col">
         <h4 class="footer-col-title">Quick Shortcuts</h4>
@@ -333,20 +360,21 @@
           <li><a href="./fanart.html" class="footer-link">Fanart Gallery</a></li>
           <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
           <li><a href="./giftshop.html" class="footer-link">Gift Shop</a></li>
+          <li><a href="./membership.html" class="footer-link">Membership</a></li>
           <li><a href="./account.html" class="footer-link">Master Account Center</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <span>&copy; 2026 Libraryreeds. All rights reserved.</span>
-      <span>Project fandomart-92133</span>
+      <span id="homeFooterProjectText">Project fandomart-92133</span>
     </div>
   </footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, collection, onSnapshot, query, orderBy, limit, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
@@ -360,6 +388,43 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const ADMIN_EMAIL = "firelily@libraryreeds.com";
+
+    function playNotificationSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
+        oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); 
+
+        gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.5);
+      } catch (e) {
+        console.warn("Audio Context blocked or unsupported:", e);
+      }
+    }
+
+    onSnapshot(doc(db, "settings", "announcement_home"), (snap) => {
+        const container = document.getElementById('siteAnnouncementBannerContainer');
+        const textEl = document.getElementById('siteAnnouncementBannerText');
+        if (!container || !textEl) return;
+
+        if (snap.exists() && snap.data().enabled && snap.data().text) {
+            container.style.display = "block";
+            textEl.textContent = snap.data().text;
+        } else {
+            container.style.display = "none";
+        }
+    });
 
     onSnapshot(doc(db, "settings", "manuscript_progress"), (snap) => {
         const percentageEl = document.getElementById('completionPercentage');
@@ -383,13 +448,6 @@
             if (chapterEl) chapterEl.textContent = data.currentChapter || 'Chapter 1';
             if (dateEl) dateEl.textContent = data.targetCompletionDate || 'TBD';
             if (velocityEl) velocityEl.textContent = data.writingVelocity ? `${parseInt(data.writingVelocity).toLocaleString()} words/day` : '-- words/day';
-        } else {
-            if (percentageEl) percentageEl.textContent = `0%`;
-            if (fillEl) fillEl.style.width = `0%`;
-            if (wordsEl) wordsEl.textContent = `0 / 80,000`;
-            if (chapterEl) chapterEl.textContent = `Chapter 1`;
-            if (dateEl) dateEl.textContent = `TBD`;
-            if (velocityEl) velocityEl.textContent = `-- words/day`;
         }
     });
 
@@ -422,6 +480,86 @@
     onAuthStateChanged(auth, async (user) => {
       const navActions = document.querySelector('.nav-actions');
       if (navActions) navActions.classList.add('auth-loaded');
+
+      const bell = document.getElementById('adminNotificationBell');
+      const dropdown = document.getElementById('notificationDropdown');
+      const clearBtn = document.getElementById('clearNotificationsBtn');
+
+      const isAdmin = user && (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || user.email.toLowerCase().includes('admin'));
+
+      if (bell) {
+        if (isAdmin) {
+          bell.style.display = 'flex';
+
+          bell.onclick = (e) => {
+            e.stopPropagation();
+            dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
+          };
+          document.addEventListener('click', () => {
+            if (dropdown) dropdown.style.display = "none";
+          });
+          if (dropdown) {
+            dropdown.onclick = (e) => e.stopPropagation();
+          }
+
+          let lastNotificationCount = null;
+          const notificationQuery = query(collection(db, "admin_notifications"), orderBy("timestamp", "desc"), limit(15));
+
+          onSnapshot(notificationQuery, (snapshot) => {
+            const badge = document.getElementById('notificationBadge');
+            const listContainer = document.getElementById('notificationDropdownList');
+            if (!badge || !listContainer) return;
+
+            let unreadCount = 0;
+            let html = "";
+
+            snapshot.forEach((docSnap) => {
+              const note = docSnap.data();
+              if (!note.read) unreadCount++;
+
+              const timeStr = note.timestamp ? new Date(note.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now';
+
+              html += `
+                <div style="padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); background: ${note.read ? 'transparent' : 'var(--bg-surface-elevated)'}; display: flex; flex-direction: column; gap: 4px;">
+                  <span style="font-size: 0.8rem; color: var(--text-primary); line-height: 1.4;">${note.message || 'New activity'}</span>
+                  <span style="font-size: 0.65rem; color: var(--accent-gold);">${timeStr}</span>
+                </div>
+              `;
+            });
+
+            if (snapshot.empty) {
+              listContainer.innerHTML = `<p style="padding: 16px; color: var(--text-muted); font-size: 0.8rem; text-align: center;">No notifications found</p>`;
+              badge.style.display = "none";
+            } else {
+              listContainer.innerHTML = html;
+              if (unreadCount > 0) {
+                badge.textContent = unreadCount;
+                badge.style.display = "flex";
+
+                if (lastNotificationCount !== null && unreadCount > lastNotificationCount) {
+                  playNotificationSound();
+                }
+              } else {
+                badge.style.display = "none";
+              }
+            }
+            lastNotificationCount = unreadCount;
+          });
+
+          if (clearBtn) {
+            clearBtn.onclick = async () => {
+              const snaps = await getDocs(notificationQuery);
+              snaps.forEach(async (d) => {
+                if (!d.data().read) {
+                  await updateDoc(doc(db, "admin_notifications", d.id), { read: true });
+                }
+              });
+            };
+          }
+        } else {
+          bell.style.display = 'none';
+        }
+      }
 
       if (user) {
         if (navLoginBtn) navLoginBtn.style.display = "none";
@@ -487,29 +625,85 @@
       });
     }
 
-    onSnapshot(doc(db, "settings", "announcement"), (snap) => {
-      if (snap.exists()) {
-        const data = snap.data();
-        const container = document.getElementById('siteAnnouncementBannerContainer');
-        if (container) {
-          if (data.behavior === 'scroll-left') {
-            container.innerHTML = `<marquee direction="left" scrollamount="5">${data.bannerText || ''}</marquee>`;
-          } else if (data.behavior === 'scroll-right') {
-            container.innerHTML = `<marquee direction="right" scrollamount="5">${data.bannerText || ''}</marquee>`;
-          } else {
-            container.innerHTML = `<div style="text-align: center;">${data.bannerText || ''}</div>`;
-          }
+    function setTextFromAdmin(id, value) {
+      const el = document.getElementById(id);
+      if (el && value !== undefined && value !== null && String(value).trim() !== "") {
+        el.textContent = String(value);
+      }
+    }
+
+    function setLinkFromAdmin(id, textValue, hrefValue) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (textValue !== undefined && textValue !== null && String(textValue).trim() !== "") {
+        el.textContent = String(textValue);
+      }
+      if (hrefValue !== undefined && hrefValue !== null && String(hrefValue).trim() !== "") {
+        el.href = String(hrefValue);
+      }
+    }
+
+    function setImageFromAdmin(id, value, altValue) {
+      const img = document.getElementById(id);
+      if (!img || value === undefined || value === null || String(value).trim() === "") return;
+      img.classList.remove("admin-controlled-img-error");
+      img.onerror = () => img.classList.add("admin-controlled-img-error");
+      img.src = String(value);
+      if (altValue !== undefined && altValue !== null && String(altValue).trim() !== "") {
+        img.alt = String(altValue);
+      }
+    }
+
+    function pickAdminValue(data, keys) {
+      for (const key of keys) {
+        if (data && data[key] !== undefined && data[key] !== null && String(data[key]).trim() !== "") {
+          return data[key];
         }
       }
-    });
+      return "";
+    }
 
-    onSnapshot(doc(db, "settings", "home_cms"), (snap) => {
-      if (snap.exists()) {
-        const d = snap.data();
-        const heroTitle = document.getElementById('homeHeroTitleText');
-        if (heroTitle && d.heroTitle) heroTitle.textContent = d.heroTitle;
-      }
-    });
+    function applyHomeAdminSettings(data = {}) {
+      setTextFromAdmin("homeHeroTitleText", pickAdminValue(data, ["heroTitle", "homeHeroTitle", "title"]));
+      setTextFromAdmin("homeHeroSubtitleText", pickAdminValue(data, ["heroSubtitle", "homeHeroSubtitle", "subtitle", "description"]));
+      setLinkFromAdmin(
+        "homeHeroCtaBtn",
+        pickAdminValue(data, ["heroButtonText", "heroCtaText", "ctaText", "buttonText"]),
+        pickAdminValue(data, ["heroButtonLink", "heroCtaHref", "ctaHref", "ctaLink"])
+      );
+
+      setImageFromAdmin("homeHeroImageOne", pickAdminValue(data, ["heroImage1", "heroImageOne", "homeHeroImage1", "bannerImage1", "image1"]), "Admin hero image one");
+      setImageFromAdmin("homeHeroImageTwo", pickAdminValue(data, ["heroImage2", "heroImageTwo", "homeHeroImage2", "bannerImage2", "image2"]), "Admin hero image two");
+
+      setTextFromAdmin("featuredBooksTitleText", pickAdminValue(data, ["featuredTitle", "featuredBooksTitle"]));
+      setTextFromAdmin("newReleasesTitleText", pickAdminValue(data, ["newReleasesTitle", "releasedTitle"]));
+      setTextFromAdmin("popularBooksTitleText", pickAdminValue(data, ["popularTitle", "bestsellersTitle"]));
+      setTextFromAdmin("completeCollectionTitleText", pickAdminValue(data, ["completeCollectionTitle", "collectionTitle"]));
+
+      setTextFromAdmin("homePerkOneTitle", pickAdminValue(data, ["perkOneTitle", "perk1Title"]));
+      setTextFromAdmin("homePerkOneDesc", pickAdminValue(data, ["perkOneDesc", "perk1Desc"]));
+      setTextFromAdmin("homePerkTwoTitle", pickAdminValue(data, ["perkTwoTitle", "perk2Title"]));
+      setTextFromAdmin("homePerkTwoDesc", pickAdminValue(data, ["perkTwoDesc", "perk2Desc"]));
+      setTextFromAdmin("homePerkThreeTitle", pickAdminValue(data, ["perkThreeTitle", "perk3Title"]));
+      setTextFromAdmin("homePerkThreeDesc", pickAdminValue(data, ["perkThreeDesc", "perk3Desc"]));
+      setTextFromAdmin("homePerkFourTitle", pickAdminValue(data, ["perkFourTitle", "perk4Title"]));
+      setTextFromAdmin("homePerkFourDesc", pickAdminValue(data, ["perkFourDesc", "perk4Desc"]));
+
+      setTextFromAdmin("homeNewsletterTitle", pickAdminValue(data, ["newsletterTitle", "mailingListTitle"]));
+      setTextFromAdmin("homeNewsletterDesc", pickAdminValue(data, ["newsletterDesc", "newsletterDescription", "mailingListDesc"]));
+      setTextFromAdmin("homeFooterText", pickAdminValue(data, ["footerText", "siteFooterText"]));
+      setTextFromAdmin("homeFooterProjectText", pickAdminValue(data, ["footerProjectText", "projectText"]));
+    }
+
+    function watchAdminSettingsDoc(docName) {
+      onSnapshot(doc(db, "settings", docName), (snap) => {
+        if (snap.exists()) applyHomeAdminSettings(snap.data());
+      }, (err) => console.warn(`Settings listener failed for ${docName}:`, err));
+    }
+
+    // These match common admin settings document names so saved admin edits work again.
+    ["home_cms", "homepage", "home_page", "site_home", "site_content"].forEach(watchAdminSettingsDoc);
+
 
     function renderBookCards(gridElement, booksArray) {
       if (!gridElement) return;
@@ -519,29 +713,29 @@
           const card = document.createElement('div');
           card.className = 'book-card';
           card.style.cursor = 'pointer';
-          
+
           card.innerHTML = `
             <div class="book-cover-wrap">
-              <img src="${b.coverUrl || ''}" alt="${b.title || 'Book'}" class="book-cover-img">
+              <img src="${b.coverUrl || b.imageUrl || b.coverImage || ''}" alt="${b.title || 'Book'}" class="book-cover-img" onerror="this.classList.add('admin-controlled-img-error');">
             </div>
             <div class="book-meta">
               <span class="book-item-author">${b.author || 'Author'} (Vol. ${b.volumeNumber || 1})</span>
               <h3 class="book-item-title">${b.title || 'Untitled'}</h3>
               <span class="book-item-price">$${parseFloat(b.price || 0).toFixed(2)}</span>
             </div>
-            <a href="book.html?id=${b.id}" class="btn-book-details">View Book Details</a>
+            <a href="book.html?id=${b.id}&type=${b.type || b.category || 'book'}" class="btn-book-details">View Book Details</a>
           `;
 
           card.addEventListener('click', (e) => {
             if (!e.target.closest('a')) {
-              window.location.href = `book.html?id=${b.id}`;
+              window.location.href = `book.html?id=${b.id}&type=${b.type || b.category || 'book'}`;
             }
           });
 
           gridElement.appendChild(card);
         });
       } else {
-        gridElement.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available in this section.</p>`;
+        gridElement.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
       }
     }
 
@@ -569,12 +763,6 @@
 
           let completeBooks = [...booksArray];
           renderBookCards(completeGrid, completeBooks.slice(4, 8).length > 0 ? completeBooks.slice(4, 8) : completeBooks.slice(0, 4));
-
-        } else {
-          if (journeyGrid) journeyGrid.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
-          if (freshGrid) freshGrid.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
-          if (favoritesGrid) favoritesGrid.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
-          if (completeGrid) completeGrid.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
         }
       });
     }

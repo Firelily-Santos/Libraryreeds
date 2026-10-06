@@ -359,6 +359,84 @@
       .cover-viewport { width: 200px; }
       .nav-search-container { display: none; }
     }
+  
+    /* Locked detail-page layout: keeps books and item details in the same 3-column view */
+    .pdp-page-container .pdp-wrapper {
+      max-width: 1200px !important;
+      margin: 0 auto !important;
+      padding: 0 24px !important;
+      display: grid !important;
+      grid-template-columns: 360px minmax(0, 1fr) 320px !important;
+      gap: 48px !important;
+      align-items: start !important;
+    }
+
+    .pdp-page-container .media-card {
+      grid-column: 1 !important;
+      grid-row: 1 !important;
+    }
+
+    .pdp-page-container .info-card {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+      min-width: 0 !important;
+    }
+
+    .pdp-page-container .buy-card {
+      grid-column: 3 !important;
+      grid-row: 1 !important;
+      width: 100% !important;
+      max-width: 320px !important;
+      justify-self: end !important;
+      align-self: start !important;
+      position: sticky !important;
+      top: 40px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 20px !important;
+      margin-top: 0 !important;
+    }
+
+    .pdp-page-container .buy-card .price-action-group,
+    .pdp-page-container .buy-card .stock-indicator,
+    .pdp-page-container .buy-card .price-header {
+      position: static !important;
+      z-index: auto !important;
+    }
+
+    .pdp-page-container .buy-card .stock-indicator {
+      margin-top: 2px !important;
+      width: fit-content !important;
+      white-space: nowrap !important;
+    }
+
+    .pdp-page-container .buy-card .coupon-box,
+    .pdp-page-container .buy-card .cta-stack,
+    .pdp-page-container .buy-card .btn-unlimited-action,
+    .pdp-page-container .buy-card .btn-primary-action,
+    .pdp-page-container .buy-card .btn-buy-now-action,
+    .pdp-page-container .buy-card .btn-gift-action,
+    .pdp-page-container .buy-card .btn-wishlist-action {
+      max-width: 100% !important;
+    }
+
+    @media (max-width: 1024px) {
+      .pdp-page-container .pdp-wrapper {
+        grid-template-columns: 1fr !important;
+        gap: 32px !important;
+      }
+
+      .pdp-page-container .media-card,
+      .pdp-page-container .info-card,
+      .pdp-page-container .buy-card {
+        grid-column: auto !important;
+        grid-row: auto !important;
+        max-width: none !important;
+        justify-self: stretch !important;
+        position: static !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1370,7 +1448,7 @@
       loadDynamicPromoBanner();
     }
 
-    loadItemDetails();
+    loadItemDetails().finally(() => { if (typeof lockLibraryreedsDetailLayout === 'function') lockLibraryreedsDetailLayout(); });
 
     const formatOptions = document.querySelectorAll('.format-option');
     formatOptions.forEach(opt => {
@@ -1497,5 +1575,52 @@
       syncNavBadges();
     });
   </script>
+
+  <script>
+    function lockLibraryreedsDetailLayout() {
+      const wrapper = document.querySelector('.pdp-wrapper');
+      const media = document.querySelector('.media-card');
+      const info = document.querySelector('.info-card');
+      const buy = document.querySelector('.buy-card');
+      if (!wrapper || !media || !info || !buy) return;
+
+      if (window.matchMedia('(min-width: 1025px)').matches) {
+        wrapper.style.display = 'grid';
+        wrapper.style.gridTemplateColumns = '360px minmax(0, 1fr) 320px';
+        wrapper.style.gap = '48px';
+        wrapper.style.alignItems = 'start';
+
+        media.style.gridColumn = '1';
+        media.style.gridRow = '1';
+
+        info.style.gridColumn = '2';
+        info.style.gridRow = '1';
+
+        buy.style.gridColumn = '3';
+        buy.style.gridRow = '1';
+        buy.style.width = '100%';
+        buy.style.maxWidth = '320px';
+        buy.style.justifySelf = 'end';
+        buy.style.alignSelf = 'start';
+        buy.style.position = 'sticky';
+        buy.style.top = '40px';
+        buy.style.display = 'flex';
+        buy.style.flexDirection = 'column';
+      } else {
+        wrapper.style.display = 'grid';
+        wrapper.style.gridTemplateColumns = '1fr';
+        media.style.gridColumn = '';
+        info.style.gridColumn = '';
+        buy.style.gridColumn = '';
+        buy.style.maxWidth = '';
+        buy.style.position = 'static';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', lockLibraryreedsDetailLayout);
+    window.addEventListener('load', lockLibraryreedsDetailLayout);
+    window.addEventListener('resize', lockLibraryreedsDetailLayout);
+  </script>
+
 </body>
 </html>

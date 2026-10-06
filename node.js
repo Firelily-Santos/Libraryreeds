@@ -1,43 +1,913 @@
-const express = require('express');
-const path = require('path');
-const Stripe = require('stripe');
-require('dotenv').config();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libraryreeds | Gift Shop &amp; Digital Cards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0c10;
+            --bg-surface: #11141c;
+            --bg-surface-elevated: #161b26;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-focus: rgba(197, 168, 128, 0.4);
+            --text-primary: #f0f2f5;
+            --text-secondary: #9ba1b0;
+            --text-muted: #5d6373;
+            --accent-gold: #c5a880;
+            --accent-gold-hover: #d8be9b;
+            --font-serif: "Cormorant Garamond", Georgia, serif;
+            --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-const app = express();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+        .nav-actions { visibility: hidden; }
+        .nav-actions.auth-loaded { visibility: visible; }
 
-// Middleware
-app.use(express.json());
-// Serve static HTML/assets from the "public" directory
-app.use(express.static(path.join(__dirname, 'public')));
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
 
-// Cancellation Endpoint
-app.post('/api/cancel-subscription', async (req, res) => {
-  const { subscriptionId } = req.body;
+        #siteAnnouncementBannerContainer {
+            overflow: hidden; background: var(--accent-gold); color: var(--bg-base); font-size: 0.75rem; font-weight: 700; padding: 8px 0; letter-spacing: 0.08em; text-transform: uppercase; width: 100%; display: none; position: relative; white-space: nowrap;
+        }
 
-  if (!subscriptionId) {
-    return res.status(400).json({ error: 'Subscription ID is required.' });
-  }
+        .marquee-track {
+            display: inline-block; white-space: nowrap; animation: smoothMarquee 22s linear infinite; padding-left: 100%;
+        }
 
-  try {
-    // Option A: Cancel at end of current billing period (Standard approach)
-    const subscription = await stripe.subscriptions.update(subscriptionId, {
-      cancel_at_period_end: true,
-    });
+        @keyframes smoothMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
 
-    // Option B: Cancel immediately and revoke access right now
-    // const subscription = await stripe.subscriptions.cancel(subscriptionId);
+        .top-nav { border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); background: rgba(10, 12, 16, 0.94); backdrop-filter: blur(14px); padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .brand-title { font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary, #f0f2f5); text-transform: uppercase; text-decoration: none; letter-spacing: 0.06em; }
+        .nav-container { max-width: 1400px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+        .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
 
-    return res.status(200).json({
-      status: subscription.status,
-      cancel_at_period_end: subscription.cancel_at_period_end,
-    });
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
-});
+        .nav-actions { display: flex; gap: 20px; align-items: center; }
+        .nav-link { color: var(--text-secondary, #9ba1b0); text-decoration: none; font-size: 0.775rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.2s; }
+        .nav-link:hover, .nav-link.active { color: var(--accent-gold, #c5a880); }
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+        .nav-icon-link { position: relative; display: inline-flex; align-items: center; color: var(--text-secondary, #9ba1b0); text-decoration: none; transition: color 0.2s; cursor: pointer; }
+        .nav-icon-link:hover { color: var(--accent-gold, #c5a880); }
+        .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent-gold); stroke-width: 2; }
+
+        /* Profile Menu Widget */
+        .user-profile-menu { position: relative; display: none; }
+        .profile-trigger-btn { background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); color: var(--text-primary, #f0f2f5); padding: 6px 14px; border-radius: 4px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .nav-user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold, #c5a880); }
+
+        .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 44px; width: 220px; background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); border-radius: 4px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
+        .dropdown-user-header { padding: 14px 16px; background: var(--bg-surface-elevated, #161b26); border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); }
+        .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--text-primary, #f0f2f5); }
+        .dropdown-user-email { font-size: 0.725rem; color: var(--text-muted, #5d6373); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+        .dropdown-link-item { padding: 11px 16px; color: var(--text-secondary, #9ba1b0); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
+        .dropdown-link-item:hover { background: var(--bg-surface-elevated, #161b26); color: var(--accent-gold, #c5a880); }
+        .auth-btn-nav { background: var(--accent-gold, #c5a880); color: var(--bg-base, #0a0c10); padding: 8px 16px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 3px; text-decoration: none; }
+
+        .hero { position: relative; background: linear-gradient(rgba(10, 12, 16, 0.7), rgba(10, 12, 16, 0.7)), url('https://cdn.phototourl.com/free/2026-09-04-02e2a9ae-5a0f-4aff-a66a-8dd60cb157a0.jpg') no-repeat center center/cover; color: var(--text-primary); text-align: center; padding: 6rem 2rem; }
+        .hero h1 { font-family: var(--font-serif); font-size: 3rem; font-weight: 500; margin-bottom: 1rem; }
+        .hero p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; color: var(--text-secondary); }
+
+        .trust-strip { background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle); padding: 20px 32px; }
+        .trust-strip-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+        .trust-item { display: flex; align-items: center; gap: 14px; }
+        .trust-icon-box { width: 40px; height: 40px; border-radius: 4px; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; color: var(--accent-gold); flex-shrink: 0; }
+        .trust-icon-box svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.75; }
+        .trust-text-group { display: flex; flex-direction: column; gap: 2px; }
+        .trust-title { font-size: 0.8rem; font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.04em; }
+        .trust-subtitle { font-size: 0.725rem; color: var(--text-secondary); }
+
+        .category-chips-wrapper { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 1.25rem; scrollbar-width: none; }
+        .category-chips-wrapper::-webkit-scrollbar { display: none; }
+        .category-chip { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: var(--text-secondary); padding: 8px 16px; border-radius: 9999px; font-size: 0.775rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; white-space: nowrap; transition: var(--transition-smooth); }
+        .category-chip:hover { border-color: var(--border-focus); color: var(--text-primary); }
+        .category-chip.active { background: var(--accent-gold); color: var(--bg-base); border-color: var(--accent-gold); }
+
+        .bestseller-section { background: var(--bg-surface-elevated); border: 1px solid var(--border-focus); border-radius: 8px; padding: 24px; margin-bottom: 3rem; }
+        .bestseller-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
+        .bestseller-header h3 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary); }
+        .bestseller-pill { background: rgba(197, 168, 128, 0.15); border: 1px solid var(--border-focus); color: var(--accent-gold); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 9999px; }
+
+        .container { max-width: 1200px; margin: 3rem auto; padding: 0 2rem; width: 100%; flex: 1; }
+        section { margin-bottom: 4rem; }
+        .section-header-row { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        h2 { font-family: var(--font-serif); font-size: 2rem; font-weight: 500; color: var(--text-primary); margin: 0; }
+
+        .filter-bar-container { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 12px 16px; border-radius: 6px; }
+        .filter-input, .filter-select { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px 12px; border-radius: 4px; font-family: var(--font-sans); font-size: 0.8rem; outline: none; transition: var(--transition-smooth); }
+        .filter-input:focus, .filter-select:focus { border-color: var(--border-focus); }
+        .filter-input { flex: 1; min-width: 200px; }
+        .filter-select { min-width: 140px; cursor: pointer; }
+        .filter-clear-btn { background: transparent; border: 1px solid var(--border-subtle); color: var(--text-secondary); padding: 8px 14px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-transform: uppercase; transition: var(--transition-smooth); }
+        .filter-clear-btn:hover { border-color: var(--border-focus); color: var(--accent-gold); }
+
+        .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+        .item-slot { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 16px; transition: var(--transition-smooth); }
+        .item-slot:hover { border-color: var(--border-focus); transform: translateY(-2px); }
+
+        .slot-img-wrap { position: relative; width: 100%; height: 260px; background: var(--bg-surface-elevated); border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        .slot-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+        .slot-badge { position: absolute; top: 10px; left: 10px; background: rgba(17, 20, 28, 0.88); backdrop-filter: blur(6px); border: 1px solid var(--border-subtle); color: var(--accent-gold); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 8px; border-radius: 9999px; z-index: 2; pointer-events: none; }
+        
+        .slot-meta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+        .slot-title { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; color: var(--text-primary); }
+        .slot-subtitle { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+        .slot-price-row { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+        .slot-price { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 700; color: var(--accent-gold); }
+
+        .btn-details, .view-btn { 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: var(--bg-surface-elevated); 
+            color: var(--accent-gold); 
+            border: 1px solid var(--border-focus); 
+            padding: 7px 12px; 
+            font-size: 0.68rem; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 0.06em; 
+            border-radius: 2px; 
+            text-decoration: none; 
+            transition: var(--transition-smooth); 
+            cursor: pointer; 
+        }
+        .btn-details:hover, .view-btn:hover { 
+            background: var(--accent-gold); 
+            color: var(--bg-base); 
+        }
+
+        .giftup-widget-slot {
+            border-color: var(--border-focus);
+            background: var(--bg-surface-elevated);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+            align-self: start;
+            height: auto;
+        }
+        .giftup-media-vertical {
+            position: relative;
+            width: 100%;
+            min-height: 220px;
+            border-radius: 4px;
+            overflow: visible;
+            background: #000;
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            padding: 8px;
+        }
+        .giftup-media-vertical img { width: 100%; height: auto; max-height: 260px; object-fit: contain; display: block; border-radius: 2px; }
+        .gift-up-target { width: 100% !important; min-height: 180px; }
+
+        .extra-25-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            opacity: 0;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            border-top: 1px solid transparent;
+            margin-top: 0;
+            padding-top: 0;
+        }
+        .item-slot.expanded-25 .extra-25-dropdown {
+            max-height: 120px;
+            opacity: 1;
+            border-top-color: var(--border-subtle);
+            margin-top: 10px;
+            padding-top: 8px;
+        }
+
+        .cart-drawer-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px);
+            z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+        }
+        .cart-drawer-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .cart-drawer {
+            position: fixed; top: 0; right: -420px; width: 100%; max-width: 400px; height: 100vh;
+            background: var(--bg-surface); border-left: 1px solid var(--border-subtle);
+            display: flex; flex-direction: column; z-index: 1000; transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -16px 0 36px rgba(0, 0, 0, 0.6);
+        }
+        .cart-drawer.open { right: 0; }
+
+        .cart-drawer-header { padding: 20px 24px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
+        .cart-drawer-title { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; color: var(--text-primary); }
+        .cart-drawer-close { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 4px; display: flex; align-items: center; }
+        .cart-drawer-close:hover { color: var(--accent-gold); }
+
+        .cart-drawer-body { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+        .cart-drawer-item { display: flex; gap: 12px; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 4px; }
+        .cart-drawer-item-img { width: 56px; height: 56px; border-radius: 2px; object-fit: cover; background: var(--bg-surface); }
+        .cart-drawer-item-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .cart-drawer-item-title { font-size: 0.825rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+        .cart-drawer-item-sub { font-size: 0.725rem; color: var(--text-secondary); }
+        .cart-drawer-item-remove { background: none; border: none; color: var(--text-muted); font-size: 0.7rem; cursor: pointer; text-align: left; }
+        .cart-drawer-item-remove:hover { color: #e5534b; }
+
+        .cart-drawer-footer { padding: 20px 24px; border-top: 1px solid var(--border-subtle); background: var(--bg-surface-elevated); display: flex; flex-direction: column; gap: 14px; }
+        .cart-drawer-subtotal { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; }
+        .cart-drawer-btn { display: flex; align-items: center; justify-content: center; background: var(--accent-gold); color: var(--bg-base); padding: 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-radius: 3px; text-decoration: none; border: none; cursor: pointer; transition: var(--transition-smooth); width: 100%; }
+        .cart-drawer-btn:hover { background: var(--accent-gold-hover); }
+
+        footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
+        .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border-subtle); }
+        .footer-col { display: flex; flex-direction: column; gap: 14px; }
+        .footer-col-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); text-transform: uppercase; }
+        .footer-links-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; }
+        .footer-link:hover { color: var(--accent-gold); }
+        .footer-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+        .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <div id="siteAnnouncementBannerContainer">
+        <div class="marquee-track" id="siteAnnouncementBannerText">Loading announcement...</div>
+    </div>
+
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="./index.html" class="brand-group">
+                <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
+                <span class="brand-title">Libraryreeds</span>
+            </a>
+            <div class="nav-actions">
+                <a href="./index.html" class="nav-link">Home</a>
+                <a href="./shop.html" class="nav-link">Shop</a>
+                <a href="./fanart.html" class="nav-link">Fanart</a>
+                <a href="./about.html" class="nav-link">About</a>
+                <a href="./giftshop.html" class="nav-link active">Gift Shop</a>
+                <a href="./membership.html" class="nav-link">Membership</a>
+                <a href="./wishlist.html" class="nav-icon-link wishlist-icon-link" title="Wishlist">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+                </a>
+                <a href="./cart.html" class="nav-icon-link cart-trigger-link" id="cartTriggerLink" title="Review Cart">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
+                </a>
+                <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
+                <div class="user-profile-menu" id="navProfileMenu">
+                    <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
+                        <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+                        <span id="navUserName">Patron</span>
+                    </button>
+                    <div class="dropdown-menu-popover" id="profileDropdown">
+                        <div class="dropdown-user-header">
+                            <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
+                            <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
+                        </div>
+                        <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+                        <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
+                        <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <h1>Welcome to Our Gift Shop</h1>
+        <p>Discover unique merchandise, digital perks, and virtual gift cards added by our curators.</p>
+    </section>
+
+    <div class="trust-strip">
+        <div class="trust-strip-container">
+            <div class="trust-item">
+                <div class="trust-icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                </div>
+                <div class="trust-text-group">
+                    <span class="trust-title">Instant Digital Delivery</span>
+                    <span class="trust-subtitle">Gift cards delivered directly to inbox</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </div>
+                <div class="trust-text-group">
+                    <span class="trust-title">Curated Archive Quality</span>
+                    <span class="trust-subtitle">Verified independent publishing items</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon-box">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <div class="trust-text-group">
+                    <span class="trust-title">Never Expiring Balance</span>
+                    <span class="trust-subtitle">Virtual gift credits stay active</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                </div>
+                <div class="trust-text-group">
+                    <span class="trust-title">Curator Support</span>
+                    <span class="trust-subtitle">Dedicated assistance for orders</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <section id="bestsellers" class="bestseller-section">
+            <div class="bestseller-header">
+                <h3>Curator's Bestsellers &amp; Top Picks</h3>
+                <span class="bestseller-pill">Indecisive? Start Here</span>
+            </div>
+            <div class="item-grid" id="bestsellerItemsGrid">
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Loading bestseller spotlights...</p>
+            </div>
+        </section>
+
+        <section id="featured">
+            <div class="section-header-row">
+                <h2>Featured Gift Shop Items &amp; Cards</h2>
+            </div>
+
+            <div class="category-chips-wrapper" id="categoryChipsContainer">
+                <button type="button" class="category-chip active" data-category="">All Categories</button>
+            </div>
+            
+            <div class="filter-bar-container" id="giftShopFilterBar">
+                <input type="text" id="filterSearchInput" class="filter-input" placeholder="Search items...">
+                <select id="filterCategorySelect" class="filter-select">
+                    <option value="">All Categories</option>
+                </select>
+                <select id="filterOccasionSelect" class="filter-select">
+                    <option value="">All Occasions</option>
+                </select>
+                <select id="filterPriceSelect" class="filter-select">
+                    <option value="">Any Price</option>
+                    <option value="under25">Under $25</option>
+                    <option value="25to50">$25 – $50</option>
+                    <option value="over50">Over $50</option>
+                </select>
+                <button type="button" id="filterClearBtn" class="filter-clear-btn">Reset</button>
+            </div>
+
+            <div class="item-grid" id="giftShopItemsGrid">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Loading gift shop inventory...</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-header">
+            <h3 class="cart-drawer-title">Your Cart</h3>
+            <button type="button" class="cart-drawer-close" id="cartDrawerCloseBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="cart-drawer-body" id="cartDrawerBody">
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Your cart is empty.</p>
+        </div>
+        <div class="cart-drawer-footer">
+            <div class="cart-drawer-subtotal">
+                <span>Subtotal</span>
+                <span id="cartDrawerSubtotal" style="color: var(--accent-gold);">$0.00</span>
+            </div>
+            <a href="./cart.html" class="cart-drawer-btn">View Full Cart &amp; Checkout</a>
+        </div>
+    </aside>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4 class="footer-col-title">Libraryreeds</h4>
+                <p class="footer-text">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-col-title">Quick Shortcuts</h4>
+                <ul class="footer-links-list">
+                    <li><a href="./index.html" class="footer-link">Home</a></li>
+                    <li><a href="./shop.html" class="footer-link">Browse Catalog</a></li>
+                    <li><a href="./fanart.html" class="footer-link">Fanart Gallery</a></li>
+                    <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
+                    <li><a href="./giftshop.html" class="footer-link">Gift Shop</a></li>
+                    <li><a href="./membership.html" class="footer-link">Membership</a></li>
+                    <li><a href="./account.html" class="footer-link">Master Account Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Libraryreeds. All rights reserved.</span>
+            <span>Official Archival Repository</span>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+    (function (g, i, f, t, u, p, s) {
+        g[u] = g[u] || function() { (g[u].q = g[u].q || []).push(arguments) };
+        p = i.createElement(f);
+        p.async = 1;
+        p.src = t;
+        s = i.getElementsByTagName(f)[0];
+        s.parentNode.insertBefore(p, s);
+    })(window, document, "script", "https://cdn.giftup.app/dist/gift-up.js", "giftup");
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+            authDomain: "libraryreeds-638f4.firebaseapp.com",
+            projectId: "libraryreeds-638f4",
+            storageBucket: "libraryreeds-638f4.firebasestorage.app",
+            messagingSenderId: "768304310517",
+            appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onSnapshot(doc(db, "settings", "announcement_gift"), (snap) => {
+            const container = document.getElementById('siteAnnouncementBannerContainer');
+            const textEl = document.getElementById('siteAnnouncementBannerText');
+            if (!container || !textEl) return;
+
+            if (snap.exists() && snap.data().enabled && snap.data().text) {
+                container.style.display = "block";
+                textEl.textContent = snap.data().text;
+            } else {
+                container.style.display = "none";
+            }
+        });
+
+        const navLoginBtn = document.getElementById("navLoginBtn");
+        const navProfileMenu = document.getElementById("navProfileMenu");
+        const navUserName = document.getElementById("navUserName");
+        const dropdownUserName = document.getElementById("dropdownUserName");
+        const dropdownUserEmail = document.getElementById("dropdownUserEmail");
+        const profileTriggerBtn = document.getElementById("profileTriggerBtn");
+        const profileDropdown = document.getElementById("profileDropdown");
+
+        onAuthStateChanged(auth, async (user) => {
+            const navActions = document.querySelector('.nav-actions');
+            if (navActions) navActions.classList.add('auth-loaded');
+
+            if (user) {
+                if (navLoginBtn) navLoginBtn.style.display = "none";
+                if (navProfileMenu) navProfileMenu.style.display = "block";
+
+                const displayName = user.displayName || user.email.split("@")[0];
+                if (navUserName) navUserName.textContent = displayName;
+                if (dropdownUserName) dropdownUserName.textContent = displayName;
+                if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
+
+                let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
+                if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
+                    try {
+                        const userDoc = await getDoc(doc(db, "users", user.uid));
+                        if (userDoc.exists() && userDoc.data().photoURL) resolvedAvatar = userDoc.data().photoURL;
+                    } catch(e) {}
+                }
+                if ((!resolvedAvatar || resolvedAvatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
+                    resolvedAvatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
+                }
+                if (resolvedAvatar) {
+                    localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
+                    document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => { img.src = resolvedAvatar; });
+                }
+            } else {
+                localStorage.removeItem('libraryreeds_user_avatar');
+                if (navLoginBtn) navLoginBtn.style.display = "inline-block";
+                if (navProfileMenu) navProfileMenu.style.display = "none";
+            }
+        });
+
+        if (profileTriggerBtn && profileDropdown) {
+            profileTriggerBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
+            });
+            document.addEventListener("click", () => { profileDropdown.style.display = "none"; });
+        }
+
+        const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+        if (dropdownLogoutBtn) {
+            dropdownLogoutBtn.addEventListener("click", async (e) => {
+                e.preventDefault();
+                try {
+                    await signOut(auth);
+                    localStorage.clear();
+                    sessionStorage.clear();
+                } finally {
+                    window.location.replace("index.html");
+                }
+            });
+        }
+
+        let allGiftItems = [];
+        const giftShopGrid = document.getElementById('giftShopItemsGrid');
+        const bestsellerGrid = document.getElementById('bestsellerItemsGrid');
+        const bestsellerWrapper = document.getElementById('bestsellers');
+        const categoryChipsContainer = document.getElementById('categoryChipsContainer');
+        const searchInput = document.getElementById('filterSearchInput');
+        const categorySelect = document.getElementById('filterCategorySelect');
+        const occasionSelect = document.getElementById('filterOccasionSelect');
+        const priceSelect = document.getElementById('filterPriceSelect');
+        const clearBtn = document.getElementById('filterClearBtn');
+
+        const cartDrawer = document.getElementById('cartDrawer');
+        const cartDrawerOverlay = document.getElementById('cartDrawerOverlay');
+        const cartDrawerCloseBtn = document.getElementById('cartDrawerCloseBtn');
+        const cartDrawerBody = document.getElementById('cartDrawerBody');
+        const cartDrawerSubtotal = document.getElementById('cartDrawerSubtotal');
+        const cartTriggerLink = document.getElementById('cartTriggerLink');
+
+        function openCartDrawer() {
+            renderCartDrawerItems();
+            cartDrawer?.classList.add('open');
+            cartDrawerOverlay?.classList.add('open');
+        }
+
+        function closeCartDrawer() {
+            cartDrawer?.classList.remove('open');
+            cartDrawerOverlay?.classList.remove('open');
+        }
+
+        function renderCartDrawerItems() {
+            if (!cartDrawerBody) return;
+            const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+            if (cart.length === 0) {
+                cartDrawerBody.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">Your cart is empty.</p>`;
+                if (cartDrawerSubtotal) cartDrawerSubtotal.textContent = '$0.00';
+                return;
+            }
+            cartDrawerBody.innerHTML = '';
+            let subtotal = 0;
+            cart.forEach((ci, idx) => {
+                const itemTotal = parseFloat(ci.price || 0) * parseInt(ci.quantity || 1);
+                subtotal += itemTotal;
+                const itemEl = document.createElement('div');
+                itemEl.className = 'cart-drawer-item';
+                itemEl.innerHTML = `
+                    <img src="${ci.imageUrl || ''}" alt="${ci.title || 'Item'}" class="cart-drawer-item-img">
+                    <div class="cart-drawer-item-info">
+                        <div>
+                            <div class="cart-drawer-item-title">${ci.title || 'Untitled Item'}</div>
+                            <div class="cart-drawer-item-sub">Qty: ${ci.quantity || 1} • $${parseFloat(ci.price || 0).toFixed(2)}</div>
+                        </div>
+                        <button type="button" class="cart-drawer-item-remove" data-index="${idx}">Remove</button>
+                    </div>
+                `;
+                itemEl.querySelector('.cart-drawer-item-remove').addEventListener('click', () => {
+                    cart.splice(idx, 1);
+                    localStorage.setItem('libraryreeds_cart', JSON.stringify(cart));
+                    syncCartUI();
+                });
+                cartDrawerBody.appendChild(itemEl);
+            });
+            if (cartDrawerSubtotal) cartDrawerSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+        }
+
+        function syncCartUI() {
+            const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+            let totalQty = 0;
+            cart.forEach(ci => { totalQty += parseInt(ci.quantity || 1); });
+            const badge = document.getElementById('cartBadgeCount');
+            if (badge) {
+                if (totalQty > 0) {
+                    badge.textContent = totalQty;
+                    badge.style.display = "flex";
+                } else {
+                    badge.style.display = "none";
+                }
+            }
+            renderCartDrawerItems();
+        }
+
+        if (cartTriggerLink) {
+            cartTriggerLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                openCartDrawer();
+            });
+        }
+        if (cartDrawerCloseBtn) cartDrawerCloseBtn.addEventListener('click', closeCartDrawer);
+        if (cartDrawerOverlay) cartDrawerOverlay.addEventListener('click', closeCartDrawer);
+
+        function updateCategoryChips(categories) {
+            if (!categoryChipsContainer) return;
+            const currentCat = categorySelect?.value || '';
+            const sortedCats = Array.from(categories).sort();
+            
+            categoryChipsContainer.innerHTML = '';
+            
+            const allBtn = document.createElement('button');
+            allBtn.type = 'button';
+            allBtn.className = `category-chip ${currentCat === '' ? 'active' : ''}`;
+            allBtn.textContent = 'All Categories';
+            allBtn.addEventListener('click', () => {
+                if (categorySelect) categorySelect.value = '';
+                applyFilters();
+            });
+            categoryChipsContainer.appendChild(allBtn);
+
+            sortedCats.forEach(cat => {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = `category-chip ${currentCat === cat ? 'active' : ''}`;
+                chip.textContent = cat;
+                chip.addEventListener('click', () => {
+                    if (categorySelect) categorySelect.value = cat;
+                    applyFilters();
+                });
+                categoryChipsContainer.appendChild(chip);
+            });
+        }
+
+        function populateFilterDropdowns(items) {
+            if (!categorySelect || !occasionSelect) return;
+            const categories = new Set(['Gift Cards', 'Merchandise']);
+            const occasions = new Set();
+
+            items.forEach(item => {
+                const data = item.data || item;
+                if (data.category) categories.add(data.category);
+                if (data.occasion) occasions.add(data.occasion);
+            });
+
+            categorySelect.innerHTML = '<option value="">All Categories</option>';
+            Array.from(categories).sort().forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                categorySelect.appendChild(opt);
+            });
+
+            occasionSelect.innerHTML = '<option value="">All Occasions</option>';
+            Array.from(occasions).sort().forEach(occ => {
+                const opt = document.createElement('option');
+                opt.value = occ;
+                opt.textContent = occ;
+                occasionSelect.appendChild(opt);
+            });
+
+            updateCategoryChips(categories);
+        }
+
+        function buildItemCardHTML(itemId, item) {
+            const basePrice = parseFloat(item.price || 0);
+            const discount = parseFloat(item.discountPercent || 0);
+            
+            const isCoupon = Boolean(item.promoCode || item.category === 'Gift Cards' || item.category === 'Coupons');
+            const finalPrice = (!isCoupon && discount > 0) ? basePrice * (1 - (discount / 100)) : basePrice;
+
+            let badgeText = item.category || 'Merchandise';
+            if (item.promoCode) {
+                badgeText = discount > 0 ? `Voucher: ${discount}% Off Value` : `Voucher Card`;
+            }
+
+            const targetId = item.slug || itemId;
+            const detailUrl = `book.html?id=${encodeURIComponent(targetId)}&type=gift`;
+
+            return `
+                <div class="slot-img-wrap">
+                    ${badgeText ? `<span class="slot-badge">${badgeText}</span>` : ''}
+                    <img src="${item.imageUrl || ''}" alt="${item.title || 'Gift Item'}">
+                </div>
+                <div class="slot-meta">
+                    <span class="slot-title">${item.title || 'Untitled Item'}</span>
+                    <span class="slot-subtitle">${item.category || 'Gift Item'}</span>
+                </div>
+                <div class="slot-price-row">
+                    <span class="slot-price">
+                        ${(!isCoupon && discount > 0) ? `<span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.8rem; margin-right: 6px;">$${basePrice.toFixed(2)}</span>` : ''}
+                        $${finalPrice.toFixed(2)}
+                    </span>
+                    <a href="${detailUrl}" class="view-btn">View Details</a>
+                </div>
+            `;
+        }
+
+        function renderBestsellers() {
+            if (!bestsellerGrid || !bestsellerWrapper) return;
+            const featuredItems = allGiftItems.filter(({ data }) => data.featured === true || data.bestseller === true).slice(0, 4);
+            
+            if (featuredItems.length === 0) {
+                bestsellerWrapper.style.display = 'none';
+                return;
+            }
+            
+            bestsellerWrapper.style.display = 'block';
+            bestsellerGrid.innerHTML = "";
+            featuredItems.forEach(({ id: itemId, data: item }) => {
+                const card = document.createElement('div');
+                card.className = 'item-slot';
+                card.innerHTML = buildItemCardHTML(itemId, item);
+                bestsellerGrid.appendChild(card);
+            });
+        }
+
+        function renderGiftItems(itemsToRender, showWidget = true, showBookmarkWidget = true) {
+            if (!giftShopGrid) return;
+            giftShopGrid.innerHTML = "";
+
+            // Widget Slot 1 (Gift Up)
+            if (showWidget) {
+                const widgetSlotCard = document.createElement('div');
+                widgetSlotCard.className = 'item-slot giftup-widget-slot';
+                widgetSlotCard.innerHTML = `
+                    <div>
+                        <div class="giftup-media-vertical">
+                            <span class="slot-badge">Live Checkout</span>
+                            <div class="gift-up-target" data-site-id="e32b70cc-3b00-481d-8321-d3b8fc68fd9f" data-platform="Other"></div>
+                        </div>
+                        <div class="slot-meta">
+                            <span class="slot-title">$25 Libraryreeds Giftcard</span>
+                            <span class="slot-subtitle">Official Direct Checkout</span>
+                        </div>
+                        <div class="extra-25-dropdown">
+                            Instant digital delivery to inbox. Never expires. Valid on all books and archivals.
+                        </div>
+                    </div>
+                    <div class="slot-price-row">
+                        <span class="slot-price">$25.00</span>
+                        <button type="button" class="view-btn toggle-25-info" style="width:auto; padding:5px 10px;">Info</button>
+                    </div>
+                `;
+                giftShopGrid.appendChild(widgetSlotCard);
+
+                const toggleBtn = widgetSlotCard.querySelector('.toggle-25-info');
+                toggleBtn.addEventListener('click', () => {
+                    widgetSlotCard.classList.toggle('expanded-25');
+                    toggleBtn.textContent = widgetSlotCard.classList.contains('expanded-25') ? 'Hide Info' : 'Info';
+                });
+            }
+
+            // Dynamic items from database
+            if (itemsToRender.length > 0) {
+                itemsToRender.forEach(({ id: itemId, data: item }) => {
+                    const card = document.createElement('div');
+                    card.className = 'item-slot';
+                    card.innerHTML = buildItemCardHTML(itemId, item);
+                    giftShopGrid.appendChild(card);
+                });
+            }
+
+            // Widget Slot 3 (Native Theme Item Card with Details in URL)
+            if (showBookmarkWidget) {
+                const bookmarkData = {
+                    id: "custom-bookmark",
+                    title: "Custom Bookmark",
+                    price: "9.99",
+                    imageUrl: "https://cdn.phototourl.com/member/2026-09-20-cfa6b9d6-06be-49a1-b6ea-cab707b45088.png",
+                    description: "High-quality bookmark, printed and shipped directly to your door.",
+                    category: "Merchandise"
+                };
+
+                const detailUrl = `book.html?id=${encodeURIComponent(bookmarkData.id)}&type=gift&title=${encodeURIComponent(bookmarkData.title)}&price=${encodeURIComponent(bookmarkData.price)}&image=${encodeURIComponent(bookmarkData.imageUrl)}&desc=${encodeURIComponent(bookmarkData.description)}&cat=${encodeURIComponent(bookmarkData.category)}`;
+
+                const bookmarkSlotCard = document.createElement('div');
+                bookmarkSlotCard.className = 'item-slot';
+                bookmarkSlotCard.innerHTML = `
+                    <div class="slot-img-wrap">
+                        <span class="slot-badge">${bookmarkData.category}</span>
+                        <img src="${bookmarkData.imageUrl}" alt="${bookmarkData.title}">
+                    </div>
+                    <div class="slot-meta">
+                        <span class="slot-title">${bookmarkData.title}</span>
+                        <span class="slot-subtitle">Curator Merchandise</span>
+                    </div>
+                    <div class="slot-price-row">
+                        <span class="slot-price">$${bookmarkData.price}</span>
+                        <a href="${detailUrl}" class="view-btn">View Details</a>
+                    </div>
+                `;
+                giftShopGrid.appendChild(bookmarkSlotCard);
+            }
+
+            if (itemsToRender.length === 0 && !showWidget && !showBookmarkWidget) {
+                giftShopGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: var(--text-secondary);">
+                        <p style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text-primary);">No matching items found</p>
+                        <p style="font-size: 0.85rem;">Try adjusting your search terms or clearing filters.</p>
+                    </div>
+                `;
+            }
+
+            if (window.giftup && typeof window.giftup === 'function') {
+                try { window.giftup('refresh'); } catch(e) {}
+            }
+        }
+
+        function applyFilters() {
+            const queryText = (searchInput?.value || '').toLowerCase().trim();
+            const catVal = categorySelect?.value || '';
+            const occVal = occasionSelect?.value || '';
+            const priceVal = priceSelect?.value || '';
+
+            const categories = new Set(['Gift Cards', 'Merchandise']);
+            allGiftItems.forEach(({ data: item }) => {
+                if (item.category) categories.add(item.category);
+            });
+            updateCategoryChips(categories);
+
+            const widgetKeywords = ['$25 libraryreeds giftcard', 'libraryreeds', 'giftcard', 'checkout', '25.00', '25'];
+            const matchesWidgetSearch = queryText === '' || widgetKeywords.some(kw => kw.includes(queryText));
+
+            const bookmarkKeywords = ['custom bookmark', 'bookmark', 'merchandise', 'curator'];
+            const matchesBookmarkSearch = queryText === '' || bookmarkKeywords.some(kw => kw.includes(queryText));
+
+            const filteredClean = allGiftItems.filter(({ data: item }) => {
+                const titleMatch = (item.title || '').toLowerCase().includes(queryText) || 
+                                   (item.description || '').toLowerCase().includes(queryText) ||
+                                   (item.category || '').toLowerCase().includes(queryText) ||
+                                   (item.promoCode || '').toLowerCase().includes(queryText);
+                const catMatch = !catVal || catVal === 'Gift Cards' || item.category === catVal;
+                const occMatch = !occVal || item.occasion === occVal;
+                const price = parseFloat(item.price || 0);
+                let priceMatch = true;
+                if (priceVal === 'under25') priceMatch = price < 25;
+                else if (priceVal === '25to50') priceMatch = price >= 25 && price <= 50;
+                else if (priceVal === 'over50') priceMatch = price > 50;
+                return titleMatch && catMatch && occMatch && priceMatch;
+            });
+
+            const catWidgetMatch = !catVal || catVal === 'Gift Cards';
+            const showWidget = matchesWidgetSearch && catWidgetMatch && (!occVal && (!priceVal || priceVal === 'under25' || priceVal === '25to50'));
+            const showBookmarkWidget = matchesBookmarkSearch && (!catVal || catVal === 'Merchandise') && !occVal && (!priceVal || priceVal === 'under25');
+
+            if (filteredClean.length === 0 && !showWidget && !showBookmarkWidget) {
+                renderGiftItems([], false, false);
+                return;
+            }
+
+            renderGiftItems(filteredClean, showWidget, showBookmarkWidget);
+        }
+
+        let searchDebounce;
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchDebounce);
+                searchDebounce = setTimeout(applyFilters, 150);
+            });
+        }
+
+        if (categorySelect) categorySelect.addEventListener('change', applyFilters);
+        if (occasionSelect) occasionSelect.addEventListener('change', applyFilters);
+        if (priceSelect) priceSelect.addEventListener('change', applyFilters);
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                if (searchInput) searchInput.value = '';
+                if (categorySelect) categorySelect.value = '';
+                if (occasionSelect) occasionSelect.value = '';
+                if (priceSelect) priceSelect.value = '';
+                applyFilters();
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            syncCartUI();
+
+            const wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
+            const wishlistBadge = document.getElementById('wishlistBadgeCount');
+            if (wishlist.length > 0 && wishlistBadge) {
+                wishlistBadge.textContent = wishlist.length;
+                wishlistBadge.style.display = "flex";
+            }
+        });
+
+        if (giftShopGrid) {
+            onSnapshot(collection(db, "giftshop_items"), (snapshot) => {
+                allGiftItems = [];
+                snapshot.forEach((docSnap) => {
+                    allGiftItems.push({ id: docSnap.id, data: docSnap.data() });
+                });
+
+                if (allGiftItems.length > 0) {
+                    populateFilterDropdowns(allGiftItems);
+                    renderBestsellers();
+                    applyFilters();
+                } else {
+                    if (bestsellerWrapper) bestsellerWrapper.style.display = 'none';
+                    renderGiftItems([]);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

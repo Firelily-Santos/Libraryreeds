@@ -57,6 +57,7 @@
         .nav-icon-link:hover { color: var(--accent-gold, #c5a880); }
         .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent-gold); stroke-width: 2; }
 
+        /* Profile Menu Widget */
         .user-profile-menu { position: relative; display: none; }
         .profile-trigger-btn { background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); color: var(--text-primary, #f0f2f5); padding: 6px 14px; border-radius: 4px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
         .nav-user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold, #c5a880); }
@@ -153,6 +154,7 @@
             height: auto;
         }
         .giftup-media-vertical {
+            position: relative;
             width: 100%;
             min-height: 220px;
             border-radius: 4px;
@@ -730,8 +732,8 @@
                 widgetSlotCard.className = 'item-slot giftup-widget-slot';
                 widgetSlotCard.innerHTML = `
                     <div>
-                        <span class="slot-badge">Live Checkout</span>
                         <div class="giftup-media-vertical">
+                            <span class="slot-badge">Live Checkout</span>
                             <div class="gift-up-target" data-site-id="e32b70cc-3b00-481d-8321-d3b8fc68fd9f" data-platform="Other"></div>
                         </div>
                         <div class="slot-meta">

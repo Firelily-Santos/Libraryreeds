@@ -91,11 +91,20 @@
       opacity: 1;
       pointer-events: auto;
     }
-    .banner-slide img {
+    .banner-slide img,
+    .banner-img {
       width: 100%;
       height: 100%;
-      object-fit: fill;
+      object-fit: contain;
+      object-position: center;
       display: block;
+      background: var(--bg-surface);
+    }
+    .banner-slide.banner-image-error img {
+      display: none;
+    }
+    .banner-slide.banner-image-error {
+      display: none;
     }
 
     /* Unified Top Navigation & Profile Styles */
@@ -202,13 +211,13 @@
   <div class="banner-carousel-container">
     <div class="banner-carousel" id="imageCarousel">
       <div class="banner-slide active">
-        <img src="https://cdn.phototourl.com/member/2026-09-17-02df5ed0-e313-4033-a6da-3cc1c09fa9cd.jpg" alt="Libraryreeds Banner 1">
+        <img class="banner-img" src="https://cdn.phototourl.com/member/2026-09-17-02df5ed0-e313-4033-a6da-3cc1c09fa9cd.jpg" alt="Libraryreeds Banner 1">
       </div>
       <div class="banner-slide">
-        <img src="https://cdn.phototourl.com/free/2026-09-17-54cec8fa-b257-4ee6-b58f-a734ac91c4e5.jpg" alt="Libraryreeds Banner 2">
+        <img class="banner-img" src="https://cdn.phototourl.com/free/2026-09-17-54cec8fa-b257-4ee6-b58f-a734ac91c4e5.jpg" alt="Libraryreeds Banner 2">
       </div>
       <div class="banner-slide">
-        <img src="https://cdn.phototourl.com/member/2026-09-17-96e233ba-51ee-4b68-a82d-cea4c5483727.jpg" alt="Libraryreeds Banner 3">
+        <img class="banner-img" src="https://cdn.phototourl.com/member/2026-09-17-96e233ba-51ee-4b68-a82d-cea4c5483727.jpg" alt="Libraryreeds Banner 3">
       </div>
     </div>
   </div>
@@ -265,22 +274,46 @@
 
     // Automatic Banner Rotation Script
     document.addEventListener("DOMContentLoaded", () => {
-      const slides = document.querySelectorAll('.banner-slide');
+      const allSlides = Array.from(document.querySelectorAll('.banner-slide'));
+
+      allSlides.forEach((slide) => {
+        const img = slide.querySelector('img');
+        if (!img) return;
+
+        img.addEventListener('error', () => {
+          slide.classList.remove('active');
+          slide.classList.add('banner-image-error');
+
+          const visibleSlides = allSlides.filter(s => !s.classList.contains('banner-image-error'));
+          if (visibleSlides.length > 0 && !visibleSlides.some(s => s.classList.contains('active'))) {
+            visibleSlides[0].classList.add('active');
+          }
+        });
+      });
+
       let currentIndex = 0;
 
+      function getVisibleSlides() {
+        return allSlides.filter(slide => !slide.classList.contains('banner-image-error'));
+      }
+
       function showSlide(index) {
-        slides.forEach((slide, i) => {
-          slide.classList.toggle('active', i === index);
-        });
-        currentIndex = index;
+        const slides = getVisibleSlides();
+        if (slides.length === 0) return;
+
+        allSlides.forEach(slide => slide.classList.remove('active'));
+        const safeIndex = index % slides.length;
+        slides[safeIndex].classList.add('active');
+        currentIndex = safeIndex;
       }
 
       function nextSlide() {
-        let nextIndex = (currentIndex + 1) % slides.length;
-        showSlide(nextIndex);
+        const slides = getVisibleSlides();
+        if (slides.length <= 1) return;
+        showSlide(currentIndex + 1);
       }
 
-      // Rotate every 5 seconds
+      showSlide(0);
       setInterval(nextSlide, 5000);
     });
 
