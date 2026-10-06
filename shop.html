@@ -348,6 +348,36 @@
       }
     });
 
+    // Admin Settings -> Countdown Timer Control.
+    function mountAdminCountdown(prefix) {
+      let bar = document.getElementById('adminCountdownBar');
+      if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'adminCountdownBar';
+        bar.style.cssText = 'display:none;text-align:center;padding:9px 16px;background:var(--bg-surface-elevated);border-bottom:1px solid var(--border-subtle);color:var(--accent-gold);font-size:.78rem;font-weight:700;letter-spacing:.04em;';
+        const announce = document.getElementById('siteAnnouncementBannerContainer');
+        if (announce) announce.insertAdjacentElement('afterend', bar);
+        else document.body.insertAdjacentElement('afterbegin', bar);
+      }
+      let intervalId = null;
+      onSnapshot(doc(db, 'settings', `timer_${prefix}`), (snap) => {
+        if (intervalId) clearInterval(intervalId);
+        if (!snap.exists() || !snap.data().enabled) { bar.style.display='none'; return; }
+        const d=snap.data();
+        const total=((Number(d.days)||0)*86400)+((Number(d.hours)||0)*3600)+((Number(d.minutes)||0)*60)+(Number(d.seconds)||0);
+        const end=Date.now()+Math.max(0,total)*1000;
+        const draw=()=>{
+          const left=Math.max(0,Math.floor((end-Date.now())/1000));
+          const days=Math.floor(left/86400), hours=Math.floor((left%86400)/3600), mins=Math.floor((left%3600)/60), secs=left%60;
+          bar.textContent=`${d.title || 'Countdown'} — ${days}d ${String(hours).padStart(2,'0')}h ${String(mins).padStart(2,'0')}m ${String(secs).padStart(2,'0')}s`;
+          bar.style.display='block';
+          if(left<=0 && intervalId){clearInterval(intervalId); intervalId=null;}
+        };
+        draw(); intervalId=setInterval(draw,1000);
+      }, ()=>{ bar.style.display='none'; });
+    }
+    mountAdminCountdown('shop');
+
     const navLoginBtn = document.getElementById("navLoginBtn");
     const navProfileMenu = document.getElementById("navProfileMenu");
     const navUserName = document.getElementById("navUserName");

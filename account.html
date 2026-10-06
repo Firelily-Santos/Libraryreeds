@@ -3321,7 +3321,7 @@
           imageUrl = await getDownloadURL(storageRef);
         }
 
-        await addDoc(collection(db, "fanarts"), {
+        await addDoc(collection(db, "fanart_gallery"), {
           title,
           artist,
           category,
@@ -3358,6 +3358,7 @@
           heading: document.getElementById('aboutAdminHeading').value.trim(),
           quote: document.getElementById('aboutAdminQuote').value.trim(),
           imageUrl: document.getElementById('aboutAuthorImageUrl').value.trim(),
+          authorImageUrl: document.getElementById('aboutAuthorImageUrl').value.trim(),
           body: document.getElementById('aboutAdminBody').value.trim(),
           updatedAt: serverTimestamp()
         }, { merge: true });
@@ -3396,12 +3397,16 @@
     document.getElementById('homeCmsForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       try {
-        await setDoc(doc(db, "settings", "home_content"), {
+        const homeCmsData = {
           heroTitle: document.getElementById('homeHeroTitle').value.trim(),
           promoCode: document.getElementById('homePromoCode').value.trim(),
           discountPercent: parseInt(document.getElementById('homeDiscountPercent').value) || 10,
           updatedAt: serverTimestamp()
-        }, { merge: true });
+        };
+        await Promise.all([
+          setDoc(doc(db, "settings", "home_content"), homeCmsData, { merge: true }),
+          setDoc(doc(db, "settings", "home_cms"), homeCmsData, { merge: true })
+        ]);
 
         const statusEl = document.getElementById('homeSaveStatus');
         if (statusEl) {
@@ -3414,7 +3419,7 @@
       }
     });
 
-    document.getElementById('fanartcmsForm')?.addEventListener('submit', async (e) => {
+    document.getElementById('fanartCmsForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const bannerUrl = document.getElementById('fanartBannerImgInput').value.trim();
       try {

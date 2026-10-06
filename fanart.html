@@ -396,6 +396,14 @@
       return card;
     }
 
+    // Admin Settings -> Fanart Banner CMS: update the public banner live.
+    onSnapshot(doc(db, "settings", "fanart_cms"), (snap) => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      const banner = document.getElementById('fanartHeaderBannerImg');
+      if (banner && data.bannerUrl) banner.src = data.bannerUrl;
+    }, (error) => console.warn('Fanart CMS listener:', error?.message || error));
+
     const container = document.getElementById('publicFanartContainer');
     if (container) {
       onSnapshot(collection(db, "fanart_gallery"), (snapshot) => {

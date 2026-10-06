@@ -485,7 +485,8 @@
         const d = snap.data();
         if (d.heading) document.getElementById('aboutHeadingText').textContent = d.heading;
         if (d.quote) document.getElementById('aboutQuoteText').textContent = d.quote;
-        if (d.authorImageUrl) document.getElementById('aboutAuthorImg').src = d.authorImageUrl;
+        const authorImage = d.imageUrl || d.authorImageUrl || '';
+        if (authorImage) document.getElementById('aboutAuthorImg').src = authorImage;
         if (d.body) {
           const bodyEl = document.getElementById('aboutBodyContainer');
           const paras = d.body.split('\n\n').filter(p => p.trim().length > 0);
