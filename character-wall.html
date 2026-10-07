@@ -1935,12 +1935,17 @@ textarea {
     display:flex;
     align-items:center;
     justify-content:center;
+    cursor: pointer;
 }
 .family-tree-button {
     margin-top:12px;
     background:#45382b;
     color:white;
     border-color:#45382b;
+    transition: background .18s ease;
+}
+.family-tree-button:hover {
+    background:#2b221a;
 }
 
 
@@ -2023,6 +2028,235 @@ textarea {
     .crest-image-modal { padding: 12px; }
     .crest-image-dialog { padding: 14px; }
     .crest-image-title { font-size: 18px; }
+}
+
+
+/* ==================================================
+   FAMILY TREE MODAL & TREE STYLES
+================================================== */
+.tree-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(9, 9, 8, 0.88);
+    backdrop-filter: blur(8px);
+}
+
+.tree-modal.active {
+    display: flex;
+}
+
+.tree-dialog {
+    position: relative;
+    width: min(1200px, 96vw);
+    max-height: 92vh;
+    padding: 28px 24px;
+    border: 1px solid #cfc5b5;
+    background: #f4f0e7;
+    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.72);
+    display: flex;
+    flex-direction: column;
+}
+
+.tree-modal-header {
+    margin-bottom: 16px;
+    border-bottom: 1px solid #d4cabb;
+    padding-bottom: 12px;
+}
+
+.tree-modal-kicker {
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #79684a;
+}
+
+.tree-modal-title {
+    margin: 3px 0 0;
+    font-size: 24px;
+    color: #24231f;
+    font-weight: normal;
+}
+
+.tree-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #a99d8b;
+    background: #fffdf7;
+    color: #332f29;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.tree-scroll-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    padding: 24px 14px;
+    background: #faf7f2;
+    border: 1px solid #dcd3c3;
+    border-radius: 4px;
+}
+
+/* Tree Chart Architecture */
+.tree {
+    display: flex;
+    justify-content: center;
+    min-width: fit-content;
+}
+
+.tree ul {
+    padding-top: 20px;
+    position: relative;
+    transition: all 0.5s;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding-left: 0;
+}
+
+.tree li {
+    float: left;
+    text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 20px 10px 0 10px;
+    transition: all 0.5s;
+}
+
+/* Connecting branch lines */
+.tree li::before, 
+.tree li::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    border-top: 2px solid #8e806c;
+    width: 50%;
+    height: 20px;
+}
+
+.tree li::after {
+    right: auto;
+    left: 50%;
+    border-left: 2px solid #8e806c;
+}
+
+.tree li:only-child::after, 
+.tree li:only-child::before {
+    display: none;
+}
+
+.tree li:only-child {
+    padding-top: 0;
+}
+
+.tree li:first-child::before, 
+.tree li:last-child::after {
+    border: 0 none;
+}
+
+.tree li:last-child::before {
+    border-right: 2px solid #8e806c;
+    border-radius: 0 5px 0 0;
+}
+
+.tree li:first-child::after {
+    border-radius: 5px 0 0 0;
+}
+
+.tree ul ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 2px solid #8e806c;
+    width: 0;
+    height: 20px;
+}
+
+/* Person Card inside Tree */
+.person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    padding: 12px 14px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    min-width: 140px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.person:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    border-color: #64748b;
+}
+
+.person .image-slot {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    border: 2px solid #8e806c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.person .image-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.person .image-slot .placeholder-icon {
+    width: 28px;
+    height: 28px;
+    fill: #8e806c;
+}
+
+.person .name {
+    font-weight: 600;
+    font-size: 13px;
+    color: #1e1e1a;
+    font-family: Arial, sans-serif;
+}
+
+.person .role {
+    font-size: 10px;
+    color: #79684a;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: Arial, sans-serif;
+}
+
+.person .dates {
+    font-size: 9px;
+    color: #948a7a;
+    margin-top: 2px;
+    font-family: Arial, sans-serif;
+}
+
+.couple {
+    display: inline-flex;
+    gap: 10px;
 }
 
 </style>
@@ -2133,9 +2367,6 @@ textarea {
             type="search"
             placeholder="Search character or book..."
         >
-
-
-
 
     </div>
 
@@ -2251,6 +2482,113 @@ textarea {
             <img id="crestImageLarge" src="" alt="">
         </div>
     </div>
+</div>
+
+
+<!-- ==================================================
+     FAMILY TREE MODAL
+================================================== -->
+<div class="tree-modal" id="treeModal" aria-hidden="true">
+  <div class="tree-dialog" role="dialog" aria-modal="true" aria-labelledby="treeModalTitle">
+    <button class="tree-modal-close" id="treeModalClose" type="button" aria-label="Close family tree">×</button>
+    <div class="tree-modal-header">
+      <div class="tree-modal-kicker">Lineage &amp; Heritage</div>
+      <h2 class="tree-modal-title" id="treeModalTitle">Family Tree</h2>
+    </div>
+    
+    <div class="tree-scroll-container">
+      <div class="tree">
+        <ul>
+          <li>
+            <!-- Generation 1: Grandparents -->
+            <div class="couple">
+              <div class="person">
+                <div class="image-slot">
+                  <img src="" alt="Arthur Doe" onerror="this.style.display='none'">
+                  <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                <div class="name">Arthur Doe</div>
+                <div class="role">Grandfather</div>
+                <div class="dates">1935 – 2012</div>
+              </div>
+              <div class="person">
+                <div class="image-slot">
+                  <img src="" alt="Eleanor Doe" onerror="this.style.display='none'">
+                  <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                <div class="name">Eleanor Doe</div>
+                <div class="role">Grandmother</div>
+                <div class="dates">1938 – Present</div>
+              </div>
+            </div>
+
+            <!-- Generation 2: Children & In-Laws -->
+            <ul>
+              <li>
+                <div class="person">
+                  <div class="image-slot">
+                    <img src="" alt="Sarah Doe" onerror="this.style.display='none'">
+                    <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                  <div class="name">Sarah Doe</div>
+                  <div class="role">Aunt</div>
+                  <div class="dates">1965 – Present</div>
+                </div>
+              </li>
+              <li>
+                <div class="couple">
+                  <div class="person">
+                    <div class="image-slot">
+                      <img src="" alt="Robert Doe" onerror="this.style.display='none'">
+                      <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <div class="name">Robert Doe</div>
+                    <div class="role">Father</div>
+                    <div class="dates">1968 – Present</div>
+                  </div>
+                  <div class="person">
+                    <div class="image-slot">
+                      <img src="" alt="Clara Doe" onerror="this.style.display='none'">
+                      <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <div class="name">Clara Doe</div>
+                    <div class="role">Mother</div>
+                    <div class="dates">1970 – Present</div>
+                  </div>
+                </div>
+
+                <!-- Generation 3: Grandchildren -->
+                <ul>
+                  <li>
+                    <div class="person">
+                      <div class="image-slot">
+                        <img src="" alt="Target Character" onerror="this.style.display='none'">
+                        <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      </div>
+                      <div class="name" id="treeTargetCharacter">Target Character</div>
+                      <div class="role">Child</div>
+                      <div class="dates">1998 – Present</div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="person">
+                      <div class="image-slot">
+                        <img src="" alt="James Doe" onerror="this.style.display='none'">
+                        <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      </div>
+                      <div class="name">James Doe</div>
+                      <div class="role">Brother</div>
+                      <div class="dates">2002 – Present</div>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -2653,7 +2991,6 @@ textarea {
 <script>
 
 let characters = [];
-
 
 let selectedImage = "";
 
@@ -3678,15 +4015,14 @@ function createCharacterCard(
                         </div>` : ""}
                     </div>` : ""}
 
-                    <a
+                    <button
                         class="family-tree-button"
-                        href="family-tree.html?id=${encodeURIComponent(character.id || "")}"
-                        target="_blank"
-                        rel="noopener"
+                        type="button"
+                        data-tree-character="${escapeHTML(character.name)}"
                         aria-label="Open ${escapeHTML(character.name)} family tree"
                     >
                         Open Family Tree
-                    </a>
+                    </button>
 
 
                     ${
@@ -4504,6 +4840,55 @@ if (crestImageModal) {
         if (event.target === crestImageModal) closeCrestImage();
     });
 }
+
+
+/* ==================================================
+   FAMILY TREE MODAL CONTROLLER
+================================================== */
+const treeModal = document.getElementById("treeModal");
+const treeModalClose = document.getElementById("treeModalClose");
+const treeModalTitle = document.getElementById("treeModalTitle");
+const treeTargetCharacter = document.getElementById("treeTargetCharacter");
+
+function openFamilyTree(characterName) {
+    if (!treeModal) return;
+    if (treeModalTitle) treeModalTitle.textContent = `${characterName || "Character"}'s Lineage`;
+    if (treeTargetCharacter) treeTargetCharacter.textContent = characterName || "Character";
+    treeModal.classList.add("active");
+    treeModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+function closeFamilyTree() {
+    if (!treeModal) return;
+    treeModal.classList.remove("active");
+    treeModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+}
+
+document.addEventListener("click", function(event) {
+    const trigger = event.target.closest("[data-tree-character]");
+    if (trigger) {
+        event.preventDefault();
+        openFamilyTree(trigger.dataset.treeCharacter);
+    }
+});
+
+if (treeModalClose) {
+    treeModalClose.addEventListener("click", closeFamilyTree);
+}
+
+if (treeModal) {
+    treeModal.addEventListener("click", function(event) {
+        if (event.target === treeModal) closeFamilyTree();
+    });
+}
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape" && treeModal && treeModal.classList.contains("active")) {
+        closeFamilyTree();
+    }
+});
 
 
 /* START */
