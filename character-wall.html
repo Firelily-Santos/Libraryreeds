@@ -31,16 +31,13 @@
         0 5px 12px rgba(0,0,0,.18);
 }
 
-
 * {
     box-sizing: border-box;
 }
 
-
 html {
     scroll-behavior: smooth;
 }
-
 
 body {
     margin: 0;
@@ -63,14 +60,12 @@ body {
         serif;
 }
 
-
 button,
 input,
 select,
 textarea {
     font: inherit;
 }
-
 
 /* ==================================================
    OUTER FRAME
@@ -108,7 +103,6 @@ textarea {
         inset 0 2px 1px rgba(255,255,255,.12),
         inset 0 -4px 8px rgba(0,0,0,.5);
 }
-
 
 /* ==================================================
    BOARD
@@ -149,7 +143,6 @@ textarea {
         inset -18px 0 30px rgba(0,0,0,.26);
 }
 
-
 /* ==================================================
    HEADER
 ================================================== */
@@ -187,7 +180,6 @@ textarea {
         var(--shadow);
 }
 
-
 .wall-header::before,
 .section-banner::before {
     content: "";
@@ -219,7 +211,6 @@ textarea {
         rgba(0,0,0,.55);
 }
 
-
 .wall-kicker {
     margin-bottom: 6px;
 
@@ -238,7 +229,6 @@ textarea {
     text-transform: uppercase;
 }
 
-
 .wall-header h1 {
     margin: 0;
 
@@ -247,7 +237,6 @@ textarea {
 
     font-weight: normal;
 }
-
 
 .wall-header p {
     max-width: 600px;
@@ -267,8 +256,6 @@ textarea {
 
     line-height: 1.6;
 }
-
-
 
 /* ==================================================
    BACK TO FANART BUTTON
@@ -317,13 +304,6 @@ textarea {
     stroke: currentColor;
 }
 
-
-/* Public Character Wall is managed from Admin Settings */
-#addCharacterButton,
-.delete-button {
-    display: none !important;
-}
-
 /* ==================================================
    CONTROLS
 ================================================== */
@@ -337,7 +317,6 @@ textarea {
 
     margin-bottom: 44px;
 }
-
 
 .control-panel {
     display: flex;
@@ -357,9 +336,7 @@ textarea {
         rgba(0,0,0,.18);
 }
 
-
-.filter-button,
-.add-button {
+.filter-button {
     min-height: 37px;
 
     padding:
@@ -388,7 +365,6 @@ textarea {
     cursor: pointer;
 }
 
-
 .filter-button:hover,
 .filter-button.active {
     background:
@@ -400,12 +376,10 @@ textarea {
     color: white;
 }
 
-
 .main-filter {
     color: #745c2d;
     border-color: #b99c61;
 }
-
 
 .main-filter.active {
     background:
@@ -416,18 +390,6 @@ textarea {
 
     color: white;
 }
-
-
-.add-button {
-    background:
-        #2d2d28;
-
-    border-color:
-        #2d2d28;
-
-    color: white;
-}
-
 
 .search-input {
     min-width: 220px;
@@ -453,7 +415,6 @@ textarea {
         sans-serif;
 }
 
-
 /* ==================================================
    SECTIONS
 ================================================== */
@@ -461,7 +422,6 @@ textarea {
 .character-section {
     margin-bottom: 60px;
 }
-
 
 .section-banner {
     position: relative;
@@ -493,7 +453,6 @@ textarea {
         rgba(0,0,0,.23);
 }
 
-
 .section-banner h2 {
     margin: 0;
 
@@ -505,7 +464,6 @@ textarea {
 
     text-transform: uppercase;
 }
-
 
 .section-banner p {
     margin:
@@ -522,13 +480,11 @@ textarea {
     font-size: 11px;
 }
 
-
 .hero-section .section-banner {
     border-bottom:
         4px solid
         var(--hero);
 }
-
 
 .villain-section .section-banner {
     border-bottom:
@@ -536,13 +492,11 @@ textarea {
         var(--villain);
 }
 
-
 .antihero-section .section-banner {
     border-bottom:
         4px solid
         var(--antihero);
 }
-
 
 .other-section .section-banner {
     border-bottom:
@@ -550,9 +504,8 @@ textarea {
         var(--other);
 }
 
-
 /* ==================================================
-   GRID
+   GRID & CARDS
 ================================================== */
 
 .character-grid {
@@ -571,11 +524,6 @@ textarea {
     justify-items: center;
 }
 
-
-/* ==================================================
-   CARD
-================================================== */
-
 .character-rig {
     position: relative;
 
@@ -585,7 +533,6 @@ textarea {
 
     perspective: 1300px;
 }
-
 
 .pin {
     position: absolute;
@@ -617,7 +564,6 @@ textarea {
         rgba(0,0,0,.6);
 }
 
-
 .card-flipper {
     position: relative;
 
@@ -631,12 +577,10 @@ textarea {
         cubic-bezier(.2,.75,.25,1);
 }
 
-
 .card-flipper.flipped {
     transform:
         rotateY(180deg);
 }
-
 
 .card-face {
     width: 100%;
@@ -647,11 +591,6 @@ textarea {
     -webkit-backface-visibility:
         hidden;
 }
-
-
-/* ==================================================
-   FRONT
-================================================== */
 
 .card-front {
     position: relative;
@@ -677,11 +616,6 @@ textarea {
         );
 }
 
-
-/* ==================================================
-   PHOTO
-================================================== */
-
 .photo-frame {
     width: 100%;
 
@@ -699,18 +633,16 @@ textarea {
         #171816;
 }
 
-
 .photo-frame img {
     width: 100%;
     height: 100%;
 
-    object-fit: contain;
+    object-fit: cover;
 
     object-position: center;
 
     display: block;
 }
-
 
 .image-placeholder {
     color:
@@ -726,11 +658,6 @@ textarea {
 
     text-transform: uppercase;
 }
-
-
-/* ==================================================
-   ROLE
-================================================== */
 
 .role-strip {
     position: absolute;
@@ -758,34 +685,10 @@ textarea {
     text-transform: uppercase;
 }
 
-
-.role-Hero {
-    background:
-        rgba(57,93,109,.92);
-}
-
-
-.role-Villain {
-    background:
-        rgba(112,55,57,.92);
-}
-
-
-.role-Anti-Hero {
-    background:
-        rgba(105,87,53,.92);
-}
-
-
-.role-Other {
-    background:
-        rgba(73,89,76,.92);
-}
-
-
-/* ==================================================
-   MAIN CHARACTER
-================================================== */
+.role-Hero { background: rgba(57,93,109,.92); }
+.role-Villain { background: rgba(112,55,57,.92); }
+.role-Anti-Hero { background: rgba(105,87,53,.92); }
+.role-Other { background: rgba(73,89,76,.92); }
 
 .main-character-marker {
     position: absolute;
@@ -821,11 +724,6 @@ textarea {
     text-transform: uppercase;
 }
 
-
-/* ==================================================
-   CAPTION
-================================================== */
-
 .front-caption {
     display: flex;
 
@@ -841,11 +739,9 @@ textarea {
         0;
 }
 
-
 .name-area {
     min-width: 0;
 }
-
 
 .character-name {
     margin: 0;
@@ -865,7 +761,6 @@ textarea {
     white-space: nowrap;
 }
 
-
 .character-species {
     margin-top: 3px;
 
@@ -882,7 +777,6 @@ textarea {
 
     text-transform: uppercase;
 }
-
 
 .book-line {
     margin-top: 4px;
@@ -903,7 +797,6 @@ textarea {
 
     white-space: nowrap;
 }
-
 
 .flip-button {
     flex-shrink: 0;
@@ -934,11 +827,6 @@ textarea {
     cursor: pointer;
 }
 
-
-/* ==================================================
-   BACK
-================================================== */
-
 .card-back {
     position: absolute;
 
@@ -954,14 +842,6 @@ textarea {
 
     background-color:
         var(--paper);
-
-    background-image:
-        repeating-linear-gradient(
-            to bottom,
-            transparent,
-            transparent 23px,
-            rgba(74,66,50,.05) 24px
-        );
 
     border:
         1px solid
@@ -980,7 +860,6 @@ textarea {
     overflow: hidden;
 }
 
-
 .back-accent {
     height: 3px;
 
@@ -995,30 +874,10 @@ textarea {
     flex-shrink: 0;
 }
 
-
-.back-hero {
-    --role-accent:
-        var(--hero);
-}
-
-
-.back-villain {
-    --role-accent:
-        var(--villain);
-}
-
-
-.back-anti-hero {
-    --role-accent:
-        var(--antihero);
-}
-
-
-.back-other {
-    --role-accent:
-        var(--other);
-}
-
+.back-hero { --role-accent: var(--hero); }
+.back-villain { --role-accent: var(--villain); }
+.back-anti-hero { --role-accent: var(--antihero); }
+.back-other { --role-accent: var(--other); }
 
 .back-header {
     display: flex;
@@ -1040,7 +899,6 @@ textarea {
     flex-shrink: 0;
 }
 
-
 .back-name {
     margin: 0;
 
@@ -1048,7 +906,6 @@ textarea {
 
     font-weight: normal;
 }
-
 
 .back-role {
     margin-top: 3px;
@@ -1068,11 +925,6 @@ textarea {
 
     text-transform: uppercase;
 }
-
-
-/* ==================================================
-   SCROLL HINT
-================================================== */
 
 .scroll-hint {
     flex-shrink: 0;
@@ -1108,11 +960,6 @@ textarea {
     text-transform: uppercase;
 }
 
-
-/* ==================================================
-   SCROLLABLE BACK INFORMATION
-================================================== */
-
 .card-information {
     flex: 1;
 
@@ -1133,47 +980,9 @@ textarea {
 
     -webkit-overflow-scrolling:
         touch;
-
-    scrollbar-width:
-        thin;
-
-    scrollbar-color:
-        #a99e8d
-        transparent;
 }
 
-
-.card-information::-webkit-scrollbar {
-    width: 6px;
-}
-
-
-.card-information::-webkit-scrollbar-track {
-    background:
-        rgba(80,70,55,.05);
-
-    border-radius: 10px;
-}
-
-
-.card-information::-webkit-scrollbar-thumb {
-    background:
-        #aaa08f;
-
-    border-radius: 10px;
-}
-
-
-.card-information::-webkit-scrollbar-thumb:hover {
-    background:
-        #7f7566;
-}
-
-
-/* ==================================================
-   BOOK INFORMATION
-================================================== */
-
+/* Book Information inside Card */
 .book-information-card {
     display: grid;
     grid-template-columns: 76px 1fr;
@@ -1238,732 +1047,87 @@ textarea {
     line-height: 1.3;
 }
 
-/* ==================================================
-   INFORMATION
-================================================== */
-
-.info-row {
+.character-media-grid {
     display: grid;
-
-    grid-template-columns:
-        82px 1fr;
-
-    gap: 7px;
-
-    padding:
-        6px 0;
-
-    border-bottom:
-        1px solid
-        rgba(80,70,55,.10);
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 10px;
-}
-
-
-.info-label {
-    color:
-        #766f64;
-
-    font-weight: 800;
-
-    text-transform:
-        uppercase;
-}
-
-
-.info-value {
-    color:
-        #292823;
-}
-
-
-.main-info {
-    color:
-        #856827;
-
-    font-weight: 800;
-}
-
-
-.detail-block {
-    margin-top: 10px;
-}
-
-
-.detail-title {
-    margin-bottom: 3px;
-
-    color:
-        #766f64;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 9px;
-
-    font-weight: 800;
-
-    letter-spacing: .09em;
-
-    text-transform: uppercase;
-}
-
-
-.detail-text {
-    font-size: 11px;
-
-    line-height: 1.45;
-
-    white-space: pre-wrap;
-}
-
-
-/* ==================================================
-   VOICE
-================================================== */
-
-.voice-panel {
-    margin-top: 12px;
-
-    padding: 8px;
-
-    border:
-        1px solid
-        #cbc1b0;
-
-    background:
-        rgba(255,255,255,.46);
-
-    font-family:
-        Arial,
-        sans-serif;
-}
-
-
-.voice-heading {
-    display: flex;
-
-    justify-content:
-        space-between;
-
+    grid-template-columns: repeat(2, minmax(0,1fr));
     gap: 8px;
-
-    margin-bottom: 4px;
-
-    color:
-        #6e665c;
-
-    font-size: 9px;
-
-    font-weight: 800;
-
-    text-transform:
-        uppercase;
+    margin-top: 12px;
 }
 
-
-.audio-coming-soon {
-    color:
-        #8b7954;
-}
-
-
-.voice-description {
-    font-size: 10px;
-
-    line-height: 1.45;
-}
-
-
-/* ==================================================
-   ACTIONS
-================================================== */
-
-.card-actions {
-    display: grid;
-
-    grid-template-columns:
-        1fr auto;
-
-    gap: 7px;
-
-    margin-top: 10px;
-
-    padding-top: 10px;
-
-    border-top:
-        1px dashed
-        #c6bcac;
-
-    background:
-        var(--paper);
-
-    flex-shrink: 0;
-}
-
-
-.share-button,
-.delete-button {
-    min-height: 31px;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 9px;
-
-    font-weight: 800;
-
-    text-transform:
-        uppercase;
-
-    cursor: pointer;
-}
-
-
-.share-button {
-    border:
-        1px solid
-        #373731;
-
-    background:
-        #2b2b27;
-
-    color:
-        white;
-}
-
-
-.delete-button {
-    border:
-        1px solid
-        #bbaead;
-
-    background:
-        transparent;
-
-    color:
-        #814b4a;
-}
-
-
-/* ==================================================
-   EMPTY
-================================================== */
-
-.empty-section {
-    grid-column:
-        1 / -1;
-
-    width: 100%;
-
-    padding: 35px;
-
-    border:
-        1px dashed
-        rgba(255,255,255,.18);
-
-    color:
-        rgba(255,255,255,.46);
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 12px;
-
+.character-media-card {
+    padding: 7px;
+    border: 1px solid #c8beaf;
+    background: rgba(255,255,255,.5);
     text-align: center;
 }
 
+.character-media-card.world-map-card { grid-column: 1 / -1; }
 
-/* ==================================================
-   MODAL
-================================================== */
-
-.modal {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 5000;
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 24px;
-
-    background:
-        rgba(12,12,11,.82);
-
-    backdrop-filter:
-        blur(8px);
-}
-
-
-.modal.active {
-    display: flex;
-}
-
-
-.modal-sheet {
-    width:
-        min(780px, 100%);
-
-    max-height:
-        90vh;
-
-    overflow-y: auto;
-
-    background:
-        var(--paper);
-
-    color:
-        var(--ink);
-
-    border:
-        1px solid
-        #c7bcaa;
-
-    box-shadow:
-        0 35px 80px
-        rgba(0,0,0,.6);
-}
-
-
-.modal-header {
-    display: flex;
-
-    justify-content:
-        space-between;
-
-    padding:
-        23px
-        25px;
-
-    border-bottom:
-        1px solid
-        #d1c7b7;
-}
-
-
-.modal-header-label {
-    color:
-        #7a7265;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 9px;
-
-    font-weight: 800;
-
+.character-media-label {
+    margin-bottom: 5px;
+    color: #766f64;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: .08em;
     text-transform: uppercase;
 }
 
-
-.modal-header h2 {
-    margin: 4px 0 0;
-
-    font-size: 28px;
-
-    font-weight: normal;
-}
-
-
-.modal-close {
-    width: 36px;
-    height: 36px;
-
-    border:
-        1px solid
-        #c7bdae;
-
-    background:
-        transparent;
-
-    cursor: pointer;
-}
-
-
-.modal-body {
-    padding: 25px;
-}
-
-
-/* ==================================================
-   FORM
-================================================== */
-
-.form-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0,1fr));
-
-    gap: 15px;
-}
-
-
-.form-group {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 6px;
-}
-
-
-.form-group.full {
-    grid-column:
-        1 / -1;
-}
-
-
-.form-group label {
-    color:
-        #625d54;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    text-transform:
-        uppercase;
-}
-
-
-.form-group input,
-.form-group select,
-.form-group textarea {
+.character-media-image {
     width: 100%;
-
-    border:
-        1px solid
-        #c7bdad;
-
-    background:
-        #fdfcf8;
-
-    color:
-        #2d2c27;
-
-    font-family:
-        Arial,
-        sans-serif;
-}
-
-
-.form-group input,
-.form-group select {
-    height: 41px;
-
-    padding:
-        0 10px;
-}
-
-
-.form-group textarea {
-    min-height: 90px;
-
-    padding: 10px;
-
-    resize: vertical;
-}
-
-
-/* ==================================================
-   IMAGE UPLOAD
-================================================== */
-
-.image-upload {
-    display: grid;
-
-    grid-template-columns:
-        180px 1fr;
-
-    gap: 18px;
-
-    padding: 15px;
-
-    background:
-        #e8e1d5;
-}
-
-
-.image-preview {
-    width: 180px;
-    height: 180px;
-
+    height: 82px;
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     overflow: hidden;
-
-    background:
-        #272824;
-
-    color:
-        #aaa69e;
+    background: #292823;
 }
 
+.world-map-card .character-media-image { height: 105px; }
 
-.image-preview img {
+.character-media-image img {
     width: 100%;
     height: 100%;
-
     object-fit: contain;
+    object-position: center;
 }
 
-
-.upload-help {
-    color:
-        #736d63;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 11px;
-}
-
-
-/* ==================================================
-   SCHOOL / JOB
-================================================== */
-
-.school-job-panel {
-    padding: 15px;
-
-    background:
-        #e9e2d6;
-}
-
-
-.conditional {
-    margin-top: 13px;
-}
-
-
-.hidden {
-    display: none !important;
-}
-
-
-/* ==================================================
-   MODAL ACTIONS
-================================================== */
-
-.modal-actions {
-    display: flex;
-
-    justify-content:
-        flex-end;
-
-    gap: 8px;
-
-    margin-top: 22px;
-
-    padding-top: 18px;
-
-    border-top:
-        1px solid
-        #cfc5b4;
-}
-
-
-.cancel-button,
-.save-button {
-    min-height: 39px;
-
-    padding:
-        0 17px;
-
-    cursor: pointer;
-}
-
-
-.cancel-button {
-    background:
-        transparent;
-}
-
-
-.save-button {
-    background:
-        #292923;
-
-    color: white;
-}
-
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media (max-width: 750px) {
-
-    body {
-        padding: 0;
-    }
-
-
-    .archive-frame {
-        padding: 12px;
-    }
-
-
-    .archive-board {
-        padding:
-            34px
-            15px;
-    }
-
-
-    .wall-controls {
-        flex-direction: column;
-    }
-
-
-    .character-grid {
-        grid-template-columns:
-            1fr;
-    }
-
-
-    .character-rig {
-        max-width: 310px;
-    }
-
-
-    .form-grid {
-        grid-template-columns:
-            1fr;
-    }
-
-
-    .form-group.full {
-        grid-column: auto;
-    }
-
-
-    .image-upload {
-        grid-template-columns:
-            1fr;
-    }
-
-
-    .image-preview {
-        width: 100%;
-
-        height: 240px;
-    }
-
-}
-
-
-/* ==================================================
-   CRESTS, MAP & FAMILY TREE
-================================================== */
-.character-media-grid {
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:8px;
-    margin-top:12px;
-}
-.character-media-card {
-    padding:7px;
-    border:1px solid #c8beaf;
-    background:rgba(255,255,255,.5);
-    text-align:center;
-}
-.character-media-card.world-map-card { grid-column:1 / -1; }
-.character-media-label {
-    margin-bottom:5px;
-    color:#766f64;
-    font-family:Arial,sans-serif;
-    font-size:8px;
-    font-weight:900;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-}
-.character-media-image {
-    width:100%;
-    height:82px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    background:#292823;
-}
-.world-map-card .character-media-image { height:105px; }
-.character-media-image img {
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    object-position:center;
-}
 .character-media-button, .family-tree-button {
-    width:100%;
-    margin-top:6px;
-    min-height:29px;
-    border:1px solid #8e806c;
-    background:#eee7db;
-    color:#51483e;
-    font-family:Arial,sans-serif;
-    font-size:8px;
-    font-weight:800;
-    letter-spacing:.05em;
-    text-transform:uppercase;
-    text-decoration:none;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    width: 100%;
+    margin-top: 6px;
+    min-height: 29px;
+    border: 1px solid #8e806c;
+    background: #eee7db;
+    color: #51483e;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
 }
+
 .family-tree-button {
-    margin-top:12px;
-    background:#45382b;
-    color:white;
-    border-color:#45382b;
+    margin-top: 12px;
+    background: #45382b;
+    color: white;
+    border-color: #45382b;
     transition: background .18s ease;
 }
+
 .family-tree-button:hover {
-    background:#2b221a;
+    background: #2b221a;
 }
 
-
-/* ==================================================
-   CREST IMAGE VIEWER
-================================================== */
 .character-media-image.crest-clickable,
 .crest-view-button {
     cursor: zoom-in;
 }
-.character-media-image.crest-clickable {
-    position: relative;
-    transition: transform .18s ease, box-shadow .18s ease;
-}
-.character-media-image.crest-clickable:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 7px 16px rgba(0,0,0,.24);
-}
+
 .crest-image-modal {
     position: fixed;
     inset: 0;
@@ -1975,9 +1139,11 @@ textarea {
     background: rgba(9,9,8,.88);
     backdrop-filter: blur(8px);
 }
+
 .crest-image-modal.active {
     display: flex;
 }
+
 .crest-image-dialog {
     position: relative;
     width: min(900px, 94vw);
@@ -1987,6 +1153,7 @@ textarea {
     background: #f4f0e7;
     box-shadow: 0 35px 90px rgba(0,0,0,.72);
 }
+
 .crest-image-title {
     margin: 0 46px 14px 0;
     color: #302d27;
@@ -1994,6 +1161,7 @@ textarea {
     font-size: 21px;
     font-weight: normal;
 }
+
 .crest-image-large-wrap {
     width: 100%;
     max-height: calc(92vh - 95px);
@@ -2003,6 +1171,7 @@ textarea {
     overflow: auto;
     background: #252520;
 }
+
 .crest-image-large-wrap img {
     display: block;
     max-width: 100%;
@@ -2011,6 +1180,7 @@ textarea {
     height: auto;
     object-fit: contain;
 }
+
 .crest-image-close {
     position: absolute;
     top: 12px;
@@ -2024,15 +1194,9 @@ textarea {
     line-height: 1;
     cursor: pointer;
 }
-@media (max-width: 600px) {
-    .crest-image-modal { padding: 12px; }
-    .crest-image-dialog { padding: 14px; }
-    .crest-image-title { font-size: 18px; }
-}
-
 
 /* ==================================================
-   FAMILY TREE MODAL & TREE STYLES
+   DYNAMIC FAMILY TREE MODAL & TREE STYLES
 ================================================== */
 .tree-modal {
     position: fixed;
@@ -2063,9 +1227,12 @@ textarea {
 }
 
 .tree-modal-header {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     border-bottom: 1px solid #d4cabb;
     padding-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .tree-modal-kicker {
@@ -2085,9 +1252,6 @@ textarea {
 }
 
 .tree-modal-close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
     width: 36px;
     height: 36px;
     border: 1px solid #a99d8b;
@@ -2096,6 +1260,27 @@ textarea {
     font-size: 24px;
     line-height: 1;
     cursor: pointer;
+}
+
+/* Family Crest inside Tree Modal */
+.modal-crest-badge {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid #cfc5b5;
+    border-radius: 4px;
+}
+
+.modal-crest-badge img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    cursor: zoom-in;
+    border: 1px solid #b4a58e;
+    background: #24231f;
 }
 
 .tree-scroll-container {
@@ -2107,7 +1292,6 @@ textarea {
     border-radius: 4px;
 }
 
-/* Tree Chart Architecture */
 .tree {
     display: flex;
     justify-content: center;
@@ -2117,7 +1301,6 @@ textarea {
 .tree ul {
     padding-top: 20px;
     position: relative;
-    transition: all 0.5s;
     display: flex;
     justify-content: center;
     margin: 0;
@@ -2130,10 +1313,8 @@ textarea {
     list-style-type: none;
     position: relative;
     padding: 20px 10px 0 10px;
-    transition: all 0.5s;
 }
 
-/* Connecting branch lines */
 .tree li::before, 
 .tree li::after {
     content: '';
@@ -2184,7 +1365,6 @@ textarea {
     height: 20px;
 }
 
-/* Person Card inside Tree */
 .person {
     display: flex;
     flex-direction: column;
@@ -2259,34 +1439,92 @@ textarea {
     gap: 10px;
 }
 
+/* Info Rows */
+.info-row {
+    display: grid;
+    grid-template-columns: 82px 1fr;
+    gap: 7px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(80,70,55,.10);
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+}
+.info-label { color: #766f64; font-weight: 800; text-transform: uppercase; }
+.info-value { color: #292823; }
+.main-info { color: #856827; font-weight: 800; }
+
+.detail-block { margin-top: 10px; }
+.detail-title { margin-bottom: 3px; color: #766f64; font-family: Arial, sans-serif; font-size: 9px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.detail-text { font-size: 11px; line-height: 1.45; white-space: pre-wrap; }
+
+.voice-panel { margin-top: 12px; padding: 8px; border: 1px solid #cbc1b0; background: rgba(255,255,255,.46); font-family: Arial, sans-serif; }
+.voice-heading { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; color: #6e665c; font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.audio-coming-soon { color: #8b7954; }
+.voice-description { font-size: 10px; line-height: 1.45; }
+
+.card-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #c6bcac;
+    background: var(--paper);
+    flex-shrink: 0;
+}
+
+.share-button {
+    min-height: 31px;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid #373731;
+    background: #2b2b27;
+    color: white;
+}
+
+.empty-section {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 35px;
+    border: 1px dashed rgba(255,255,255,.18);
+    color: rgba(255,255,255,.46);
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    text-align: center;
+}
+
+@media (max-width: 750px) {
+    body { padding: 0; }
+    .archive-frame { padding: 12px; }
+    .archive-board { padding: 34px 15px; }
+    .wall-controls { flex-direction: column; }
+    .character-grid { grid-template-columns: 1fr; }
+    .character-rig { max-width: 310px; }
+}
+
 </style>
 </head>
 
-
 <body>
 
-
 <div class="archive-frame">
-
 <div class="archive-board">
 
-
 <header class="wall-header">
-
     <div class="wall-kicker">
         Private Character Collection
     </div>
-
     <h1>
         Character Wall
     </h1>
-
     <p>
         An evolving archive of protagonists,
         heroes, villains, anti-heroes and
         supporting characters across your books.
     </p>
-
 </header>
 
 <div class="back-to-fanart-wrap">
@@ -2299,177 +1537,59 @@ textarea {
     </a>
 </div>
 
-
 <div style="text-align:center; margin:-8px auto 18px; font-family:Arial,sans-serif; font-size:10px; color:rgba(255,255,255,.55); letter-spacing:.08em; text-transform:uppercase;">
-    Profiles are maintained by the site administrator.
+    Profiles and lineages are maintained from the Admin Settings console.
 </div>
 
 <div class="wall-controls">
-
-
     <div class="control-panel">
-
-        <button
-            class="filter-button active"
-            data-filter="All"
-        >
-            All
-        </button>
-
-
-        <button
-            class="filter-button main-filter"
-            data-filter="Main"
-        >
-            Main Characters
-        </button>
-
-
-        <button
-            class="filter-button"
-            data-filter="Hero"
-        >
-            Heroes
-        </button>
-
-
-        <button
-            class="filter-button"
-            data-filter="Villain"
-        >
-            Villains
-        </button>
-
-
-        <button
-            class="filter-button"
-            data-filter="Anti-Hero"
-        >
-            Anti-Heroes
-        </button>
-
-
-        <button
-            class="filter-button"
-            data-filter="Other"
-        >
-            Supporting
-        </button>
-
+        <button class="filter-button active" data-filter="All">All</button>
+        <button class="filter-button main-filter" data-filter="Main">Main Characters</button>
+        <button class="filter-button" data-filter="Hero">Heroes</button>
+        <button class="filter-button" data-filter="Villain">Villains</button>
+        <button class="filter-button" data-filter="Anti-Hero">Anti-Heroes</button>
+        <button class="filter-button" data-filter="Other">Supporting</button>
     </div>
 
-
     <div class="control-panel">
-
-        <input
-            class="search-input"
-            id="search"
-            type="search"
-            placeholder="Search character or book..."
-        >
-
+        <input class="search-input" id="search" type="search" placeholder="Search character or book...">
     </div>
-
-
 </div>
 
-
-<section
-    class="character-section hero-section"
-    data-section="Hero"
->
-
+<section class="character-section hero-section" data-section="Hero">
     <div class="section-banner">
-
         <h2>Heroes</h2>
-
-        <p>
-            Protectors, protagonists and champions.
-        </p>
-
+        <p>Protectors, protagonists and champions.</p>
     </div>
-
-    <div
-        class="character-grid"
-        id="heroGrid"
-    ></div>
-
+    <div class="character-grid" id="heroGrid"></div>
 </section>
 
-
-<section
-    class="character-section villain-section"
-    data-section="Villain"
->
-
+<section class="character-section villain-section" data-section="Villain">
     <div class="section-banner">
-
         <h2>Villains</h2>
-
-        <p>
-            Antagonists, rivals and dangerous forces.
-        </p>
-
+        <p>Antagonists, rivals and dangerous forces.</p>
     </div>
-
-    <div
-        class="character-grid"
-        id="villainGrid"
-    ></div>
-
+    <div class="character-grid" id="villainGrid"></div>
 </section>
 
-
-<section
-    class="character-section antihero-section"
-    data-section="Anti-Hero"
->
-
+<section class="character-section antihero-section" data-section="Anti-Hero">
     <div class="section-banner">
-
         <h2>Anti-Heroes</h2>
-
-        <p>
-            Complex characters living between both sides.
-        </p>
-
+        <p>Complex characters living between both sides.</p>
     </div>
-
-    <div
-        class="character-grid"
-        id="antiHeroGrid"
-    ></div>
-
+    <div class="character-grid" id="antiHeroGrid"></div>
 </section>
 
-
-<section
-    class="character-section other-section"
-    data-section="Other"
->
-
+<section class="character-section other-section" data-section="Other">
     <div class="section-banner">
-
         <h2>Supporting Characters</h2>
-
-        <p>
-            Friends, family and other important figures.
-        </p>
-
+        <p>Friends, family and other important figures.</p>
     </div>
-
-    <div
-        class="character-grid"
-        id="otherGrid"
-    ></div>
-
+    <div class="character-grid" id="otherGrid"></div>
 </section>
 
-
 </div>
 </div>
-
-
 
 <!-- ==================================================
      CREST IMAGE VIEWER
@@ -2484,18 +1604,28 @@ textarea {
     </div>
 </div>
 
-
 <!-- ==================================================
-     FAMILY TREE MODAL
+     DYNAMIC FAMILY TREE & CREST MODAL
 ================================================== -->
 <div class="tree-modal" id="treeModal" aria-hidden="true">
   <div class="tree-dialog" role="dialog" aria-modal="true" aria-labelledby="treeModalTitle">
-    <button class="tree-modal-close" id="treeModalClose" type="button" aria-label="Close family tree">×</button>
     <div class="tree-modal-header">
-      <div class="tree-modal-kicker">Lineage &amp; Heritage</div>
-      <h2 class="tree-modal-title" id="treeModalTitle">Family Tree</h2>
+      <div>
+        <div class="tree-modal-kicker">Lineage &amp; Heritage Records</div>
+        <h2 class="tree-modal-title" id="treeModalTitle">Family Tree</h2>
+      </div>
+      <button class="tree-modal-close" id="treeModalClose" type="button" aria-label="Close family tree">×</button>
     </div>
     
+    <!-- Family Crest Header (Loaded dynamically from Admin Settings) -->
+    <div class="modal-crest-badge" id="modalCrestBadge" style="display:none;">
+      <img id="treeModalCrestImg" src="" alt="House Crest" title="Click to enlarge crest">
+      <div>
+        <div style="font-size:8px; font-weight:900; text-transform:uppercase; color:#79684a; font-family:Arial,sans-serif;">House / Family Crest</div>
+        <div id="treeModalCrestText" style="font-size:12px; font-weight:bold; color:#24231f; font-family:Georgia,serif;">Ancestral Coat of Arms</div>
+      </div>
+    </div>
+
     <div class="tree-scroll-container">
       <div class="tree">
         <ul>
@@ -2504,21 +1634,19 @@ textarea {
             <div class="couple">
               <div class="person">
                 <div class="image-slot">
-                  <img src="" alt="Arthur Doe" onerror="this.style.display='none'">
                   <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 </div>
-                <div class="name">Arthur Doe</div>
+                <div class="name" id="treeNodeGrandfather">Arthur Doe</div>
                 <div class="role">Grandfather</div>
-                <div class="dates">1935 – 2012</div>
+                <div class="dates" id="treeDatesGrandfather">1935 – 2012</div>
               </div>
               <div class="person">
                 <div class="image-slot">
-                  <img src="" alt="Eleanor Doe" onerror="this.style.display='none'">
                   <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 </div>
-                <div class="name">Eleanor Doe</div>
+                <div class="name" id="treeNodeGrandmother">Eleanor Doe</div>
                 <div class="role">Grandmother</div>
-                <div class="dates">1938 – Present</div>
+                <div class="dates" id="treeDatesGrandmother">1938 – Present</div>
               </div>
             </div>
 
@@ -2527,33 +1655,30 @@ textarea {
               <li>
                 <div class="person">
                   <div class="image-slot">
-                    <img src="" alt="Sarah Doe" onerror="this.style.display='none'">
                     <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                   </div>
-                  <div class="name">Sarah Doe</div>
+                  <div class="name" id="treeNodeAunt">Sarah Doe</div>
                   <div class="role">Aunt</div>
-                  <div class="dates">1965 – Present</div>
+                  <div class="dates" id="treeDatesAunt">1965 – Present</div>
                 </div>
               </li>
               <li>
                 <div class="couple">
                   <div class="person">
                     <div class="image-slot">
-                      <img src="" alt="Robert Doe" onerror="this.style.display='none'">
                       <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                     </div>
-                    <div class="name">Robert Doe</div>
+                    <div class="name" id="treeNodeFather">Robert Doe</div>
                     <div class="role">Father</div>
-                    <div class="dates">1968 – Present</div>
+                    <div class="dates" id="treeDatesFather">1968 – Present</div>
                   </div>
                   <div class="person">
                     <div class="image-slot">
-                      <img src="" alt="Clara Doe" onerror="this.style.display='none'">
                       <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                     </div>
-                    <div class="name">Clara Doe</div>
+                    <div class="name" id="treeNodeMother">Clara Doe</div>
                     <div class="role">Mother</div>
-                    <div class="dates">1970 – Present</div>
+                    <div class="dates" id="treeDatesMother">1970 – Present</div>
                   </div>
                 </div>
 
@@ -2562,23 +1687,22 @@ textarea {
                   <li>
                     <div class="person">
                       <div class="image-slot">
-                        <img src="" alt="Target Character" onerror="this.style.display='none'">
-                        <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <img id="treeNodeTargetImg" src="" alt="Target Character" onerror="this.style.display='none'">
+                        <svg id="treeNodeTargetSvg" class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                       </div>
-                      <div class="name" id="treeTargetCharacter">Target Character</div>
-                      <div class="role">Child</div>
-                      <div class="dates">1998 – Present</div>
+                      <div class="name" id="treeNodeTargetName">Target Character</div>
+                      <div class="role">Character</div>
+                      <div class="dates" id="treeNodeTargetDates">Present</div>
                     </div>
                   </li>
                   <li>
                     <div class="person">
                       <div class="image-slot">
-                        <img src="" alt="James Doe" onerror="this.style.display='none'">
                         <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                       </div>
-                      <div class="name">James Doe</div>
-                      <div class="role">Brother</div>
-                      <div class="dates">2002 – Present</div>
+                      <div class="name" id="treeNodeSibling">James Doe</div>
+                      <div class="role">Sibling</div>
+                      <div class="dates" id="treeDatesSibling">Present</div>
                     </div>
                   </li>
                 </ul>
@@ -2591,1379 +1715,173 @@ textarea {
   </div>
 </div>
 
-
-<!-- ADD CHARACTER -->
-
-<div
-    class="modal"
-    id="characterModal"
->
-
-<div class="modal-sheet">
-
-
-<div class="modal-header">
-
-    <div>
-
-        <div class="modal-header-label">
-            New Archive Record
-        </div>
-
-        <h2>Add Character</h2>
-
-    </div>
-
-
-    <button
-        class="modal-close"
-        id="closeModalButton"
-        type="button"
-    >
-        ×
-    </button>
-
-</div>
-
-
-<div class="modal-body">
-
-<form id="characterForm">
-
-<div class="form-grid">
-
-
-<div class="form-group full">
-
-<label>
-    Character Artwork
-</label>
-
-
-<div class="image-upload">
-
-    <div
-        class="image-preview"
-        id="imagePreview"
-    >
-        No artwork selected
-    </div>
-
-
-    <div>
-
-        <input
-            type="file"
-            id="characterImage"
-            accept="image/*"
-        >
-
-        <p class="upload-help">
-            Your complete character image stays
-            visible and will not be cropped.
-        </p>
-
-    </div>
-
-</div>
-
-</div>
-
-
-<div class="form-group">
-
-<label>Character Name</label>
-
-<input
-    id="name"
-    type="text"
-    placeholder="Enter character name"
->
-
-</div>
-
-
-<div class="form-group">
-
-<label>Species</label>
-
-<input
-    id="species"
-    type="text"
-    placeholder="Human, alien, dragon..."
->
-
-</div>
-
-
-<div class="form-group">
-
-<label>Book / Story</label>
-
-<input
-    id="book"
-    type="text"
-    placeholder="Example: The Broken Crown"
->
-
-</div>
-
-
-<div class="form-group">
-
-<label>Character Importance</label>
-
-<select id="mainCharacter">
-
-    <option value="No">
-        Supporting Character
-    </option>
-
-    <option value="Yes">
-        Main Character
-    </option>
-
-</select>
-
-</div>
-
-
-<div class="form-group">
-
-<label>Character Role</label>
-
-<select id="characterRole">
-
-    <option value="">
-        Choose role
-    </option>
-
-    <option value="Hero">
-        Hero
-    </option>
-
-    <option value="Villain">
-        Villain
-    </option>
-
-    <option value="Anti-Hero">
-        Anti-Hero
-    </option>
-
-    <option value="Other">
-        Supporting / Other
-    </option>
-
-</select>
-
-</div>
-
-
-<div class="form-group">
-
-<label>Age</label>
-
-<input
-    id="age"
-    type="text"
->
-
-</div>
-
-
-<div class="form-group">
-
-<label>Life Stage</label>
-
-<select id="lifeStage">
-
-    <option value="">
-        Choose stage
-    </option>
-
-    <option value="Child">
-        Child
-    </option>
-
-    <option value="Teenager">
-        Teenager
-    </option>
-
-    <option value="Adult">
-        Adult
-    </option>
-
-    <option value="Elder">
-        Elder
-    </option>
-
-</select>
-
-</div>
-
-
-<div class="form-group">
-
-<label>Pronouns</label>
-
-<input
-    id="pronouns"
-    type="text"
->
-
-</div>
-
-
-<div class="form-group">
-
-<label>Place of Birth</label>
-
-<input
-    id="born"
-    type="text"
->
-
-</div>
-
-
-<div class="form-group">
-
-<label>Birthday</label>
-
-<input
-    id="birthday"
-    type="text"
->
-
-</div>
-
-
-<div class="form-group full">
-
-<label>Voice Description</label>
-
-<input
-    id="voice"
-    type="text"
->
-
-</div>
-
-
-<div
-    class="form-group full school-job-panel"
->
-
-<label>
-    Education / Occupation
-</label>
-
-
-<select id="schoolJobType">
-
-    <option value="">
-        Choose
-    </option>
-
-    <option value="School">
-        School
-    </option>
-
-    <option value="Job">
-        Job
-    </option>
-
-    <option value="Neither">
-        Neither / Other
-    </option>
-
-</select>
-
-
-<div
-    class="form-group conditional hidden"
-    id="schoolArea"
->
-
-<label>School</label>
-
-<input
-    id="school"
-    type="text"
->
-
-</div>
-
-
-<div
-    class="form-group conditional hidden"
-    id="jobArea"
->
-
-<label>Occupation</label>
-
-<input
-    id="job"
-    type="text"
->
-
-</div>
-
-</div>
-
-
-<div class="form-group full">
-
-<label>Personality</label>
-
-<textarea id="personality"></textarea>
-
-</div>
-
-
-<div class="form-group full">
-
-<label>Abilities / Skills</label>
-
-<textarea id="abilities"></textarea>
-
-</div>
-
-
-<div class="form-group">
-
-<label>Likes</label>
-
-<textarea id="likes"></textarea>
-
-</div>
-
-
-<div class="form-group">
-
-<label>Dislikes</label>
-
-<textarea id="dislikes"></textarea>
-
-</div>
-
-
-<div class="form-group full">
-
-<label>Additional Information</label>
-
-<textarea id="extra"></textarea>
-
-</div>
-
-
-</div>
-
-
-<div class="modal-actions">
-
-<button
-    class="cancel-button"
-    id="cancelButton"
-    type="button"
->
-    Cancel
-</button>
-
-
-<button
-    class="save-button"
-    type="submit"
->
-    Add to Wall
-</button>
-
-</div>
-
-
-</form>
-
-</div>
-</div>
-</div>
-
-
 <script>
-
 let characters = [];
-
-let selectedImage = "";
-
 let activeFilter = "All";
 
-
-const modal =
-    document.getElementById(
-        "characterModal"
-    );
-
-
-const form =
-    document.getElementById(
-        "characterForm"
-    );
-
-
-const search =
-    document.getElementById(
-        "search"
-    );
-
-
-const publicAddCharacterButton =
-    document.getElementById(
-        "addCharacterButton"
-    );
-
-if (publicAddCharacterButton) {
-    publicAddCharacterButton.addEventListener(
-        "click",
-        openModal
-    );
-}
-
-
-document
-.getElementById(
-    "closeModalButton"
-)
-.addEventListener(
-    "click",
-    closeModal
-);
-
-
-document
-.getElementById(
-    "cancelButton"
-)
-.addEventListener(
-    "click",
-    closeModal
-);
-
-
-modal.addEventListener(
-    "click",
-    function(event) {
-
-        if (
-            event.target === modal
-        ) {
-
-            closeModal();
-
-        }
-
-    }
-);
-
-
-function openModal() {
-
-    modal.classList.add(
-        "active"
-    );
-
-}
-
-
-function closeModal() {
-
-    modal.classList.remove(
-        "active"
-    );
-
-    clearForm();
-
-}
-
-
-/* IMAGE */
-
-document
-.getElementById(
-    "characterImage"
-)
-.addEventListener(
-    "change",
-    function(event) {
-
-        const file =
-            event.target.files[0];
-
-
-        if (!file) {
-            return;
-        }
-
-
-        const reader =
-            new FileReader();
-
-
-        reader.onload =
-            function(event) {
-
-                selectedImage =
-                    event.target.result;
-
-
-                document
-                .getElementById(
-                    "imagePreview"
-                )
-                .innerHTML = `
-
-                    <img
-                        src="${selectedImage}"
-                        alt="Character preview"
-                    >
-
-                `;
-
-            };
-
-
-        reader.readAsDataURL(
-            file
-        );
-
-    }
-);
-
-
-/* SCHOOL JOB */
-
-document
-.getElementById(
-    "schoolJobType"
-)
-.addEventListener(
-    "change",
-    updateSchoolJob
-);
-
-
-function updateSchoolJob() {
-
-    const type =
-        value(
-            "schoolJobType"
-        );
-
-
-    const school =
-        document.getElementById(
-            "schoolArea"
-        );
-
-
-    const job =
-        document.getElementById(
-            "jobArea"
-        );
-
-
-    school.classList.add(
-        "hidden"
-    );
-
-
-    job.classList.add(
-        "hidden"
-    );
-
-
-    if (
-        type === "School"
-    ) {
-
-        school.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    if (
-        type === "Job"
-    ) {
-
-        job.classList.remove(
-            "hidden"
-        );
-
-    }
-
-}
-
-
-/* LIFE STAGE */
-
-document
-.getElementById(
-    "lifeStage"
-)
-.addEventListener(
-    "change",
-    function() {
-
-        const schoolJob =
-            document.getElementById(
-                "schoolJobType"
-            );
-
-
-        if (
-            !schoolJob.value
-        ) {
-
-            if (
-                this.value === "Child" ||
-                this.value === "Teenager"
-            ) {
-
-                schoolJob.value =
-                    "School";
-
-            }
-
-
-            else if (
-                this.value === "Adult" ||
-                this.value === "Elder"
-            ) {
-
-                schoolJob.value =
-                    "Job";
-
-            }
-
-        }
-
-
-        updateSchoolJob();
-
-    }
-);
-
-
-/* SAVE */
-
-form.addEventListener(
-    "submit",
-    function(event) {
-
-        event.preventDefault();
-
-        saveCharacter();
-
-    }
-);
-
-
-function saveCharacter() {
-
-    const name =
-        value("name");
-
-
-    const role =
-        value("characterRole");
-
-
-    if (!name) {
-
-        alert(
-            "Please enter a character name."
-        );
-
-        return;
-
-    }
-
-
-    if (!role) {
-
-        alert(
-            "Please choose a character role."
-        );
-
-        return;
-
-    }
-
-
-    const character = {
-
-        id:
-            String(
-                Date.now()
-            ),
-
-        name:
-            name,
-
-        species:
-            value("species"),
-
-        book:
-            value("book"),
-
-        mainCharacter:
-            value("mainCharacter"),
-
-        role:
-            role,
-
-        age:
-            value("age"),
-
-        lifeStage:
-            value("lifeStage"),
-
-        pronouns:
-            value("pronouns"),
-
-        born:
-            value("born"),
-
-        birthday:
-            value("birthday"),
-
-        voice:
-            value("voice"),
-
-        schoolJobType:
-            value("schoolJobType"),
-
-        school:
-            value("school"),
-
-        job:
-            value("job"),
-
-        personality:
-            value("personality"),
-
-        abilities:
-            value("abilities"),
-
-        likes:
-            value("likes"),
-
-        dislikes:
-            value("dislikes"),
-
-        extra:
-            value("extra"),
-
-        image:
-            selectedImage,
-
-        rotation:
-            randomRotation()
-
-    };
-
-
-    characters.push(
-        character
-    );
-
-
-    saveCharacters();
-
-    applyFilters();
-
-    closeModal();
-
-}
-
-
-function randomRotation() {
-
-    const rotations = [
-
-        "-1.7deg",
-        "-1deg",
-        "-.5deg",
-        ".4deg",
-        ".9deg",
-        "1.5deg"
-
-    ];
-
-
-    return rotations[
-        Math.floor(
-            Math.random()
-            * rotations.length
-        )
-    ];
-
-}
-
+const search = document.getElementById("search");
 
 /* FILTERS */
+document.querySelectorAll(".filter-button").forEach(button => {
+    button.addEventListener("click", function() {
+        activeFilter = this.dataset.filter;
+        document.querySelectorAll(".filter-button").forEach(btn => btn.classList.remove("active"));
+        this.classList.add("active");
+        applyFilters();
+    });
+});
 
-document
-.querySelectorAll(
-    ".filter-button"
-)
-.forEach(
-    button => {
-
-        button.addEventListener(
-            "click",
-            function() {
-
-                activeFilter =
-                    this.dataset.filter;
-
-
-                document
-                .querySelectorAll(
-                    ".filter-button"
-                )
-                .forEach(
-                    button =>
-                        button.classList.remove(
-                            "active"
-                        )
-                );
-
-
-                this.classList.add(
-                    "active"
-                );
-
-
-                applyFilters();
-
-            }
-        );
-
-    }
-);
-
-
-search.addEventListener(
-    "input",
-    applyFilters
-);
-
+if (search) {
+    search.addEventListener("input", applyFilters);
+}
 
 function applyFilters() {
+    const query = search ? search.value.trim().toLowerCase() : "";
 
-    const query =
-        search.value
-        .trim()
-        .toLowerCase();
+    const filtered = characters.filter(character => {
+        let matchesFilter = false;
+        if (activeFilter === "All") {
+            matchesFilter = true;
+        } else if (activeFilter === "Main") {
+            matchesFilter = character.mainCharacter === "Yes";
+        } else {
+            matchesFilter = (character.role || "Other") === activeFilter;
+        }
 
+        const matchesSearch = !query ||
+            Object.values(character).join(" ").toLowerCase().includes(query);
 
-    const filtered =
-        characters.filter(
-            function(character) {
+        return matchesFilter && matchesSearch;
+    });
 
-                let matchesFilter =
-                    false;
-
-
-                if (
-                    activeFilter === "All"
-                ) {
-
-                    matchesFilter =
-                        true;
-
-                }
-
-
-                else if (
-                    activeFilter === "Main"
-                ) {
-
-                    matchesFilter =
-                        character.mainCharacter ===
-                        "Yes";
-
-                }
-
-
-                else {
-
-                    matchesFilter =
-                        (
-                            character.role ||
-                            "Other"
-                        ) === activeFilter;
-
-                }
-
-
-                const matchesSearch =
-                    !query ||
-                    Object
-                    .values(character)
-                    .join(" ")
-                    .toLowerCase()
-                    .includes(query);
-
-
-                return (
-                    matchesFilter &&
-                    matchesSearch
-                );
-
-            }
-        );
-
-
-    renderCharacters(
-        filtered
-    );
-
+    renderCharacters(filtered);
 }
-
 
 /* RENDER */
+function renderCharacters(list = characters) {
+    const heroGrid = document.getElementById("heroGrid");
+    const villainGrid = document.getElementById("villainGrid");
+    const antiHeroGrid = document.getElementById("antiHeroGrid");
+    const otherGrid = document.getElementById("otherGrid");
 
-function renderCharacters(
-    list = characters
-) {
-
-    const heroGrid =
-        document.getElementById(
-            "heroGrid"
-        );
-
-
-    const villainGrid =
-        document.getElementById(
-            "villainGrid"
-        );
-
-
-    const antiHeroGrid =
-        document.getElementById(
-            "antiHeroGrid"
-        );
-
-
-    const otherGrid =
-        document.getElementById(
-            "otherGrid"
-        );
-
+    if (!heroGrid || !villainGrid || !antiHeroGrid || !otherGrid) return;
 
     heroGrid.innerHTML = "";
-
     villainGrid.innerHTML = "";
-
     antiHeroGrid.innerHTML = "";
-
     otherGrid.innerHTML = "";
 
+    list.forEach(character => {
+        const role = character.role || "Other";
+        const card = createCharacterCard(character);
 
-    list.forEach(
-        function(character) {
-
-            const role =
-                character.role ||
-                "Other";
-
-
-            const card =
-                createCharacterCard(
-                    character
-                );
-
-
-            if (
-                role === "Hero"
-            ) {
-
-                heroGrid.appendChild(
-                    card
-                );
-
-            }
-
-
-            else if (
-                role === "Villain"
-            ) {
-
-                villainGrid.appendChild(
-                    card
-                );
-
-            }
-
-
-            else if (
-                role === "Anti-Hero"
-            ) {
-
-                antiHeroGrid.appendChild(
-                    card
-                );
-
-            }
-
-
-            else {
-
-                otherGrid.appendChild(
-                    card
-                );
-
-            }
-
+        if (role === "Hero") {
+            heroGrid.appendChild(card);
+        } else if (role === "Villain") {
+            villainGrid.appendChild(card);
+        } else if (role === "Anti-Hero") {
+            antiHeroGrid.appendChild(card);
+        } else {
+            otherGrid.appendChild(card);
         }
-    );
+    });
 
-
-    showEmpty(
-        heroGrid,
-        "No heroes currently appear in this view."
-    );
-
-
-    showEmpty(
-        villainGrid,
-        "No villains currently appear in this view."
-    );
-
-
-    showEmpty(
-        antiHeroGrid,
-        "No anti-heroes currently appear in this view."
-    );
-
-
-    showEmpty(
-        otherGrid,
-        "No supporting characters currently appear in this view."
-    );
-
+    showEmpty(heroGrid, "No heroes currently appear in this view.");
+    showEmpty(villainGrid, "No villains currently appear in this view.");
+    showEmpty(antiHeroGrid, "No anti-heroes currently appear in this view.");
+    showEmpty(otherGrid, "No supporting characters currently appear in this view.");
 
     updateVisibleSections();
-
 }
 
+function createCharacterCard(character) {
+    const role = character.role || "Other";
+    const houseCrest = character.houseCrest || character.familyCrest || "";
 
-/* CHARACTER CARD */
+    const rig = document.createElement("article");
+    rig.className = "character-rig";
 
-function createCharacterCard(
-    character
-) {
-
-    const role =
-        character.role ||
-        "Other";
-
-    const houseCrest =
-        character.houseCrest ||
-        character.familyCrest ||
-        "";
-
-
-    const rig =
-        document.createElement(
-            "article"
-        );
-
-
-    rig.className =
-        "character-rig";
-
-
-    const schoolJob =
-        character.schoolJobType === "School"
-
-        ?
-
-        infoRow(
-            "School",
-            character.school
-        )
-
-        :
-
-        character.schoolJobType === "Job"
-
-        ?
-
-        infoRow(
-            "Occupation",
-            character.job
-        )
-
-        :
-
-        "";
-
+    const schoolJob = character.schoolJobType === "School"
+        ? infoRow("School", character.school)
+        : character.schoolJobType === "Job"
+        ? infoRow("Occupation", character.job)
+        : "";
 
     rig.innerHTML = `
-
         <div class="pin"></div>
-
-
         <div class="card-flipper">
-
-
-            <div
-                class="card-face card-front"
-                style="
-                    --rotation:
-                    ${
-                        character.rotation ||
-                        randomRotation()
-                    };
-                "
-            >
-
-
-                <div
-                    class="role-strip role-${role}"
-                >
-                    ${escapeHTML(
-                        displayRole(role)
-                    )}
+            <div class="card-face card-front" style="--rotation: ${character.rotation || randomRotation()};">
+                <div class="role-strip role-${role}">
+                    ${escapeHTML(displayRole(role))}
                 </div>
 
-
-                ${
-                    character.mainCharacter === "Yes"
-
-                    ?
-
-                    `
+                ${character.mainCharacter === "Yes" ? `
                     <div class="main-character-marker">
                         Main Character
-                    </div>
-                    `
-
-                    :
-
-                    ""
+                    </div>` : ""
                 }
 
-
                 <div class="photo-frame">
-
-                    ${
-                        character.image
-
-                        ?
-
-                        `
-                        <img
-                            src="${character.image}"
-                            alt="${escapeHTML(
-                                character.name
-                            )}"
-                        >
-                        `
-
-                        :
-
-                        `
+                    ${character.image ? `
+                        <img src="${character.image}" alt="${escapeHTML(character.name)}">
+                    ` : `
                         <div class="image-placeholder">
                             Artwork Pending
                         </div>
-                        `
-                    }
-
+                    `}
                 </div>
-
 
                 <div class="front-caption">
-
                     <div class="name-area">
-
-                        <h3 class="character-name">
-
-                            ${escapeHTML(
-                                character.name
-                            )}
-
-                        </h3>
-
-
-                        <div class="character-species">
-
-                            ${
-                                escapeHTML(
-                                    character.species ||
-                                    "Species unspecified"
-                                )
-                            }
-
-                        </div>
-
-
-                        ${
-                            character.book
-
-                            ?
-
-                            `
-                            <div class="book-line">
-
-                                ${escapeHTML(
-                                    character.book
-                                )}
-
-                            </div>
-                            `
-
-                            :
-
-                            ""
-                        }
-
+                        <h3 class="character-name">${escapeHTML(character.name)}</h3>
+                        <div class="character-species">${escapeHTML(character.species || "Species unspecified")}</div>
+                        ${character.book ? `
+                            <div class="book-line">${escapeHTML(character.book)}</div>
+                        ` : ""}
                     </div>
-
-
-                    <button
-                        class="flip-button"
-                        type="button"
-                    >
-                        View File
-                    </button>
-
+                    <button class="flip-button" type="button">View File</button>
                 </div>
-
             </div>
 
-
-            <div
-                class="card-face card-back ${backClass(
-                    role
-                )}"
-            >
-
+            <div class="card-face card-back ${backClass(role)}">
                 <div class="back-accent"></div>
-
-
                 <div class="back-header">
-
                     <div>
-
-                        <h3 class="back-name">
-
-                            ${escapeHTML(
-                                character.name
-                            )}
-
-                        </h3>
-
-
+                        <h3 class="back-name">${escapeHTML(character.name)}</h3>
                         <div class="back-role">
-
-                            ${escapeHTML(
-                                displayRole(role)
-                            )}
-
-                            ${
-                                character.mainCharacter ===
-                                "Yes"
-
-                                ?
-
-                                " · Main Character"
-
-                                :
-
-                                ""
-                            }
-
+                            ${escapeHTML(displayRole(role))}
+                            ${character.mainCharacter === "Yes" ? " · Main Character" : ""}
                         </div>
-
                     </div>
-
-
-                    <button
-                        class="flip-button"
-                        type="button"
-                    >
-                        Photo
-                    </button>
-
+                    <button class="flip-button" type="button">Photo</button>
                 </div>
 
-
-                <div class="scroll-hint">
-                    Scroll for full profile
-                </div>
-
+                <div class="scroll-hint">Scroll for full profile</div>
 
                 <div class="card-information">
-
-
                     <div class="book-information-card">
-
                         <div class="book-cover-display">
-                            ${
-                                character.bookCover
-                                ?
-                                `
-                                <img
-                                    src="${character.bookCover}"
-                                    alt="${escapeHTML(character.book || character.name)} book cover"
-                                >
-                                `
-                                :
-                                `
-                                <div class="book-cover-missing">
-                                    Book Cover Not Added
-                                </div>
-                                `
-                            }
+                            ${character.bookCover ? `
+                                <img src="${character.bookCover}" alt="${escapeHTML(character.book || character.name)} book cover">
+                            ` : `
+                                <div class="book-cover-missing">Book Cover Not Added</div>
+                            `}
                         </div>
-
                         <div class="book-information-text">
-                            <div class="book-information-heading">
-                                Book / Story
-                            </div>
-                            <div class="book-information-title">
-                                ${escapeHTML(character.book || "Book not specified")}
-                            </div>
+                            <div class="book-information-heading">Book / Story</div>
+                            <div class="book-information-title">${escapeHTML(character.book || "Book not specified")}</div>
                         </div>
-
                     </div>
-
 
                     ${houseCrest || character.schoolCrest || character.worldMap ? `
                     <div class="character-media-grid">
                         ${houseCrest ? `
                         <div class="character-media-card">
                             <div class="character-media-label">House / Family Crest</div>
-                            <div
-                                class="character-media-image crest-clickable"
-                                role="button"
-                                tabindex="0"
-                                data-crest-src="${houseCrest}"
-                                data-crest-title="${escapeHTML(character.name)} — House / Family Crest"
-                                aria-label="View ${escapeHTML(character.name)} house or family crest larger"
-                            >
+                            <div class="character-media-image crest-clickable" role="button" tabindex="0" data-crest-src="${houseCrest}" data-crest-title="${escapeHTML(character.name)} — House / Family Crest">
                                 <img src="${houseCrest}" alt="${escapeHTML(character.name)} house crest">
                             </div>
-                            <button
-                                class="character-media-button crest-view-button"
-                                type="button"
-                                data-crest-src="${houseCrest}"
-                                data-crest-title="${escapeHTML(character.name)} — House / Family Crest"
-                            >
+                            <button class="character-media-button crest-view-button" type="button" data-crest-src="${houseCrest}" data-crest-title="${escapeHTML(character.name)} — House / Family Crest">
                                 View Crest
                             </button>
                         </div>` : ""}
@@ -3971,22 +1889,10 @@ function createCharacterCard(
                         ${character.schoolCrest ? `
                         <div class="character-media-card">
                             <div class="character-media-label">School Crest</div>
-                            <div
-                                class="character-media-image crest-clickable"
-                                role="button"
-                                tabindex="0"
-                                data-crest-src="${character.schoolCrest}"
-                                data-crest-title="${escapeHTML(character.school || character.name)} — School Crest"
-                                aria-label="View ${escapeHTML(character.school || character.name)} school crest larger"
-                            >
+                            <div class="character-media-image crest-clickable" role="button" tabindex="0" data-crest-src="${character.schoolCrest}" data-crest-title="${escapeHTML(character.school || character.name)} — School Crest">
                                 <img src="${character.schoolCrest}" alt="${escapeHTML(character.school || character.name)} school crest">
                             </div>
-                            <button
-                                class="character-media-button crest-view-button"
-                                type="button"
-                                data-crest-src="${character.schoolCrest}"
-                                data-crest-title="${escapeHTML(character.school || character.name)} — School Crest"
-                            >
+                            <button class="character-media-button crest-view-button" type="button" data-crest-src="${character.schoolCrest}" data-crest-title="${escapeHTML(character.school || character.name)} — School Crest">
                                 View Crest
                             </button>
                         </div>` : ""}
@@ -3994,793 +1900,138 @@ function createCharacterCard(
                         ${character.worldMap ? `
                         <div class="character-media-card world-map-card">
                             <div class="character-media-label">World Map</div>
-                            <div
-                                class="character-media-image crest-clickable"
-                                role="button"
-                                tabindex="0"
-                                data-crest-src="${character.worldMap}"
-                                data-crest-title="${escapeHTML(character.book || character.name)} — World Map"
-                                aria-label="View ${escapeHTML(character.book || character.name)} world map larger"
-                            >
+                            <div class="character-media-image crest-clickable" role="button" tabindex="0" data-crest-src="${character.worldMap}" data-crest-title="${escapeHTML(character.book || character.name)} — World Map">
                                 <img src="${character.worldMap}" alt="${escapeHTML(character.book || character.name)} world map">
                             </div>
-                            <button
-                                class="character-media-button crest-view-button"
-                                type="button"
-                                data-crest-src="${character.worldMap}"
-                                data-crest-title="${escapeHTML(character.book || character.name)} — World Map"
-                            >
+                            <button class="character-media-button crest-view-button" type="button" data-crest-src="${character.worldMap}" data-crest-title="${escapeHTML(character.book || character.name)} — World Map">
                                 View World Map
                             </button>
                         </div>` : ""}
                     </div>` : ""}
 
-                    <button
-                        class="family-tree-button"
-                        type="button"
-                        data-tree-character="${escapeHTML(character.name)}"
-                        aria-label="Open ${escapeHTML(character.name)} family tree"
-                    >
+                    <button class="family-tree-button" type="button" data-tree-id="${character.id || ''}" aria-label="Open ${escapeHTML(character.name)} family tree">
                         Open Family Tree
                     </button>
 
-
-                    ${
-                        character.mainCharacter === "Yes"
-
-                        ?
-
-                        `
+                    ${character.mainCharacter === "Yes" ? `
                         <div class="info-row">
-
-                            <div class="info-label">
-                                Importance
-                            </div>
-
-                            <div class="info-value main-info">
-                                Main Character
-                            </div>
-
-                        </div>
-                        `
-
-                        :
-
-                        infoRow(
-                            "Importance",
-                            "Supporting Character"
-                        )
+                            <div class="info-label">Importance</div>
+                            <div class="info-value main-info">Main Character</div>
+                        </div>` : infoRow("Importance", "Supporting Character")
                     }
 
-
-                    ${infoRow(
-                        "Species",
-                        character.species
-                    )}
-
-
-                    ${infoRow(
-                        "Age",
-                        character.age
-                    )}
-
-
-                    ${infoRow(
-                        "Pronouns",
-                        character.pronouns
-                    )}
-
-
-                    ${infoRow(
-                        "Born",
-                        character.born
-                    )}
-
-
-                    ${infoRow(
-                        "Birthday",
-                        character.birthday
-                    )}
-
-
+                    ${infoRow("Species", character.species)}
+                    ${infoRow("Age", character.age)}
+                    ${infoRow("Pronouns", character.pronouns)}
+                    ${infoRow("Born", character.born)}
+                    ${infoRow("Birthday", character.birthday)}
                     ${schoolJob}
 
-
-                    ${detailBlock(
-                        "Personality",
-                        character.personality
-                    )}
-
-
-                    ${detailBlock(
-                        "Abilities / Skills",
-                        character.abilities
-                    )}
-
-
-                    ${detailBlock(
-                        "Likes",
-                        character.likes
-                    )}
-
-
-                    ${detailBlock(
-                        "Dislikes",
-                        character.dislikes
-                    )}
-
-
-                    ${detailBlock(
-                        "Additional Notes",
-                        character.extra
-                    )}
-
+                    ${detailBlock("Personality", character.personality)}
+                    ${detailBlock("Abilities / Skills", character.abilities)}
+                    ${detailBlock("Likes", character.likes)}
+                    ${detailBlock("Dislikes", character.dislikes)}
+                    ${detailBlock("Additional Notes", character.extra)}
 
                     <div class="voice-panel">
-
                         <div class="voice-heading">
-
-                            <span>
-                                Voice Reference
-                            </span>
-
-                            <span class="audio-coming-soon">
-                                Audio Coming Soon
-                            </span>
-
+                            <span>Voice Reference</span>
+                            <span class="audio-coming-soon">Audio Coming Soon</span>
                         </div>
-
-
-                        <div class="voice-description">
-
-                            ${
-                                escapeHTML(
-                                    character.voice ||
-                                    "No voice description added."
-                                )
-                            }
-
-                        </div>
-
+                        <div class="voice-description">${escapeHTML(character.voice || "No voice description added.")}</div>
                     </div>
-
-
                 </div>
-
 
                 <div class="card-actions">
-
-                    <button
-                        class="share-button"
-                        type="button"
-                    >
-                        Share Character
-                    </button>
-
-
-                    <button
-                        class="delete-button"
-                        type="button"
-                    >
-                        Delete
-                    </button>
-
+                    <button class="share-button" type="button">Share Character</button>
                 </div>
-
             </div>
-
-
         </div>
-
     `;
 
+    const flipper = rig.querySelector(".card-flipper");
+    rig.querySelectorAll(".flip-button").forEach(button => {
+        button.addEventListener("click", () => flipper.classList.toggle("flipped"));
+    });
 
-    const flipper =
-        rig.querySelector(
-            ".card-flipper"
-        );
-
-
-    rig
-    .querySelectorAll(
-        ".flip-button"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function() {
-
-                    flipper.classList.toggle(
-                        "flipped"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    rig
-    .querySelector(
-        ".share-button"
-    )
-    .addEventListener(
-        "click",
-        function() {
-
-            shareCharacter(
-                character
-            );
-
-        }
-    );
-
-
-    rig
-    .querySelector(
-        ".delete-button"
-    )
-    .addEventListener(
-        "click",
-        function() {
-
-            deleteCharacter(
-                character
-            );
-
-        }
-    );
-
+    rig.querySelector(".share-button").addEventListener("click", () => shareCharacter(character));
 
     return rig;
-
 }
-
-
-/* VISIBLE SECTIONS */
 
 function updateVisibleSections() {
-
-    document
-    .querySelectorAll(
-        ".character-section"
-    )
-    .forEach(
-        section => {
-
-            const role =
-                section.dataset.section;
-
-
-            if (
-                activeFilter === "All" ||
-                activeFilter === "Main" ||
-                activeFilter === role
-            ) {
-
-                section.style.display =
-                    "";
-
-            }
-
-
-            else {
-
-                section.style.display =
-                    "none";
-
-            }
-
+    document.querySelectorAll(".character-section").forEach(section => {
+        const role = section.dataset.section;
+        if (activeFilter === "All" || activeFilter === "Main" || activeFilter === role) {
+            section.style.display = "";
+        } else {
+            section.style.display = "none";
         }
-    );
-
+    });
 }
-
-
-/* HELPERS */
 
 function displayRole(role) {
-
-    if (
-        role === "Other"
-    ) {
-
-        return "Supporting";
-
-    }
-
-
-    return role;
-
+    return role === "Other" ? "Supporting" : role;
 }
-
 
 function backClass(role) {
-
-    if (
-        role === "Hero"
-    ) {
-
-        return "back-hero";
-
-    }
-
-
-    if (
-        role === "Villain"
-    ) {
-
-        return "back-villain";
-
-    }
-
-
-    if (
-        role === "Anti-Hero"
-    ) {
-
-        return "back-anti-hero";
-
-    }
-
-
+    if (role === "Hero") return "back-hero";
+    if (role === "Villain") return "back-villain";
+    if (role === "Anti-Hero") return "back-anti-hero";
     return "back-other";
-
 }
 
-
-function infoRow(
-    label,
-    rowValue
-) {
-
-    if (!rowValue) {
-
-        return "";
-
-    }
-
-
+function infoRow(label, rowValue) {
+    if (!rowValue) return "";
     return `
-
         <div class="info-row">
-
-            <div class="info-label">
-
-                ${escapeHTML(
-                    label
-                )}
-
-            </div>
-
-
-            <div class="info-value">
-
-                ${escapeHTML(
-                    rowValue
-                )}
-
-            </div>
-
+            <div class="info-label">${escapeHTML(label)}</div>
+            <div class="info-value">${escapeHTML(rowValue)}</div>
         </div>
-
     `;
-
 }
 
-
-function detailBlock(
-    title,
-    text
-) {
-
-    if (!text) {
-
-        return "";
-
-    }
-
-
+function detailBlock(title, text) {
+    if (!text) return "";
     return `
-
         <div class="detail-block">
-
-            <div class="detail-title">
-
-                ${escapeHTML(
-                    title
-                )}
-
-            </div>
-
-
-            <div class="detail-text">
-
-                ${escapeHTML(
-                    text
-                )}
-
-            </div>
-
+            <div class="detail-title">${escapeHTML(title)}</div>
+            <div class="detail-text">${escapeHTML(text)}</div>
         </div>
-
     `;
-
 }
 
-
-function showEmpty(
-    grid,
-    message
-) {
-
-    if (
-        grid.children.length === 0
-    ) {
-
-        grid.innerHTML = `
-
-            <div class="empty-section">
-
-                ${escapeHTML(
-                    message
-                )}
-
-            </div>
-
-        `;
-
+function showEmpty(grid, message) {
+    if (grid.children.length === 0) {
+        grid.innerHTML = `<div class="empty-section">${escapeHTML(message)}</div>`;
     }
-
 }
 
-
-/* DELETE */
-
-function deleteCharacter(
-    character
-) {
-
-    if (
-        !confirm(
-            `Delete ${character.name} from your character wall?`
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    characters =
-        characters.filter(
-            item =>
-                item !== character
-        );
-
-
-    saveCharacters();
-
-    applyFilters();
-
+function randomRotation() {
+    const rotations = ["-1.7deg", "-1deg", "-.5deg", ".4deg", ".9deg", "1.5deg"];
+    return rotations[Math.floor(Math.random() * rotations.length)];
 }
-
-
-/* SHARE */
-
-async function shareCharacter(
-    character
-) {
-
-    let occupation = "";
-
-
-    if (
-        character.schoolJobType === "School" &&
-        character.school
-    ) {
-
-        occupation =
-            `School: ${character.school}\n`;
-
-    }
-
-
-    if (
-        character.schoolJobType === "Job" &&
-        character.job
-    ) {
-
-        occupation =
-            `Occupation: ${character.job}\n`;
-
-    }
-
-
-    const shareText = `CHARACTER PROFILE
-
-${character.name}
-
-Book / Story: ${character.book || "Not specified"}
-Importance: ${
-    character.mainCharacter === "Yes"
-    ? "Main Character"
-    : "Supporting Character"
-}
-Role: ${displayRole(character.role || "Other")}
-Species: ${character.species || "Unknown"}
-Age: ${character.age || "Unknown"}
-Life Stage: ${character.lifeStage || "Unknown"}
-Pronouns: ${character.pronouns || "Unknown"}
-Place of Birth: ${character.born || "Unknown"}
-${occupation}Voice: ${character.voice || "Not specified"}
-
-PERSONALITY
-${character.personality || "Not listed"}
-
-ABILITIES
-${character.abilities || "Not listed"}
-
-LIKES
-${character.likes || "Not listed"}
-
-DISLIKES
-${character.dislikes || "Not listed"}
-
-ADDITIONAL INFORMATION
-${character.extra || "None"}`;
-
-
-    if (
-        navigator.share
-    ) {
-
-        try {
-
-            await navigator.share({
-
-                title:
-                    `${character.name} — Character Profile`,
-
-                text:
-                    shareText
-
-            });
-
-
-            return;
-
-        }
-
-
-        catch (error) {
-
-            if (
-                error.name === "AbortError"
-            ) {
-
-                return;
-
-            }
-
-        }
-
-    }
-
-
-    try {
-
-        await navigator
-        .clipboard
-        .writeText(
-            shareText
-        );
-
-
-        alert(
-            `${character.name}'s profile was copied.`
-        );
-
-    }
-
-
-    catch (error) {
-
-        fallbackCopy(
-            shareText
-        );
-
-    }
-
-}
-
-
-function fallbackCopy(text) {
-
-    const area =
-        document.createElement(
-            "textarea"
-        );
-
-
-    area.value =
-        text;
-
-
-    area.style.position =
-        "fixed";
-
-
-    area.style.opacity =
-        "0";
-
-
-    document.body.appendChild(
-        area
-    );
-
-
-    area.select();
-
-
-    try {
-
-        document.execCommand(
-            "copy"
-        );
-
-
-        alert(
-            "Character profile copied."
-        );
-
-    }
-
-
-    catch (error) {
-
-        alert(
-            "Sharing is not supported by this browser."
-        );
-
-    }
-
-
-    area.remove();
-
-}
-
-
-/* STORAGE */
-
-function saveCharacters() {
-
-    localStorage.setItem(
-
-        "characterWall",
-
-        JSON.stringify(
-            characters
-        )
-
-    );
-
-}
-
-
-/* VALUE */
-
-function value(id) {
-
-    const element =
-        document.getElementById(
-            id
-        );
-
-
-    return element
-        ?
-        element.value.trim()
-        :
-        "";
-
-}
-
-
-/* CLEAR */
-
-function clearForm() {
-
-    form.reset();
-
-
-    selectedImage =
-        "";
-
-
-    document
-    .getElementById(
-        "imagePreview"
-    )
-    .textContent =
-        "No artwork selected";
-
-
-    document
-    .getElementById(
-        "schoolArea"
-    )
-    .classList.add(
-        "hidden"
-    );
-
-
-    document
-    .getElementById(
-        "jobArea"
-    )
-    .classList.add(
-        "hidden"
-    );
-
-}
-
-
-/* SAFE HTML */
 
 function escapeHTML(text) {
-
-    if (
-        text === null ||
-        text === undefined
-    ) {
-
-        return "";
-
-    }
-
-
+    if (text === null || text === undefined) return "";
     return String(text)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
-
-/* FIREBASE DATA BRIDGE */
-
-window.__setCharacterWallCharacters = function(list) {
-    characters = Array.isArray(list) ? list : [];
-    applyFilters();
-};
-
-
+async function shareCharacter(character) {
+    const shareText = `CHARACTER PROFILE\n\n${character.name}\nBook: ${character.book || "None"}\nRole: ${displayRole(character.role || "Other")}`;
+    if (navigator.share) {
+        try {
+            await navigator.share({ title: character.name, text: shareText });
+            return;
+        } catch (_) {}
+    }
+    navigator.clipboard?.writeText(shareText).then(() => alert(`${character.name}'s profile was copied.`));
+}
 
 /* ==================================================
    CREST IMAGE VIEWER
@@ -4792,7 +2043,6 @@ const crestImageClose = document.getElementById("crestImageClose");
 
 function openCrestImage(src, title) {
     if (!src || !crestImageModal || !crestImageLarge) return;
-
     crestImageLarge.src = src;
     crestImageLarge.alt = title || "Crest enlarged image";
     crestImageTitle.textContent = title || "Crest";
@@ -4803,7 +2053,6 @@ function openCrestImage(src, title) {
 
 function closeCrestImage() {
     if (!crestImageModal) return;
-
     crestImageModal.classList.remove("active");
     crestImageModal.setAttribute("aria-hidden", "true");
     crestImageLarge.src = "";
@@ -4813,53 +2062,104 @@ function closeCrestImage() {
 document.addEventListener("click", function(event) {
     const trigger = event.target.closest("[data-crest-src]");
     if (!trigger) return;
-
     event.preventDefault();
-    event.stopPropagation();
     openCrestImage(trigger.dataset.crestSrc, trigger.dataset.crestTitle);
 });
 
-document.addEventListener("keydown", function(event) {
-    if ((event.key === "Enter" || event.key === " ") && event.target.matches(".crest-clickable[data-crest-src]")) {
-        event.preventDefault();
-        openCrestImage(event.target.dataset.crestSrc, event.target.dataset.crestTitle);
-        return;
-    }
-
-    if (event.key === "Escape" && crestImageModal && crestImageModal.classList.contains("active")) {
-        closeCrestImage();
-    }
-});
-
-if (crestImageClose) {
-    crestImageClose.addEventListener("click", closeCrestImage);
-}
-
+if (crestImageClose) crestImageClose.addEventListener("click", closeCrestImage);
 if (crestImageModal) {
-    crestImageModal.addEventListener("click", function(event) {
-        if (event.target === crestImageModal) closeCrestImage();
-    });
+    crestImageModal.addEventListener("click", e => { if (e.target === crestImageModal) closeCrestImage(); });
 }
-
 
 /* ==================================================
-   FAMILY TREE MODAL CONTROLLER
+   DYNAMIC FAMILY TREE MODAL CONTROLLER
 ================================================== */
 const treeModal = document.getElementById("treeModal");
 const treeModalClose = document.getElementById("treeModalClose");
 const treeModalTitle = document.getElementById("treeModalTitle");
-const treeTargetCharacter = document.getElementById("treeTargetCharacter");
 
-function openFamilyTree(characterName) {
-    if (!treeModal) return;
-    if (treeModalTitle) treeModalTitle.textContent = `${characterName || "Character"}'s Lineage`;
-    if (treeTargetCharacter) treeTargetCharacter.textContent = characterName || "Character";
+function openFamilyTreeModal(character) {
+    if (!treeModal || !character) return;
+
+    if (treeModalTitle) treeModalTitle.textContent = `${character.name || "Character"}'s Lineage`;
+
+    // 1. Dynamic Crest Header from Admin Settings
+    const crestBadge = document.getElementById("modalCrestBadge");
+    const crestImg = document.getElementById("treeModalCrestImg");
+    const crestText = document.getElementById("treeModalCrestText");
+    const houseCrest = character.houseCrest || character.familyCrest || "";
+
+    if (houseCrest && crestBadge && crestImg) {
+        crestImg.src = houseCrest;
+        crestImg.dataset.crestSrc = houseCrest;
+        crestImg.dataset.crestTitle = `${character.name || "Character"} House Crest`;
+        if (crestText) crestText.textContent = `${character.name || "Character"} House Crest`;
+        crestBadge.style.display = "flex";
+    } else if (crestBadge) {
+        crestBadge.style.display = "none";
+    }
+
+    // 2. Parse Genealogy Data
+    const tree = character.familyTree || {};
+    
+    // Helper to parse name and dates like "Arthur Doe (1935 – 2012)" or separate strings
+    function parseNode(val, defaultName, defaultDates) {
+        if (!val) return { name: defaultName, dates: defaultDates };
+        const match = val.match(/^(.*?)(?:\s*\((.*?)\))?$/);
+        if (match) {
+            return {
+                name: match[1].trim() || defaultName,
+                dates: match[2]?.trim() || defaultDates
+            };
+        }
+        return { name: val, dates: defaultDates };
+    }
+
+    const gpa = parseNode(tree.grandfather, "Arthur Doe", "1935 – 2012");
+    document.getElementById("treeNodeGrandfather").textContent = gpa.name;
+    document.getElementById("treeDatesGrandfather").textContent = gpa.dates;
+
+    const gma = parseNode(tree.grandmother, "Eleanor Doe", "1938 – Present");
+    document.getElementById("treeNodeGrandmother").textContent = gma.name;
+    document.getElementById("treeDatesGrandmother").textContent = gma.dates;
+
+    const dad = parseNode(tree.father || character.parents?.split(',')[0], "Robert Doe", "1968 – Present");
+    document.getElementById("treeNodeFather").textContent = dad.name;
+    document.getElementById("treeDatesFather").textContent = dad.dates;
+
+    const mom = parseNode(tree.mother || character.parents?.split(',')[1], "Clara Doe", "1970 – Present");
+    document.getElementById("treeNodeMother").textContent = mom.name;
+    document.getElementById("treeDatesMother").textContent = mom.dates;
+
+    const aunt = parseNode(tree.aunt || character.otherRelatives?.split(',')[0], "Sarah Doe", "1965 – Present");
+    document.getElementById("treeNodeAunt").textContent = aunt.name;
+    document.getElementById("treeDatesAunt").textContent = aunt.dates;
+
+    const sib = parseNode(tree.siblings || character.siblings, "James Doe", "2002 – Present");
+    document.getElementById("treeNodeSibling").textContent = sib.name;
+    document.getElementById("treeDatesSibling").textContent = sib.dates;
+
+    // Target Character Node
+    document.getElementById("treeNodeTargetName").textContent = character.name || "Target Character";
+    document.getElementById("treeNodeTargetDates").textContent = character.age || "Present";
+    
+    const targetImg = document.getElementById("treeNodeTargetImg");
+    const targetSvg = document.getElementById("treeNodeTargetSvg");
+    if (character.image && targetImg) {
+        targetImg.src = character.image;
+        targetImg.style.display = "block";
+        if (targetSvg) targetSvg.style.display = "none";
+    } else {
+        if (targetImg) targetImg.style.display = "none";
+        if (targetSvg) targetSvg.style.display = "block";
+    }
+
     treeModal.classList.add("active");
     treeModal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
 }
 
-function closeFamilyTree() {
+function closeFamilyTreeModal() {
     if (!treeModal) return;
     treeModal.classList.remove("active");
     treeModal.setAttribute("aria-hidden", "true");
@@ -4867,38 +2167,42 @@ function closeFamilyTree() {
 }
 
 document.addEventListener("click", function(event) {
-    const trigger = event.target.closest("[data-tree-character]");
-    if (trigger) {
-        event.preventDefault();
-        openFamilyTree(trigger.dataset.treeCharacter);
+    const trigger = event.target.closest("[data-tree-id]");
+    if (!trigger) return;
+    event.preventDefault();
+    const character = characters.find(c => String(c.id) === String(trigger.dataset.treeId));
+    if (character) {
+        openFamilyTreeModal(character);
     }
 });
 
 if (treeModalClose) {
-    treeModalClose.addEventListener("click", closeFamilyTree);
+    treeModalClose.addEventListener("click", closeFamilyTreeModal);
 }
 
 if (treeModal) {
     treeModal.addEventListener("click", function(event) {
-        if (event.target === treeModal) closeFamilyTree();
+        if (event.target === treeModal) closeFamilyTreeModal();
     });
 }
 
 document.addEventListener("keydown", function(event) {
-    if (event.key === "Escape" && treeModal && treeModal.classList.contains("active")) {
-        closeFamilyTree();
+    if (event.key === "Escape") {
+        if (treeModal && treeModal.classList.contains("active")) closeFamilyTreeModal();
+        if (crestImageModal && crestImageModal.classList.contains("active")) closeCrestImage();
     }
 });
 
-
-/* START */
+/* FIREBASE DATA BRIDGE */
+window.__setCharacterWallCharacters = function(list) {
+    characters = Array.isArray(list) ? list : [];
+    applyFilters();
+};
 
 applyFilters();
-
 </script>
 
-
-
+<!-- FIREBASE FIRESTORE DATA STREAM -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -4937,7 +2241,6 @@ onSnapshot(
   }
 );
 </script>
-
 
 <script>
 document.addEventListener("error", function(event) {

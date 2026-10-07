@@ -914,10 +914,17 @@
               <!-- Gen 3: Target Character & Siblings -->
               <div style="border-top:1px dashed var(--border-subtle); padding-top:14px;">
                 <span style="font-size:0.7rem; font-weight:700; color:var(--accent-gold); text-transform:uppercase;">Generation 3: Character &amp; Siblings</span>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
+                <div style="display:grid; grid-template-columns:1fr 180px 1fr; gap:12px; margin-top:8px;">
                   <div class="form-group">
-                    <label class="form-label">Siblings (Comma-separated):</label>
+                    <label class="form-label">Sibling (Name &amp; Dates):</label>
                     <input type="text" class="form-input" id="treeSiblingsInput" placeholder="James Doe (2002 – Present)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Sibling Relationship:</label>
+                    <select class="form-input" id="treeSiblingTypeInput">
+                      <option value="Brother" selected>Brother</option>
+                      <option value="Sister">Sister</option>
+                    </select>
                   </div>
                   <div class="form-group">
                     <label class="form-label">Partner / Spouse / Children:</label>
@@ -948,10 +955,10 @@
             <div style="overflow-x:auto;">
               <table class="inventory-table">
                 <thead>
-                  <tr><th>Character Name</th><th>Role / Story</th><th>Crest Attached</th><th>Actions</th></tr>
+                  <tr><th>Character Name</th><th>Role / Story</th><th>Sibling Type</th><th>Crest Attached</th><th>Actions</th></tr>
                 </thead>
                 <tbody id="adminCharacterTableBody">
-                  <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Loading characters...</td></tr>
+                  <tr><td colspan="5" style="color:var(--text-muted); text-align:center;">Loading characters...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1928,6 +1935,7 @@
       document.getElementById("existingCharacterImageUrl").value = "";
       document.getElementById("existingCharacterBookCoverUrl").value = "";
       document.getElementById("existingCharacterFamilyCrestUrl").value = "";
+      document.getElementById("treeSiblingTypeInput").value = "Brother";
       document.getElementById("characterFormLegend").textContent = "Add Character to Wall";
       document.getElementById("adminCharacterSubmitBtn").textContent = "Save Character & Tree";
       document.getElementById("cancelCharacterEditBtn").style.display = "none";
@@ -1961,6 +1969,7 @@
       document.getElementById("treeMotherInput").value = tree.mother || "";
       document.getElementById("treeAuntInput").value = tree.aunt || "";
       document.getElementById("treeSiblingsInput").value = tree.siblings || character.siblings || "";
+      document.getElementById("treeSiblingTypeInput").value = tree.siblingType || "Brother";
       document.getElementById("treePartnerInput").value = tree.partner || character.partner || "";
 
       document.getElementById("adminCharacterPersonality").value = character.personality || "";
@@ -1980,12 +1989,13 @@
       entries.sort((a, b) => (a[1].name || "").localeCompare(b[1].name || ""));
 
       if (!entries.length) {
-        tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">No characters published yet.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted); text-align:center;">No characters published yet.</td></tr>';
         return;
       }
 
       tbody.innerHTML = entries.map(([id, c]) => {
         const crest = c.houseCrest || c.familyCrest;
+        const sibType = c.familyTree?.siblingType || "Brother";
         return `
           <tr>
             <td>
@@ -1993,6 +2003,7 @@
               <div style="font-size:.72rem;color:var(--text-muted);">${c.species || "Unspecified"}</div>
             </td>
             <td>${c.role || "Other"}<br><span style="font-size:.72rem;color:var(--text-muted);">${c.book || "No story"}</span></td>
+            <td><span style="color:var(--accent-gold); font-size:0.75rem;">${sibType}</span></td>
             <td>${crest ? `<span style="color:var(--accent-gold); font-size:0.75rem;">✓ Crest Active</span>` : `<span style="color:var(--text-muted); font-size:0.75rem;">None</span>`}</td>
             <td style="display:flex;gap:8px;">
               <button type="button" class="btn-secondary-action" data-edit-character="${id}">Edit</button>
@@ -2042,6 +2053,7 @@
             mother: characterField("treeMotherInput"),
             aunt: characterField("treeAuntInput"),
             siblings: characterField("treeSiblingsInput"),
+            siblingType: document.getElementById("treeSiblingTypeInput")?.value || "Brother",
             partner: characterField("treePartnerInput")
           },
           personality: characterField("adminCharacterPersonality"),
@@ -2153,7 +2165,6 @@
       setupAdminInterface(user, isAdmin);
     });
 
-    // Profile menu trigger
     document.getElementById("profileTriggerBtn")?.addEventListener("click", (e) => {
       e.stopPropagation();
       const popover = document.getElementById("profileDropdown");
