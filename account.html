@@ -279,12 +279,11 @@
           </div>
         </div>
 
-        <!-- LIVE NOTIFICATIONS SECTION (CONTAINS ONLY STANDALONE COUPON ALERT TEST) -->
+        <!-- LIVE NOTIFICATIONS SECTION -->
         <div class="dashboard-card" id="notifications-section" style="display: none;">
           <h3 class="card-title">Live Admin Notifications</h3>
           <p class="card-desc">Real-time alerts when readers interact with your repository or follow the author.</p>
           
-          <!-- Standalone Coupon Alert Card -->
           <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; gap: 12px; margin-top: 4px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <div style="display: flex; align-items: center; gap: 8px;">
@@ -736,11 +735,10 @@
           </div>
         </div>
 
-
-        <!-- ADMIN CHARACTER WALL MANAGEMENT -->
+        <!-- ADMIN CHARACTER WALL & FAMILY TREE MANAGEMENT -->
         <div id="panel-characterwall" class="settings-card" style="display: none;">
           <h2 class="card-title">Character Wall Management</h2>
-          <p class="card-desc">Add, edit, publish, and remove the character profiles shown on the public Character Wall page.</p>
+          <p class="card-desc">Add, edit, publish, and remove the character profiles shown on the public Character Wall page, with complete Family Tree lineages &amp; Crest controls.</p>
 
           <form id="adminCharacterForm" style="display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle);">
             <h3 id="characterFormLegend" style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary);">Add Character to Wall</h3>
@@ -754,7 +752,7 @@
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
               <div class="form-group">
                 <label class="form-label">Character Name:</label>
-                <input type="text" class="form-input" id="adminCharacterName" required>
+                <input type="text" class="form-input" id="adminCharacterName" required placeholder="e.g. Arthur Doe">
               </div>
               <div class="form-group">
                 <label class="form-label">Species:</label>
@@ -765,12 +763,7 @@
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
               <div class="form-group">
                 <label class="form-label">Book / Story:</label>
-                <input type="text" class="form-input" id="adminCharacterBook">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Book Cover Image:</label>
-                <input type="file" class="form-input" id="adminCharacterBookCoverFile" accept="image/*" style="padding:9px; cursor:pointer;">
-                <div style="font-size:.72rem;color:var(--text-muted);margin-top:5px;">Upload the cover shown on the back of this character's Polaroid.</div>
+                <input type="text" class="form-input" id="adminCharacterBook" placeholder="Example: The Broken Crown">
               </div>
               <div class="form-group">
                 <label class="form-label">Role:</label>
@@ -784,14 +777,6 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">Or Book Cover Image URL:</label>
-              <input type="url" class="form-input" id="adminCharacterBookCoverUrl" placeholder="https://example.com/book-cover.jpg">
-              <div id="adminCharacterBookCoverPreview" style="display:none; margin-top:10px; width:110px; height:160px; border:1px solid var(--border-subtle); background:var(--bg-base); align-items:center; justify-content:center; overflow:hidden;">
-                <img alt="Book cover preview" style="width:100%;height:100%;object-fit:contain;display:block;">
-              </div>
-            </div>
-
             <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px;">
               <div class="form-group">
                 <label class="form-label">Importance:</label>
@@ -801,8 +786,8 @@
                 </select>
               </div>
               <div class="form-group">
-                <label class="form-label">Age:</label>
-                <input type="text" class="form-input" id="adminCharacterAge">
+                <label class="form-label">Age / Dates:</label>
+                <input type="text" class="form-input" id="adminCharacterAge" placeholder="1998 – Present">
               </div>
               <div class="form-group">
                 <label class="form-label">Life Stage:</label>
@@ -861,95 +846,109 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label">Character Artwork from Device:</label>
+              <label class="form-label">Character Artwork Image (File or URL):</label>
               <input type="file" class="form-input" id="adminCharacterImageFile" accept="image/*" style="padding:9px; cursor:pointer;">
+              <input type="url" class="form-input" id="adminCharacterImageUrl" placeholder="Or enter Artwork Image URL" style="margin-top:6px;">
             </div>
+
             <div class="form-group">
-              <label class="form-label">Or Artwork Image URL:</label>
-              <input type="url" class="form-input" id="adminCharacterImageUrl" placeholder="https://example.com/character.png">
+              <label class="form-label">Book Cover Image (File or URL):</label>
+              <input type="file" class="form-input" id="adminCharacterBookCoverFile" accept="image/*" style="padding:9px; cursor:pointer;">
+              <input type="url" class="form-input" id="adminCharacterBookCoverUrl" placeholder="Or enter Book Cover URL" style="margin-top:6px;">
             </div>
 
-            <div style="border-top:1px solid var(--border-subtle); padding-top:16px; margin-top:4px;">
-              <h4 style="font-family:var(--font-serif); color:var(--text-primary); margin:0 0 12px;">Character Crests &amp; World Map</h4>
-              <p style="font-size:.78rem;color:var(--text-muted);margin:0 0 14px;line-height:1.5;">Upload these here in Admin Settings. They will appear in the character information on the public Character Wall after you save.</p>
-
-              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;">
-                <div class="form-group">
-                  <label class="form-label">House / Family Crest Image:</label>
-                  <input type="file" class="form-input" id="adminCharacterFamilyCrestFile" accept="image/*" style="padding:9px;cursor:pointer;">
-                  <input type="url" class="form-input" id="adminCharacterFamilyCrestUrl" placeholder="Or image URL" style="margin-top:8px;">
-                  <div id="adminCharacterFamilyCrestPreview" style="display:none;margin-top:8px;width:100%;height:120px;border:1px solid var(--border-subtle);background:var(--bg-base);align-items:center;justify-content:center;overflow:hidden;"><img alt="House / family crest preview" style="max-width:100%;max-height:100%;object-fit:contain;"></div>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">School Crest Image:</label>
-                  <input type="file" class="form-input" id="adminCharacterSchoolCrestFile" accept="image/*" style="padding:9px;cursor:pointer;">
-                  <input type="url" class="form-input" id="adminCharacterSchoolCrestUrl" placeholder="Or image URL" style="margin-top:8px;">
-                  <div id="adminCharacterSchoolCrestPreview" style="display:none;margin-top:8px;width:100%;height:120px;border:1px solid var(--border-subtle);background:var(--bg-base);align-items:center;justify-content:center;overflow:hidden;"><img alt="School crest preview" style="max-width:100%;max-height:100%;object-fit:contain;"></div>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">World Map Image:</label>
-                  <input type="file" class="form-input" id="adminCharacterWorldMapFile" accept="image/*" style="padding:9px;cursor:pointer;">
-                  <input type="url" class="form-input" id="adminCharacterWorldMapUrl" placeholder="Or image URL" style="margin-top:8px;">
-                  <div id="adminCharacterWorldMapPreview" style="display:none;margin-top:8px;width:100%;height:120px;border:1px solid var(--border-subtle);background:var(--bg-base);align-items:center;justify-content:center;overflow:hidden;"><img alt="World map preview" style="max-width:100%;max-height:100%;object-fit:contain;"></div>
-                </div>
+            <!-- FAMILY CREST UPLOAD -->
+            <div style="background:var(--bg-base); border:1px solid var(--accent-gold); border-radius:4px; padding:16px;">
+              <h4 style="font-family:var(--font-serif); color:var(--accent-gold); margin-bottom:6px; font-size:1.15rem;">🛡️ House / Family Crest for Tree &amp; Wall</h4>
+              <p style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:12px;">This crest displays at the head of the Family Tree chart as well as in the character's card media slot.</p>
+              
+              <div class="form-group">
+                <label class="form-label">Upload Crest File from Device:</label>
+                <input type="file" class="form-input" id="adminCharacterFamilyCrestFile" accept="image/*" style="padding:9px; cursor:pointer;">
+              </div>
+              <div class="form-group" style="margin-top:8px;">
+                <label class="form-label">Or Crest Image URL:</label>
+                <input type="url" class="form-input" id="adminCharacterFamilyCrestUrl" placeholder="https://example.com/crest.png">
               </div>
             </div>
 
-            <div style="border-top:1px solid var(--border-subtle); padding-top:16px; margin-top:4px;">
-              <h4 style="font-family:var(--font-serif); color:var(--text-primary); margin:0 0 12px;">Family Tree</h4>
-              <p style="font-size:.78rem;color:var(--text-muted);margin:0 0 14px;line-height:1.5;">These details appear on the separate Family Tree page opened from the back of this character's Polaroid.</p>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                <div class="form-group"><label class="form-label">Parents:</label><input type="text" class="form-input" id="adminCharacterParents" placeholder="Example: Mara Vale, Tomas Vale"></div>
-                <div class="form-group"><label class="form-label">Siblings:</label><input type="text" class="form-input" id="adminCharacterSiblings" placeholder="Comma-separated names"></div>
-                <div class="form-group"><label class="form-label">Partner / Spouse:</label><input type="text" class="form-input" id="adminCharacterPartner"></div>
-                <div class="form-group"><label class="form-label">Children:</label><input type="text" class="form-input" id="adminCharacterChildren" placeholder="Comma-separated names"></div>
-                <div class="form-group"><label class="form-label">Grandparents:</label><input type="text" class="form-input" id="adminCharacterGrandparents" placeholder="Comma-separated names"></div>
-                <div class="form-group"><label class="form-label">Other Relatives:</label><input type="text" class="form-input" id="adminCharacterOtherRelatives" placeholder="Cousins, aunts, uncles, guardians..."></div>
+            <!-- FAMILY TREE GENERATIONS FORM -->
+            <div style="border:1px solid var(--border-subtle); background:var(--bg-base); border-radius:4px; padding:18px;">
+              <h4 style="font-family:var(--font-serif); color:var(--text-primary); margin-bottom:4px; font-size:1.2rem;">🌳 Interactive Family Tree Hierarchy</h4>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:14px;">Fill in generational lineage. These populate the node boxes and connecting lines in the live Family Tree modal.</p>
+
+              <!-- Gen 1: Grandparents -->
+              <div style="margin-bottom:16px;">
+                <span style="font-size:0.7rem; font-weight:700; color:var(--accent-gold); text-transform:uppercase;">Generation 1: Grandparents</span>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
+                  <div class="form-group">
+                    <label class="form-label">Grandfather (Name &amp; Dates):</label>
+                    <input type="text" class="form-input" id="treeGrandfatherInput" placeholder="Arthur Doe (1935 – 2012)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Grandmother (Name &amp; Dates):</label>
+                    <input type="text" class="form-input" id="treeGrandmotherInput" placeholder="Eleanor Doe (1938 – Present)">
+                  </div>
+                </div>
               </div>
-              <div class="form-group" style="margin-top:12px;"><label class="form-label">Family Tree Notes:</label><textarea class="form-input" id="adminCharacterFamilyTreeNotes" rows="3" style="resize:vertical;" placeholder="Family history, adopted relations, important branches, etc."></textarea></div>
+
+              <!-- Gen 2: Parents & Relatives -->
+              <div style="margin-bottom:16px; border-top:1px dashed var(--border-subtle); padding-top:14px;">
+                <span style="font-size:0.7rem; font-weight:700; color:var(--accent-gold); text-transform:uppercase;">Generation 2: Parents &amp; Aunts/Uncles</span>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:8px;">
+                  <div class="form-group">
+                    <label class="form-label">Father (Name &amp; Dates):</label>
+                    <input type="text" class="form-input" id="treeFatherInput" placeholder="Robert Doe (1968 – Present)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Mother (Name &amp; Dates):</label>
+                    <input type="text" class="form-input" id="treeMotherInput" placeholder="Clara Doe (1970 – Present)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Aunt / Uncle (Name &amp; Dates):</label>
+                    <input type="text" class="form-input" id="treeAuntInput" placeholder="Sarah Doe (1965 – Present)">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Gen 3: Target Character & Siblings -->
+              <div style="border-top:1px dashed var(--border-subtle); padding-top:14px;">
+                <span style="font-size:0.7rem; font-weight:700; color:var(--accent-gold); text-transform:uppercase;">Generation 3: Character &amp; Siblings</span>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
+                  <div class="form-group">
+                    <label class="form-label">Siblings (Comma-separated):</label>
+                    <input type="text" class="form-input" id="treeSiblingsInput" placeholder="James Doe (2002 – Present)">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Partner / Spouse / Children:</label>
+                    <input type="text" class="form-input" id="treePartnerInput" placeholder="Optional spouse or children">
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
               <label class="form-label">Personality:</label>
-              <textarea class="form-input" id="adminCharacterPersonality" rows="3" style="resize:vertical;"></textarea>
+              <textarea class="form-input" id="adminCharacterPersonality" rows="2" style="resize:vertical;"></textarea>
             </div>
             <div class="form-group">
               <label class="form-label">Abilities / Skills:</label>
-              <textarea class="form-input" id="adminCharacterAbilities" rows="3" style="resize:vertical;"></textarea>
+              <textarea class="form-input" id="adminCharacterAbilities" rows="2" style="resize:vertical;"></textarea>
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-              <div class="form-group">
-                <label class="form-label">Likes:</label>
-                <textarea class="form-input" id="adminCharacterLikes" rows="3" style="resize:vertical;"></textarea>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Dislikes:</label>
-                <textarea class="form-input" id="adminCharacterDislikes" rows="3" style="resize:vertical;"></textarea>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Additional Information:</label>
-              <textarea class="form-input" id="adminCharacterExtra" rows="4" style="resize:vertical;"></textarea>
-            </div>
-
-            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-              <button type="submit" class="btn-primary" id="adminCharacterSubmitBtn">Publish Character</button>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:8px;">
+              <button type="submit" class="btn-primary" id="adminCharacterSubmitBtn">Save Character &amp; Tree</button>
               <button type="button" class="btn-secondary-action" id="cancelCharacterEditBtn" style="display:none;">Cancel Edit</button>
-              <a href="./character-wall.html" class="btn-secondary-action" style="text-decoration:none;">View Character Wall</a>
-              <span id="characterSaveStatus" class="success-msg">Character saved successfully.</span>
+              <span id="characterSaveStatus" class="success-msg">Character saved successfully!</span>
             </div>
           </form>
 
           <div style="margin-top:24px;">
-            <h3 style="font-family:var(--font-serif); font-size:1.2rem; color:var(--text-primary); margin-bottom:12px;">Characters Published to Wall</h3>
+            <h3 style="font-family:var(--font-serif); font-size:1.2rem; color:var(--text-primary); margin-bottom:12px;">Published Character Archive</h3>
             <div style="overflow-x:auto;">
               <table class="inventory-table">
                 <thead>
-                  <tr><th>Character</th><th>Role / Story</th><th>Life Stage</th><th>Actions</th></tr>
+                  <tr><th>Character Name</th><th>Role / Story</th><th>Crest Attached</th><th>Actions</th></tr>
                 </thead>
                 <tbody id="adminCharacterTableBody">
                   <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Loading characters...</td></tr>
@@ -1370,12 +1369,10 @@
     const storage = getStorage(app);
 
     const ADMIN_EMAIL = "firelily@libraryreeds.com";
-    // Sanitized token ensures iPadOS Smart Punctuation dashes are corrected to standard hyphens
     const RAW_BOT_TOKEN = "8688974138:AAFW_DZq1AJm_fM4S0FvEENswninQ1–5t0";
     const TELEGRAM_BOT_TOKEN = RAW_BOT_TOKEN.replace(/[\u2013\u2014]/g, '--').trim();
     const TELEGRAM_CHAT_ID = "8726195655";
 
-    // --- TELEGRAM RAW SENDER (Safari / iPadOS Preflight-Safe) ---
     function escapeHtml(str) {
       if (!str) return '';
       return String(str)
@@ -1386,8 +1383,6 @@
 
     async function dispatchTelegramRaw(htmlMessage) {
       const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-
-      // Method 1: Safari CORS-safe FormData (No JSON preflight trigger)
       try {
         const formData = new FormData();
         formData.append('chat_id', String(TELEGRAM_CHAT_ID).trim());
@@ -1398,28 +1393,19 @@
           method: 'POST',
           body: formData
         });
-
         const data = await response.json();
-        if (!response.ok || !data.ok) {
-          throw new Error(data.description || `HTTP ${response.status}`);
-        }
+        if (!response.ok || !data.ok) throw new Error(data.description || `HTTP ${response.status}`);
         return data;
       } catch (postErr) {
-        console.warn("POST failed on iPad Safari, attempting GET query fallback...", postErr);
-
-        // Method 2: Direct URL Query fallback (Works universally on iOS/iPadOS)
+        console.warn("POST failed on iPad Safari, attempting GET fallback...", postErr);
         const getUrl = `${url}?chat_id=${encodeURIComponent(String(TELEGRAM_CHAT_ID).trim())}&text=${encodeURIComponent(htmlMessage)}&parse_mode=HTML`;
         const fallbackRes = await fetch(getUrl);
         const fallbackData = await fallbackRes.json();
-
-        if (!fallbackRes.ok || !fallbackData.ok) {
-          throw new Error(fallbackData.description || `HTTP ${fallbackRes.status}`);
-        }
+        if (!fallbackRes.ok || !fallbackData.ok) throw new Error(fallbackData.description || `HTTP ${fallbackRes.status}`);
         return fallbackData;
       }
     }
 
-    // 1. LINKED BOOK PURCHASE DISPATCHER
     async function sendBookOrderAlert(book) {
       const message = 
         `📚 <b>New Book Order Placed!</b>\n\n` +
@@ -1433,11 +1419,9 @@
         `💰 <b>Book Price:</b> ${escapeHtml(book.price)}\n` +
         `💵 <b>Total Paid:</b> ${escapeHtml(book.total)}\n` +
         `⏱️ <b>Time Paid:</b> ${escapeHtml(book.time)}`;
-
       return dispatchTelegramRaw(message);
     }
 
-    // 2. GIFT SHOP DISPATCHER
     async function sendGiftShopOrderAlert(gift) {
       const message = 
         `🎁 <b>New Gift Shop Purchase!</b>\n\n` +
@@ -1448,11 +1432,9 @@
         `📦 <b>Order ID:</b> <code>#${escapeHtml(gift.orderId)}</code>\n` +
         `💰 <b>Total Paid:</b> ${escapeHtml(gift.total)}\n` +
         `⏱️ <b>Time Paid:</b> ${escapeHtml(gift.time)}`;
-
       return dispatchTelegramRaw(message);
     }
 
-    // 3. STANDALONE COUPON DISPATCHER
     async function sendCouponOnlyAlert(coupon) {
       const message = 
         `🎟️ <b>Reward Coupon Code Issued!</b>\n\n` +
@@ -1461,11 +1443,9 @@
         `👤 <b>Issued To:</b> ${escapeHtml(coupon.customerName)}\n` +
         `📧 <b>Email:</b> ${escapeHtml(coupon.email)}\n` +
         `⏱️ <b>Generated:</b> ${escapeHtml(coupon.time)}`;
-
       return dispatchTelegramRaw(message);
     }
 
-    // Helper: Build accurate book payload
     function createBookAlertPayload(bookData) {
       const user = auth.currentUser;
       const customerName = user?.displayName || "Carl R. Trombley Jr.";
@@ -1495,7 +1475,6 @@
       };
     }
 
-    // --- STANDALONE COUPON TEST BUTTON ---
     const btnTestCoupon = document.getElementById('btnTestCouponAlert');
     const couponTestStatus = document.getElementById('couponTestStatus');
     if (btnTestCoupon) {
@@ -1538,7 +1517,6 @@
       });
     }
 
-    // --- GIFT ORDER TEST BUTTON ---
     const btnTestGift = document.getElementById('btnTestGiftOrderAlert');
     const giftAlertStatus = document.getElementById('giftAlertStatus');
     if (btnTestGift) {
@@ -1589,11 +1567,9 @@
     async function populateGiftItemSelect() {
       const selectEl = document.getElementById('giftItemSelectTarget');
       if (!selectEl) return;
-
       try {
         const currentVal = selectEl.value;
         selectEl.innerHTML = '<option value="">-- Choose a Gift Shop Item to Edit --</option>';
-        
         const giftSnap = await getDocs(collection(db, "giftshop_items"));
         giftSnap.forEach(docSnap => {
           const item = docSnap.data();
@@ -1602,18 +1578,9 @@
           opt.textContent = `${item.title || 'Untitled'} ($${parseFloat(item.price || 0).toFixed(2)})`;
           selectEl.appendChild(opt);
         });
-
-        if (currentVal) {
-          selectEl.value = currentVal;
-        }
+        if (currentVal) selectEl.value = currentVal;
       } catch (e) {
-        console.warn("Permission or fetch note populating gift items:", e?.message || e);
-        if (selectEl.options.length <= 1) {
-          const opt = document.createElement('option');
-          opt.value = "preview_tshirt";
-          opt.textContent = "Libraryreeds Collector T-Shirt ($24.99) [Preview]";
-          selectEl.appendChild(opt);
-        }
+        console.warn("Note populating gift items:", e?.message || e);
       }
     }
 
@@ -1656,19 +1623,13 @@
         const frontCover = document.getElementById('giftItemFrontCover')?.value.trim() || '';
         const backCover = document.getElementById('giftItemBackCover')?.value.trim() || '';
 
-        if (!targetId) {
-          window.showToast("Please select a gift item to edit.");
-          return;
-        }
-
-        if (isNaN(newPrice)) {
-          window.showToast("Please enter a valid numeric price.");
+        if (!targetId || isNaN(newPrice)) {
+          window.showToast("Please select an item and provide a valid price.");
           return;
         }
 
         try {
-          const docRef = doc(db, "giftshop_items", targetId);
-          await updateDoc(docRef, {
+          await updateDoc(doc(db, "giftshop_items", targetId), {
             title: newName,
             price: newPrice,
             imageUrl: frontCover,
@@ -1679,7 +1640,7 @@
 
           const statusEl = document.getElementById('giftItemEditStatus');
           if (statusEl) {
-            statusEl.textContent = `Successfully updated "${newName}" ($${newPrice.toFixed(2)}) with front & back covers!`;
+            statusEl.textContent = `Successfully updated "${newName}" ($${newPrice.toFixed(2)})!`;
             statusEl.style.display = 'block';
             setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
           }
@@ -1694,7 +1655,6 @@
     async function populatePromoBannerItems() {
       const selectEl = document.getElementById('adminPromoBannerTarget');
       if (!selectEl) return;
-
       try {
         const currentVal = selectEl.value;
         selectEl.innerHTML = '<option value="global_default">Global Default (Sitewide)</option>';
@@ -1713,15 +1673,13 @@
           const item = docSnap.data();
           const opt = document.createElement('option');
           opt.value = `gift_${docSnap.id}`;
-          opt.textContent = `Gift Shop / Card: ${item.title || 'Untitled'}`;
+          opt.textContent = `Gift Shop: ${item.title || 'Untitled'}`;
           selectEl.appendChild(opt);
         });
 
-        if (currentVal) {
-          selectEl.value = currentVal;
-        }
+        if (currentVal) selectEl.value = currentVal;
       } catch (e) {
-        console.warn("Permission or fetch note populating promo banner items:", e?.message || e);
+        console.warn("Note populating promo banner items:", e?.message || e);
       }
     }
 
@@ -1729,7 +1687,6 @@
       try {
         const docRef = doc(db, "site_settings_banners", targetKey);
         const docSnap = await getDoc(docRef);
-
         const titleInput = document.getElementById('adminPromoBannerTitle');
         const descInput = document.getElementById('adminPromoBannerDesc');
 
@@ -1738,15 +1695,6 @@
           if (titleInput) titleInput.value = data.title || '';
           if (descInput) descInput.value = data.description || '';
         } else {
-          if (targetKey === "global_default") {
-            const legacySnap = await getDoc(doc(db, "site_settings", "promo_banner"));
-            if (legacySnap.exists()) {
-              const data = legacySnap.data();
-              if (titleInput) titleInput.value = data.title || '';
-              if (descInput) descInput.value = data.description || '';
-              return;
-            }
-          }
           if (titleInput) titleInput.value = '';
           if (descInput) descInput.value = '';
         }
@@ -1759,42 +1707,31 @@
       loadPromoBannerSettings(e.target.value);
     });
 
-    const adminPromoBannerForm = document.getElementById('adminPromoBannerForm');
-    if (adminPromoBannerForm) {
-      adminPromoBannerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const targetSelect = document.getElementById('adminPromoBannerTarget');
-        const targetKey = targetSelect ? targetSelect.value : "global_default";
-        const title = document.getElementById('adminPromoBannerTitle').value.trim();
-        const description = document.getElementById('adminPromoBannerDesc').value.trim();
+    document.getElementById('adminPromoBannerForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const targetSelect = document.getElementById('adminPromoBannerTarget');
+      const targetKey = targetSelect ? targetSelect.value : "global_default";
+      const title = document.getElementById('adminPromoBannerTitle').value.trim();
+      const description = document.getElementById('adminPromoBannerDesc').value.trim();
 
-        try {
-          await setDoc(doc(db, "site_settings_banners", targetKey), {
-            targetKey: targetKey,
-            title: title,
-            description: description,
-            updatedAt: serverTimestamp()
-          }, { merge: true });
+      try {
+        await setDoc(doc(db, "site_settings_banners", targetKey), {
+          targetKey: targetKey,
+          title: title,
+          description: description,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
 
-          if (targetKey === "global_default") {
-            await setDoc(doc(db, "site_settings", "promo_banner"), {
-              title: title,
-              description: description,
-              updatedAt: serverTimestamp()
-            }, { merge: true });
-          }
-
-          const statusEl = document.getElementById('promoBannerSaveStatus');
-          if (statusEl) {
-            statusEl.style.display = 'block';
-            setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
-          }
-          window.showToast("Promotional banner saved!");
-        } catch (err) {
-          window.showToast("Error saving banner: " + err.message);
+        const statusEl = document.getElementById('promoBannerSaveStatus');
+        if (statusEl) {
+          statusEl.style.display = 'block';
+          setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
         }
-      });
-    }
+        window.showToast("Promotional banner saved!");
+      } catch (err) {
+        window.showToast("Error saving banner: " + err.message);
+      }
+    });
 
     populatePromoBannerItems().then(() => {
       loadPromoBannerSettings("global_default");
@@ -1804,7 +1741,6 @@
       try {
         const snap = await getDoc(doc(db, "site_settings", "manuscript"));
         if (!snap.exists()) return;
-
         const data = snap.data();
         const current = Number(data.currentWords) || 0;
         const target = Number(data.targetWords) || 75000;
@@ -1818,14 +1754,14 @@
         const velocityInput = document.getElementById('velocityInput');
         const trackerTitleInput = document.getElementById('trackerTitleInput');
 
-        if (trackerTitleInput && document.activeElement !== trackerTitleInput) trackerTitleInput.value = data.title || '';
-        if (currentInput && document.activeElement !== currentInput) currentInput.value = current.toLocaleString();
-        if (targetInput && document.activeElement !== targetInput) targetInput.value = target.toLocaleString();
-        if (chaptersDoneInput && document.activeElement !== chaptersDoneInput) chaptersDoneInput.value = data.chaptersDone !== undefined ? data.chaptersDone : '';
-        if (totalChaptersInput && document.activeElement !== totalChaptersInput) totalChaptersInput.value = data.totalChapters !== undefined ? data.totalChapters : '';
-        if (targetDateInput && document.activeElement !== targetDateInput) targetDateInput.value = data.targetDate || '';
-        if (velocityInput && document.activeElement !== velocityInput) velocityInput.value = data.writingVelocity || '';
-        if (manualPercentInput && document.activeElement !== manualPercentInput && data.manualPercent !== undefined) {
+        if (trackerTitleInput) trackerTitleInput.value = data.title || '';
+        if (currentInput) currentInput.value = current.toLocaleString();
+        if (targetInput) targetInput.value = target.toLocaleString();
+        if (chaptersDoneInput) chaptersDoneInput.value = data.chaptersDone ?? '';
+        if (totalChaptersInput) totalChaptersInput.value = data.totalChapters ?? '';
+        if (targetDateInput) targetDateInput.value = data.targetDate || '';
+        if (velocityInput) velocityInput.value = data.writingVelocity || '';
+        if (manualPercentInput && data.manualPercent !== undefined) {
           manualPercentInput.value = data.manualPercent !== null ? data.manualPercent : '';
         }
       } catch (err) {}
@@ -1860,11 +1796,11 @@
       try {
         if (trackerDocId) {
           await updateDoc(doc(db, "manuscript_progress", trackerDocId), trackerData);
-          window.showToast("Manuscript tracker updated in database!");
+          window.showToast("Manuscript tracker updated!");
         } else {
           trackerData.createdAt = serverTimestamp();
           await addDoc(collection(db, "manuscript_progress"), trackerData);
-          window.showToast("New manuscript tracker added to database!");
+          window.showToast("New manuscript tracker added!");
         }
 
         await setDoc(doc(db, "site_settings", "manuscript"), {
@@ -1880,21 +1816,12 @@
           updatedAt: new Date().toISOString()
         }, { merge: true });
 
-        resetTrackerForm();
+        document.getElementById('adminManuscriptForm').reset();
+        document.getElementById('editTrackerDocId').value = "";
+        document.getElementById('cancelEditTrackerBtn').style.display = "none";
         initManuscriptProgress();
       } catch (err) { window.showToast("Error: " + err.message); }
     });
-
-    function resetTrackerForm() {
-      const form = document.getElementById('adminManuscriptForm');
-      if (form) form.reset();
-      document.getElementById('editTrackerDocId').value = "";
-      document.getElementById('manuscriptFormLegend').textContent = "📖 Live Manuscript Progress";
-      document.getElementById('manuscriptSubmitBtn').textContent = "Update Progress Bar";
-      document.getElementById('cancelEditTrackerBtn').style.display = "none";
-    }
-
-    document.getElementById('cancelEditTrackerBtn')?.addEventListener('click', resetTrackerForm);
 
     function loadAdminEpubTrackers() {
       const tbody = document.getElementById('adminTrackerTableBody');
@@ -1922,61 +1849,25 @@
             tbody.appendChild(tr);
           });
 
-          tbody.querySelectorAll('.edit-tracker-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const id = btn.getAttribute('data-id');
-              const snap = await getDoc(doc(db, "manuscript_progress", id));
-              if (snap.exists()) {
-                const d = snap.data();
-                document.getElementById('editTrackerDocId').value = id;
-                document.getElementById('trackerTitleInput').value = d.title || '';
-                document.getElementById('currentWordsInput').value = Number(d.manualWords || d.currentWords || 0).toLocaleString();
-                document.getElementById('targetWordsInput').value = Number(d.targetWords || 75000).toLocaleString();
-                document.getElementById('chaptersDoneInput').value = d.chaptersDone !== undefined ? d.chaptersDone : '';
-                document.getElementById('totalChaptersInput').value = d.totalChapters !== undefined ? d.totalChapters : '';
-                document.getElementById('targetDateInput').value = d.targetDate || '';
-                document.getElementById('velocityInput').value = d.writingVelocity || '';
-                document.getElementById('manualPercentInput').value = (d.manualPercent !== undefined && d.manualPercent !== null) ? d.manualPercent : '';
-
-                document.getElementById('manuscriptFormLegend').textContent = `✏️ Edit Tracker: ${d.title || 'Manuscript'}`;
-                document.getElementById('manuscriptSubmitBtn').textContent = 'Save Changes to Tracker';
-                document.getElementById('cancelEditTrackerBtn').style.display = 'inline-block';
-
-                const form = document.getElementById('adminManuscriptForm');
-                window.scrollTo({ top: form.offsetTop - 100, behavior: 'smooth' });
-              }
-            });
-          });
-
           tbody.querySelectorAll('.delete-epub-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
               try {
                 await deleteDoc(doc(db, "manuscript_progress", btn.getAttribute('data-id')));
-                window.showToast("Manuscript tracker deleted.");
+                window.showToast("Tracker deleted.");
               } catch (e) {
                 window.showToast("Error deleting tracker: " + e.message);
               }
             });
           });
-
         } else {
           tbody.innerHTML = `<tr><td colspan="4" style="color: var(--text-muted); text-align: center;">No manuscript trackers found.</td></tr>`;
         }
-      }, (error) => {
-        console.warn("Manuscript trackers listener note:", error?.message || error);
-        tbody.innerHTML = `
-          <tr>
-            <td><strong>The Hidden Wings: Flames Of Fate</strong></td>
-            <td>12,500 words</td>
-            <td>Chapter 12</td>
-            <td><span style="font-size:0.75rem; color:var(--text-muted);">Database Synchronized</span></td>
-          </tr>
-        `;
       });
     }
 
     initManuscriptProgress();
 
+    // Canvas Signature Setup
     const sigCanvas = document.getElementById("signatureCanvas");
     const sigCtx = sigCanvas ? sigCanvas.getContext("2d") : null;
     let isDrawing = false;
@@ -1992,250 +1883,41 @@
       const rect = sigCanvas.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return {
-        x: clientX - rect.left,
-        y: clientY - rect.top
-      };
-    }
-
-    function startDrawing(e) {
-      isDrawing = true;
-      const pos = getCanvasPos(e);
-      sigCtx.beginPath();
-      sigCtx.moveTo(pos.x, pos.y);
-      if (e.cancelable) e.preventDefault();
-    }
-
-    function draw(e) {
-      if (!isDrawing) return;
-      const pos = getCanvasPos(e);
-      sigCtx.lineTo(pos.x, pos.y);
-      sigCtx.stroke();
-      if (e.cancelable) e.preventDefault();
-    }
-
-    function stopDrawing() {
-      if (!isDrawing) return;
-      isDrawing = false;
-      const previewImg = document.getElementById("signaturePreviewImg");
-      if (previewImg) {
-        previewImg.src = sigCanvas.toDataURL("image/png");
-      }
+      return { x: clientX - rect.left, y: clientY - rect.top };
     }
 
     if (sigCanvas) {
-      sigCanvas.addEventListener("mousedown", startDrawing);
-      sigCanvas.addEventListener("mousemove", draw);
-      window.addEventListener("mouseup", stopDrawing);
-
-      sigCanvas.addEventListener("touchstart", startDrawing, { passive: false });
-      sigCanvas.addEventListener("touchmove", draw, { passive: false });
-      window.addEventListener("touchend", stopDrawing);
+      sigCanvas.addEventListener("mousedown", (e) => { isDrawing = true; const p = getCanvasPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); });
+      sigCanvas.addEventListener("mousemove", (e) => { if (isDrawing) { const p = getCanvasPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); } });
+      window.addEventListener("mouseup", () => { isDrawing = false; });
+      sigCanvas.addEventListener("touchstart", (e) => { isDrawing = true; const p = getCanvasPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); e.preventDefault(); }, { passive: false });
+      sigCanvas.addEventListener("touchmove", (e) => { if (isDrawing) { const p = getCanvasPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); } e.preventDefault(); }, { passive: false });
+      window.addEventListener("touchend", () => { isDrawing = false; });
     }
 
     document.getElementById("clearCanvasBtn")?.addEventListener("click", () => {
-      if (sigCtx && sigCanvas) {
-        sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
-        const previewImg = document.getElementById("signaturePreviewImg");
-        if (previewImg) previewImg.src = "";
-      }
+      if (sigCtx && sigCanvas) sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
     });
 
-    const sigModeTyped = document.getElementById("sigModeTyped");
-    const sigModeDrawn = document.getElementById("sigModeDrawn");
-    const typedContainer = document.getElementById("typedSignatureContainer");
-    const drawnContainer = document.getElementById("drawnSignatureContainer");
-    const signaturePreviewText = document.getElementById("signaturePreviewText");
-    const signaturePreviewImg = document.getElementById("signaturePreviewImg");
-    const sigTextInput = document.getElementById("sigTextInput");
-    const sigFontSelect = document.getElementById("sigFontSelect");
-
-    function updateSignaturePreview() {
-      if (sigModeDrawn && sigModeDrawn.checked) {
-        if (typedContainer) typedContainer.style.display = "none";
-        if (drawnContainer) drawnContainer.style.display = "flex";
-        if (signaturePreviewText) signaturePreviewText.style.display = "none";
-        if (signaturePreviewImg) {
-          signaturePreviewImg.style.display = "block";
-          if (sigCanvas) signaturePreviewImg.src = sigCanvas.toDataURL("image/png");
-        }
-      } else {
-        if (typedContainer) typedContainer.style.display = "flex";
-        if (drawnContainer) drawnContainer.style.display = "none";
-        if (signaturePreviewText) {
-          signaturePreviewText.style.display = "block";
-          signaturePreviewText.textContent = sigTextInput?.value || "Firelily Santos";
-          signaturePreviewText.style.fontFamily = sigFontSelect?.value || "'Cormorant Garamond', Georgia, serif";
-        }
-        if (signaturePreviewImg) signaturePreviewImg.style.display = "none";
-      }
-    }
-
-    [sigModeTyped, sigModeDrawn, sigTextInput, sigFontSelect].forEach(el => {
-      if (el) el.addEventListener("input", updateSignaturePreview);
-    });
-
-    document.getElementById("authorSignatureForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const mode = sigModeDrawn && sigModeDrawn.checked ? "drawn" : "typed";
-      const text = sigTextInput?.value.trim() || "Firelily Santos";
-      const font = sigFontSelect?.value || "'Cormorant Garamond', Georgia, serif";
-      const drawnData = (mode === "drawn" && sigCanvas) ? sigCanvas.toDataURL("image/png") : "";
-
-      try {
-        await setDoc(doc(db, "settings", "author_signature"), {
-          mode: mode,
-          text: text,
-          font: font,
-          drawnData: drawnData,
-          updatedAt: serverTimestamp()
-        }, { merge: true });
-
-        const statusEl = document.getElementById("signatureSaveStatus");
-        if (statusEl) {
-          statusEl.style.display = "block";
-          setTimeout(() => { statusEl.style.display = "none"; }, 3000);
-        }
-        window.showToast("Author signature updated successfully!");
-      } catch (err) {
-        window.showToast("Error saving signature: " + err.message);
-      }
-    });
-
-    ['home', 'shop', 'gift'].forEach(prefix => {
-      const form = document.getElementById(`timerForm${prefix.charAt(0).toUpperCase() + prefix.slice(1)}`);
-      if (form) {
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const enabled = document.getElementById(`${prefix}Enabled`)?.checked || false;
-          const title = document.getElementById(`${prefix}Title`)?.value.trim() || '';
-          const days = parseInt(document.getElementById(`${prefix}Days`)?.value) || 0;
-          const hours = parseInt(document.getElementById(`${prefix}Hours`)?.value) || 0;
-          const minutes = parseInt(document.getElementById(`${prefix}Minutes`)?.value) || 0;
-          const seconds = parseInt(document.getElementById(`${prefix}Seconds`)?.value) || 0;
-
-          try {
-            await setDoc(doc(db, "settings", `timer_${prefix}`), {
-              enabled,
-              title,
-              days,
-              hours,
-              minutes,
-              seconds,
-              updatedAt: serverTimestamp()
-            }, { merge: true });
-
-            window.showToast(`${prefix.toUpperCase()} countdown timer saved!`);
-          } catch (err) {
-            window.showToast(`Error saving timer: ${err.message}`);
-          }
-        });
-      }
-    });
-
-    ['home', 'shop', 'gift'].forEach(prefix => {
-      const form = document.getElementById(`announcementForm${prefix.charAt(0).toUpperCase() + prefix.slice(1)}`);
-      if (form) {
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const enabled = document.getElementById(`${prefix}AnnounceEnabled`)?.checked || false;
-          const text = document.getElementById(`${prefix}AnnounceText`)?.value.trim() || '';
-
-          try {
-            await setDoc(doc(db, "settings", `announcement_${prefix}`), {
-              enabled,
-              text,
-              updatedAt: serverTimestamp()
-            }, { merge: true });
-
-            window.showToast(`${prefix.toUpperCase()} announcement bar saved!`);
-          } catch (err) {
-            window.showToast(`Error saving announcement: ${err.message}`);
-          }
-        });
-      }
-    });
-
-    document.getElementById('nativeCancelBtn')?.addEventListener('click', async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        window.showToast("Please sign in to manage your subscription.");
-        return;
-      }
-
-      const cancelBtn = document.getElementById('nativeCancelBtn');
-      const feedbackMsg = document.getElementById('cancelFeedbackMsg');
-      const statusText = document.getElementById('userSubStatusText');
-      const subBadge = document.getElementById('subBadge');
-
-      cancelBtn.disabled = true;
-      cancelBtn.textContent = 'Canceling...';
-
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        const subscriptionId = userDocSnap.data()?.stripeSubscriptionId;
-
-        if (!subscriptionId) {
-          throw new Error("No active subscription ID found for this account.");
-        }
-
-        const response = await fetch('/api/cancel-subscription', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ subscriptionId: subscriptionId })
-        });
-
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Failed to cancel subscription.');
-
-        if (statusText) statusText.textContent = 'Status: Canceling at Period End';
-        if (subBadge) {
-          subBadge.textContent = 'Pending Cancellation';
-          subBadge.style.color = '#ff922b';
-          subBadge.style.background = 'rgba(255, 146, 43, 0.15)';
-        }
-
-        if (feedbackMsg) {
-          feedbackMsg.textContent = 'Your subscription will remain active until the end of your billing cycle and will not renew.';
-          feedbackMsg.style.color = '#40c057';
-          feedbackMsg.style.display = 'block';
-        }
-
-        cancelBtn.style.display = 'none';
-
-        await updateDoc(userDocRef, {
-          subscriptionStatus: 'canceling',
-          cancelAtPeriodEnd: true,
-          updatedAt: serverTimestamp()
-        });
-
-      } catch (err) {
-        if (feedbackMsg) {
-          feedbackMsg.textContent = err.message;
-          feedbackMsg.style.color = '#ff6b6b';
-          feedbackMsg.style.display = 'block';
-        }
-        cancelBtn.disabled = false;
-        cancelBtn.textContent = 'Cancel Subscription';
-      }
-    });
-
-
-    // --- CHARACTER WALL ADMIN MANAGEMENT ---
-    let characterWallUnsubscribe = null;
+    // --- CHARACTER WALL & FAMILY TREE MANAGEMENT ---
     let adminCharacterCache = new Map();
 
     function requireCharacterAdmin() {
       const user = auth.currentUser;
-      return !!(user && user.email &&
-        (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() ||
-         user.email.toLowerCase().includes("admin")));
+      return !!(user && user.email && (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || user.email.toLowerCase().includes("admin")));
     }
 
     function characterField(id) {
       const el = document.getElementById(id);
       return el ? el.value.trim() : "";
+    }
+
+    async function uploadCharacterMedia(file, folder) {
+      if (!file) return "";
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const mediaRef = ref(storage, `character-wall/${folder}/${Date.now()}-${safeName}`);
+      await uploadBytes(mediaRef, file);
+      return await getDownloadURL(mediaRef);
     }
 
     function resetAdminCharacterForm() {
@@ -2246,101 +1928,48 @@
       document.getElementById("existingCharacterImageUrl").value = "";
       document.getElementById("existingCharacterBookCoverUrl").value = "";
       document.getElementById("existingCharacterFamilyCrestUrl").value = "";
-      document.getElementById("existingCharacterSchoolCrestUrl").value = "";
-      document.getElementById("existingCharacterWorldMapUrl").value = "";
-      document.getElementById("adminCharacterBookCoverUrl").value = "";
-      document.getElementById("adminCharacterFamilyCrestUrl").value = "";
-      document.getElementById("adminCharacterSchoolCrestUrl").value = "";
-      document.getElementById("adminCharacterWorldMapUrl").value = "";
-      const bookCoverFile = document.getElementById("adminCharacterBookCoverFile");
-      if (bookCoverFile) bookCoverFile.value = "";
-      const bookPreview = document.getElementById("adminCharacterBookCoverPreview");
-      if (bookPreview) {
-        bookPreview.style.display = "none";
-        const img = bookPreview.querySelector("img");
-        if (img) img.removeAttribute("src");
-      }
-      [
-        ["adminCharacterFamilyCrestFile","adminCharacterFamilyCrestPreview"],
-        ["adminCharacterSchoolCrestFile","adminCharacterSchoolCrestPreview"],
-        ["adminCharacterWorldMapFile","adminCharacterWorldMapPreview"]
-      ].forEach(([fileId, previewId]) => {
-        const input = document.getElementById(fileId);
-        if (input) input.value = "";
-        const preview = document.getElementById(previewId);
-        if (preview) {
-          preview.style.display = "none";
-          const img = preview.querySelector("img");
-          if (img) img.removeAttribute("src");
-        }
-      });
       document.getElementById("characterFormLegend").textContent = "Add Character to Wall";
-      document.getElementById("adminCharacterSubmitBtn").textContent = "Publish Character";
+      document.getElementById("adminCharacterSubmitBtn").textContent = "Save Character & Tree";
       document.getElementById("cancelCharacterEditBtn").style.display = "none";
-      document.getElementById("characterSaveStatus").style.display = "none";
     }
 
     function fillAdminCharacterForm(id) {
       const character = adminCharacterCache.get(id);
       if (!character) return;
+
       document.getElementById("editCharacterDocId").value = id;
       document.getElementById("existingCharacterImageUrl").value = character.image || "";
       document.getElementById("existingCharacterBookCoverUrl").value = character.bookCover || "";
-      document.getElementById("existingCharacterFamilyCrestUrl").value = (character.houseCrest || character.familyCrest || "");
-      document.getElementById("existingCharacterSchoolCrestUrl").value = character.schoolCrest || "";
-      document.getElementById("existingCharacterWorldMapUrl").value = character.worldMap || "";
+      document.getElementById("existingCharacterFamilyCrestUrl").value = character.houseCrest || character.familyCrest || "";
+
       document.getElementById("adminCharacterName").value = character.name || "";
       document.getElementById("adminCharacterSpecies").value = character.species || "";
       document.getElementById("adminCharacterBook").value = character.book || "";
-      document.getElementById("adminCharacterBookCoverUrl").value = character.bookCover || "";
-      document.getElementById("adminCharacterFamilyCrestUrl").value = (character.houseCrest || character.familyCrest || "");
-      document.getElementById("adminCharacterSchoolCrestUrl").value = character.schoolCrest || "";
-      document.getElementById("adminCharacterWorldMapUrl").value = character.worldMap || "";
-      const bookPreview = document.getElementById("adminCharacterBookCoverPreview");
-      if (bookPreview) {
-        const img = bookPreview.querySelector("img");
-        if (character.bookCover && img) {
-          img.src = character.bookCover;
-          bookPreview.style.display = "flex";
-        } else {
-          if (img) img.removeAttribute("src");
-          bookPreview.style.display = "none";
-        }
-      }
       document.getElementById("adminCharacterRole").value = character.role || "Other";
       document.getElementById("adminCharacterMain").value = character.mainCharacter || "No";
       document.getElementById("adminCharacterAge").value = character.age || "";
       document.getElementById("adminCharacterLifeStage").value = character.lifeStage || "";
-      document.getElementById("adminCharacterPronouns").value = character.pronouns || "";
-      document.getElementById("adminCharacterBorn").value = character.born || "";
-      document.getElementById("adminCharacterBirthday").value = character.birthday || "";
-      document.getElementById("adminCharacterVoice").value = character.voice || "";
-      document.getElementById("adminCharacterSchoolJobType").value = character.schoolJobType || "";
-      document.getElementById("adminCharacterSchool").value = character.school || "";
-      document.getElementById("adminCharacterJob").value = character.job || "";
       document.getElementById("adminCharacterImageUrl").value = character.image || "";
+      document.getElementById("adminCharacterBookCoverUrl").value = character.bookCover || "";
+      document.getElementById("adminCharacterFamilyCrestUrl").value = character.houseCrest || character.familyCrest || "";
+
+      // Family Tree Fields
+      const tree = character.familyTree || {};
+      document.getElementById("treeGrandfatherInput").value = tree.grandfather || "";
+      document.getElementById("treeGrandmotherInput").value = tree.grandmother || "";
+      document.getElementById("treeFatherInput").value = tree.father || "";
+      document.getElementById("treeMotherInput").value = tree.mother || "";
+      document.getElementById("treeAuntInput").value = tree.aunt || "";
+      document.getElementById("treeSiblingsInput").value = tree.siblings || character.siblings || "";
+      document.getElementById("treePartnerInput").value = tree.partner || character.partner || "";
+
       document.getElementById("adminCharacterPersonality").value = character.personality || "";
       document.getElementById("adminCharacterAbilities").value = character.abilities || "";
-      document.getElementById("adminCharacterLikes").value = character.likes || "";
-      document.getElementById("adminCharacterDislikes").value = character.dislikes || "";
-      document.getElementById("adminCharacterExtra").value = character.extra || "";
-      document.getElementById("adminCharacterParents").value = character.parents || "";
-      document.getElementById("adminCharacterSiblings").value = character.siblings || "";
-      document.getElementById("adminCharacterPartner").value = character.partner || "";
-      document.getElementById("adminCharacterChildren").value = character.children || "";
-      document.getElementById("adminCharacterGrandparents").value = character.grandparents || "";
-      document.getElementById("adminCharacterOtherRelatives").value = character.otherRelatives || "";
-      document.getElementById("adminCharacterFamilyTreeNotes").value = character.familyTreeNotes || "";
-      setAdminMediaPreview("adminCharacterFamilyCrestPreview", (character.houseCrest || character.familyCrest || ""));
-      setAdminMediaPreview("adminCharacterSchoolCrestPreview", character.schoolCrest || "");
-      setAdminMediaPreview("adminCharacterWorldMapPreview", character.worldMap || "");
-      document.getElementById("characterFormLegend").textContent = "Edit Character";
-      document.getElementById("adminCharacterSubmitBtn").textContent = "Save Character Changes";
+
+      document.getElementById("characterFormLegend").textContent = `Edit: ${character.name || 'Character'}`;
+      document.getElementById("adminCharacterSubmitBtn").textContent = "Save Changes to Wall & Tree";
       document.getElementById("cancelCharacterEditBtn").style.display = "inline-flex";
-      document.getElementById("panelHeaderTitle").textContent = "Character Wall Management";
-      document.querySelectorAll(".settings-card, .dashboard-card").forEach(card => card.style.display = "none");
-      document.getElementById("panel-characterwall").style.display = "flex";
-      window.scrollTo({top: 0, behavior: "smooth"});
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function renderAdminCharacterTable() {
@@ -2355,273 +1984,115 @@
         return;
       }
 
-      tbody.innerHTML = entries.map(([id, c]) => `
-        <tr>
-          <td>
-            <strong style="color:var(--text-primary);">${escapeHtml(c.name || "Unnamed")}</strong>
-            <div style="font-size:.72rem;color:var(--text-muted);">${escapeHtml(c.species || "Species unspecified")}</div>
-          </td>
-          <td>${escapeHtml(c.role || "Other")}<br><span style="font-size:.72rem;color:var(--text-muted);">${escapeHtml(c.book || "No story listed")}</span></td>
-          <td>${escapeHtml(c.lifeStage || "Not specified")}</td>
-          <td style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button type="button" class="btn-secondary-action" data-character-edit="${id}">Edit</button>
-            <button type="button" class="btn-danger-action" data-character-delete="${id}">Delete</button>
-          </td>
-        </tr>
-      `).join("");
+      tbody.innerHTML = entries.map(([id, c]) => {
+        const crest = c.houseCrest || c.familyCrest;
+        return `
+          <tr>
+            <td>
+              <strong style="color:var(--text-primary);">${c.name || "Unnamed"}</strong>
+              <div style="font-size:.72rem;color:var(--text-muted);">${c.species || "Unspecified"}</div>
+            </td>
+            <td>${c.role || "Other"}<br><span style="font-size:.72rem;color:var(--text-muted);">${c.book || "No story"}</span></td>
+            <td>${crest ? `<span style="color:var(--accent-gold); font-size:0.75rem;">✓ Crest Active</span>` : `<span style="color:var(--text-muted); font-size:0.75rem;">None</span>`}</td>
+            <td style="display:flex;gap:8px;">
+              <button type="button" class="btn-secondary-action" data-edit-character="${id}">Edit</button>
+              <button type="button" class="btn-danger-action" data-delete-character="${id}">Delete</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
     }
 
-    async function uploadCharacterArtwork(file) {
-      if (!file) return "";
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const imageRef = ref(storage, `character-wall/${Date.now()}-${safeName}`);
-      await uploadBytes(imageRef, file);
-      return await getDownloadURL(imageRef);
-    }
+    const form = document.getElementById("adminCharacterForm");
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById("adminCharacterSubmitBtn");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Publishing to Wall...";
 
-    async function uploadCharacterBookCover(file) {
-      if (!file) return "";
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const coverRef = ref(storage, `character-wall/book-covers/${Date.now()}-${safeName}`);
-      await uploadBytes(coverRef, file);
-      return await getDownloadURL(coverRef);
-    }
+      try {
+        const artFile = document.getElementById("adminCharacterImageFile").files[0];
+        const coverFile = document.getElementById("adminCharacterBookCoverFile").files[0];
+        const crestFile = document.getElementById("adminCharacterFamilyCrestFile").files[0];
 
-    async function uploadCharacterMedia(file, folder) {
-      if (!file) return "";
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const mediaRef = ref(storage, `character-wall/${folder}/${Date.now()}-${safeName}`);
-      await uploadBytes(mediaRef, file);
-      return await getDownloadURL(mediaRef);
-    }
+        let image = characterField("adminCharacterImageUrl") || characterField("existingCharacterImageUrl");
+        let bookCover = characterField("adminCharacterBookCoverUrl") || characterField("existingCharacterBookCoverUrl");
+        let familyCrest = characterField("adminCharacterFamilyCrestUrl") || characterField("existingCharacterFamilyCrestUrl");
 
-    function setAdminMediaPreview(previewId, src) {
-      const preview = document.getElementById(previewId);
-      if (!preview) return;
-      const img = preview.querySelector("img");
-      if (src && img) {
-        img.src = src;
-        preview.style.display = "flex";
-      } else {
-        if (img) img.removeAttribute("src");
-        preview.style.display = "none";
-      }
-    }
+        if (artFile) image = await uploadCharacterMedia(artFile, "avatars");
+        if (coverFile) bookCover = await uploadCharacterMedia(coverFile, "book-covers");
+        if (crestFile) familyCrest = await uploadCharacterMedia(crestFile, "family-crests");
 
-    [
-      {file:"adminCharacterFamilyCrestFile", url:"adminCharacterFamilyCrestUrl", existing:"existingCharacterFamilyCrestUrl", preview:"adminCharacterFamilyCrestPreview"},
-      {file:"adminCharacterSchoolCrestFile", url:"adminCharacterSchoolCrestUrl", existing:"existingCharacterSchoolCrestUrl", preview:"adminCharacterSchoolCrestPreview"},
-      {file:"adminCharacterWorldMapFile", url:"adminCharacterWorldMapUrl", existing:"existingCharacterWorldMapUrl", preview:"adminCharacterWorldMapPreview"}
-    ].forEach((cfg) => {
-      const fileInput = document.getElementById(cfg.file);
-      const urlInput = document.getElementById(cfg.url);
-      if (fileInput) {
-        fileInput.addEventListener("change", () => {
-          const file = fileInput.files[0];
-          if (!file) {
-            setAdminMediaPreview(cfg.preview, characterField(cfg.url) || characterField(cfg.existing));
-            return;
-          }
-          const reader = new FileReader();
-          reader.onload = (event) => setAdminMediaPreview(cfg.preview, event.target.result);
-          reader.readAsDataURL(file);
-        });
-      }
-      if (urlInput) {
-        urlInput.addEventListener("input", () => {
-          if (!fileInput || !fileInput.files.length) {
-            setAdminMediaPreview(cfg.preview, urlInput.value.trim() || characterField(cfg.existing));
-          }
-        });
+        const payload = {
+          name: characterField("adminCharacterName"),
+          species: characterField("adminCharacterSpecies"),
+          book: characterField("adminCharacterBook"),
+          role: characterField("adminCharacterRole") || "Other",
+          mainCharacter: characterField("adminCharacterMain") || "No",
+          age: characterField("adminCharacterAge"),
+          lifeStage: characterField("adminCharacterLifeStage"),
+          image,
+          bookCover,
+          houseCrest: familyCrest,
+          familyCrest: familyCrest,
+          familyTree: {
+            grandfather: characterField("treeGrandfatherInput"),
+            grandmother: characterField("treeGrandmotherInput"),
+            father: characterField("treeFatherInput"),
+            mother: characterField("treeMotherInput"),
+            aunt: characterField("treeAuntInput"),
+            siblings: characterField("treeSiblingsInput"),
+            partner: characterField("treePartnerInput")
+          },
+          personality: characterField("adminCharacterPersonality"),
+          abilities: characterField("adminCharacterAbilities"),
+          updatedAt: serverTimestamp()
+        };
+
+        const editId = characterField("editCharacterDocId");
+        if (editId) {
+          await updateDoc(doc(db, "character_wall", editId), payload);
+        } else {
+          payload.createdAt = serverTimestamp();
+          await addDoc(collection(db, "character_wall"), payload);
+        }
+
+        resetAdminCharacterForm();
+        const status = document.getElementById("characterSaveStatus");
+        status.style.display = "block";
+        setTimeout(() => status.style.display = "none", 3500);
+      } catch (err) {
+        alert("Save failed: " + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Save Character & Tree";
       }
     });
 
-    function setAdminBookCoverPreview(src) {
-      const preview = document.getElementById("adminCharacterBookCoverPreview");
-      if (!preview) return;
-      const img = preview.querySelector("img");
-      if (src && img) {
-        img.src = src;
-        preview.style.display = "flex";
-      } else {
-        if (img) img.removeAttribute("src");
-        preview.style.display = "none";
+    document.getElementById("cancelCharacterEditBtn")?.addEventListener("click", resetAdminCharacterForm);
+
+    document.getElementById("adminCharacterTableBody")?.addEventListener("click", async (e) => {
+      const editBtn = e.target.closest("[data-edit-character]");
+      const deleteBtn = e.target.closest("[data-delete-character]");
+
+      if (editBtn) fillAdminCharacterForm(editBtn.dataset.editCharacter);
+      if (deleteBtn) {
+        const id = deleteBtn.dataset.deleteCharacter;
+        if (!confirm("Permanently delete this character and its tree?")) return;
+        await deleteDoc(doc(db, "character_wall", id));
       }
-    }
+    });
 
-    const adminBookCoverFileInput = document.getElementById("adminCharacterBookCoverFile");
-    if (adminBookCoverFileInput) {
-      adminBookCoverFileInput.addEventListener("change", () => {
-        const file = adminBookCoverFileInput.files[0];
-        if (!file) {
-          setAdminBookCoverPreview(characterField("adminCharacterBookCoverUrl") || characterField("existingCharacterBookCoverUrl"));
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = (event) => setAdminBookCoverPreview(event.target.result);
-        reader.readAsDataURL(file);
+    onSnapshot(collection(db, "character_wall"), (snapshot) => {
+      adminCharacterCache.clear();
+      snapshot.forEach(docSnap => {
+        adminCharacterCache.set(docSnap.id, { id: docSnap.id, ...docSnap.data() });
       });
-    }
-
-    const adminBookCoverUrlInput = document.getElementById("adminCharacterBookCoverUrl");
-    if (adminBookCoverUrlInput) {
-      adminBookCoverUrlInput.addEventListener("input", () => {
-        if (!adminBookCoverFileInput || !adminBookCoverFileInput.files.length) {
-          setAdminBookCoverPreview(adminBookCoverUrlInput.value.trim() || characterField("existingCharacterBookCoverUrl"));
-        }
-      });
-    }
-
-    function initCharacterWallAdmin() {
-      if (!requireCharacterAdmin()) return;
-
-      const form = document.getElementById("adminCharacterForm");
-      const table = document.getElementById("adminCharacterTableBody");
-      const cancelBtn = document.getElementById("cancelCharacterEditBtn");
-      if (!form || !table || form.dataset.ready === "true") return;
-      form.dataset.ready = "true";
-
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        if (!requireCharacterAdmin()) {
-          alert("Administrator access is required.");
-          return;
-        }
-
-        const submitBtn = document.getElementById("adminCharacterSubmitBtn");
-        const status = document.getElementById("characterSaveStatus");
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Saving...";
-
-        try {
-          const file = document.getElementById("adminCharacterImageFile").files[0];
-          const bookCoverFile = document.getElementById("adminCharacterBookCoverFile").files[0];
-          const familyCrestFile = document.getElementById("adminCharacterFamilyCrestFile").files[0];
-          const schoolCrestFile = document.getElementById("adminCharacterSchoolCrestFile").files[0];
-          const worldMapFile = document.getElementById("adminCharacterWorldMapFile").files[0];
-
-          let image = characterField("adminCharacterImageUrl") ||
-                      characterField("existingCharacterImageUrl");
-
-          let bookCover = characterField("adminCharacterBookCoverUrl") ||
-                          characterField("existingCharacterBookCoverUrl");
-
-          let familyCrest = characterField("adminCharacterFamilyCrestUrl") ||
-                            characterField("existingCharacterFamilyCrestUrl");
-          let schoolCrest = characterField("adminCharacterSchoolCrestUrl") ||
-                            characterField("existingCharacterSchoolCrestUrl");
-          let worldMap = characterField("adminCharacterWorldMapUrl") ||
-                         characterField("existingCharacterWorldMapUrl");
-
-          if (file) image = await uploadCharacterArtwork(file);
-          if (bookCoverFile) bookCover = await uploadCharacterBookCover(bookCoverFile);
-          if (familyCrestFile) familyCrest = await uploadCharacterMedia(familyCrestFile, "family-crests");
-          if (schoolCrestFile) schoolCrest = await uploadCharacterMedia(schoolCrestFile, "school-crests");
-          if (worldMapFile) worldMap = await uploadCharacterMedia(worldMapFile, "world-maps");
-
-          const payload = {
-            name: characterField("adminCharacterName"),
-            species: characterField("adminCharacterSpecies"),
-            book: characterField("adminCharacterBook"),
-            bookCover,
-            familyCrest,
-            houseCrest: familyCrest,
-            schoolCrest,
-            worldMap,
-            parents: characterField("adminCharacterParents"),
-            siblings: characterField("adminCharacterSiblings"),
-            partner: characterField("adminCharacterPartner"),
-            children: characterField("adminCharacterChildren"),
-            grandparents: characterField("adminCharacterGrandparents"),
-            otherRelatives: characterField("adminCharacterOtherRelatives"),
-            familyTreeNotes: characterField("adminCharacterFamilyTreeNotes"),
-            role: characterField("adminCharacterRole") || "Other",
-            mainCharacter: characterField("adminCharacterMain") || "No",
-            age: characterField("adminCharacterAge"),
-            lifeStage: characterField("adminCharacterLifeStage"),
-            pronouns: characterField("adminCharacterPronouns"),
-            born: characterField("adminCharacterBorn"),
-            birthday: characterField("adminCharacterBirthday"),
-            voice: characterField("adminCharacterVoice"),
-            schoolJobType: characterField("adminCharacterSchoolJobType"),
-            school: characterField("adminCharacterSchool"),
-            job: characterField("adminCharacterJob"),
-            personality: characterField("adminCharacterPersonality"),
-            abilities: characterField("adminCharacterAbilities"),
-            likes: characterField("adminCharacterLikes"),
-            dislikes: characterField("adminCharacterDislikes"),
-            extra: characterField("adminCharacterExtra"),
-            image,
-            updatedAt: serverTimestamp()
-          };
-
-          const editId = characterField("editCharacterDocId");
-          if (editId) {
-            await updateDoc(doc(db, "character_wall", editId), payload);
-          } else {
-            payload.createdAt = serverTimestamp();
-            await addDoc(collection(db, "character_wall"), payload);
-          }
-
-          resetAdminCharacterForm();
-          status.textContent = editId ? "Character updated successfully." : "Character published successfully.";
-          status.style.display = "block";
-          setTimeout(() => { status.style.display = "none"; }, 3000);
-        } catch (error) {
-          console.error("Character save failed:", error);
-          alert("Could not save the character. Check Firebase permissions and try again.");
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = characterField("editCharacterDocId") ? "Save Character Changes" : "Publish Character";
-        }
-      });
-
-      cancelBtn.addEventListener("click", resetAdminCharacterForm);
-
-      table.addEventListener("click", async (event) => {
-        const editBtn = event.target.closest("[data-character-edit]");
-        const deleteBtn = event.target.closest("[data-character-delete]");
-
-        if (editBtn) {
-          fillAdminCharacterForm(editBtn.dataset.characterEdit);
-          return;
-        }
-
-        if (deleteBtn) {
-          if (!requireCharacterAdmin()) return;
-          const id = deleteBtn.dataset.characterDelete;
-          const c = adminCharacterCache.get(id);
-          if (!confirm(`Delete ${c?.name || "this character"} from the Character Wall?`)) return;
-          try {
-            await deleteDoc(doc(db, "character_wall", id));
-            const currentEditId = characterField("editCharacterDocId");
-            if (currentEditId === id) resetAdminCharacterForm();
-          } catch (error) {
-            console.error("Character delete failed:", error);
-            alert("Could not delete the character.");
-          }
-        }
-      });
-
-      characterWallUnsubscribe = onSnapshot(
-        collection(db, "character_wall"),
-        (snapshot) => {
-          adminCharacterCache.clear();
-          snapshot.forEach((snap) => {
-            adminCharacterCache.set(snap.id, { id: snap.id, ...snap.data() });
-          });
-          renderAdminCharacterTable();
-        },
-        (error) => {
-          console.error("Character Wall listener failed:", error);
-          table.innerHTML = '<tr><td colspan="4" style="color:#ff6b6b;text-align:center;">Unable to load Character Wall data.</td></tr>';
-        }
-      );
-    }
+      renderAdminCharacterTable();
+    });
 
     function setupAdminInterface(userData, isAdmin) {
       document.body.classList.add("authenticated");
-
       const navActions = document.querySelector('.nav-actions');
       if (navActions) navActions.classList.add('auth-loaded');
 
@@ -2632,121 +2103,15 @@
 
       const name = userData.displayName || (userData.email ? userData.email.split('@')[0] : "Patron");
       document.getElementById('sidebarDisplayName').textContent = name;
-      const navUserNameEl = document.getElementById('navUserName');
-      if (navUserNameEl) navUserNameEl.textContent = name;
-
-      const profileNameInput = document.getElementById('profileNameInput');
-      if (profileNameInput) profileNameInput.value = userData.displayName || '';
-
-      const dropdownUserName = document.getElementById("dropdownUserName");
-      const dropdownUserEmail = document.getElementById("dropdownUserEmail");
-      if (dropdownUserName) dropdownUserName.textContent = name;
-      if (dropdownUserEmail) dropdownUserEmail.textContent = userData.email || '';
+      document.getElementById('navUserName').textContent = name;
 
       if (isAdmin) {
         document.getElementById('sidebarUserRole').textContent = "Administrator";
         injectAdminSidebarLinks();
-        loadCmsData();
         loadAdminInventory();
         loadAdminGiftInventory();
         loadAdminEpubTrackers();
-        loadAllTimersAndAnnouncements();
-        loadAuthorSignatureSettings();
-        initCharacterWallAdmin();
-
-        const notificationsContainer = document.getElementById('adminNotificationsList');
-        if (notificationsContainer) {
-          const q = query(collection(db, "admin_notifications"), orderBy("timestamp", "desc"), limit(10));
-          onSnapshot(q, (snapshot) => {
-            if (!snapshot.empty) {
-              notificationsContainer.innerHTML = "";
-              snapshot.forEach((docSnap) => {
-                const note = docSnap.data();
-                const item = document.createElement('div');
-                item.style.cssText = "background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); padding: 10px 14px; border-radius: 4px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;";
-                item.innerHTML = `
-                  <span>${note.message || 'New notification'}</span>
-                  <span style="font-size: 0.65rem; color: var(--accent-gold);">${note.timestamp ? new Date(note.timestamp.toDate()).toLocaleTimeString() : 'Just now'}</span>
-                `;
-                notificationsContainer.appendChild(item);
-              });
-            } else {
-              notificationsContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">No new notifications.</p>`;
-            }
-          }, (error) => {
-            console.warn("Admin notifications listener note:", error?.message || error);
-            notificationsContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">Admin notifications ready.</p>`;
-          });
-        }
-
-        const bell = document.getElementById('adminNotificationBell');
-        const dropdown = document.getElementById('notificationDropdown');
-        if (bell && dropdown) {
-          bell.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
-          });
-          document.addEventListener('click', () => { dropdown.style.display = "none"; });
-        }
-      } else {
-        document.getElementById('sidebarUserRole').textContent = "Reader Account";
-        if (document.getElementById('adminNotificationBell')) {
-          document.getElementById('adminNotificationBell').style.display = 'none';
-        }
       }
-
-      let avatar = localStorage.getItem('libraryreeds_user_avatar') || userData.photoURL;
-      if (avatar) {
-        document.getElementById('sidebarAvatarImg').src = avatar;
-        document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => { img.src = avatar; });
-      }
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        localStorage.removeItem('libraryreeds_user_avatar');
-
-        if (window.location.protocol === 'blob:' || window.location.href.startsWith('blob:') || window.location.hostname.includes('usercontent.goog')) {
-          setupAdminInterface({
-            displayName: "Carl R. Trombley Jr. (Preview)",
-            email: "firelily@libraryreeds.com",
-            photoURL: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
-          }, true);
-          return;
-        }
-
-        window.safeNavigate("login.html");
-        return;
-      }
-
-      const isAdmin = user.email && (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || user.email.toLowerCase().includes('admin'));
-      setupAdminInterface(user, isAdmin);
-
-      let avatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
-      if (!avatar || avatar.includes('unsplash')) {
-        try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
-          if (userDoc.exists() && userDoc.data().photoURL) avatar = userDoc.data().photoURL;
-        } catch(e) {}
-      }
-      if ((!avatar || avatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
-        avatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
-      }
-      if (avatar) {
-        document.getElementById('sidebarAvatarImg').src = avatar;
-        document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => { img.src = avatar; });
-        localStorage.setItem('libraryreeds_user_avatar', avatar);
-      }
-    });
-
-    const profileTriggerBtn = document.getElementById("profileTriggerBtn");
-    const profileDropdown = document.getElementById("profileDropdown");
-    if (profileTriggerBtn && profileDropdown) {
-      profileTriggerBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
-      });
-      document.addEventListener("click", () => { profileDropdown.style.display = "none"; });
     }
 
     function injectAdminSidebarLinks() {
@@ -2754,7 +2119,6 @@
       if (document.getElementById('panel-orders').dataset.injected) return;
       document.getElementById('panel-orders').dataset.injected = "true";
 
-      // Store Management: "Live Notifications" removed here because it is present in the Overview section
       navList.innerHTML += `
         <div class="sidebar-category-header">Store Management</div>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('epubtracker', 'Manuscript EPUB Tracker', event)">Manuscript Progress</button>
@@ -2776,734 +2140,32 @@
       `;
     }
 
-    async function loadAuthorSignatureSettings() {
-      try {
-        const docSnap = await getDoc(doc(db, "settings", "author_signature"));
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          if (data.text) { document.getElementById('sigTextInput').value = data.text; }
-          if (data.mode === "drawn") {
-            const sigModeDrawn = document.getElementById("sigModeDrawn");
-            if (sigModeDrawn) sigModeDrawn.checked = true;
-          }
-          updateSignaturePreview();
-        }
-      } catch (e) {}
-    }
-
-    async function loadAllTimersAndAnnouncements() {
-      try {
-        ['home', 'shop', 'gift'].forEach(async (pKey) => {
-          const aSnap = await getDoc(doc(db, "settings", `announcement_${pKey}`));
-          if (aSnap.exists()) {
-            if (document.getElementById(pKey + 'AnnounceEnabled')) document.getElementById(pKey + 'AnnounceEnabled').checked = !!aSnap.data().enabled;
-            if (document.getElementById(pKey + 'AnnounceText')) document.getElementById(pKey + 'AnnounceText').value = aSnap.data().text || '';
-          }
-
-          const tSnap = await getDoc(doc(db, "settings", `timer_${pKey}`));
-          if (tSnap.exists()) {
-            const tData = tSnap.data();
-            if (document.getElementById(pKey + 'Enabled')) document.getElementById(pKey + 'Enabled').checked = !!tData.enabled;
-            if (document.getElementById(pKey + 'Title')) document.getElementById(pKey + 'Title').value = tData.title || '';
-            if (document.getElementById(pKey + 'Days')) document.getElementById(pKey + 'Days').value = tData.days || 0;
-            if (document.getElementById(pKey + 'Hours')) document.getElementById(pKey + 'Hours').value = tData.hours || 0;
-            if (document.getElementById(pKey + 'Minutes')) document.getElementById(pKey + 'Minutes').value = tData.minutes || 0;
-            if (document.getElementById(pKey + 'Seconds')) document.getElementById(pKey + 'Seconds').value = tData.seconds || 0;
-          }
-        });
-      } catch (e) {}
-    }
-
-    const adminGiftForm = document.getElementById('adminGiftMerchandiseForm');
-    if (adminGiftForm) {
-      adminGiftForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const docId = document.getElementById('editGiftItemId').value;
-        const frontUrl = document.getElementById('adminGiftImageUrl').value.trim();
-        const backUrl = document.getElementById('adminGiftBackCoverUrl').value.trim();
-        
-        const giftData = {
-          title: document.getElementById('adminGiftTitle').value.trim(),
-          price: parseFloat(document.getElementById('adminGiftPrice').value) || 0,
-          category: document.getElementById('adminGiftCategory').value,
-          promoCode: document.getElementById('adminGiftPromo').value.trim().toUpperCase(),
-          discountPercent: parseFloat(document.getElementById('adminGiftDiscountPct').value) || 0,
-          imageUrl: frontUrl,
-          frontImageUrl: frontUrl,
-          backImageUrl: backUrl,
-          description: document.getElementById('adminGiftDesc').value.trim(),
-          updatedAt: serverTimestamp()
-        };
-
-        try {
-          if (docId) {
-            await updateDoc(doc(db, "giftshop_items", docId), giftData);
-            window.showToast("Gift shop merchandise and pricing updated successfully.");
-          } else {
-            giftData.createdAt = serverTimestamp();
-            await addDoc(collection(db, "giftshop_items"), giftData);
-            window.showToast("New gift shop item added successfully.");
-          }
-          adminGiftForm.reset();
-          document.getElementById('editGiftItemId').value = "";
-          document.getElementById('cancelEditGiftBtn').style.display = 'none';
-          populateGiftItemSelect();
-          populatePromoBannerItems();
-        } catch (err) {
-          window.showToast("Error saving gift item: " + err.message);
-        }
-      });
-    }
-
-    document.getElementById('cancelEditGiftBtn')?.addEventListener('click', () => {
-      adminGiftForm.reset();
-      document.getElementById('editGiftItemId').value = "";
-      document.getElementById('cancelEditGiftBtn').style.display = 'none';
-    });
-
-    function loadAdminGiftInventory() {
-      const tbody = document.getElementById('adminGiftInventoryTableBody');
-      if (!tbody) return;
-
-      onSnapshot(collection(db, "giftshop_items"), (snapshot) => {
-        populateGiftItemSelect();
-        if (!snapshot.empty) {
-          tbody.innerHTML = "";
-          snapshot.forEach((docSnap) => {
-            const item = docSnap.data();
-            const id = docSnap.id;
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td><strong>${item.title || 'Untitled'}</strong><br><span style="font-size:0.7rem; color:var(--accent-gold);">Code: ${item.promoCode || 'None'} (${item.discountPercent || 0}% off)</span></td>
-              <td>${item.category || 'Merchandise'}</td>
-              <td>$${parseFloat(item.price || 0).toFixed(2)}</td>
-              <td>
-                <button type="button" class="btn-primary edit-gift-btn" data-id="${id}" style="padding: 6px 12px; font-size: 0.65rem;">Edit</button>
-                <button type="button" class="btn-secondary-action test-single-gift" data-title="${encodeURIComponent(item.title || 'Item')}" data-category="${item.category || 'Merchandise'}" data-price="${item.price || 0}" style="padding: 6px 12px; font-size: 0.65rem; margin-left: 6px;">Test Alert</button>
-                <button type="button" class="btn-danger-action delete-gift-btn" data-id="${id}" style="padding: 6px 12px; font-size: 0.65rem; margin-left: 6px;">Delete</button>
-              </td>
-            `;
-            tbody.appendChild(tr);
-          });
-
-          document.querySelectorAll('.test-single-gift').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              btn.disabled = true;
-              btn.textContent = "Sending...";
-              const now = new Date();
-              const timeString = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + " at " +
-                                 now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-
-              try {
-                await sendGiftShopOrderAlert({
-                  title: decodeURIComponent(btn.getAttribute('data-title')),
-                  category: btn.getAttribute('data-category'),
-                  customerName: auth.currentUser?.displayName || "Carl R. Trombley Jr.",
-                  email: auth.currentUser?.email || "firelily@libraryreeds.com",
-                  orderId: "GIFT-" + Math.floor(100000 + Math.random() * 900000),
-                  total: `$${parseFloat(btn.getAttribute('data-price')).toFixed(2)}`,
-                  time: timeString
-                });
-                btn.textContent = "✓ Sent!";
-              } catch (e) {
-                window.showToast("Telegram error: " + e.message);
-                btn.textContent = "Test Alert";
-              } finally {
-                setTimeout(() => {
-                  btn.disabled = false;
-                  btn.textContent = "Test Alert";
-                }, 3000);
-              }
-            });
-          });
-
-          document.querySelectorAll('.edit-gift-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const id = btn.getAttribute('data-id');
-              const snap = await getDoc(doc(db, "giftshop_items", id));
-              if (snap.exists()) {
-                const d = snap.data();
-                document.getElementById('editGiftItemId').value = id;
-                document.getElementById('adminGiftTitle').value = d.title || '';
-                document.getElementById('adminGiftPrice').value = d.price || '';
-                document.getElementById('adminGiftCategory').value = d.category || 'Gift Cards';
-                document.getElementById('adminGiftPromo').value = d.promoCode || '';
-                document.getElementById('adminGiftDiscountPct').value = d.discountPercent || 0;
-                document.getElementById('adminGiftImageUrl').value = d.frontImageUrl || d.imageUrl || '';
-                document.getElementById('adminGiftBackCoverUrl').value = d.backImageUrl || '';
-                document.getElementById('adminGiftDesc').value = d.description || '';
-                document.getElementById('cancelEditGiftBtn').style.display = 'inline-block';
-                window.scrollTo({ top: adminGiftForm.offsetTop - 100, behavior: 'smooth' });
-              }
-            });
-          });
-
-          document.querySelectorAll('.delete-gift-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              await deleteDoc(doc(db, "giftshop_items", btn.getAttribute('data-id')));
-              window.showToast("Gift shop item deleted.");
-              populateGiftItemSelect();
-              populatePromoBannerItems();
-            });
-          });
-        } else {
-          tbody.innerHTML = `<tr><td colspan="4" style="color: var(--text-muted); text-align: center;">No gift shop items found.</td></tr>`;
-        }
-      }, (error) => {
-        console.warn("Gift inventory snapshot note:", error?.message || error);
-        tbody.innerHTML = `
-          <tr>
-            <td><strong>Libraryreeds Collector T-Shirt</strong><br><span style="font-size:0.7rem; color:var(--accent-gold);">Code: TEE20 (15% off)</span></td>
-            <td>Merchandise / Apparel</td>
-            <td>$24.99</td>
-            <td><span style="font-size:0.75rem; color:var(--text-muted);">Catalog Loaded</span></td>
-          </tr>
-        `;
-      });
-    }
-
-    async function loadCmsData() {
-      try {
-        const aboutDoc = await getDoc(doc(db, "settings", "about_content"));
-        if (aboutDoc.exists()) {
-          const d = aboutDoc.data();
-          if (d.heading) document.getElementById('aboutAdminHeading').value = d.heading;
-          if (d.quote) document.getElementById('aboutAdminQuote').value = d.quote;
-          if (d.imageUrl) document.getElementById('aboutAuthorImageUrl').value = d.imageUrl;
-          if (d.body) document.getElementById('aboutAdminBody').value = d.body;
-        }
-
-        const homeDoc = await getDoc(doc(db, "settings", "home_content"));
-        if (homeDoc.exists()) {
-          const hd = homeDoc.data();
-          if (hd.heroTitle) document.getElementById('homeHeroTitle').value = hd.heroTitle;
-          if (hd.promoCode) document.getElementById('homePromoCode').value = hd.promoCode;
-          if (hd.discountPercent) document.getElementById('homeDiscountPercent').value = hd.discountPercent;
-        }
-
-        const fanartDoc = await getDoc(doc(db, "settings", "fanart_cms"));
-        if (fanartDoc.exists()) {
-          const fd = fanartDoc.data();
-          if (fd.bannerUrl) document.getElementById('fanartBannerImgInput').value = fd.bannerUrl;
-        }
-      } catch(e) {}
-    }
-
-    async function uploadInventoryBookCover(file) {
-      if (!file) return "";
-
-      const safeName = (file.name || "book-cover")
-        .replace(/[^a-zA-Z0-9._-]/g, "_");
-      const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}-${safeName}`;
-      const coverRef = ref(storage, `book-covers/${uniqueName}`);
-
-      await uploadBytes(coverRef, file, {
-        contentType: file.type || "image/jpeg"
-      });
-
-      return await getDownloadURL(coverRef);
-    }
-
-    const adminBookCoverFile = document.getElementById('adminBookCoverFile');
-    const adminBookCoverPreview = document.getElementById('adminBookCoverPreview');
-
-    adminBookCoverFile?.addEventListener('change', () => {
-      const file = adminBookCoverFile.files?.[0];
-      if (!file || !adminBookCoverPreview) {
-        if (adminBookCoverPreview) adminBookCoverPreview.style.display = 'none';
-        return;
-      }
-
-      const previewUrl = URL.createObjectURL(file);
-      adminBookCoverPreview.src = previewUrl;
-      adminBookCoverPreview.style.display = 'block';
-      adminBookCoverPreview.onload = () => URL.revokeObjectURL(previewUrl);
-    });
-
-    const adminBookForm = document.getElementById('adminBookForm');
-    if (adminBookForm) {
-      adminBookForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const docId = document.getElementById('editBookDocId').value;
-        const isUnlimited = document.getElementById('adminBookIsUnlimited').checked;
-
-        const saveBtn = adminBookForm.querySelector('button[type="submit"]');
-        const originalSaveText = saveBtn ? saveBtn.textContent : "Save Book & Specs to Vault";
-
-        if (saveBtn) {
-          saveBtn.disabled = true;
-          saveBtn.textContent = "Saving...";
-        }
-
-        const coverFile = document.getElementById('adminBookCoverFile')?.files?.[0] || null;
-        let coverUrl = document.getElementById('adminBookCover')?.value.trim() || "";
-
-        try {
-          if (coverFile) {
-            if (saveBtn) saveBtn.textContent = "Uploading Cover...";
-            coverUrl = await uploadInventoryBookCover(coverFile);
-          }
-
-          if (!coverUrl) {
-            window.showToast("Please upload a front book cover image or enter a front cover image URL.");
-            if (saveBtn) {
-              saveBtn.disabled = false;
-              saveBtn.textContent = originalSaveText;
-            }
-            return;
-          }
-        } catch (uploadErr) {
-          console.error("Book cover upload failed:", uploadErr);
-          window.showToast("Book cover upload failed: " + uploadErr.message);
-          if (saveBtn) {
-            saveBtn.disabled = false;
-            saveBtn.textContent = originalSaveText;
-          }
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        if (window.location.protocol === 'blob:' || window.location.href.startsWith('blob:')) {
+          setupAdminInterface({ displayName: "Carl R. Trombley Jr.", email: "firelily@libraryreeds.com" }, true);
           return;
         }
-
-        if (saveBtn) saveBtn.textContent = "Saving Book...";
-
-        const bData = { 
-          title: document.getElementById('adminBookTitle').value.trim(),
-          author: document.getElementById('adminBookAuthor').value.trim(),
-          tags: document.getElementById('adminBookTags').value.split(',').map(t => t.trim()).filter(Boolean),
-          price: parseFloat(document.getElementById('adminBookPrice').value) || 0,
-          promoCode: document.getElementById('adminBookPromo').value.trim().toUpperCase(),
-          discountPercent: 10,
-          stock: parseInt(document.getElementById('adminBookStock').value) || 0,
-          tax: parseFloat(document.getElementById('adminBookTax').value) || 0,
-          shipping: parseFloat(document.getElementById('adminBookShipping').value) || 0,
-          discount: parseFloat(document.getElementById('adminBookDiscount').value) || 0,
-          volume: parseInt(document.getElementById('adminBookVolume').value) || 1,
-          series: document.getElementById('adminBookSeries').value.trim(),
-          format: document.getElementById('adminBookFormat').value,
-          pubDate: document.getElementById('adminBookPubDate').value.trim(),
-          pages: document.getElementById('adminBookPages').value.trim(),
-          publisher: document.getElementById('adminBookPublisher').value.trim(),
-          language: document.getElementById('adminBookLanguage').value.trim(),
-          isbn: document.getElementById('adminBookIsbn').value.trim(),
-          license: document.getElementById('adminBookLicense').value.trim(),
-          coverUrl: coverUrl,
-          backCoverUrl: document.getElementById('adminBookBackCover').value.trim(),
-          description: document.getElementById('adminBookDesc').value.trim(),
-          isUnlimited: isUnlimited,
-          unlimitedEligible: isUnlimited,
-          formatPrices: {
-            paperback: parseFloat(document.getElementById('pricePaperback')?.value) || 0,
-            hardcover: parseFloat(document.getElementById('priceHardcover')?.value) || 0,
-            audiobook: parseFloat(document.getElementById('priceAudio')?.value) || 0
-          },
-          updatedAt: serverTimestamp() 
-        };
-
-        try {
-          if (docId) {
-            await updateDoc(doc(db, "books", docId), bData);
-            window.showToast(`Book inventory updated! (Unlimited: ${isUnlimited ? 'Enabled' : 'Disabled'})`);
-          } else {
-            bData.createdAt = serverTimestamp();
-            await addDoc(collection(db, "books"), bData);
-            window.showToast(`New book added! (Unlimited: ${isUnlimited ? 'Enabled' : 'Disabled'})`);
-          }
-          adminBookForm.reset();
-          if (adminBookCoverPreview) {
-            adminBookCoverPreview.src = "";
-            adminBookCoverPreview.style.display = "none";
-          }
-          document.getElementById('editBookDocId').value = "";
-          document.getElementById('adminBookIsUnlimited').checked = false;
-          document.getElementById('bookFormLegend').textContent = "Add New Book to Catalog";
-          document.getElementById('cancelEditBookBtn').style.display = 'none';
-          populatePromoBannerItems();
-        } catch (err) {
-          console.error("Book save failed:", err);
-          window.showToast("Error saving book: " + err.message);
-        } finally {
-          if (saveBtn) {
-            saveBtn.disabled = false;
-            saveBtn.textContent = originalSaveText;
-          }
-        }
-      });
-    }
-
-    document.getElementById('cancelEditBookBtn')?.addEventListener('click', () => {
-      adminBookForm.reset();
-      if (adminBookCoverPreview) {
-        adminBookCoverPreview.src = "";
-        adminBookCoverPreview.style.display = "none";
-      }
-      document.getElementById('editBookDocId').value = "";
-      document.getElementById('adminBookIsUnlimited').checked = false;
-      document.getElementById('bookFormLegend').textContent = "Add New Book to Catalog";
-      document.getElementById('cancelEditBookBtn').style.display = 'none';
-    });
-
-    function loadAdminInventory() {
-      const tbody = document.getElementById('adminInventoryTableBody');
-      onSnapshot(collection(db, "books"), (snapshot) => {
-        if (!snapshot.empty) {
-          tbody.innerHTML = "";
-          snapshot.forEach((docSnap) => {
-            const b = docSnap.data();
-            const id = docSnap.id;
-            const isUnlimitedBook = b.isUnlimited === true || b.unlimitedEligible === true;
-            
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>
-                <strong>${b.title || 'Untitled'}</strong><br>
-                <span style="font-size:0.75rem; color:var(--text-muted);">${b.author || 'Author'}</span>
-                ${isUnlimitedBook ? '<br><span class="unlimited-badge">Unlimited Eligible</span>' : ''}
-              </td>
-              <td><span style="color: var(--accent-gold);">${b.format || 'Clothbound Hardcover'}</span><br><span style="font-size:0.75rem; color:var(--text-muted);">ISBN: ${b.isbn || 'N/A'}</span></td>
-              <td>$${parseFloat(b.price || 0).toFixed(2)}</td>
-              <td>
-                <button type="button" class="btn-primary edit-book-btn" data-id="${id}" style="padding: 6px 12px; font-size: 0.65rem;">Edit</button>
-                <button type="button" class="btn-secondary-action toggle-unlimited-btn" data-id="${id}" data-current="${isUnlimitedBook}" style="padding: 6px 10px; font-size: 0.65rem; margin-left: 4px;">
-                  ${isUnlimitedBook ? 'Disable Unlimited' : 'Enable Unlimited'}
-                </button>
-                <button type="button" class="btn-secondary-action test-single-book" data-id="${id}" style="padding: 6px 10px; font-size: 0.65rem; margin-left: 4px;">Test Alert</button>
-              </td>
-            `;
-            tbody.appendChild(tr);
-          });
-
-          document.querySelectorAll('.toggle-unlimited-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const id = btn.getAttribute('data-id');
-              const currentStatus = btn.getAttribute('data-current') === 'true';
-              const newStatus = !currentStatus;
-
-              btn.disabled = true;
-              btn.textContent = "Updating...";
-
-              try {
-                await updateDoc(doc(db, "books", id), {
-                  isUnlimited: newStatus,
-                  unlimitedEligible: newStatus,
-                  updatedAt: serverTimestamp()
-                });
-                window.showToast(`Unlimited status toggled to: ${newStatus ? 'Active' : 'Disabled'}`);
-              } catch (err) {
-                window.showToast("Failed to toggle unlimited status: " + err.message);
-                btn.disabled = false;
-              }
-            });
-          });
-
-          document.querySelectorAll('.test-single-book').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const id = btn.getAttribute('data-id');
-              btn.disabled = true;
-              btn.textContent = "Sending...";
-
-              try {
-                const bookSnap = await getDoc(doc(db, "books", id));
-                if (!bookSnap.exists()) throw new Error("Book not found");
-                
-                const payload = createBookAlertPayload(bookSnap.data());
-                await sendBookOrderAlert(payload);
-
-                await addDoc(collection(db, "admin_notifications"), {
-                  message: `Telegram test dispatched for book: "${payload.title}".`,
-                  timestamp: serverTimestamp()
-                });
-
-                btn.textContent = "✓ Sent!";
-              } catch (err) {
-                window.showToast(`Failed to send Telegram alert: ${err.message}`);
-                btn.textContent = "Test Book Alert";
-              } finally {
-                setTimeout(() => {
-                  btn.disabled = false;
-                  btn.textContent = "Test Alert";
-                }, 3000);
-              }
-            });
-          });
-
-          document.querySelectorAll('.edit-book-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const id = btn.getAttribute('data-id');
-              const snap = await getDoc(doc(db, "books", id));
-              if (snap.exists()) {
-                const b = snap.data();
-                document.getElementById('editBookDocId').value = id;
-                document.getElementById('adminBookTitle').value = b.title || '';
-                document.getElementById('adminBookAuthor').value = b.author || '';
-                document.getElementById('adminBookTags').value = Array.isArray(b.tags) ? b.tags.join(', ') : (b.tags || '');
-                document.getElementById('adminBookIsUnlimited').checked = !!(b.isUnlimited || b.unlimitedEligible);
-
-                document.getElementById('priceHardcover').value = b.formatPrices?.hardcover ?? '';
-                document.getElementById('pricePaperback').value = b.formatPrices?.paperback ?? '';
-                document.getElementById('adminBookPrice').value = b.price ?? '';
-                document.getElementById('priceAudio').value = b.formatPrices?.audiobook ?? '';
-                document.getElementById('adminBookStock').value = b.stock ?? 10;
-                document.getElementById('adminBookTax').value = b.tax ?? 6.00;
-                document.getElementById('adminBookShipping').value = b.shipping ?? 0.00;
-                document.getElementById('adminBookDiscount').value = b.discount ?? 0.00;
-                document.getElementById('adminBookVolume').value = b.volume ?? 1;
-                document.getElementById('adminBookSeries').value = b.series || '';
-                document.getElementById('adminBookPromo').value = b.promoCode || '';
-                document.getElementById('adminBookFormat').value = b.format || 'Clothbound Hardcover';
-                document.getElementById('adminBookPubDate').value = b.pubDate || '';
-                document.getElementById('adminBookPages').value = b.pages || '';
-                document.getElementById('adminBookPublisher').value = b.publisher || 'Libraryreeds Archive';
-                document.getElementById('adminBookLanguage').value = b.language || 'English';
-                document.getElementById('adminBookIsbn').value = b.isbn || '';
-                document.getElementById('adminBookLicense').value = b.license || 'Digital & Physical';
-                document.getElementById('adminBookCover').value = b.coverUrl || '';
-                if (adminBookCoverPreview) {
-                  if (b.coverUrl) {
-                    adminBookCoverPreview.src = b.coverUrl;
-                    adminBookCoverPreview.style.display = 'block';
-                  } else {
-                    adminBookCoverPreview.src = '';
-                    adminBookCoverPreview.style.display = 'none';
-                  }
-                }
-                document.getElementById('adminBookBackCover').value = b.backCoverUrl || '';
-                document.getElementById('adminBookDesc').value = b.description || '';
-
-                document.getElementById('bookFormLegend').textContent = 'Edit Book Catalog Entry';
-                document.getElementById('cancelEditBookBtn').style.display = 'inline-block';
-                window.scrollTo({ top: adminBookForm.offsetTop - 100, behavior: 'smooth' });
-              }
-            });
-          });
-        } else {
-          tbody.innerHTML = `<tr><td colspan="4" style="color: var(--text-muted); text-align: center;">No books found in inventory.</td></tr>`;
-        }
-      }, (error) => {
-        console.warn("Books inventory snapshot note:", error?.message || error);
-        tbody.innerHTML = `
-          <tr>
-            <td>
-              <strong>The Hidden Wings: Flames of Fate</strong><br>
-              <span style="font-size:0.75rem; color:var(--text-muted);">Firelily Santos</span><br>
-              <span class="unlimited-badge">Unlimited Eligible</span>
-            </td>
-            <td><span style="color: var(--accent-gold);">Clothbound Hardcover</span><br><span style="font-size:0.75rem; color:var(--text-muted);">ISBN: 978-1-23456-789-0</span></td>
-            <td>$24.99</td>
-            <td><span style="font-size:0.75rem; color:var(--text-muted);">Catalog Loaded</span></td>
-          </tr>
-        `;
-      });
-    }
-
-    document.getElementById('adminFanartForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const title = document.getElementById('fanartTitleInput').value.trim();
-      const artist = document.getElementById('fanartArtistInput').value.trim();
-      const category = document.getElementById('fanartCategoryInput')?.value || 'Fantasy & Sci-Fi';
-      const caption = document.getElementById('fanartCaptionInput')?.value.trim() || '';
-      const fileInput = document.getElementById('fanartFileInput');
-      const submitBtn = document.getElementById('fanartSubmitBtn');
-      let imageUrl = document.getElementById('fanartImageUrlInput').value.trim();
-
-      if (!imageUrl && (!fileInput || !fileInput.files || !fileInput.files[0])) {
-        window.showToast("Please choose an image file from your device or enter an Image URL.");
+        window.safeNavigate("login.html");
         return;
       }
-
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Uploading Artwork...";
-      }
-
-      try {
-        if (fileInput && fileInput.files && fileInput.files[0]) {
-          const file = fileInput.files[0];
-          const storageRef = ref(storage, `fanarts/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`);
-          await uploadBytes(storageRef, file);
-          imageUrl = await getDownloadURL(storageRef);
-        }
-
-        await addDoc(collection(db, "fanart_gallery"), {
-          title,
-          artist,
-          category,
-          caption,
-          imageUrl,
-          userId: auth.currentUser?.uid || "patron",
-          userEmail: auth.currentUser?.email || "",
-          likesCount: 0,
-          likes: 0,
-          createdAt: serverTimestamp()
-        });
-
-        document.getElementById('adminFanartForm').reset();
-        const statusEl = document.getElementById('fanartUploadStatus');
-        if (statusEl) {
-          statusEl.style.display = 'block';
-          setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
-        }
-        window.showToast("Artwork successfully published to Fanart Gallery!");
-      } catch (err) {
-        window.showToast("Error uploading artwork: " + err.message);
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Upload Fanart Artwork";
-        }
-      }
+      const isAdmin = user.email && (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || user.email.toLowerCase().includes('admin'));
+      setupAdminInterface(user, isAdmin);
     });
 
-    document.getElementById('adminAboutForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        await setDoc(doc(db, "settings", "about_content"), {
-          heading: document.getElementById('aboutAdminHeading').value.trim(),
-          quote: document.getElementById('aboutAdminQuote').value.trim(),
-          imageUrl: document.getElementById('aboutAuthorImageUrl').value.trim(),
-          authorImageUrl: document.getElementById('aboutAuthorImageUrl').value.trim(),
-          body: document.getElementById('aboutAdminBody').value.trim(),
-          updatedAt: serverTimestamp()
-        }, { merge: true });
-
-        const statusEl = document.getElementById('aboutSaveStatus');
-        if (statusEl) {
-          statusEl.style.display = 'block';
-          setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
-        }
-        window.showToast("About page content updated!");
-      } catch (err) {
-        window.showToast("Error updating about page: " + err.message);
-      }
+    // Profile menu trigger
+    document.getElementById("profileTriggerBtn")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const popover = document.getElementById("profileDropdown");
+      if (popover) popover.style.display = popover.style.display === "flex" ? "none" : "flex";
     });
-
-    document.getElementById('bookDetailCmsForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        await setDoc(doc(db, "settings", "book_detail_template"), {
-          ctaText: document.getElementById('detailCtaText').value.trim(),
-          noticeText: document.getElementById('detailNoticeText').value.trim(),
-          updatedAt: serverTimestamp()
-        }, { merge: true });
-
-        const statusEl = document.getElementById('bookDetailSaveStatus');
-        if (statusEl) {
-          statusEl.style.display = 'block';
-          setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
-        }
-        window.showToast("Book detail template updated!");
-      } catch (err) {
-        window.showToast("Error updating template: " + err.message);
-      }
-    });
-
-    document.getElementById('homeCmsForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        const homeCmsData = {
-          heroTitle: document.getElementById('homeHeroTitle').value.trim(),
-          promoCode: document.getElementById('homePromoCode').value.trim(),
-          discountPercent: parseInt(document.getElementById('homeDiscountPercent').value) || 10,
-          updatedAt: serverTimestamp()
-        };
-        await Promise.all([
-          setDoc(doc(db, "settings", "home_content"), homeCmsData, { merge: true }),
-          setDoc(doc(db, "settings", "home_cms"), homeCmsData, { merge: true })
-        ]);
-
-        const statusEl = document.getElementById('homeSaveStatus');
-        if (statusEl) {
-          statusEl.style.display = 'block';
-          setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
-        }
-        window.showToast("Homepage CMS updated!");
-      } catch (err) {
-        window.showToast("Error updating homepage CMS: " + err.message);
-      }
-    });
-
-    document.getElementById('fanartCmsForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const bannerUrl = document.getElementById('fanartBannerImgInput').value.trim();
-      try {
-        await setDoc(doc(db, "settings", "fanart_cms"), {
-          bannerUrl: bannerUrl,
-          updatedAt: serverTimestamp()
-        }, { merge: true });
-
-        const statusEl = document.getElementById('fanartSaveStatus');
-        if (statusEl) {
-          statusEl.style.display = 'block';
-          setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
-        }
-        window.showToast("Fanart page banner updated!");
-      } catch (err) {
-        window.showToast("Error updating fanart banner: " + err.message);
-      }
-    });
-
-    document.getElementById('adminPoliciesForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        await setDoc(doc(db, "settings", "policies"), {
-          supportEmail: document.getElementById('policySupportEmail').value.trim(),
-          shippingText: document.getElementById('policyShippingText').value.trim(),
-          updatedAt: serverTimestamp()
-        }, { merge: true });
-
-        const statusEl = document.getElementById('policySaveStatus');
-        if (statusEl) {
-          statusEl.style.display = 'block';
-          setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
-        }
-        window.showToast("Store policies updated!");
-      } catch (err) {
-        window.showToast("Error updating policies: " + err.message);
-      }
-    });
-
-    document.getElementById('profileUpdateForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (!user) return;
-      const newName = document.getElementById('profileNameInput').value.trim();
-      const fileInput = document.getElementById('profileImageFile');
-
-      try {
-        let photoURL = user.photoURL;
-        if (fileInput && fileInput.files && fileInput.files[0]) {
-          const file = fileInput.files[0];
-          const storageRef = ref(storage, `avatars/${user.uid}_${Date.now()}`);
-          await uploadBytes(storageRef, file);
-          photoURL = await getDownloadURL(storageRef);
-          localStorage.setItem('libraryreeds_user_avatar', photoURL);
-        }
-
-        await updateProfile(user, {
-          displayName: newName || user.displayName,
-          photoURL: photoURL
-        });
-
-        await setDoc(doc(db, "users", user.uid), {
-          displayName: newName || user.displayName,
-          photoURL: photoURL,
-          updatedAt: serverTimestamp()
-        }, { merge: true });
-
-        const statusEl = document.getElementById('profileSaveStatus');
-        if (statusEl) {
-          statusEl.style.display = 'block';
-          setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
-        }
-        window.showToast("Profile credentials saved!");
-      } catch (err) {
-        window.showToast("Error saving profile: " + err.message);
-      }
+    document.addEventListener("click", () => {
+      const popover = document.getElementById("profileDropdown");
+      if (popover) popover.style.display = "none";
     });
 
     const handleSignOut = async () => {
-      try {
-        await signOut(auth);
-      } catch (err) {
-        console.warn("Sign out note:", err);
-      }
+      try { await signOut(auth); } catch (err) {}
       localStorage.clear();
       window.safeNavigate("index.html");
     };
@@ -3512,11 +2174,10 @@
     document.getElementById('dropdownLogoutBtn')?.addEventListener('click', handleSignOut);
   </script>
 
-  <!-- Shared Firebase notification sync: injected 2026-10-06 -->
-  <script type="module" id="libraryreedsSharedNotificationSync">
+  <!-- Notification Counter Sync -->
+  <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, limit, onSnapshot, writeBatch, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+    import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
@@ -3529,129 +2190,27 @@
 
     const sharedApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
     const sharedDb = getFirestore(sharedApp);
-    const SHARED_NOTIFICATION_LIMIT = 50;
+    const badge = document.getElementById('notificationBadge');
+    const list = document.getElementById('notificationDropdownList');
 
-    const badge = document.getElementById('notificationBadgeCount') || document.getElementById('notificationBadge');
-    const list = document.getElementById('notificationList') || document.getElementById('notificationDropdownList');
-    const status = document.getElementById('notificationPanelStatus');
-    const markAllButton = document.getElementById('markAllNotificationsReadBtn') || document.getElementById('clearNotificationsBtn');
-
-    function escapeNotificationText(value) {
-      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
-    }
-
-    function formatNotificationTime(timestamp) {
-      try {
-        if (!timestamp) return 'Just now';
-        const date = typeof timestamp.toDate === 'function' ? timestamp.toDate() : new Date(timestamp);
-        return date.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-      } catch (_) {
-        return 'Just now';
+    const q = query(collection(sharedDb, 'admin_notifications'), orderBy('timestamp', 'desc'), limit(50));
+    onSnapshot(q, (snapshot) => {
+      const unreadCount = snapshot.docs.filter(d => !d.data().read).length;
+      if (badge) {
+        badge.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+        badge.style.display = unreadCount > 0 ? 'flex' : 'none';
       }
-    }
-
-    function renderBadge(unreadCount) {
-      if (!badge) return;
-      const count = Math.max(0, Number(unreadCount) || 0);
-      badge.textContent = count > 99 ? '99+' : String(count);
-      badge.style.display = count > 0 ? 'flex' : 'none';
-      badge.setAttribute('aria-label', `${count} unread notifications`);
-      try { localStorage.setItem('libraryreeds_notification_unread_count', String(count)); } catch (_) {}
-      window.dispatchEvent(new CustomEvent('notifications-updated', { detail: { unreadCount: count } }));
-    }
-
-    function renderNotifications(rows) {
-      const unreadCount = rows.reduce((total, row) => total + (row.data.read ? 0 : 1), 0);
-      renderBadge(unreadCount);
-
-      if (markAllButton) {
-        markAllButton.textContent = unreadCount > 0 ? 'Mark All Read' : 'All Read';
-        markAllButton.disabled = unreadCount === 0;
-        markAllButton.style.opacity = unreadCount === 0 ? '0.55' : '1';
-        markAllButton.style.cursor = unreadCount === 0 ? 'default' : 'pointer';
+      if (list && !snapshot.empty) {
+        list.innerHTML = snapshot.docs.map(docSnap => {
+          const d = docSnap.data();
+          return `
+            <div style="padding:12px 16px; border-bottom:1px solid var(--border-subtle); background:${d.read ? 'transparent' : 'var(--bg-surface-elevated)'};">
+              <div style="font-size:0.8rem; color:var(--text-primary); font-weight:${d.read ? '400' : '700'};">${d.message || 'Notification'}</div>
+            </div>
+          `;
+        }).join('');
       }
-
-      if (!list) return;
-
-      if (!rows.length) {
-        if (list.tagName === 'UL') {
-          list.replaceChildren();
-        } else {
-          list.innerHTML = '<p style="padding:16px;color:var(--text-muted);font-size:.8rem;text-align:center;">No notifications found</p>';
-        }
-        if (status) {
-          status.hidden = false;
-          status.textContent = 'No notifications yet.';
-        }
-        return;
-      }
-
-      if (status) status.hidden = true;
-
-      if (list.tagName === 'UL') {
-        list.replaceChildren();
-        rows.forEach(({data}) => {
-          const item = document.createElement('li');
-          item.style.fontWeight = data.read ? '400' : '700';
-          item.style.opacity = data.read ? '0.72' : '1';
-          const message = document.createElement('div');
-          message.textContent = data.message || data.title || data.body || 'New activity';
-          const time = document.createElement('div');
-          time.textContent = formatNotificationTime(data.timestamp);
-          time.style.cssText = 'font-size:11px;margin-top:4px;color:var(--accent-gold,#c5a880);';
-          item.append(message, time);
-          list.appendChild(item);
-        });
-      } else {
-        list.innerHTML = rows.map(({data}) => `
-          <div style="padding:12px 16px;border-bottom:1px solid var(--border-subtle);background:${data.read ? 'transparent' : 'var(--bg-surface-elevated)'};display:flex;flex-direction:column;gap:4px;">
-            <span style="font-size:.8rem;color:var(--text-primary);line-height:1.4;font-weight:${data.read ? '400' : '700'};">${escapeNotificationText(data.message || data.title || data.body || 'New activity')}</span>
-            <span style="font-size:.65rem;color:var(--accent-gold);">${escapeNotificationText(formatNotificationTime(data.timestamp))}</span>
-          </div>
-        `).join('');
-      }
-    }
-
-    let latestRows = [];
-    const sharedNotificationQuery = query(
-      collection(sharedDb, 'admin_notifications'),
-      orderBy('timestamp', 'desc'),
-      limit(SHARED_NOTIFICATION_LIMIT)
-    );
-
-    onSnapshot(sharedNotificationQuery, snapshot => {
-      latestRows = snapshot.docs.map(snap => ({ id: snap.id, data: snap.data() }));
-      renderNotifications(latestRows);
-    }, error => {
-      console.warn('Notification sync listener:', error?.message || error);
     });
-
-    if (markAllButton) {
-      markAllButton.addEventListener('click', async event => {
-        event.preventDefault();
-        event.stopPropagation();
-        const unreadRows = latestRows.filter(row => !row.data.read);
-        if (!unreadRows.length) return;
-
-        markAllButton.disabled = true;
-        markAllButton.textContent = 'Saving...';
-        try {
-          const batch = writeBatch(sharedDb);
-          unreadRows.forEach(row => {
-            batch.update(doc(sharedDb, 'admin_notifications', row.id), {
-              read: true,
-              readAt: serverTimestamp()
-            });
-          });
-          await batch.commit();
-        } catch (error) {
-          console.error('Could not mark notifications read:', error);
-          markAllButton.disabled = false;
-          markAllButton.textContent = 'Mark All Read';
-        }
-      });
-    }
   </script>
-
 </body>
 </html>
