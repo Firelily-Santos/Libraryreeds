@@ -178,6 +178,297 @@ body {
 .person .dates { font-size: 9px; color: #948a7a; margin-top: 2px; font-family: Arial, sans-serif; }
 .couple { display: inline-flex; gap: 10px; }
 
+/* Dynamic relatives added from Admin Settings */
+.dynamic-family-tree {
+  display: none;
+  min-width: 760px;
+}
+.dynamic-family-tree.active { display: block; }
+.dynamic-generation {
+  position: relative;
+  margin: 0 auto 34px;
+  padding-top: 18px;
+  text-align: center;
+}
+
+/* Keep every generated family-tree level connected */
+.dynamic-generation:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -34px;
+  width: 0;
+  height: 52px;
+  border-left: 2px solid #8e806c;
+  transform: translateX(-1px);
+}
+
+.dynamic-generation-title {
+  position: relative;
+  z-index: 2;
+  width: max-content;
+  max-width: 90%;
+  margin: 0 auto 12px;
+  padding: 2px 8px;
+  color: #79684a;
+  background: #faf7f2;
+  font-family: Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.dynamic-relative-row {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+  padding-top: 24px;
+}
+
+/* Horizontal generation branch */
+.dynamic-relative-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  border-top: 2px solid #8e806c;
+}
+
+/* Vertical branch from the generation line to each relative */
+.dynamic-relative-slot {
+  position: relative;
+}
+.dynamic-relative-slot::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -24px;
+  width: 0;
+  height: 24px;
+  border-left: 2px solid #8e806c;
+  transform: translateX(-1px);
+}
+
+/* A single relative still connects directly to the center spine */
+.dynamic-relative-row:has(.dynamic-relative-slot:only-child)::before {
+  left: 50%;
+  right: auto;
+  width: 0;
+}
+.dynamic-relative-slot .person { min-width: 150px; max-width: 180px; }
+.dynamic-relative-slot .name { word-break: break-word; }
+.dynamic-relative-slot .relation-note {
+  margin-top: 4px;
+  max-width: 150px;
+  color: #766f64;
+  font-family: Arial, sans-serif;
+  font-size: 9px;
+  line-height: 1.3;
+}
+.legacy-family-tree.hidden-by-dynamic { display: none; }
+
+
+/* ==================================================
+   FAMILY TREE — WIDE HORIZONTAL LINEAGE STYLE
+   Inspired by the user's reference layout.
+================================================== */
+.dynamic-family-tree.active {
+  display: block;
+  min-width: 1040px;
+  padding: 8px 28px 28px;
+  font-family: Arial, sans-serif;
+}
+.family-tree-showcase {
+  position: relative;
+  min-width: 1040px;
+  padding: 8px 18px 24px;
+}
+.family-tree-plaque {
+  position: relative;
+  z-index: 4;
+  width: max-content;
+  margin: 0 auto 30px;
+  padding: 10px 34px;
+  border-radius: 5px;
+  background: #1d1b18;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0,0,0,.13);
+}
+.family-tree-plaque::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 2px;
+  height: 30px;
+  background: #8e806c;
+  transform: translateX(-50%);
+}
+.dynamic-generation {
+  position: relative;
+  margin: 0 auto 42px;
+  padding-top: 25px;
+  text-align: center;
+}
+.dynamic-generation::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -17px;
+  width: 2px;
+  height: 42px;
+  background: #8e806c;
+  transform: translateX(-50%);
+}
+.dynamic-generation:first-of-type::before {
+  top: -30px;
+  height: 55px;
+}
+.dynamic-generation-title {
+  position: relative;
+  z-index: 3;
+  width: max-content;
+  max-width: 90%;
+  margin: 0 auto 15px;
+  padding: 3px 10px;
+  background: #faf7f2;
+  color: #79684a;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.dynamic-relative-row {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 34px;
+  padding: 27px 22px 0;
+}
+.dynamic-relative-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--branch-left, 8%);
+  right: var(--branch-right, 8%);
+  height: 2px;
+  background: #8e806c;
+}
+.dynamic-relative-slot {
+  position: relative;
+  flex: 0 0 112px;
+  width: 112px;
+  padding-top: 1px;
+}
+.dynamic-relative-slot::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -27px;
+  width: 2px;
+  height: 27px;
+  background: #8e806c;
+  transform: translateX(-50%);
+}
+.dynamic-relative-slot .person {
+  min-width: 0;
+  width: 112px;
+  max-width: 112px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.dynamic-relative-slot .person .image-slot {
+  width: 78px;
+  height: 78px;
+  margin: 0 auto 8px;
+  border: 2px solid #8e806c;
+  border-radius: 50%;
+  background: #e6e1d8;
+  box-shadow: 0 2px 7px rgba(0,0,0,.08);
+}
+.dynamic-relative-slot .person .image-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.dynamic-relative-slot .person .name {
+  max-width: 112px;
+  color: #27231e;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.dynamic-relative-slot .person .role {
+  max-width: 112px;
+  margin-top: 4px;
+  color: #4c453c;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: .04em;
+  text-align: center;
+  text-transform: uppercase;
+}
+.dynamic-relative-slot .person .dates,
+.dynamic-relative-slot .relation-note {
+  max-width: 112px;
+  margin-top: 3px;
+  color: #8c8376;
+  font-size: 8px;
+  line-height: 1.25;
+  text-align: center;
+}
+.dynamic-relative-slot.is-target .person .image-slot {
+  border: 3px solid #6f557f;
+  box-shadow: 0 0 0 3px rgba(111,85,127,.14);
+}
+.dynamic-relative-slot.is-target .person .role {
+  color: #6f557f;
+}
+.dynamic-relative-row.single-relative::before {
+  left: 50%;
+  right: auto;
+  width: 2px;
+}
+/* Short partner line used when Admin Settings marks a person as spouse/partner. */
+.dynamic-relative-slot.has-partner-link::after {
+  content: "";
+  position: absolute;
+  top: 39px;
+  left: calc(100% - 2px);
+  width: 36px;
+  height: 2px;
+  background: #8e806c;
+}
+.tree-scroll-container {
+  overflow: auto;
+  padding: 28px 18px 18px;
+  background: #fbf9f4;
+  border: 1px solid #dcd3c3;
+}
+@media (max-width: 760px) {
+  .dynamic-family-tree.active,
+  .family-tree-showcase { min-width: 920px; }
+  .dynamic-relative-row { gap: 24px; }
+}
+
 /* Crest Header inside Modal */
 .modal-crest-badge {
   display: flex; align-items: center; gap: 12px; margin-bottom: 16px; background: rgba(0,0,0,0.03);
@@ -353,7 +644,8 @@ body {
     </div>
     
     <div class="tree-scroll-container">
-      <div class="tree">
+      <div class="dynamic-family-tree" id="dynamicFamilyTree"></div>
+      <div class="tree legacy-family-tree" id="legacyFamilyTree">
         <ul>
           <li>
             <!-- Generation 1: Grandparents -->
@@ -618,14 +910,93 @@ body {
     });
   }
 
-  // Real-time Firestore Listener
-  onSnapshot(collection(db, "character_wall"), (snapshot) => {
-    characters = [];
-    snapshot.forEach((snap) => {
-      characters.push({ id: snap.id, ...snap.data() });
-    });
+  // ==================================================
+  // CHARACTER WALL DATA LOADING
+  // Keeps the page from getting stuck on "Loading..." if Firestore
+  // is temporarily unavailable, blocked, or denied by security rules.
+  // ==================================================
+
+  const CHARACTER_WALL_CACHE_KEY = "characterWallFirestoreCache";
+  const LEGACY_CHARACTER_WALL_KEY = "characterWall";
+
+  function readCharacterCache() {
+    const keys = [CHARACTER_WALL_CACHE_KEY, LEGACY_CHARACTER_WALL_KEY];
+
+    for (const key of keys) {
+      try {
+        const saved = localStorage.getItem(key);
+        if (!saved) continue;
+
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (error) {
+        console.warn(`Unable to read ${key}:`, error);
+      }
+    }
+
+    return [];
+  }
+
+  function saveCharacterCache(list) {
+    try {
+      localStorage.setItem(CHARACTER_WALL_CACHE_KEY, JSON.stringify(list));
+    } catch (error) {
+      console.warn("Unable to cache Character Wall data:", error);
+    }
+  }
+
+  function showCharacterLoadError(error) {
+    console.error("Unable to load Character Wall from Firestore:", error);
+
+    const cachedCharacters = readCharacterCache();
+
+    if (cachedCharacters.length) {
+      characters = cachedCharacters;
+      renderCharacters();
+      return;
+    }
+
+    const container = document.getElementById("charactersContainer");
+    if (!container) return;
+
+    container.innerHTML = `
+      <div style="grid-column:1/-1;max-width:720px;margin:0 auto;padding:24px;text-align:center;background:#f4f0e7;color:#24231f;border:1px solid #cfc5b5;box-shadow:0 10px 25px rgba(0,0,0,.18);">
+        <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Character Wall could not connect to the database</div>
+        <div style="font-family:Arial,sans-serif;font-size:12px;line-height:1.6;color:#6f675d;">The page itself is working, but Firebase did not return the character records. Check that Firestore allows this page to read the <strong>character_wall</strong> collection.</div>
+      </div>
+    `;
+  }
+
+  // Show previously saved data immediately when available instead of
+  // making visitors stare at the loading message while Firebase connects.
+  const cachedCharacters = readCharacterCache();
+  if (cachedCharacters.length) {
+    characters = cachedCharacters;
     renderCharacters();
-  });
+  }
+
+  // Real-time Firestore Listener
+  onSnapshot(
+    collection(db, "character_wall"),
+    (snapshot) => {
+      const loadedCharacters = [];
+
+      snapshot.forEach((snap) => {
+        loadedCharacters.push({ id: snap.id, ...snap.data() });
+      });
+
+      loadedCharacters.sort((a, b) =>
+        String(a.name || "").localeCompare(String(b.name || ""))
+      );
+
+      characters = loadedCharacters;
+      saveCharacterCache(characters);
+      renderCharacters();
+    },
+    (error) => {
+      showCharacterLoadError(error);
+    }
+  );
 
 
   // Crest / School Crest / World Map image viewer
@@ -675,6 +1046,240 @@ body {
     if (e.target === imageViewerModal) closeImageViewer();
   });
 
+  function escapeTreeHTML(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function normalizeRelative(relative, fallbackRole = "Relative") {
+    if (relative == null) return null;
+    if (typeof relative === "string" || typeof relative === "number") {
+      const name = String(relative).trim();
+      return name ? { name, role: fallbackRole } : null;
+    }
+    if (typeof relative !== "object") return null;
+    const name = relative.name || relative.fullName || relative.relativeName || relative.characterName || relative.label || "";
+    if (!String(name).trim()) return null;
+    return {
+      name: String(name).trim(),
+      role: relative.relationship || relative.relation || relative.role || relative.type || fallbackRole,
+      image: relative.image || relative.photo || relative.imageUrl || relative.imageURL || relative.portrait || "",
+      dates: relative.dates || relative.years || relative.lifespan || relative.birthDeath || relative.age || "",
+      note: relative.note || relative.notes || relative.description || "",
+      generation: relative.generation || relative.generationLabel || relative.level || "",
+      parent: relative.parent || relative.parentName || relative.parentId || relative.parentID || "",
+      spouse: relative.spouse || relative.spouseName || relative.partner || relative.partnerName || "",
+      spouseId: relative.spouseId || relative.partnerId || "",
+      branch: relative.branch || relative.familyBranch || ""
+    };
+  }
+
+  function collectDynamicRelatives(char) {
+    const tree = (char && char.familyTree && typeof char.familyTree === "object") ? char.familyTree : {};
+    const candidates = [
+      char?.relatives,
+      char?.familyMembers,
+      char?.familyTreeRelatives,
+      tree.relatives,
+      tree.familyMembers,
+      tree.members,
+      tree.additionalRelatives,
+      tree.extraRelatives
+    ];
+
+    const relatives = [];
+    for (const candidate of candidates) {
+      if (Array.isArray(candidate)) {
+        candidate.forEach(item => {
+          const normalized = normalizeRelative(item);
+          if (normalized) relatives.push(normalized);
+        });
+      } else if (candidate && typeof candidate === "object") {
+        Object.entries(candidate).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            value.forEach(item => {
+              const normalized = normalizeRelative(item, key);
+              if (normalized) relatives.push(normalized);
+            });
+          } else {
+            const normalized = normalizeRelative(value, key);
+            if (normalized) relatives.push(normalized);
+          }
+        });
+      }
+    }
+
+    // Also support extra keys saved directly inside familyTree.
+    const fixedKeys = new Set([
+      "grandfather","grandmother","father","mother","aunt","uncle","siblings","sibling",
+      "relatives","familyMembers","members","additionalRelatives","extraRelatives"
+    ]);
+    Object.entries(tree).forEach(([key, value]) => {
+      if (fixedKeys.has(key)) return;
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          const normalized = normalizeRelative(item, key);
+          if (normalized) relatives.push(normalized);
+        });
+      } else if (value && typeof value === "object") {
+        const normalized = normalizeRelative(value, key);
+        if (normalized) relatives.push(normalized);
+      }
+    });
+
+    // Deduplicate while preserving Admin Settings order.
+    const seen = new Set();
+    return relatives.filter(relative => {
+      const key = `${String(relative.name).toLowerCase()}|${String(relative.role).toLowerCase()}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  function relativeCardHTML(relative, options = {}) {
+    const image = relative.image
+      ? `<img src="${escapeTreeHTML(relative.image)}" alt="${escapeTreeHTML(relative.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><svg style="display:none;width:31px;height:31px;fill:#8e806c;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`
+      : `<svg style="width:31px;height:31px;fill:#8e806c;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+
+    const classes = ["dynamic-relative-slot"];
+    if (options.isTarget) classes.push("is-target");
+    if (options.hasPartnerLink) classes.push("has-partner-link");
+
+    return `
+      <div class="${classes.join(" ")}">
+        <div class="person">
+          <div class="image-slot">${image}</div>
+          <div class="name">${escapeTreeHTML(relative.name)}</div>
+          <div class="role">${escapeTreeHTML(relative.role || "Relative")}</div>
+          ${relative.dates ? `<div class="dates">${escapeTreeHTML(relative.dates)}</div>` : ""}
+          ${relative.note ? `<div class="relation-note">${escapeTreeHTML(relative.note)}</div>` : ""}
+        </div>
+      </div>`;
+  }
+
+  function inferGeneration(relative) {
+    if (relative.generation) return String(relative.generation);
+    const role = String(relative.role || "").toLowerCase();
+
+    if (/great[ -]?grand/.test(role)) return "Great Grandparents";
+    if (/grandmother|grandfather|grandparent/.test(role)) return "Grandparents";
+    if (/mother|father|parent|aunt|uncle/.test(role)) return "Parents & Their Siblings";
+    if (/daughter|son|child|children|niece|nephew/.test(role)) return "Children & Younger Generation";
+    if (/granddaughter|grandson|grandchild/.test(role)) return "Grandchildren";
+    if (/brother|sister|sibling|cousin|wife|husband|spouse|partner|character|me/.test(role)) return "Character Generation";
+    return "Extended Family";
+  }
+
+  function generationRank(label) {
+    const text = String(label || "").toLowerCase();
+    if (text.includes("great") && text.includes("grand")) return 10;
+    if (text.includes("grandparent") || text === "grandparents") return 20;
+    if (text.includes("parent") || text.includes("aunt") || text.includes("uncle")) return 30;
+    if (text.includes("character") || text.includes("sibling") || text.includes("cousin") || text.includes("same generation")) return 40;
+    if (text.includes("children") || text.includes("younger")) return 50;
+    if (text.includes("grandchildren")) return 60;
+    return 45;
+  }
+
+  function renderDynamicFamilyTree(char) {
+    const dynamic = document.getElementById("dynamicFamilyTree");
+    const legacy = document.getElementById("legacyFamilyTree");
+    if (!dynamic || !legacy) return;
+
+    const extras = collectDynamicRelatives(char);
+    const tree = char.familyTree || {};
+
+    const core = [
+      normalizeRelative(tree.greatGrandfather, "Great Grandfather"),
+      normalizeRelative(tree.greatGrandmother, "Great Grandmother"),
+      normalizeRelative(tree.grandfather, "Grandfather"),
+      normalizeRelative(tree.grandmother, "Grandmother"),
+      normalizeRelative(tree.father, "Father"),
+      normalizeRelative(tree.mother, "Mother"),
+      normalizeRelative(tree.aunt, "Aunt"),
+      normalizeRelative(tree.uncle, "Uncle"),
+      normalizeRelative(tree.siblings || tree.sibling, "Sibling")
+    ].filter(Boolean);
+
+    const target = {
+      name: char.name || "Character",
+      role: char.familyTreeLabel || "Me",
+      image: char.image || "",
+      dates: char.age || "",
+      generation: "Character Generation",
+      isTarget: true
+    };
+
+    const all = [...core, target, ...extras];
+
+    // Deduplicate the combined list while retaining the first saved occurrence.
+    const seen = new Set();
+    const unique = all.filter(relative => {
+      const key = `${String(relative.name || "").toLowerCase()}|${String(relative.role || "").toLowerCase()}`;
+      if (!relative.name || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    if (!unique.length) {
+      dynamic.innerHTML = "";
+      dynamic.classList.remove("active");
+      legacy.classList.remove("hidden-by-dynamic");
+      return;
+    }
+
+    const groups = new Map();
+    unique.forEach(relative => {
+      const label = inferGeneration(relative);
+      if (!groups.has(label)) groups.set(label, []);
+      groups.get(label).push(relative);
+    });
+
+    const orderedGroups = Array.from(groups.entries()).sort((a, b) => {
+      const diff = generationRank(a[0]) - generationRank(b[0]);
+      return diff || 0;
+    });
+
+    const rows = orderedGroups.map(([label, members]) => {
+      // Keep the selected character near the center of their generation.
+      members.sort((a, b) => Number(Boolean(a.isTarget)) - Number(Boolean(b.isTarget)));
+      const targetIndex = members.findIndex(m => m.isTarget);
+      if (targetIndex >= 0) {
+        const [me] = members.splice(targetIndex, 1);
+        members.splice(Math.floor(members.length / 2), 0, me);
+      }
+
+      return `
+        <section class="dynamic-generation" data-generation="${escapeTreeHTML(label)}">
+          <div class="dynamic-generation-title">${escapeTreeHTML(label)}</div>
+          <div class="dynamic-relative-row ${members.length === 1 ? "single-relative" : ""}">
+            ${members.map((relative, index) => {
+              const next = members[index + 1];
+              const role = String(relative.role || "").toLowerCase();
+              const nextRole = String(next?.role || "").toLowerCase();
+              const partnerRoles = /wife|husband|spouse|partner/;
+              const hasPartnerLink = Boolean(next) && (partnerRoles.test(role) || partnerRoles.test(nextRole));
+              return relativeCardHTML(relative, { isTarget: Boolean(relative.isTarget), hasPartnerLink });
+            }).join("")}
+          </div>
+        </section>`;
+    }).join("");
+
+    dynamic.innerHTML = `
+      <div class="family-tree-showcase">
+        <div class="family-tree-plaque">Family Tree</div>
+        ${rows}
+      </div>`;
+
+    dynamic.classList.add("active");
+    legacy.classList.add("hidden-by-dynamic");
+  }
+
   // Modal Open Handler with Dynamic Admin Data
   document.addEventListener("click", (e) => {
     const trigger = e.target.closest("[data-tree-id]");
@@ -718,7 +1323,10 @@ body {
     document.getElementById("treeNodeFather").textContent = tree.father || "Robert Doe";
     document.getElementById("treeNodeMother").textContent = tree.mother || "Clara Doe";
     document.getElementById("treeNodeAunt").textContent = tree.aunt || "Sarah Doe";
-    document.getElementById("treeNodeSibling").textContent = tree.siblings || "James Doe";
+    document.getElementById("treeNodeSibling").textContent = tree.siblings || tree.sibling || "James Doe";
+
+    // Create additional slots automatically for every relative saved in Admin Settings.
+    renderDynamicFamilyTree(char);
 
     // Target Character Node
     document.getElementById("treeNodeTargetName").textContent = char.name;
@@ -754,5 +1362,37 @@ body {
     if (e.key === "Escape" && !imageViewerModal?.classList.contains("active")) closeModal();
   });
 </script>
+
+<script>
+// Final safety net: if the Firebase module itself cannot start (for example,
+// a host blocks module/CDN scripts), never leave the page frozen on Loading.
+window.setTimeout(function () {
+  const container = document.getElementById("charactersContainer");
+  if (!container) return;
+
+  const text = (container.textContent || "").trim();
+  if (!text.includes("Loading Character Wall from database")) return;
+
+  let cached = [];
+  for (const key of ["characterWallFirestoreCache", "characterWall"]) {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(key) || "[]");
+      if (Array.isArray(parsed) && parsed.length) {
+        cached = parsed;
+        break;
+      }
+    } catch (error) {}
+  }
+
+  if (!cached.length) {
+    container.innerHTML = `
+      <div style="grid-column:1/-1;max-width:720px;margin:0 auto;padding:24px;text-align:center;background:#f4f0e7;color:#24231f;border:1px solid #cfc5b5;">
+        <strong style="font-family:Arial,sans-serif;">Character Wall database connection did not start.</strong>
+        <div style="margin-top:8px;font-family:Arial,sans-serif;font-size:12px;line-height:1.6;color:#6f675d;">Your page content has not been deleted. The Firebase scripts may be blocked by the site where this HTML is embedded.</div>
+      </div>`;
+  }
+}, 7000);
+</script>
+
 </body>
 </html>

@@ -752,12 +752,13 @@
         <!-- ADMIN CHARACTER WALL & FAMILY TREE MANAGEMENT -->
         <div id="panel-characterwall" class="settings-card" style="display: none;">
           <h2 class="card-title">Character Wall Management</h2>
-          <p class="card-desc">Add, edit, publish, and remove character profiles shown on the Character Wall. Configure custom generational lineages, multiple brothers/sisters, and extended relatives with adoption flags.</p>
+          <p class="card-desc">Add, edit, publish, and remove character profiles shown on the Character Wall. Configure multiple front Polaroid carousel images, generational lineages, brothers/sisters, and extended relatives with adoption flags.</p>
 
           <form id="adminCharacterForm" style="display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle);">
             <h3 id="characterFormLegend" style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary);">Add Character to Wall</h3>
             <input type="hidden" id="editCharacterDocId">
             <input type="hidden" id="existingCharacterImageUrl">
+            <input type="hidden" id="existingCharacterImagesJson">
             <input type="hidden" id="existingCharacterBookCoverUrl">
             <input type="hidden" id="existingCharacterFamilyCrestUrl">
             <input type="hidden" id="existingCharacterSchoolCrestUrl">
@@ -859,10 +860,27 @@
               </div>
             </div>
 
+            <!-- PRIMARY ARTWORK / POLAROID FRONT PHOTO -->
             <div class="form-group">
-              <label class="form-label">Character Artwork Image (File or URL):</label>
+              <label class="form-label">Primary Character Artwork (File or URL):</label>
               <input type="file" class="form-input" id="adminCharacterImageFile" accept="image/*" style="padding:9px; cursor:pointer;">
-              <input type="url" class="form-input" id="adminCharacterImageUrl" placeholder="Or enter Artwork Image URL" style="margin-top:6px;">
+              <input type="url" class="form-input" id="adminCharacterImageUrl" placeholder="Or enter Primary Artwork URL" style="margin-top:6px;">
+            </div>
+
+            <!-- MULTIPLE ADDITIONAL POLAROID FRONT IMAGES -->
+            <div style="background:var(--bg-base); border:1px solid var(--accent-gold); border-radius:4px; padding:16px;">
+              <h4 style="font-family:var(--font-serif); color:var(--accent-gold); margin-bottom:6px; font-size:1.15rem;">🖼️ Additional Polaroid Front Images (Scrollable Gallery)</h4>
+              <p style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:12px;">Upload multiple images or paste URLs. Visitors can scroll or tap next/previous directly on the front of the Polaroid card!</p>
+              
+              <div class="form-group">
+                <label class="form-label">Upload Additional Images from Device (Select Multiple):</label>
+                <input type="file" class="form-input" id="adminCharacterGalleryFiles" accept="image/*" multiple style="padding:9px; cursor:pointer;">
+              </div>
+              
+              <div class="form-group" style="margin-top:8px;">
+                <label class="form-label">Or Extra Image URLs (One Per Line or Comma-Separated):</label>
+                <textarea class="form-input" id="adminCharacterGalleryUrls" rows="3" placeholder="https://example.com/extra1.jpg&#10;https://example.com/extra2.jpg" style="resize:vertical;"></textarea>
+              </div>
             </div>
 
             <div class="form-group">
@@ -980,10 +998,10 @@
             <div style="overflow-x:auto;">
               <table class="inventory-table">
                 <thead>
-                  <tr><th>Character Name</th><th>Role / Story</th><th>Siblings Count</th><th>Crest Attached</th><th>Actions</th></tr>
+                  <tr><th>Character Name</th><th>Role / Story</th><th>Front Images</th><th>Siblings Count</th><th>Crest Attached</th><th>Actions</th></tr>
                 </thead>
                 <tbody id="adminCharacterTableBody">
-                  <tr><td colspan="5" style="color:var(--text-muted); text-align:center;">Loading characters...</td></tr>
+                  <tr><td colspan="6" style="color:var(--text-muted); text-align:center;">Loading characters...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1995,6 +2013,7 @@
       form.reset();
       document.getElementById("editCharacterDocId").value = "";
       document.getElementById("existingCharacterImageUrl").value = "";
+      document.getElementById("existingCharacterImagesJson").value = "";
       document.getElementById("existingCharacterBookCoverUrl").value = "";
       document.getElementById("existingCharacterFamilyCrestUrl").value = "";
       document.getElementById("siblingsContainer").innerHTML = "";
@@ -2010,6 +2029,17 @@
 
       document.getElementById("editCharacterDocId").value = id;
       document.getElementById("existingCharacterImageUrl").value = character.image || "";
+      
+      const allImgs = Array.isArray(character.images) ? character.images : (character.image ? [character.image] : []);
+      document.getElementById("existingCharacterImagesJson").value = JSON.stringify(allImgs);
+      
+      // Secondary images into the gallery text field
+      const extraImgs = allImgs.slice(1);
+      const galleryUrlsInput = document.getElementById("adminCharacterGalleryUrls");
+      if (galleryUrlsInput) {
+        galleryUrlsInput.value = extraImgs.join("\n");
+      }
+
       document.getElementById("existingCharacterBookCoverUrl").value = character.bookCover || "";
       document.getElementById("existingCharacterFamilyCrestUrl").value = character.houseCrest || character.familyCrest || "";
 
@@ -2020,7 +2050,7 @@
       document.getElementById("adminCharacterMain").value = character.mainCharacter || "No";
       document.getElementById("adminCharacterAge").value = character.age || "";
       document.getElementById("adminCharacterLifeStage").value = character.lifeStage || "";
-      document.getElementById("adminCharacterImageUrl").value = character.image || "";
+      document.getElementById("adminCharacterImageUrl").value = character.image || (allImgs[0] || "");
       document.getElementById("adminCharacterBookCoverUrl").value = character.bookCover || "";
       document.getElementById("adminCharacterFamilyCrestUrl").value = character.houseCrest || character.familyCrest || "";
 
@@ -2041,7 +2071,6 @@
           sibsContainer.appendChild(window.createSiblingRow(sib.name, sib.type, !!sib.isAdopted));
         });
       } else if (tree.siblings || character.siblings) {
-        // Fallback migration from older string
         const oldSibs = (tree.siblings || character.siblings).split(",");
         oldSibs.forEach(s => {
           if (s.trim()) sibsContainer.appendChild(window.createSiblingRow(s.trim(), tree.siblingType || "Brother", false));
@@ -2078,13 +2107,14 @@
       entries.sort((a, b) => (a[1].name || "").localeCompare(b[1].name || ""));
 
       if (!entries.length) {
-        tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted); text-align:center;">No characters published yet.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted); text-align:center;">No characters published yet.</td></tr>';
         return;
       }
 
       tbody.innerHTML = entries.map(([id, c]) => {
         const crest = c.houseCrest || c.familyCrest;
         const sibCount = Array.isArray(c.familyTree?.siblingsList) ? c.familyTree.siblingsList.length : (c.familyTree?.siblings ? 1 : 0);
+        const imgCount = Array.isArray(c.images) && c.images.length > 0 ? c.images.length : (c.image ? 1 : 0);
         return `
           <tr>
             <td>
@@ -2092,6 +2122,7 @@
               <div style="font-size:.72rem;color:var(--text-muted);">${c.species || "Unspecified"}</div>
             </td>
             <td>${c.role || "Other"}<br><span style="font-size:.72rem;color:var(--text-muted);">${c.book || "No story"}</span></td>
+            <td><span style="color:var(--accent-gold); font-size:0.75rem;">${imgCount} photo${imgCount === 1 ? '' : 's'}</span></td>
             <td><span style="color:var(--accent-gold); font-size:0.75rem;">${sibCount} recorded</span></td>
             <td>${crest ? `<span style="color:var(--accent-gold); font-size:0.75rem;">✓ Crest Active</span>` : `<span style="color:var(--text-muted); font-size:0.75rem;">None</span>`}</td>
             <td style="display:flex;gap:8px;">
@@ -2114,6 +2145,7 @@
         const artFile = document.getElementById("adminCharacterImageFile").files[0];
         const coverFile = document.getElementById("adminCharacterBookCoverFile").files[0];
         const crestFile = document.getElementById("adminCharacterFamilyCrestFile").files[0];
+        const galleryFiles = document.getElementById("adminCharacterGalleryFiles")?.files || [];
 
         let image = characterField("adminCharacterImageUrl") || characterField("existingCharacterImageUrl");
         let bookCover = characterField("adminCharacterBookCoverUrl") || characterField("existingCharacterBookCoverUrl");
@@ -2122,6 +2154,27 @@
         if (artFile) image = await uploadCharacterMedia(artFile, "avatars");
         if (coverFile) bookCover = await uploadCharacterMedia(coverFile, "book-covers");
         if (crestFile) familyCrest = await uploadCharacterMedia(crestFile, "family-crests");
+
+        // Parse gallery / multiple images
+        const galleryList = [];
+        if (image) galleryList.push(image);
+
+        // Upload extra device gallery files
+        if (galleryFiles && galleryFiles.length > 0) {
+          for (let i = 0; i < galleryFiles.length; i++) {
+            const uploadedUrl = await uploadCharacterMedia(galleryFiles[i], "gallery");
+            if (uploadedUrl && !galleryList.includes(uploadedUrl)) {
+              galleryList.push(uploadedUrl);
+            }
+          }
+        }
+
+        // Parse extra URLs from textarea
+        const rawGalleryUrls = document.getElementById("adminCharacterGalleryUrls")?.value || "";
+        const parsedUrls = rawGalleryUrls.split(/[\n,]+/).map(u => u.trim()).filter(Boolean);
+        parsedUrls.forEach(url => {
+          if (!galleryList.includes(url)) galleryList.push(url);
+        });
 
         // Parse Multiple Siblings
         const siblingsList = [];
@@ -2141,6 +2194,8 @@
           if (name) relativesList.push({ name, relation, isAdopted });
         });
 
+        const primaryImage = galleryList[0] || image || "";
+
         const payload = {
           name: characterField("adminCharacterName"),
           species: characterField("adminCharacterSpecies"),
@@ -2149,7 +2204,8 @@
           mainCharacter: characterField("adminCharacterMain") || "No",
           age: characterField("adminCharacterAge"),
           lifeStage: characterField("adminCharacterLifeStage"),
-          image,
+          image: primaryImage,
+          images: galleryList.length > 0 ? galleryList : (primaryImage ? [primaryImage] : []),
           bookCover,
           houseCrest: familyCrest,
           familyCrest: familyCrest,
