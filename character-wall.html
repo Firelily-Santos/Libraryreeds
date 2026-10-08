@@ -3,1629 +3,355 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Character Archive Wall</title>
-
 <style>
-
 :root {
-    --page: #181817;
-
-    --wood-dark: #24150f;
-    --wood-mid: #4b2a1b;
-    --wood-light: #6a4029;
-
-    --board: #45443f;
-
-    --paper: #f4f0e7;
-
-    --ink: #24231f;
-
-    --hero: #486d7c;
-    --villain: #7b4445;
-    --antihero: #776441;
-    --other: #58675b;
-
-    --shadow:
-        0 18px 35px rgba(0,0,0,.30),
-        0 5px 12px rgba(0,0,0,.18);
+  --page: #181817;
+  --wood-dark: #24150f;
+  --wood-mid: #4b2a1b;
+  --wood-light: #6a4029;
+  --board: #45443f;
+  --paper: #f4f0e7;
+  --ink: #24231f;
+  --hero: #486d7c;
+  --villain: #7b4445;
+  --antihero: #776441;
+  --other: #58675b;
+  --shadow: 0 18px 35px rgba(0,0,0,.30), 0 5px 12px rgba(0,0,0,.18);
 }
-
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
+* { box-sizing: border-box; }
 body {
-    margin: 0;
-    min-height: 100vh;
-    padding: 28px;
-
-    background:
-        radial-gradient(
-            circle at top,
-            #34322e 0,
-            #1d1c1a 42%,
-            #111110 100%
-        );
-
-    color: #eeeae1;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+  margin: 0; min-height: 100vh; padding: 28px;
+  background: radial-gradient(circle at top, #34322e 0, #1d1c1a 42%, #111110 100%);
+  color: #eeeae1; font-family: Georgia, "Times New Roman", serif;
 }
-
-button,
-input,
-select,
-textarea {
-    font: inherit;
-}
-
-/* ==================================================
-   OUTER FRAME
-================================================== */
-
 .archive-frame {
-    width: min(1500px, 100%);
-    margin: auto;
-    padding: 28px;
-
-    border-radius: 6px;
-
-    background:
-        linear-gradient(
-            120deg,
-            transparent 0 8%,
-            rgba(255,255,255,.06) 9%,
-            transparent 10% 25%,
-            rgba(0,0,0,.10) 26%,
-            transparent 27% 58%,
-            rgba(255,255,255,.05) 59%,
-            transparent 60%
-        ),
-        linear-gradient(
-            90deg,
-            var(--wood-dark),
-            var(--wood-light) 18%,
-            var(--wood-mid) 43%,
-            #301b12 68%,
-            #59351f
-        );
-
-    box-shadow:
-        0 32px 70px rgba(0,0,0,.65),
-        inset 0 2px 1px rgba(255,255,255,.12),
-        inset 0 -4px 8px rgba(0,0,0,.5);
+  width: min(1500px, 100%); margin: auto; padding: 28px; border-radius: 6px;
+  background: linear-gradient(90deg, var(--wood-dark), var(--wood-light) 18%, var(--wood-mid) 43%, #301b12 68%, #59351f);
+  box-shadow: 0 32px 70px rgba(0,0,0,.65);
 }
-
-/* ==================================================
-   BOARD
-================================================== */
-
 .archive-board {
-    min-height: 100vh;
-    padding: 46px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.05);
-
-    background-color:
-        var(--board);
-
-    background-image:
-        radial-gradient(
-            rgba(255,255,255,.035) 1px,
-            transparent 1px
-        ),
-        radial-gradient(
-            rgba(0,0,0,.10) 1px,
-            transparent 1px
-        );
-
-    background-size:
-        9px 9px,
-        6px 6px;
-
-    background-position:
-        0 0,
-        3px 3px;
-
-    box-shadow:
-        inset 0 25px 35px rgba(0,0,0,.35),
-        inset 18px 0 30px rgba(0,0,0,.26),
-        inset -18px 0 30px rgba(0,0,0,.26);
+  min-height: 100vh; padding: 46px; border: 1px solid rgba(255,255,255,.05);
+  background-color: var(--board);
+  box-shadow: inset 0 25px 35px rgba(0,0,0,.35);
 }
-
-/* ==================================================
-   HEADER
-================================================== */
-
 .wall-header {
-    position: relative;
-
-    max-width: 820px;
-
-    margin:
-        0 auto
-        32px;
-
-    padding:
-        28px
-        40px;
-
-    text-align: center;
-
-    color:
-        var(--ink);
-
-    background:
-        linear-gradient(
-            145deg,
-            #faf7ef,
-            #e9e3d7
-        );
-
-    border:
-        1px solid
-        #c8bdab;
-
-    box-shadow:
-        var(--shadow);
+  position: relative; max-width: 820px; margin: 0 auto 32px; padding: 28px 40px; text-align: center;
+  color: var(--ink); background: linear-gradient(145deg, #faf7ef, #e9e3d7); border: 1px solid #c8bdab;
 }
-
-.wall-header::before,
-.section-banner::before {
-    content: "";
-
-    position: absolute;
-
-    width: 13px;
-    height: 13px;
-
-    border-radius: 50%;
-
-    left: 50%;
-    top: -7px;
-
-    transform:
-        translateX(-50%);
-
-    background:
-        radial-gradient(
-            circle at 35% 30%,
-            #fff3be 0,
-            #c59b48 28%,
-            #755727 62%,
-            #272116 100%
-        );
-
-    box-shadow:
-        1px 3px 5px
-        rgba(0,0,0,.55);
-}
-
-.wall-kicker {
-    margin-bottom: 6px;
-
-    color: #796a54;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: .22em;
-
-    text-transform: uppercase;
-}
-
-.wall-header h1 {
-    margin: 0;
-
-    font-size:
-        clamp(34px, 6vw, 65px);
-
-    font-weight: normal;
-}
-
-.wall-header p {
-    max-width: 600px;
-
-    margin:
-        10px auto
-        0;
-
-    color:
-        #716c62;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 13px;
-
-    line-height: 1.6;
-}
-
-/* ==================================================
-   BACK TO FANART BUTTON
-================================================== */
-
+.wall-kicker { margin-bottom: 6px; color: #796a54; font-family: Arial, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; }
+.wall-header h1 { margin: 0; font-size: clamp(34px, 6vw, 65px); font-weight: normal; }
 .back-to-fanart-wrap {
-    display: flex;
-    justify-content: center;
-    margin: 0 auto 22px;
+  display: flex;
+  justify-content: center;
+  margin: -10px auto 24px;
 }
-
 .back-to-fanart-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 40px;
-    padding: 0 16px;
-
-    border: 1px solid #c7bdad;
-    border-radius: 5px;
-
-    background: #f7f2e8;
-    color: #3f3a32;
-
-    font-family: Arial, sans-serif;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    text-decoration: none;
-
-    box-shadow: 0 8px 18px rgba(0,0,0,.18);
-    transition: transform .18s ease, background .18s ease, color .18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid #c7bdad;
+  border-radius: 5px;
+  background: #f7f2e8;
+  color: #3f3a32;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+  transition: transform .18s ease, background .18s ease, color .18s ease;
 }
-
 .back-to-fanart-button:hover {
-    background: #292923;
-    color: white;
-    transform: translateY(-1px);
+  background: #292923;
+  color: #fff;
+  transform: translateY(-1px);
 }
-
 .back-to-fanart-button svg {
-    width: 15px;
-    height: 15px;
-    stroke: currentColor;
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
 }
 
-/* ==================================================
-   CONTROLS
-================================================== */
 
-.wall-controls {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-
-    gap: 10px;
-
-    margin-bottom: 44px;
-}
-
-.control-panel {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 7px;
-
-    padding: 7px;
-
-    background:
-        rgba(238,233,222,.92);
-
-    border-radius: 8px;
-
-    box-shadow:
-        0 8px 18px
-        rgba(0,0,0,.18);
-}
-
-.filter-button {
-    min-height: 37px;
-
-    padding:
-        0 14px;
-
-    border:
-        1px solid
-        #c9c0b2;
-
-    border-radius: 5px;
-
-    background:
-        #faf8f3;
-
-    color:
-        #4c4840;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-.filter-button:hover,
-.filter-button.active {
-    background:
-        #292923;
-
-    border-color:
-        #292923;
-
-    color: white;
-}
-
-.main-filter {
-    color: #745c2d;
-    border-color: #b99c61;
-}
-
-.main-filter.active {
-    background:
-        #7f6635;
-
-    border-color:
-        #7f6635;
-
-    color: white;
-}
-
-.search-input {
-    min-width: 220px;
-
-    height: 37px;
-
-    padding:
-        0 12px;
-
-    border:
-        1px solid
-        #c9c0b2;
-
-    border-radius: 5px;
-
-    outline: none;
-
-    background:
-        white;
-
-    font-family:
-        Arial,
-        sans-serif;
-}
-
-/* ==================================================
-   SECTIONS
-================================================== */
-
-.character-section {
-    margin-bottom: 60px;
-}
-
-.section-banner {
-    position: relative;
-
-    max-width: 650px;
-
-    margin:
-        0 auto
-        35px;
-
-    padding:
-        15px
-        24px;
-
-    text-align: center;
-
-    background:
-        #f3eee4;
-
-    color:
-        var(--ink);
-
-    border:
-        1px solid
-        #c7beae;
-
-    box-shadow:
-        0 10px 20px
-        rgba(0,0,0,.23);
-}
-
-.section-banner h2 {
-    margin: 0;
-
-    font-size: 20px;
-
-    font-weight: normal;
-
-    letter-spacing: .08em;
-
-    text-transform: uppercase;
-}
-
-.section-banner p {
-    margin:
-        4px 0
-        0;
-
-    color:
-        #7a746a;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 11px;
-}
-
-.hero-section .section-banner {
-    border-bottom:
-        4px solid
-        var(--hero);
-}
-
-.villain-section .section-banner {
-    border-bottom:
-        4px solid
-        var(--villain);
-}
-
-.antihero-section .section-banner {
-    border-bottom:
-        4px solid
-        var(--antihero);
-}
-
-.other-section .section-banner {
-    border-bottom:
-        4px solid
-        var(--other);
-}
-
-/* ==================================================
-   GRID & CARDS
-================================================== */
-
-.character-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fill,
-            minmax(245px, 1fr)
-        );
-
-    gap:
-        50px
-        32px;
-
-    justify-items: center;
-}
-
-.character-rig {
-    position: relative;
-
-    width: 100%;
-
-    max-width: 280px;
-
-    perspective: 1300px;
-}
-
-.pin {
-    position: absolute;
-
-    left: 50%;
-    top: -7px;
-
-    z-index: 20;
-
-    width: 13px;
-    height: 13px;
-
-    transform:
-        translateX(-50%);
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle at 35% 30%,
-            #faf1c2,
-            #b88b37 30%,
-            #62471e 68%,
-            #292014
-        );
-
-    box-shadow:
-        1px 3px 4px
-        rgba(0,0,0,.6);
-}
-
-.card-flipper {
-    position: relative;
-
-    width: 100%;
-
-    transform-style:
-        preserve-3d;
-
-    transition:
-        transform .65s
-        cubic-bezier(.2,.75,.25,1);
-}
-
-.card-flipper.flipped {
-    transform:
-        rotateY(180deg);
-}
-
-.card-face {
-    width: 100%;
-
-    backface-visibility:
-        hidden;
-
-    -webkit-backface-visibility:
-        hidden;
-}
+.character-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 50px 32px; justify-items: center; }
+.character-rig { position: relative; width: 100%; max-width: 280px; perspective: 1300px; }
+.card-flipper { position: relative; width: 100%; transform-style: preserve-3d; transition: transform .65s cubic-bezier(.2,.75,.25,1); }
+.card-flipper.flipped { transform: rotateY(180deg); }
+.card-face { width: 100%; backface-visibility: hidden; }
 
 .card-front {
-    position: relative;
-
-    padding:
-        13px
-        13px
-        18px;
-
-    background:
-        #fafafa;
-
-    border:
-        1px solid
-        #ddd9d1;
-
-    box-shadow:
-        var(--shadow);
-
-    transform:
-        rotate(
-            var(--rotation, 0deg)
-        );
+  padding: 13px 13px 18px; background: #fafafa; border: 1px solid #ddd9d1; box-shadow: var(--shadow);
 }
-
-.photo-frame {
-    width: 100%;
-
-    aspect-ratio: 1 / 1;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    overflow: hidden;
-
-    background:
-        #171816;
-}
-
-.photo-frame img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    object-position: center;
-
-    display: block;
-}
-
-.image-placeholder {
-    color:
-        #77766f;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 11px;
-
-    letter-spacing: .08em;
-
-    text-transform: uppercase;
-}
-
-.role-strip {
-    position: absolute;
-
-    left: 13px;
-    top: 13px;
-
-    z-index: 8;
-
-    padding:
-        5px 9px;
-
-    color: white;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 9px;
-
-    font-weight: 800;
-
-    letter-spacing: .12em;
-
-    text-transform: uppercase;
-}
-
-.role-Hero { background: rgba(57,93,109,.92); }
-.role-Villain { background: rgba(112,55,57,.92); }
-.role-Anti-Hero { background: rgba(105,87,53,.92); }
-.role-Other { background: rgba(73,89,76,.92); }
-
-.main-character-marker {
-    position: absolute;
-
-    right: 13px;
-    top: 13px;
-
-    z-index: 9;
-
-    padding:
-        5px 8px;
-
-    border:
-        1px solid
-        rgba(210,174,92,.7);
-
-    background:
-        rgba(28,27,23,.94);
-
-    color:
-        #e8ca83;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 8px;
-
-    font-weight: 900;
-
-    letter-spacing: .12em;
-
-    text-transform: uppercase;
-}
-
-.front-caption {
-    display: flex;
-
-    justify-content:
-        space-between;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding:
-        14px 3px
-        0;
-}
-
-.name-area {
-    min-width: 0;
-}
-
-.character-name {
-    margin: 0;
-
-    overflow: hidden;
-
-    color:
-        #292823;
-
-    font-size: 21px;
-
-    font-weight: normal;
-
-    text-overflow:
-        ellipsis;
-
-    white-space: nowrap;
-}
-
-.character-species {
-    margin-top: 3px;
-
-    color:
-        #858077;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 10px;
-
-    letter-spacing: .08em;
-
-    text-transform: uppercase;
-}
-
-.book-line {
-    margin-top: 4px;
-
-    color: #79684a;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 9px;
-
-    font-weight: 700;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-}
-
-.flip-button {
-    flex-shrink: 0;
-
-    padding:
-        5px 8px;
-
-    border:
-        1px solid
-        #d4d0c8;
-
-    border-radius: 4px;
-
-    background:
-        transparent;
-
-    color:
-        #716c62;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-}
+.photo-frame { width: 100%; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #171816; }
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+.front-caption { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; }
+.character-name { margin: 0; font-size: 21px; color: #292823; font-weight: normal; }
+.flip-button { padding: 5px 8px; border: 1px solid #d4d0c8; border-radius: 4px; background: transparent; color: #716c62; font-size: 10px; font-weight: 700; cursor: pointer; }
 
 .card-back {
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    transform:
-        rotateY(180deg);
-
-    padding: 16px;
-
-    background-color:
-        var(--paper);
-
-    border:
-        1px solid
-        #cfc5b5;
-
-    box-shadow:
-        var(--shadow);
-
-    color:
-        var(--ink);
-
-    display: flex;
-
-    flex-direction: column;
-
-    overflow: hidden;
+  position: absolute; inset: 0; width: 100%; height: 100%; transform: rotateY(180deg);
+  padding: 16px; background-color: var(--paper); border: 1px solid #cfc5b5; color: var(--ink);
+  display: flex; flex-direction: column; overflow: hidden;
 }
+.back-header { display: flex; justify-content: space-between; border-bottom: 1px solid #cfc6b8; padding-bottom: 8px; }
+.card-information { flex: 1; overflow-y: auto; margin-top: 10px; padding-right: 6px; }
 
-.back-accent {
-    height: 3px;
 
-    margin:
-        -16px
-        -16px
-        13px;
-
-    background:
-        var(--role-accent);
-
-    flex-shrink: 0;
+/* RESTORED CHARACTER PROFILE INFORMATION */
+.profile-section-title {
+  margin: 12px 0 5px; color:#766f64; font-family:Arial,sans-serif; font-size:9px;
+  font-weight:900; letter-spacing:.09em; text-transform:uppercase;
 }
-
-.back-hero { --role-accent: var(--hero); }
-.back-villain { --role-accent: var(--villain); }
-.back-anti-hero { --role-accent: var(--antihero); }
-.back-other { --role-accent: var(--other); }
-
-.back-header {
-    display: flex;
-
-    align-items:
-        flex-start;
-
-    justify-content:
-        space-between;
-
-    gap: 10px;
-
-    padding-bottom: 9px;
-
-    border-bottom:
-        1px solid
-        #cfc6b8;
-
-    flex-shrink: 0;
+.info-row {
+  display:grid; grid-template-columns:82px minmax(0,1fr); gap:7px; padding:6px 0;
+  border-bottom:1px solid rgba(80,70,55,.10); font-family:Arial,sans-serif; font-size:10px;
 }
-
-.back-name {
-    margin: 0;
-
-    font-size: 19px;
-
-    font-weight: normal;
-}
-
-.back-role {
-    margin-top: 3px;
-
-    color:
-        #777066;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 9px;
-
-    font-weight: 700;
-
-    letter-spacing: .12em;
-
-    text-transform: uppercase;
-}
-
-.scroll-hint {
-    flex-shrink: 0;
-
-    margin-top: 8px;
-
-    padding:
-        5px
-        7px;
-
-    border:
-        1px solid
-        #d0c7b8;
-
-    background:
-        rgba(255,255,255,.38);
-
-    color:
-        #847b6e;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 8px;
-
-    font-weight: 800;
-
-    letter-spacing: .10em;
-
-    text-align: center;
-
-    text-transform: uppercase;
-}
-
-.card-information {
-    flex: 1;
-
-    min-height: 0;
-
-    margin-top: 9px;
-
-    padding-right: 9px;
-
-    padding-bottom: 12px;
-
-    overflow-y: auto;
-
-    overflow-x: hidden;
-
-    overscroll-behavior:
-        contain;
-
-    -webkit-overflow-scrolling:
-        touch;
-}
-
-/* Book Information inside Card */
+.info-label { color:#766f64; font-weight:800; text-transform:uppercase; }
+.info-value { color:#292823; overflow-wrap:anywhere; }
+.detail-block { margin-top:10px; }
+.detail-title { margin-bottom:3px; color:#766f64; font-family:Arial,sans-serif; font-size:9px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; }
+.detail-text { font-size:11px; line-height:1.45; white-space:pre-wrap; overflow-wrap:anywhere; }
 .book-information-card {
-    display: grid;
-    grid-template-columns: 76px 1fr;
-    gap: 10px;
-    margin-bottom: 11px;
-    padding: 9px;
-    border: 1px solid #c8bcaa;
-    background: rgba(255,255,255,.60);
+  display:grid; grid-template-columns:76px minmax(0,1fr); gap:10px; margin:10px 0 11px; padding:9px;
+  border:1px solid #c8bcaa; background:rgba(255,255,255,.60);
 }
-
-.book-cover-display {
-    width: 76px;
-    height: 112px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 1px solid #b4a58e;
-    background: #24231f;
-    box-shadow: 2px 4px 8px rgba(0,0,0,.22);
-}
-
-.book-cover-display img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-    display: block;
-}
-
-.book-cover-missing {
-    padding: 6px;
-    color: #aaa296;
-    font-family: Arial, sans-serif;
-    font-size: 7px;
-    font-weight: 700;
-    line-height: 1.4;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-.book-information-text {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.book-information-heading {
-    margin-bottom: 4px;
-    color: #817665;
-    font-family: Arial, sans-serif;
-    font-size: 8px;
-    font-weight: 900;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-}
-
-.book-information-title {
-    color: #332d27;
-    font-size: 13px;
-    line-height: 1.3;
-}
-
-.character-media-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.character-media-card {
-    padding: 7px;
-    border: 1px solid #c8beaf;
-    background: rgba(255,255,255,.5);
-    text-align: center;
-}
-
-.character-media-card.world-map-card { grid-column: 1 / -1; }
-
-.character-media-label {
-    margin-bottom: 5px;
-    color: #766f64;
-    font-family: Arial, sans-serif;
-    font-size: 8px;
-    font-weight: 900;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-}
-
-.character-media-image {
-    width: 100%;
-    height: 82px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: #292823;
-}
-
-.world-map-card .character-media-image { height: 105px; }
-
-.character-media-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-}
-
-.character-media-button, .family-tree-button {
-    width: 100%;
-    margin-top: 6px;
-    min-height: 29px;
-    border: 1px solid #8e806c;
-    background: #eee7db;
-    color: #51483e;
-    font-family: Arial, sans-serif;
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
+.book-cover-display { width:76px; height:112px; display:flex; align-items:center; justify-content:center; overflow:hidden; border:1px solid #b4a58e; background:#24231f; }
+.book-cover-display img { width:100%; height:100%; object-fit:contain; display:block; }
+.book-cover-missing { padding:6px; color:#aaa296; font-family:Arial,sans-serif; font-size:7px; font-weight:700; line-height:1.4; text-align:center; text-transform:uppercase; }
+.book-information-text { min-width:0; display:flex; flex-direction:column; justify-content:center; }
+.book-information-heading { margin-bottom:4px; color:#817665; font-family:Arial,sans-serif; font-size:8px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; }
+.book-information-title { color:#332d27; font-size:13px; line-height:1.3; overflow-wrap:anywhere; }
+.voice-panel { margin-top:12px; padding:8px; border:1px solid #cbc1b0; background:rgba(255,255,255,.46); font-family:Arial,sans-serif; }
+.voice-heading { display:flex; justify-content:space-between; gap:8px; margin-bottom:4px; color:#6e665c; font-size:9px; font-weight:800; text-transform:uppercase; }
+.audio-coming-soon { color:#8b7954; }
+.voice-description { font-size:10px; line-height:1.45; }
+.voice-panel audio { width:100%; margin-top:7px; height:30px; }
 
 .family-tree-button {
-    margin-top: 12px;
-    background: #45382b;
-    color: white;
-    border-color: #45382b;
-    transition: background .18s ease;
+  width: 100%; margin-top: 10px; min-height: 30px; border: 1px solid #45382b; background: #45382b;
+  color: white; font-family: Arial, sans-serif; font-size: 9px; font-weight: 800; text-transform: uppercase;
+  cursor: pointer; transition: background .2s;
 }
+.family-tree-button:hover { background: #261e16; }
 
-.family-tree-button:hover {
-    background: #2b221a;
-}
-
-.character-media-image.crest-clickable,
-.crest-view-button {
-    cursor: zoom-in;
-}
-
-.crest-image-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background: rgba(9,9,8,.88);
-    backdrop-filter: blur(8px);
-}
-
-.crest-image-modal.active {
-    display: flex;
-}
-
-.crest-image-dialog {
-    position: relative;
-    width: min(900px, 94vw);
-    max-height: 92vh;
-    padding: 20px;
-    border: 1px solid #cfc5b5;
-    background: #f4f0e7;
-    box-shadow: 0 35px 90px rgba(0,0,0,.72);
-}
-
-.crest-image-title {
-    margin: 0 46px 14px 0;
-    color: #302d27;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 21px;
-    font-weight: normal;
-}
-
-.crest-image-large-wrap {
-    width: 100%;
-    max-height: calc(92vh - 95px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: auto;
-    background: #252520;
-}
-
-.crest-image-large-wrap img {
-    display: block;
-    max-width: 100%;
-    max-height: calc(92vh - 115px);
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
-
-.crest-image-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 36px;
-    height: 36px;
-    border: 1px solid #a99d8b;
-    background: #fffdf7;
-    color: #332f29;
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-}
-
-/* ==================================================
-   DYNAMIC FAMILY TREE MODAL & TREE STYLES
-================================================== */
+/* MODAL STYLES */
 .tree-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(9, 9, 8, 0.88);
-    backdrop-filter: blur(8px);
+  position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center;
+  padding: 20px; background: rgba(9, 9, 8, 0.90); backdrop-filter: blur(8px);
 }
-
-.tree-modal.active {
-    display: flex;
-}
-
+.tree-modal.active { display: flex; }
 .tree-dialog {
-    position: relative;
-    width: min(1200px, 96vw);
-    max-height: 92vh;
-    padding: 28px 24px;
-    border: 1px solid #cfc5b5;
-    background: #f4f0e7;
-    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.72);
-    display: flex;
-    flex-direction: column;
+  position: relative; width: min(1200px, 96vw); max-height: 92vh; padding: 28px 24px;
+  border: 1px solid #cfc5b5; background: #f4f0e7; box-shadow: 0 35px 90px rgba(0, 0, 0, 0.72);
+  display: flex; flex-direction: column; color: var(--ink);
 }
+.tree-modal-header { margin-bottom: 16px; border-bottom: 1px solid #d4cabb; padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+.tree-modal-close { width: 34px; height: 34px; border: 1px solid #a99d8b; background: #fffdf7; font-size: 24px; cursor: pointer; }
+.tree-scroll-container { overflow: auto; padding: 24px 14px; background: #faf7f2; border: 1px solid #dcd3c3; }
 
-.tree-modal-header {
-    margin-bottom: 12px;
-    border-bottom: 1px solid #d4cabb;
-    padding-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.tree-modal-kicker {
-    font-family: Arial, sans-serif;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #79684a;
-}
-
-.tree-modal-title {
-    margin: 3px 0 0;
-    font-size: 24px;
-    color: #24231f;
-    font-weight: normal;
-}
-
-.tree-modal-close {
-    width: 36px;
-    height: 36px;
-    border: 1px solid #a99d8b;
-    background: #fffdf7;
-    color: #332f29;
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-}
-
-/* Family Crest inside Tree Modal */
-.modal-crest-badge {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 14px;
-    padding: 10px 14px;
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid #cfc5b5;
-    border-radius: 4px;
-}
-
-.modal-crest-badge img {
-    width: 48px;
-    height: 48px;
-    object-fit: contain;
-    cursor: zoom-in;
-    border: 1px solid #b4a58e;
-    background: #24231f;
-}
-
-.tree-scroll-container {
-    overflow-x: auto;
-    overflow-y: auto;
-    padding: 24px 14px;
-    background: #faf7f2;
-    border: 1px solid #dcd3c3;
-    border-radius: 4px;
-}
-
-.tree {
-    display: flex;
-    justify-content: center;
-    min-width: fit-content;
-}
-
-.tree ul {
-    padding-top: 20px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding-left: 0;
-}
-
-.tree li {
-    float: left;
-    text-align: center;
-    list-style-type: none;
-    position: relative;
-    padding: 20px 10px 0 10px;
-}
-
-.tree li::before, 
-.tree li::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 50%;
-    border-top: 2px solid #8e806c;
-    width: 50%;
-    height: 20px;
-}
-
-.tree li::after {
-    right: auto;
-    left: 50%;
-    border-left: 2px solid #8e806c;
-}
-
-.tree li:only-child::after, 
-.tree li:only-child::before {
-    display: none;
-}
-
-.tree li:only-child {
-    padding-top: 0;
-}
-
-.tree li:first-child::before, 
-.tree li:last-child::after {
-    border: 0 none;
-}
-
-.tree li:last-child::before {
-    border-right: 2px solid #8e806c;
-    border-radius: 0 5px 0 0;
-}
-
-.tree li:first-child::after {
-    border-radius: 5px 0 0 0;
-}
-
-.tree ul ul::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    border-left: 2px solid #8e806c;
-    width: 0;
-    height: 20px;
-}
+/* Tree Layout */
+.tree { display: flex; justify-content: center; min-width: fit-content; }
+.tree ul { padding-top: 20px; position: relative; display: flex; justify-content: center; margin: 0; padding-left: 0; }
+.tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 10px 0 10px; }
+.tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 2px solid #8e806c; width: 50%; height: 20px; }
+.tree li::after { right: auto; left: 50%; border-left: 2px solid #8e806c; }
+.tree li:only-child::after, .tree li:only-child::before { display: none; }
+.tree li:only-child { padding-top: 0; }
+.tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+.tree li:last-child::before { border-right: 2px solid #8e806c; border-radius: 0 5px 0 0; }
+.tree li:first-child::after { border-radius: 5px 0 0 0; }
+.tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 2px solid #8e806c; width: 0; height: 20px; }
 
 .person {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    padding: 12px 14px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-    min-width: 140px;
-    transition: transform 0.2s, box-shadow 0.2s;
+  display: flex; flex-direction: column; align-items: center; background: #ffffff; border: 1px solid #cbd5e1;
+  padding: 12px 14px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); min-width: 140px;
+}
+.person .image-slot { width: 58px; height: 58px; border-radius: 50%; background-color: #e2e8f0; border: 2px solid #8e806c; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 8px; }
+.person .image-slot img { width: 100%; height: 100%; object-fit: cover; }
+.person .name { font-weight: 600; font-size: 13px; color: #1e1e1a; font-family: Arial, sans-serif; }
+.person .role { font-size: 10px; color: #79684a; margin-top: 2px; text-transform: uppercase; font-family: Arial, sans-serif; }
+.person .dates { font-size: 9px; color: #948a7a; margin-top: 2px; font-family: Arial, sans-serif; }
+.couple { display: inline-flex; gap: 10px; }
+
+/* Crest Header inside Modal */
+.modal-crest-badge {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px; background: rgba(0,0,0,0.03);
+  padding: 10px 14px; border: 1px solid #dcd3c3; border-radius: 4px;
+}
+.modal-crest-badge img { width: 50px; height: 50px; object-fit: contain; }
+
+/* CHARACTER MEDIA */
+.character-media-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.character-media-card {
+  padding: 7px;
+  border: 1px solid #c8beaf;
+  background: rgba(255,255,255,.5);
+  text-align: center;
+}
+.character-media-card.world-map-card { grid-column: 1 / -1; }
+.character-media-label {
+  margin-bottom: 5px;
+  color: #766f64;
+  font-family: Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.character-media-image {
+  width: 100%;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #292823;
+  cursor: zoom-in;
+}
+.world-map-card .character-media-image { height: 105px; }
+.character-media-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+.character-media-button {
+  width: 100%;
+  margin-top: 6px;
+  min-height: 29px;
+  border: 1px solid #8e806c;
+  background: #eee7db;
+  color: #51483e;
+  font-family: Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
-.person:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-    border-color: #64748b;
+/* CREST / MAP LARGE IMAGE VIEWER */
+.image-viewer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 11000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(9,9,8,.90);
+  backdrop-filter: blur(8px);
 }
-
-.person .image-slot {
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    background-color: #e2e8f0;
-    border: 2px solid #8e806c;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    margin-bottom: 8px;
-    position: relative;
+.image-viewer-modal.active { display: flex; }
+.image-viewer-dialog {
+  position: relative;
+  width: min(1000px, 96vw);
+  max-height: 92vh;
+  padding: 20px;
+  border: 1px solid #cfc5b5;
+  background: #f4f0e7;
+  box-shadow: 0 35px 90px rgba(0,0,0,.72);
+  color: var(--ink);
 }
-
-.person .image-slot img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+.image-viewer-title {
+  margin: 0 46px 14px 0;
+  font-size: 21px;
+  font-weight: normal;
 }
-
-.person .image-slot .placeholder-icon {
-    width: 28px;
-    height: 28px;
-    fill: #8e806c;
+.image-viewer-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #a99d8b;
+  background: #fffdf7;
+  color: #332f29;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
 }
-
-.person .name {
-    font-weight: 600;
-    font-size: 13px;
-    color: #1e1e1a;
-    font-family: Arial, sans-serif;
+.image-viewer-wrap {
+  width: 100%;
+  max-height: calc(92vh - 100px);
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #252520;
 }
-
-.person .role {
-    font-size: 10px;
-    color: #79684a;
-    margin-top: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-family: Arial, sans-serif;
+.image-viewer-wrap img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(92vh - 120px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
-
-.person .dates {
-    font-size: 9px;
-    color: #948a7a;
-    margin-top: 2px;
-    font-family: Arial, sans-serif;
-}
-
-.couple {
-    display: inline-flex;
-    gap: 10px;
-}
-
-/* Info Rows */
-.info-row {
-    display: grid;
-    grid-template-columns: 82px 1fr;
-    gap: 7px;
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(80,70,55,.10);
-    font-family: Arial, sans-serif;
-    font-size: 10px;
-}
-.info-label { color: #766f64; font-weight: 800; text-transform: uppercase; }
-.info-value { color: #292823; }
-.main-info { color: #856827; font-weight: 800; }
-
-.detail-block { margin-top: 10px; }
-.detail-title { margin-bottom: 3px; color: #766f64; font-family: Arial, sans-serif; font-size: 9px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
-.detail-text { font-size: 11px; line-height: 1.45; white-space: pre-wrap; }
-
-.voice-panel { margin-top: 12px; padding: 8px; border: 1px solid #cbc1b0; background: rgba(255,255,255,.46); font-family: Arial, sans-serif; }
-.voice-heading { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; color: #6e665c; font-size: 9px; font-weight: 800; text-transform: uppercase; }
-.audio-coming-soon { color: #8b7954; }
-.voice-description { font-size: 10px; line-height: 1.45; }
-
-.card-actions {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 7px;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed #c6bcac;
-    background: var(--paper);
-    flex-shrink: 0;
-}
-
-.share-button {
-    min-height: 31px;
-    font-family: Arial, sans-serif;
-    font-size: 9px;
-    font-weight: 800;
-    text-transform: uppercase;
-    cursor: pointer;
-    border: 1px solid #373731;
-    background: #2b2b27;
-    color: white;
-}
-
-.empty-section {
-    grid-column: 1 / -1;
-    width: 100%;
-    padding: 35px;
-    border: 1px dashed rgba(255,255,255,.18);
-    color: rgba(255,255,255,.46);
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    text-align: center;
-}
-
-@media (max-width: 750px) {
-    body { padding: 0; }
-    .archive-frame { padding: 12px; }
-    .archive-board { padding: 34px 15px; }
-    .wall-controls { flex-direction: column; }
-    .character-grid { grid-template-columns: 1fr; }
-    .character-rig { max-width: 310px; }
+.modal-crest-badge.has-image {
+  cursor: zoom-in;
 }
 
 </style>
 </head>
-
 <body>
 
 <div class="archive-frame">
-<div class="archive-board">
+  <div class="archive-board">
+    <header class="wall-header">
+      <div class="wall-kicker">Lineage &amp; Heritage Records</div>
+      <h1>Character Wall</h1>
+    </header>
 
-<header class="wall-header">
-    <div class="wall-kicker">
-        Private Character Collection
-    </div>
-    <h1>
-        Character Wall
-    </h1>
-    <p>
-        An evolving archive of protagonists,
-        heroes, villains, anti-heroes and
-        supporting characters across your books.
-    </p>
-</header>
-
-<div class="back-to-fanart-wrap">
-    <a href="./fanart.html" class="back-to-fanart-button" aria-label="Back to Fanart">
+    <div class="back-to-fanart-wrap">
+      <a href="./fanart.html" class="back-to-fanart-button" aria-label="Back to Fanart">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M19 12H5"></path>
-            <path d="M12 19l-7-7 7-7"></path>
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
         </svg>
         Back to Fanart
-    </a>
-</div>
-
-<div style="text-align:center; margin:-8px auto 18px; font-family:Arial,sans-serif; font-size:10px; color:rgba(255,255,255,.55); letter-spacing:.08em; text-transform:uppercase;">
-    Profiles and lineages are maintained from the Admin Settings console.
-</div>
-
-<div class="wall-controls">
-    <div class="control-panel">
-        <button class="filter-button active" data-filter="All">All</button>
-        <button class="filter-button main-filter" data-filter="Main">Main Characters</button>
-        <button class="filter-button" data-filter="Hero">Heroes</button>
-        <button class="filter-button" data-filter="Villain">Villains</button>
-        <button class="filter-button" data-filter="Anti-Hero">Anti-Heroes</button>
-        <button class="filter-button" data-filter="Other">Supporting</button>
+      </a>
     </div>
 
-    <div class="control-panel">
-        <input class="search-input" id="search" type="search" placeholder="Search character or book...">
+    <div class="character-grid" id="charactersContainer">
+      <p style="text-align:center; grid-column:1/-1;">Loading Character Wall from database...</p>
     </div>
-</div>
-
-<section class="character-section hero-section" data-section="Hero">
-    <div class="section-banner">
-        <h2>Heroes</h2>
-        <p>Protectors, protagonists and champions.</p>
-    </div>
-    <div class="character-grid" id="heroGrid"></div>
-</section>
-
-<section class="character-section villain-section" data-section="Villain">
-    <div class="section-banner">
-        <h2>Villains</h2>
-        <p>Antagonists, rivals and dangerous forces.</p>
-    </div>
-    <div class="character-grid" id="villainGrid"></div>
-</section>
-
-<section class="character-section antihero-section" data-section="Anti-Hero">
-    <div class="section-banner">
-        <h2>Anti-Heroes</h2>
-        <p>Complex characters living between both sides.</p>
-    </div>
-    <div class="character-grid" id="antiHeroGrid"></div>
-</section>
-
-<section class="character-section other-section" data-section="Other">
-    <div class="section-banner">
-        <h2>Supporting Characters</h2>
-        <p>Friends, family and other important figures.</p>
-    </div>
-    <div class="character-grid" id="otherGrid"></div>
-</section>
-
-</div>
-</div>
-
-<!-- ==================================================
-     CREST IMAGE VIEWER
-================================================== -->
-<div class="crest-image-modal" id="crestImageModal" aria-hidden="true">
-    <div class="crest-image-dialog" role="dialog" aria-modal="true" aria-labelledby="crestImageTitle">
-        <button class="crest-image-close" id="crestImageClose" type="button" aria-label="Close crest image">×</button>
-        <h2 class="crest-image-title" id="crestImageTitle">Crest</h2>
-        <div class="crest-image-large-wrap">
-            <img id="crestImageLarge" src="" alt="">
-        </div>
-    </div>
+  </div>
 </div>
 
 <!-- ==================================================
      DYNAMIC FAMILY TREE & CREST MODAL
 ================================================== -->
 <div class="tree-modal" id="treeModal" aria-hidden="true">
-  <div class="tree-dialog" role="dialog" aria-modal="true" aria-labelledby="treeModalTitle">
+  <div class="tree-dialog" role="dialog" aria-modal="true">
     <div class="tree-modal-header">
       <div>
-        <div class="tree-modal-kicker">Lineage &amp; Heritage Records</div>
-        <h2 class="tree-modal-title" id="treeModalTitle">Family Tree</h2>
+        <div style="font-size:9px; font-weight:800; color:#79684a; text-transform:uppercase;">Official Lineage Chart</div>
+        <h2 id="treeModalTitle" style="margin:2px 0 0; font-weight:normal;">Family Tree</h2>
       </div>
-      <button class="tree-modal-close" id="treeModalClose" type="button" aria-label="Close family tree">×</button>
-    </div>
-    
-    <!-- Family Crest Header (Loaded dynamically from Admin Settings) -->
-    <div class="modal-crest-badge" id="modalCrestBadge" style="display:none;">
-      <img id="treeModalCrestImg" src="" alt="House Crest" title="Click to enlarge crest">
-      <div>
-        <div style="font-size:8px; font-weight:900; text-transform:uppercase; color:#79684a; font-family:Arial,sans-serif;">House / Family Crest</div>
-        <div id="treeModalCrestText" style="font-size:12px; font-weight:bold; color:#24231f; font-family:Georgia,serif;">Ancestral Coat of Arms</div>
-      </div>
+      <button class="tree-modal-close" id="treeModalClose" type="button">×</button>
     </div>
 
+    <!-- Family Crest Header (Loaded from Admin Settings) -->
+    <div class="modal-crest-badge" id="modalCrestBadge" style="display:none;">
+      <img id="treeModalCrestImg" src="" alt="House Crest">
+      <div>
+        <div style="font-size:8px; font-weight:900; text-transform:uppercase; color:#79684a;">House / Family Crest</div>
+        <div id="treeModalCrestText" style="font-size:12px; font-weight:bold; color:#24231f;">Ancestral Coat of Arms</div>
+      </div>
+    </div>
+    
     <div class="tree-scroll-container">
       <div class="tree">
         <ul>
@@ -1633,30 +359,24 @@ textarea {
             <!-- Generation 1: Grandparents -->
             <div class="couple">
               <div class="person">
-                <div class="image-slot">
-                  <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                </div>
+                <div class="image-slot"><svg style="width:28px;height:28px;fill:#8e806c;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                 <div class="name" id="treeNodeGrandfather">Arthur Doe</div>
                 <div class="role">Grandfather</div>
                 <div class="dates" id="treeDatesGrandfather">1935 – 2012</div>
               </div>
               <div class="person">
-                <div class="image-slot">
-                  <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                </div>
+                <div class="image-slot"><svg style="width:28px;height:28px;fill:#8e806c;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                 <div class="name" id="treeNodeGrandmother">Eleanor Doe</div>
                 <div class="role">Grandmother</div>
                 <div class="dates" id="treeDatesGrandmother">1938 – Present</div>
               </div>
             </div>
 
-            <!-- Generation 2: Children & In-Laws -->
+            <!-- Generation 2: Parents & Relatives -->
             <ul>
               <li>
                 <div class="person">
-                  <div class="image-slot">
-                    <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                  </div>
+                  <div class="image-slot"><svg style="width:28px;height:28px;fill:#8e806c;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                   <div class="name" id="treeNodeAunt">Sarah Doe</div>
                   <div class="role">Aunt</div>
                   <div class="dates" id="treeDatesAunt">1965 – Present</div>
@@ -1665,30 +385,26 @@ textarea {
               <li>
                 <div class="couple">
                   <div class="person">
-                    <div class="image-slot">
-                      <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    </div>
+                    <div class="image-slot"><svg style="width:28px;height:28px;fill:#8e806c;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                     <div class="name" id="treeNodeFather">Robert Doe</div>
                     <div class="role">Father</div>
                     <div class="dates" id="treeDatesFather">1968 – Present</div>
                   </div>
                   <div class="person">
-                    <div class="image-slot">
-                      <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    </div>
+                    <div class="image-slot"><svg style="width:28px;height:28px;fill:#8e806c;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                     <div class="name" id="treeNodeMother">Clara Doe</div>
                     <div class="role">Mother</div>
                     <div class="dates" id="treeDatesMother">1970 – Present</div>
                   </div>
                 </div>
 
-                <!-- Generation 3: Grandchildren -->
+                <!-- Generation 3: Target Character & Siblings -->
                 <ul>
                   <li>
                     <div class="person">
                       <div class="image-slot">
                         <img id="treeNodeTargetImg" src="" alt="Target Character" onerror="this.style.display='none'">
-                        <svg id="treeNodeTargetSvg" class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <svg id="treeNodeTargetSvg" style="width:28px;height:28px;fill:#8e806c;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                       </div>
                       <div class="name" id="treeNodeTargetName">Target Character</div>
                       <div class="role">Character</div>
@@ -1697,9 +413,7 @@ textarea {
                   </li>
                   <li>
                     <div class="person">
-                      <div class="image-slot">
-                        <svg class="placeholder-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                      </div>
+                      <div class="image-slot"><svg style="width:28px;height:28px;fill:#8e806c;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                       <div class="name" id="treeNodeSibling">James Doe</div>
                       <div class="role">Sibling</div>
                       <div class="dates" id="treeDatesSibling">Present</div>
@@ -1715,548 +429,330 @@ textarea {
   </div>
 </div>
 
-<script>
-let characters = [];
-let activeFilter = "All";
 
-const search = document.getElementById("search");
+<!-- ==================================================
+     CREST / SCHOOL CREST / WORLD MAP LARGE VIEWER
+================================================== -->
+<div class="image-viewer-modal" id="imageViewerModal" aria-hidden="true">
+  <div class="image-viewer-dialog" role="dialog" aria-modal="true" aria-labelledby="imageViewerTitle">
+    <button class="image-viewer-close" id="imageViewerClose" type="button" aria-label="Close image">×</button>
+    <h2 class="image-viewer-title" id="imageViewerTitle">Image</h2>
+    <div class="image-viewer-wrap">
+      <img id="imageViewerLarge" src="" alt="">
+    </div>
+  </div>
+</div>
 
-/* FILTERS */
-document.querySelectorAll(".filter-button").forEach(button => {
-    button.addEventListener("click", function() {
-        activeFilter = this.dataset.filter;
-        document.querySelectorAll(".filter-button").forEach(btn => btn.classList.remove("active"));
-        this.classList.add("active");
-        applyFilters();
-    });
-});
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-if (search) {
-    search.addEventListener("input", applyFilters);
-}
+  const firebaseConfig = {
+    apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+    authDomain: "libraryreeds-638f4.firebaseapp.com",
+    projectId: "libraryreeds-638f4",
+    storageBucket: "libraryreeds-638f4.firebasestorage.app",
+    messagingSenderId: "768304310517",
+    appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+  };
 
-function applyFilters() {
-    const query = search ? search.value.trim().toLowerCase() : "";
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    const filtered = characters.filter(character => {
-        let matchesFilter = false;
-        if (activeFilter === "All") {
-            matchesFilter = true;
-        } else if (activeFilter === "Main") {
-            matchesFilter = character.mainCharacter === "Yes";
-        } else {
-            matchesFilter = (character.role || "Other") === activeFilter;
-        }
+  let characters = [];
 
-        const matchesSearch = !query ||
-            Object.values(character).join(" ").toLowerCase().includes(query);
+  function renderCharacters() {
+    const container = document.getElementById("charactersContainer");
+    if (!container) return;
+    container.innerHTML = "";
 
-        return matchesFilter && matchesSearch;
-    });
+    if (!characters.length) {
+      container.innerHTML = `<p style="text-align:center;grid-column:1/-1;">No characters published yet.</p>`;
+      return;
+    }
 
-    renderCharacters(filtered);
-}
+    characters.forEach((char) => {
+      const rig = document.createElement("article");
+      rig.className = "character-rig";
+      const crest = char.houseCrest || char.familyCrest || "";
 
-/* RENDER */
-function renderCharacters(list = characters) {
-    const heroGrid = document.getElementById("heroGrid");
-    const villainGrid = document.getElementById("villainGrid");
-    const antiHeroGrid = document.getElementById("antiHeroGrid");
-    const otherGrid = document.getElementById("otherGrid");
-
-    if (!heroGrid || !villainGrid || !antiHeroGrid || !otherGrid) return;
-
-    heroGrid.innerHTML = "";
-    villainGrid.innerHTML = "";
-    antiHeroGrid.innerHTML = "";
-    otherGrid.innerHTML = "";
-
-    list.forEach(character => {
-        const role = character.role || "Other";
-        const card = createCharacterCard(character);
-
-        if (role === "Hero") {
-            heroGrid.appendChild(card);
-        } else if (role === "Villain") {
-            villainGrid.appendChild(card);
-        } else if (role === "Anti-Hero") {
-            antiHeroGrid.appendChild(card);
-        } else {
-            otherGrid.appendChild(card);
-        }
-    });
-
-    showEmpty(heroGrid, "No heroes currently appear in this view.");
-    showEmpty(villainGrid, "No villains currently appear in this view.");
-    showEmpty(antiHeroGrid, "No anti-heroes currently appear in this view.");
-    showEmpty(otherGrid, "No supporting characters currently appear in this view.");
-
-    updateVisibleSections();
-}
-
-function createCharacterCard(character) {
-    const role = character.role || "Other";
-    const houseCrest = character.houseCrest || character.familyCrest || "";
-
-    const rig = document.createElement("article");
-    rig.className = "character-rig";
-
-    const schoolJob = character.schoolJobType === "School"
-        ? infoRow("School", character.school)
-        : character.schoolJobType === "Job"
-        ? infoRow("Occupation", character.job)
-        : "";
-
-    rig.innerHTML = `
-        <div class="pin"></div>
+      rig.innerHTML = `
         <div class="card-flipper">
-            <div class="card-face card-front" style="--rotation: ${character.rotation || randomRotation()};">
-                <div class="role-strip role-${role}">
-                    ${escapeHTML(displayRole(role))}
-                </div>
-
-                ${character.mainCharacter === "Yes" ? `
-                    <div class="main-character-marker">
-                        Main Character
-                    </div>` : ""
-                }
-
-                <div class="photo-frame">
-                    ${character.image ? `
-                        <img src="${character.image}" alt="${escapeHTML(character.name)}">
-                    ` : `
-                        <div class="image-placeholder">
-                            Artwork Pending
-                        </div>
-                    `}
-                </div>
-
-                <div class="front-caption">
-                    <div class="name-area">
-                        <h3 class="character-name">${escapeHTML(character.name)}</h3>
-                        <div class="character-species">${escapeHTML(character.species || "Species unspecified")}</div>
-                        ${character.book ? `
-                            <div class="book-line">${escapeHTML(character.book)}</div>
-                        ` : ""}
-                    </div>
-                    <button class="flip-button" type="button">View File</button>
-                </div>
+          <div class="card-face card-front">
+            <div class="photo-frame">
+              ${char.image ? `<img src="${char.image}" alt="${char.name}">` : `<div style="font-size:10px;color:#777;">Artwork Pending</div>`}
             </div>
-
-            <div class="card-face card-back ${backClass(role)}">
-                <div class="back-accent"></div>
-                <div class="back-header">
-                    <div>
-                        <h3 class="back-name">${escapeHTML(character.name)}</h3>
-                        <div class="back-role">
-                            ${escapeHTML(displayRole(role))}
-                            ${character.mainCharacter === "Yes" ? " · Main Character" : ""}
-                        </div>
-                    </div>
-                    <button class="flip-button" type="button">Photo</button>
-                </div>
-
-                <div class="scroll-hint">Scroll for full profile</div>
-
-                <div class="card-information">
-                    <div class="book-information-card">
-                        <div class="book-cover-display">
-                            ${character.bookCover ? `
-                                <img src="${character.bookCover}" alt="${escapeHTML(character.book || character.name)} book cover">
-                            ` : `
-                                <div class="book-cover-missing">Book Cover Not Added</div>
-                            `}
-                        </div>
-                        <div class="book-information-text">
-                            <div class="book-information-heading">Book / Story</div>
-                            <div class="book-information-title">${escapeHTML(character.book || "Book not specified")}</div>
-                        </div>
-                    </div>
-
-                    ${houseCrest || character.schoolCrest || character.worldMap ? `
-                    <div class="character-media-grid">
-                        ${houseCrest ? `
-                        <div class="character-media-card">
-                            <div class="character-media-label">House / Family Crest</div>
-                            <div class="character-media-image crest-clickable" role="button" tabindex="0" data-crest-src="${houseCrest}" data-crest-title="${escapeHTML(character.name)} — House / Family Crest">
-                                <img src="${houseCrest}" alt="${escapeHTML(character.name)} house crest">
-                            </div>
-                            <button class="character-media-button crest-view-button" type="button" data-crest-src="${houseCrest}" data-crest-title="${escapeHTML(character.name)} — House / Family Crest">
-                                View Crest
-                            </button>
-                        </div>` : ""}
-
-                        ${character.schoolCrest ? `
-                        <div class="character-media-card">
-                            <div class="character-media-label">School Crest</div>
-                            <div class="character-media-image crest-clickable" role="button" tabindex="0" data-crest-src="${character.schoolCrest}" data-crest-title="${escapeHTML(character.school || character.name)} — School Crest">
-                                <img src="${character.schoolCrest}" alt="${escapeHTML(character.school || character.name)} school crest">
-                            </div>
-                            <button class="character-media-button crest-view-button" type="button" data-crest-src="${character.schoolCrest}" data-crest-title="${escapeHTML(character.school || character.name)} — School Crest">
-                                View Crest
-                            </button>
-                        </div>` : ""}
-
-                        ${character.worldMap ? `
-                        <div class="character-media-card world-map-card">
-                            <div class="character-media-label">World Map</div>
-                            <div class="character-media-image crest-clickable" role="button" tabindex="0" data-crest-src="${character.worldMap}" data-crest-title="${escapeHTML(character.book || character.name)} — World Map">
-                                <img src="${character.worldMap}" alt="${escapeHTML(character.book || character.name)} world map">
-                            </div>
-                            <button class="character-media-button crest-view-button" type="button" data-crest-src="${character.worldMap}" data-crest-title="${escapeHTML(character.book || character.name)} — World Map">
-                                View World Map
-                            </button>
-                        </div>` : ""}
-                    </div>` : ""}
-
-                    <button class="family-tree-button" type="button" data-tree-id="${character.id || ''}" aria-label="Open ${escapeHTML(character.name)} family tree">
-                        Open Family Tree
-                    </button>
-
-                    ${character.mainCharacter === "Yes" ? `
-                        <div class="info-row">
-                            <div class="info-label">Importance</div>
-                            <div class="info-value main-info">Main Character</div>
-                        </div>` : infoRow("Importance", "Supporting Character")
-                    }
-
-                    ${infoRow("Species", character.species)}
-                    ${infoRow("Age", character.age)}
-                    ${infoRow("Pronouns", character.pronouns)}
-                    ${infoRow("Born", character.born)}
-                    ${infoRow("Birthday", character.birthday)}
-                    ${schoolJob}
-
-                    ${detailBlock("Personality", character.personality)}
-                    ${detailBlock("Abilities / Skills", character.abilities)}
-                    ${detailBlock("Likes", character.likes)}
-                    ${detailBlock("Dislikes", character.dislikes)}
-                    ${detailBlock("Additional Notes", character.extra)}
-
-                    <div class="voice-panel">
-                        <div class="voice-heading">
-                            <span>Voice Reference</span>
-                            <span class="audio-coming-soon">Audio Coming Soon</span>
-                        </div>
-                        <div class="voice-description">${escapeHTML(character.voice || "No voice description added.")}</div>
-                    </div>
-                </div>
-
-                <div class="card-actions">
-                    <button class="share-button" type="button">Share Character</button>
-                </div>
+            <div class="front-caption">
+              <div>
+                <h3 class="character-name">${char.name || "Unnamed"}</h3>
+                <div style="font-size:10px;color:#858077;text-transform:uppercase;">${char.species || "Unspecified"}</div>
+              </div>
+              <button class="flip-button" type="button">View File</button>
             </div>
-        </div>
-    `;
+          </div>
+          <div class="card-face card-back">
+            <div class="back-header">
+              <h3 style="margin:0;font-size:18px;">${char.name}</h3>
+              <button class="flip-button" type="button">Photo</button>
+            </div>
+            <div class="card-information">
+              <div class="profile-section-title">Character Record</div>
 
-    const flipper = rig.querySelector(".card-flipper");
-    rig.querySelectorAll(".flip-button").forEach(button => {
-        button.addEventListener("click", () => flipper.classList.toggle("flipped"));
+              <div class="info-row"><div class="info-label">Role</div><div class="info-value">${char.role || "Other"}</div></div>
+              <div class="info-row"><div class="info-label">Species</div><div class="info-value">${char.species || "Not listed"}</div></div>
+              <div class="info-row"><div class="info-label">Age</div><div class="info-value">${char.age || "Not listed"}</div></div>
+              <div class="info-row"><div class="info-label">Life Stage</div><div class="info-value">${char.lifeStage || char.life_stage || "Not listed"}</div></div>
+              <div class="info-row"><div class="info-label">Pronouns</div><div class="info-value">${char.pronouns || "Not listed"}</div></div>
+              <div class="info-row"><div class="info-label">Born</div><div class="info-value">${char.born || char.placeOfBirth || char.birthPlace || "Not listed"}</div></div>
+              <div class="info-row"><div class="info-label">Birthday</div><div class="info-value">${char.birthday || "Not listed"}</div></div>
+              <div class="info-row"><div class="info-label">Importance</div><div class="info-value">${char.mainCharacter === "Yes" || char.mainCharacter === true ? "Main Character" : (char.mainCharacter || "Supporting Character")}</div></div>
+
+              <div class="profile-section-title">Education / Occupation</div>
+              <div class="info-row"><div class="info-label">Type</div><div class="info-value">${char.schoolJobType || (char.school ? "School" : (char.job ? "Job" : "Not listed"))}</div></div>
+              ${char.school ? `<div class="info-row"><div class="info-label">School</div><div class="info-value">${char.school}</div></div>` : ""}
+              ${char.job ? `<div class="info-row"><div class="info-label">Job</div><div class="info-value">${char.job}</div></div>` : ""}
+
+              <div class="profile-section-title">Book / Story</div>
+              <div class="book-information-card">
+                <div class="book-cover-display">
+                  ${(char.bookCover || char.bookCoverImage || char.bookImage) ? `<img src="${char.bookCover || char.bookCoverImage || char.bookImage}" alt="${char.book || char.name || "Character"} book cover">` : `<div class="book-cover-missing">Book Cover<br>Not Added</div>`}
+                </div>
+                <div class="book-information-text">
+                  <div class="book-information-heading">Appears In</div>
+                  <div class="book-information-title">${char.book || char.story || "No book/story listed"}</div>
+                </div>
+              </div>
+
+              ${char.personality ? `<div class="detail-block"><div class="detail-title">Personality</div><div class="detail-text">${char.personality}</div></div>` : ""}
+              ${(char.abilities || char.skills) ? `<div class="detail-block"><div class="detail-title">Abilities / Skills</div><div class="detail-text">${char.abilities || char.skills}</div></div>` : ""}
+              ${char.likes ? `<div class="detail-block"><div class="detail-title">Likes</div><div class="detail-text">${char.likes}</div></div>` : ""}
+              ${char.dislikes ? `<div class="detail-block"><div class="detail-title">Dislikes</div><div class="detail-text">${char.dislikes}</div></div>` : ""}
+              ${(char.extra || char.additionalInformation || char.additionalInfo) ? `<div class="detail-block"><div class="detail-title">Additional Information</div><div class="detail-text">${char.extra || char.additionalInformation || char.additionalInfo}</div></div>` : ""}
+
+              <div class="voice-panel">
+                <div class="voice-heading">
+                  <span>Voice</span>
+                  ${char.voiceAudio || char.audio || char.voiceUrl ? `<span>Audio</span>` : `<span class="audio-coming-soon">Coming Soon</span>`}
+                </div>
+                <div class="voice-description">${char.voice || char.voiceDescription || "Voice description not added yet."}</div>
+                ${char.voiceAudio || char.audio || char.voiceUrl ? `<audio controls preload="none" src="${char.voiceAudio || char.audio || char.voiceUrl}"></audio>` : ""}
+              </div>
+
+              ${(crest || char.schoolCrest || char.worldMap || char.worldMapImage || char.mapImage) ? `
+                <div class="character-media-grid">
+
+                  ${crest ? `
+                    <div class="character-media-card">
+                      <div class="character-media-label">House / Family Crest</div>
+                      <div class="character-media-image"
+                           role="button"
+                           tabindex="0"
+                           data-view-image="${crest}"
+                           data-view-title="${char.name || "Character"} — House / Family Crest">
+                        <img src="${crest}" alt="${char.name || "Character"} house or family crest">
+                      </div>
+                      <button class="character-media-button"
+                              type="button"
+                              data-view-image="${crest}"
+                              data-view-title="${char.name || "Character"} — House / Family Crest">
+                        View Crest
+                      </button>
+                    </div>
+                  ` : ""}
+
+                  ${char.schoolCrest ? `
+                    <div class="character-media-card">
+                      <div class="character-media-label">School Crest</div>
+                      <div class="character-media-image"
+                           role="button"
+                           tabindex="0"
+                           data-view-image="${char.schoolCrest}"
+                           data-view-title="${char.school || char.name || "Character"} — School Crest">
+                        <img src="${char.schoolCrest}" alt="${char.school || char.name || "Character"} school crest">
+                      </div>
+                      <button class="character-media-button"
+                              type="button"
+                              data-view-image="${char.schoolCrest}"
+                              data-view-title="${char.school || char.name || "Character"} — School Crest">
+                        View Crest
+                      </button>
+                    </div>
+                  ` : ""}
+
+                  ${(char.worldMap || char.worldMapImage || char.mapImage) ? `
+                    <div class="character-media-card world-map-card">
+                      <div class="character-media-label">World Map</div>
+                      <div class="character-media-image"
+                           role="button"
+                           tabindex="0"
+                           data-view-image="${char.worldMap || char.worldMapImage || char.mapImage}"
+                           data-view-title="${char.name || "Character"} — World Map">
+                        <img src="${char.worldMap || char.worldMapImage || char.mapImage}"
+                             alt="${char.name || "Character"} world map">
+                      </div>
+                      <button class="character-media-button"
+                              type="button"
+                              data-view-image="${char.worldMap || char.worldMapImage || char.mapImage}"
+                              data-view-title="${char.name || "Character"} — World Map">
+                        View World Map
+                      </button>
+                    </div>
+                  ` : ""}
+
+                </div>
+              ` : ""}
+
+              <button class="family-tree-button" type="button" data-tree-id="${char.id}">
+                Open Family Tree
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      rig.querySelectorAll(".flip-button").forEach(btn => {
+        btn.addEventListener("click", () => rig.querySelector(".card-flipper").classList.toggle("flipped"));
+      });
+
+      container.appendChild(rig);
     });
+  }
 
-    rig.querySelector(".share-button").addEventListener("click", () => shareCharacter(character));
-
-    return rig;
-}
-
-function updateVisibleSections() {
-    document.querySelectorAll(".character-section").forEach(section => {
-        const role = section.dataset.section;
-        if (activeFilter === "All" || activeFilter === "Main" || activeFilter === role) {
-            section.style.display = "";
-        } else {
-            section.style.display = "none";
-        }
+  // Real-time Firestore Listener
+  onSnapshot(collection(db, "character_wall"), (snapshot) => {
+    characters = [];
+    snapshot.forEach((snap) => {
+      characters.push({ id: snap.id, ...snap.data() });
     });
-}
+    renderCharacters();
+  });
 
-function displayRole(role) {
-    return role === "Other" ? "Supporting" : role;
-}
 
-function backClass(role) {
-    if (role === "Hero") return "back-hero";
-    if (role === "Villain") return "back-villain";
-    if (role === "Anti-Hero") return "back-anti-hero";
-    return "back-other";
-}
+  // Crest / School Crest / World Map image viewer
+  const imageViewerModal = document.getElementById("imageViewerModal");
+  const imageViewerLarge = document.getElementById("imageViewerLarge");
+  const imageViewerTitle = document.getElementById("imageViewerTitle");
 
-function infoRow(label, rowValue) {
-    if (!rowValue) return "";
-    return `
-        <div class="info-row">
-            <div class="info-label">${escapeHTML(label)}</div>
-            <div class="info-value">${escapeHTML(rowValue)}</div>
-        </div>
-    `;
-}
-
-function detailBlock(title, text) {
-    if (!text) return "";
-    return `
-        <div class="detail-block">
-            <div class="detail-title">${escapeHTML(title)}</div>
-            <div class="detail-text">${escapeHTML(text)}</div>
-        </div>
-    `;
-}
-
-function showEmpty(grid, message) {
-    if (grid.children.length === 0) {
-        grid.innerHTML = `<div class="empty-section">${escapeHTML(message)}</div>`;
-    }
-}
-
-function randomRotation() {
-    const rotations = ["-1.7deg", "-1deg", "-.5deg", ".4deg", ".9deg", "1.5deg"];
-    return rotations[Math.floor(Math.random() * rotations.length)];
-}
-
-function escapeHTML(text) {
-    if (text === null || text === undefined) return "";
-    return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-async function shareCharacter(character) {
-    const shareText = `CHARACTER PROFILE\n\n${character.name}\nBook: ${character.book || "None"}\nRole: ${displayRole(character.role || "Other")}`;
-    if (navigator.share) {
-        try {
-            await navigator.share({ title: character.name, text: shareText });
-            return;
-        } catch (_) {}
-    }
-    navigator.clipboard?.writeText(shareText).then(() => alert(`${character.name}'s profile was copied.`));
-}
-
-/* ==================================================
-   CREST IMAGE VIEWER
-================================================== */
-const crestImageModal = document.getElementById("crestImageModal");
-const crestImageLarge = document.getElementById("crestImageLarge");
-const crestImageTitle = document.getElementById("crestImageTitle");
-const crestImageClose = document.getElementById("crestImageClose");
-
-function openCrestImage(src, title) {
-    if (!src || !crestImageModal || !crestImageLarge) return;
-    crestImageLarge.src = src;
-    crestImageLarge.alt = title || "Crest enlarged image";
-    crestImageTitle.textContent = title || "Crest";
-    crestImageModal.classList.add("active");
-    crestImageModal.setAttribute("aria-hidden", "false");
+  function openImageViewer(src, title) {
+    if (!src || !imageViewerModal || !imageViewerLarge) return;
+    imageViewerLarge.src = src;
+    imageViewerLarge.alt = title || "Enlarged image";
+    imageViewerTitle.textContent = title || "Image";
+    imageViewerModal.classList.add("active");
+    imageViewerModal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
-}
+  }
 
-function closeCrestImage() {
-    if (!crestImageModal) return;
-    crestImageModal.classList.remove("active");
-    crestImageModal.setAttribute("aria-hidden", "true");
-    crestImageLarge.src = "";
-    document.body.style.overflow = "";
-}
+  function closeImageViewer() {
+    if (!imageViewerModal) return;
+    imageViewerModal.classList.remove("active");
+    imageViewerModal.setAttribute("aria-hidden", "true");
+    imageViewerLarge.src = "";
+    document.body.style.overflow = document.getElementById("treeModal")?.classList.contains("active") ? "hidden" : "";
+  }
 
-document.addEventListener("click", function(event) {
-    const trigger = event.target.closest("[data-crest-src]");
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest("[data-view-image]");
     if (!trigger) return;
-    event.preventDefault();
-    openCrestImage(trigger.dataset.crestSrc, trigger.dataset.crestTitle);
-});
+    e.preventDefault();
+    e.stopPropagation();
+    openImageViewer(trigger.dataset.viewImage, trigger.dataset.viewTitle);
+  });
 
-if (crestImageClose) crestImageClose.addEventListener("click", closeCrestImage);
-if (crestImageModal) {
-    crestImageModal.addEventListener("click", e => { if (e.target === crestImageModal) closeCrestImage(); });
-}
+  document.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.matches("[data-view-image]")) {
+      e.preventDefault();
+      openImageViewer(e.target.dataset.viewImage, e.target.dataset.viewTitle);
+      return;
+    }
+    if (e.key === "Escape" && imageViewerModal?.classList.contains("active")) {
+      closeImageViewer();
+    }
+  });
 
-/* ==================================================
-   DYNAMIC FAMILY TREE MODAL CONTROLLER
-================================================== */
-const treeModal = document.getElementById("treeModal");
-const treeModalClose = document.getElementById("treeModalClose");
-const treeModalTitle = document.getElementById("treeModalTitle");
+  document.getElementById("imageViewerClose")?.addEventListener("click", closeImageViewer);
+  imageViewerModal?.addEventListener("click", (e) => {
+    if (e.target === imageViewerModal) closeImageViewer();
+  });
 
-function openFamilyTreeModal(character) {
-    if (!treeModal || !character) return;
+  // Modal Open Handler with Dynamic Admin Data
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest("[data-tree-id]");
+    if (!trigger) return;
 
-    if (treeModalTitle) treeModalTitle.textContent = `${character.name || "Character"}'s Lineage`;
+    const char = characters.find(c => c.id === trigger.dataset.treeId);
+    if (!char) return;
 
-    // 1. Dynamic Crest Header from Admin Settings
+    const modal = document.getElementById("treeModal");
+    const title = document.getElementById("treeModalTitle");
     const crestBadge = document.getElementById("modalCrestBadge");
     const crestImg = document.getElementById("treeModalCrestImg");
     const crestText = document.getElementById("treeModalCrestText");
-    const houseCrest = character.houseCrest || character.familyCrest || "";
 
-    if (houseCrest && crestBadge && crestImg) {
-        crestImg.src = houseCrest;
-        crestImg.dataset.crestSrc = houseCrest;
-        crestImg.dataset.crestTitle = `${character.name || "Character"} House Crest`;
-        if (crestText) crestText.textContent = `${character.name || "Character"} House Crest`;
-        crestBadge.style.display = "flex";
-    } else if (crestBadge) {
-        crestBadge.style.display = "none";
+    title.textContent = `${char.name}'s Lineage`;
+
+    // Crest loaded from Admin Settings
+    const crest = char.houseCrest || char.familyCrest;
+    if (crest) {
+      crestImg.src = crest;
+      crestText.textContent = `${char.name} Family Crest`;
+      crestBadge.style.display = "flex";
+      crestBadge.classList.add("has-image");
+      crestBadge.dataset.viewImage = crest;
+      crestBadge.dataset.viewTitle = `${char.name} — House / Family Crest`;
+      crestBadge.setAttribute("role", "button");
+      crestBadge.setAttribute("tabindex", "0");
+    } else {
+      crestBadge.style.display = "none";
+      crestBadge.classList.remove("has-image");
+      delete crestBadge.dataset.viewImage;
+      delete crestBadge.dataset.viewTitle;
+      crestBadge.removeAttribute("role");
+      crestBadge.removeAttribute("tabindex");
     }
 
-    // 2. Parse Genealogy Data
-    const tree = character.familyTree || {};
-    
-    // Helper to parse name and dates like "Arthur Doe (1935 – 2012)" or separate strings
-    function parseNode(val, defaultName, defaultDates) {
-        if (!val) return { name: defaultName, dates: defaultDates };
-        const match = val.match(/^(.*?)(?:\s*\((.*?)\))?$/);
-        if (match) {
-            return {
-                name: match[1].trim() || defaultName,
-                dates: match[2]?.trim() || defaultDates
-            };
-        }
-        return { name: val, dates: defaultDates };
-    }
-
-    const gpa = parseNode(tree.grandfather, "Arthur Doe", "1935 – 2012");
-    document.getElementById("treeNodeGrandfather").textContent = gpa.name;
-    document.getElementById("treeDatesGrandfather").textContent = gpa.dates;
-
-    const gma = parseNode(tree.grandmother, "Eleanor Doe", "1938 – Present");
-    document.getElementById("treeNodeGrandmother").textContent = gma.name;
-    document.getElementById("treeDatesGrandmother").textContent = gma.dates;
-
-    const dad = parseNode(tree.father || character.parents?.split(',')[0], "Robert Doe", "1968 – Present");
-    document.getElementById("treeNodeFather").textContent = dad.name;
-    document.getElementById("treeDatesFather").textContent = dad.dates;
-
-    const mom = parseNode(tree.mother || character.parents?.split(',')[1], "Clara Doe", "1970 – Present");
-    document.getElementById("treeNodeMother").textContent = mom.name;
-    document.getElementById("treeDatesMother").textContent = mom.dates;
-
-    const aunt = parseNode(tree.aunt || character.otherRelatives?.split(',')[0], "Sarah Doe", "1965 – Present");
-    document.getElementById("treeNodeAunt").textContent = aunt.name;
-    document.getElementById("treeDatesAunt").textContent = aunt.dates;
-
-    const sib = parseNode(tree.siblings || character.siblings, "James Doe", "2002 – Present");
-    document.getElementById("treeNodeSibling").textContent = sib.name;
-    document.getElementById("treeDatesSibling").textContent = sib.dates;
+    // Dynamic Tree Nodes loaded from Admin Settings
+    const tree = char.familyTree || {};
+    document.getElementById("treeNodeGrandfather").textContent = tree.grandfather || "Arthur Doe";
+    document.getElementById("treeNodeGrandmother").textContent = tree.grandmother || "Eleanor Doe";
+    document.getElementById("treeNodeFather").textContent = tree.father || "Robert Doe";
+    document.getElementById("treeNodeMother").textContent = tree.mother || "Clara Doe";
+    document.getElementById("treeNodeAunt").textContent = tree.aunt || "Sarah Doe";
+    document.getElementById("treeNodeSibling").textContent = tree.siblings || "James Doe";
 
     // Target Character Node
-    document.getElementById("treeNodeTargetName").textContent = character.name || "Target Character";
-    document.getElementById("treeNodeTargetDates").textContent = character.age || "Present";
-    
+    document.getElementById("treeNodeTargetName").textContent = char.name;
+    document.getElementById("treeNodeTargetDates").textContent = char.age || "Present";
     const targetImg = document.getElementById("treeNodeTargetImg");
     const targetSvg = document.getElementById("treeNodeTargetSvg");
-    if (character.image && targetImg) {
-        targetImg.src = character.image;
-        targetImg.style.display = "block";
-        if (targetSvg) targetSvg.style.display = "none";
+    if (char.image) {
+      targetImg.src = char.image;
+      targetImg.style.display = "block";
+      targetSvg.style.display = "none";
     } else {
-        if (targetImg) targetImg.style.display = "none";
-        if (targetSvg) targetSvg.style.display = "block";
+      targetImg.style.display = "none";
+      targetSvg.style.display = "block";
     }
 
-    treeModal.classList.add("active");
-    treeModal.setAttribute("aria-hidden", "false");
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
-}
+  });
 
-function closeFamilyTreeModal() {
-    if (!treeModal) return;
-    treeModal.classList.remove("active");
-    treeModal.setAttribute("aria-hidden", "true");
+  const closeModal = () => {
+    const modal = document.getElementById("treeModal");
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
-}
+  };
 
-document.addEventListener("click", function(event) {
-    const trigger = event.target.closest("[data-tree-id]");
-    if (!trigger) return;
-    event.preventDefault();
-    const character = characters.find(c => String(c.id) === String(trigger.dataset.treeId));
-    if (character) {
-        openFamilyTreeModal(character);
-    }
-});
-
-if (treeModalClose) {
-    treeModalClose.addEventListener("click", closeFamilyTreeModal);
-}
-
-if (treeModal) {
-    treeModal.addEventListener("click", function(event) {
-        if (event.target === treeModal) closeFamilyTreeModal();
-    });
-}
-
-document.addEventListener("keydown", function(event) {
-    if (event.key === "Escape") {
-        if (treeModal && treeModal.classList.contains("active")) closeFamilyTreeModal();
-        if (crestImageModal && crestImageModal.classList.contains("active")) closeCrestImage();
-    }
-});
-
-/* FIREBASE DATA BRIDGE */
-window.__setCharacterWallCharacters = function(list) {
-    characters = Array.isArray(list) ? list : [];
-    applyFilters();
-};
-
-applyFilters();
+  document.getElementById("treeModalClose")?.addEventListener("click", closeModal);
+  document.getElementById("treeModal")?.addEventListener("click", (e) => {
+    if (e.target.id === "treeModal") closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !imageViewerModal?.classList.contains("active")) closeModal();
+  });
 </script>
-
-<!-- FIREBASE FIRESTORE DATA STREAM -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
-  authDomain: "libraryreeds-638f4.firebaseapp.com",
-  projectId: "libraryreeds-638f4",
-  storageBucket: "libraryreeds-638f4.firebasestorage.app",
-  messagingSenderId: "768304310517",
-  appId: "1:768304310517:web:39b931e6447043d84d3dbc"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-onSnapshot(
-  collection(db, "character_wall"),
-  (snapshot) => {
-    const list = [];
-    snapshot.forEach((snap) => {
-      list.push({ id: snap.id, ...snap.data() });
-    });
-
-    list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-
-    if (window.__setCharacterWallCharacters) {
-      window.__setCharacterWallCharacters(list);
-    }
-  },
-  (error) => {
-    console.error("Unable to load Character Wall:", error);
-    if (window.__setCharacterWallCharacters) {
-      window.__setCharacterWallCharacters([]);
-    }
-  }
-);
-</script>
-
-<script>
-document.addEventListener("error", function(event) {
-  const img = event.target;
-  if (!(img instanceof HTMLImageElement)) return;
-  if (!img.closest(".character-media-image, .book-cover-display")) return;
-
-  const holder = img.parentElement;
-  if (!holder) return;
-
-  const placeholder = document.createElement("div");
-  placeholder.className = "book-cover-missing";
-  placeholder.textContent = "Image unavailable";
-  holder.replaceChildren(placeholder);
-}, true);
-</script>
-
 </body>
 </html>

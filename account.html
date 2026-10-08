@@ -128,6 +128,19 @@
       letter-spacing: 0.05em;
     }
 
+    /* Dynamic Hierarchy Row Elements */
+    .dynamic-tree-row {
+      display: grid;
+      grid-template-columns: 1fr 140px 110px auto;
+      gap: 10px;
+      align-items: center;
+      background: var(--bg-surface-elevated);
+      padding: 10px 12px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
     footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
     .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border-subtle); }
     .footer-col { display: flex; flex-direction: column; gap: 14px; }
@@ -141,6 +154,7 @@
     @media (max-width: 900px) {
       .dashboard-layout { grid-template-columns: 1fr; }
       .sidebar-panel { position: static; }
+      .dynamic-tree-row { grid-template-columns: 1fr; }
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -738,7 +752,7 @@
         <!-- ADMIN CHARACTER WALL & FAMILY TREE MANAGEMENT -->
         <div id="panel-characterwall" class="settings-card" style="display: none;">
           <h2 class="card-title">Character Wall Management</h2>
-          <p class="card-desc">Add, edit, publish, and remove the character profiles shown on the public Character Wall page, with complete Family Tree lineages &amp; Crest controls.</p>
+          <p class="card-desc">Add, edit, publish, and remove character profiles shown on the Character Wall. Configure custom generational lineages, multiple brothers/sisters, and extended relatives with adoption flags.</p>
 
           <form id="adminCharacterForm" style="display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle);">
             <h3 id="characterFormLegend" style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary);">Add Character to Wall</h3>
@@ -875,7 +889,7 @@
             <!-- FAMILY TREE GENERATIONS FORM -->
             <div style="border:1px solid var(--border-subtle); background:var(--bg-base); border-radius:4px; padding:18px;">
               <h4 style="font-family:var(--font-serif); color:var(--text-primary); margin-bottom:4px; font-size:1.2rem;">🌳 Interactive Family Tree Hierarchy</h4>
-              <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:14px;">Fill in generational lineage. These populate the node boxes and connecting lines in the live Family Tree modal.</p>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:14px;">Fill in generational lineage. These populate the node boxes, relations, and connecting lines in the live Family Tree modal.</p>
 
               <!-- Gen 1: Grandparents -->
               <div style="margin-bottom:16px;">
@@ -911,25 +925,36 @@
                 </div>
               </div>
 
-              <!-- Gen 3: Target Character & Siblings -->
-              <div style="border-top:1px dashed var(--border-subtle); padding-top:14px;">
-                <span style="font-size:0.7rem; font-weight:700; color:var(--accent-gold); text-transform:uppercase;">Generation 3: Character &amp; Siblings</span>
-                <div style="display:grid; grid-template-columns:1fr 180px 1fr; gap:12px; margin-top:8px;">
-                  <div class="form-group">
-                    <label class="form-label">Sibling (Name &amp; Dates):</label>
-                    <input type="text" class="form-input" id="treeSiblingsInput" placeholder="James Doe (2002 – Present)">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Sibling Relationship:</label>
-                    <select class="form-input" id="treeSiblingTypeInput">
-                      <option value="Brother" selected>Brother</option>
-                      <option value="Sister">Sister</option>
-                    </select>
-                  </div>
+              <!-- Gen 3: Target Character, Spouse & MULTIPLE SIBLINGS -->
+              <div style="border-top:1px dashed var(--border-subtle); padding-top:14px; margin-bottom:16px;">
+                <span style="font-size:0.7rem; font-weight:700; color:var(--accent-gold); text-transform:uppercase;">Generation 3: Character, Spouse &amp; Siblings</span>
+                <div style="margin-top:8px; margin-bottom:12px;">
                   <div class="form-group">
                     <label class="form-label">Partner / Spouse / Children:</label>
-                    <input type="text" class="form-input" id="treePartnerInput" placeholder="Optional spouse or children">
+                    <input type="text" class="form-input" id="treePartnerInput" placeholder="Optional spouse, partner, or children">
                   </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <label class="form-label" style="margin:0;">Brothers &amp; Sisters (Multiple):</label>
+                  <button type="button" id="btnAddSibling" class="btn-secondary-action" style="padding:4px 10px; font-size:0.65rem;">+ Add Sibling</button>
+                </div>
+                <div id="siblingsContainer">
+                  <!-- Dynamic Sibling Rows Injected Here -->
+                </div>
+              </div>
+
+              <!-- MULTIPLE EXTENDED RELATIVES -->
+              <div style="border-top:1px dashed var(--border-subtle); padding-top:14px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <div>
+                    <span style="font-size:0.7rem; font-weight:700; color:var(--accent-gold); text-transform:uppercase;">Other Relatives, In-Laws &amp; Guardians</span>
+                    <p style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">Add cousins, mentors, adopted relatives, or extended house members.</p>
+                  </div>
+                  <button type="button" id="btnAddRelative" class="btn-secondary-action" style="padding:4px 10px; font-size:0.65rem;">+ Add Relative</button>
+                </div>
+                <div id="relativesContainer">
+                  <!-- Dynamic Relative Rows Injected Here -->
                 </div>
               </div>
             </div>
@@ -955,7 +980,7 @@
             <div style="overflow-x:auto;">
               <table class="inventory-table">
                 <thead>
-                  <tr><th>Character Name</th><th>Role / Story</th><th>Sibling Type</th><th>Crest Attached</th><th>Actions</th></tr>
+                  <tr><th>Character Name</th><th>Role / Story</th><th>Siblings Count</th><th>Crest Attached</th><th>Actions</th></tr>
                 </thead>
                 <tbody id="adminCharacterTableBody">
                   <tr><td colspan="5" style="color:var(--text-muted); text-align:center;">Loading characters...</td></tr>
@@ -1353,6 +1378,49 @@
         console.warn("Navigation failed:", err);
       }
     };
+
+    // Dynamic Sibling DOM Generator
+    window.createSiblingRow = function(name = "", type = "Brother", isAdopted = false) {
+      const row = document.createElement("div");
+      row.className = "dynamic-tree-row sibling-row";
+      row.innerHTML = `
+        <input type="text" class="form-input sib-name" placeholder="Name & Dates (e.g. James Doe, 2002 – Present)" value="${name}">
+        <select class="form-input sib-type">
+          <option value="Brother" ${type === "Brother" ? "selected" : ""}>Brother</option>
+          <option value="Sister" ${type === "Sister" ? "selected" : ""}>Sister</option>
+        </select>
+        <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text-secondary); cursor:pointer;">
+          <input type="checkbox" class="sib-adopted" style="accent-color:var(--accent-gold);" ${isAdopted ? "checked" : ""}> Adopted
+        </label>
+        <button type="button" class="btn-danger-action remove-row-btn" style="padding:6px 10px;">×</button>
+      `;
+      row.querySelector(".remove-row-btn").addEventListener("click", () => row.remove());
+      return row;
+    };
+
+    // Dynamic Relative DOM Generator
+    window.createRelativeRow = function(name = "", relation = "Cousin", isAdopted = false) {
+      const row = document.createElement("div");
+      row.className = "dynamic-tree-row relative-row";
+      row.innerHTML = `
+        <input type="text" class="form-input rel-name" placeholder="Name & Dates (e.g. Marcus Vale, 1995 – Present)" value="${name}">
+        <input type="text" class="form-input rel-relation" placeholder="Relation (Cousin, Guardian, etc.)" value="${relation}">
+        <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text-secondary); cursor:pointer;">
+          <input type="checkbox" class="rel-adopted" style="accent-color:var(--accent-gold);" ${isAdopted ? "checked" : ""}> Adopted
+        </label>
+        <button type="button" class="btn-danger-action remove-row-btn" style="padding:6px 10px;">×</button>
+      `;
+      row.querySelector(".remove-row-btn").addEventListener("click", () => row.remove());
+      return row;
+    };
+
+    document.getElementById("btnAddSibling")?.addEventListener("click", () => {
+      document.getElementById("siblingsContainer")?.appendChild(window.createSiblingRow());
+    });
+
+    document.getElementById("btnAddRelative")?.addEventListener("click", () => {
+      document.getElementById("relativesContainer")?.appendChild(window.createRelativeRow());
+    });
   </script>
 
   <script type="module">
@@ -1382,10 +1450,7 @@
 
     function escapeHtml(str) {
       if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     async function dispatchTelegramRaw(htmlMessage) {
@@ -1396,10 +1461,7 @@
         formData.append('text', htmlMessage);
         formData.append('parse_mode', 'HTML');
 
-        const response = await fetch(url, {
-          method: 'POST',
-          body: formData
-        });
+        const response = await fetch(url, { method: 'POST', body: formData });
         const data = await response.json();
         if (!response.ok || !data.ok) throw new Error(data.description || `HTTP ${response.status}`);
         return data;
@@ -1935,7 +1997,8 @@
       document.getElementById("existingCharacterImageUrl").value = "";
       document.getElementById("existingCharacterBookCoverUrl").value = "";
       document.getElementById("existingCharacterFamilyCrestUrl").value = "";
-      document.getElementById("treeSiblingTypeInput").value = "Brother";
+      document.getElementById("siblingsContainer").innerHTML = "";
+      document.getElementById("relativesContainer").innerHTML = "";
       document.getElementById("characterFormLegend").textContent = "Add Character to Wall";
       document.getElementById("adminCharacterSubmitBtn").textContent = "Save Character & Tree";
       document.getElementById("cancelCharacterEditBtn").style.display = "none";
@@ -1968,9 +2031,35 @@
       document.getElementById("treeFatherInput").value = tree.father || "";
       document.getElementById("treeMotherInput").value = tree.mother || "";
       document.getElementById("treeAuntInput").value = tree.aunt || "";
-      document.getElementById("treeSiblingsInput").value = tree.siblings || character.siblings || "";
-      document.getElementById("treeSiblingTypeInput").value = tree.siblingType || "Brother";
       document.getElementById("treePartnerInput").value = tree.partner || character.partner || "";
+
+      // Render Multiple Siblings
+      const sibsContainer = document.getElementById("siblingsContainer");
+      sibsContainer.innerHTML = "";
+      if (Array.isArray(tree.siblingsList) && tree.siblingsList.length > 0) {
+        tree.siblingsList.forEach(sib => {
+          sibsContainer.appendChild(window.createSiblingRow(sib.name, sib.type, !!sib.isAdopted));
+        });
+      } else if (tree.siblings || character.siblings) {
+        // Fallback migration from older string
+        const oldSibs = (tree.siblings || character.siblings).split(",");
+        oldSibs.forEach(s => {
+          if (s.trim()) sibsContainer.appendChild(window.createSiblingRow(s.trim(), tree.siblingType || "Brother", false));
+        });
+      }
+
+      // Render Multiple Relatives
+      const relsContainer = document.getElementById("relativesContainer");
+      relsContainer.innerHTML = "";
+      if (Array.isArray(tree.relativesList) && tree.relativesList.length > 0) {
+        tree.relativesList.forEach(rel => {
+          relsContainer.appendChild(window.createRelativeRow(rel.name, rel.relation, !!rel.isAdopted));
+        });
+      } else if (character.otherRelatives) {
+        character.otherRelatives.split(",").forEach(r => {
+          if (r.trim()) relsContainer.appendChild(window.createRelativeRow(r.trim(), "Relative", false));
+        });
+      }
 
       document.getElementById("adminCharacterPersonality").value = character.personality || "";
       document.getElementById("adminCharacterAbilities").value = character.abilities || "";
@@ -1995,7 +2084,7 @@
 
       tbody.innerHTML = entries.map(([id, c]) => {
         const crest = c.houseCrest || c.familyCrest;
-        const sibType = c.familyTree?.siblingType || "Brother";
+        const sibCount = Array.isArray(c.familyTree?.siblingsList) ? c.familyTree.siblingsList.length : (c.familyTree?.siblings ? 1 : 0);
         return `
           <tr>
             <td>
@@ -2003,7 +2092,7 @@
               <div style="font-size:.72rem;color:var(--text-muted);">${c.species || "Unspecified"}</div>
             </td>
             <td>${c.role || "Other"}<br><span style="font-size:.72rem;color:var(--text-muted);">${c.book || "No story"}</span></td>
-            <td><span style="color:var(--accent-gold); font-size:0.75rem;">${sibType}</span></td>
+            <td><span style="color:var(--accent-gold); font-size:0.75rem;">${sibCount} recorded</span></td>
             <td>${crest ? `<span style="color:var(--accent-gold); font-size:0.75rem;">✓ Crest Active</span>` : `<span style="color:var(--text-muted); font-size:0.75rem;">None</span>`}</td>
             <td style="display:flex;gap:8px;">
               <button type="button" class="btn-secondary-action" data-edit-character="${id}">Edit</button>
@@ -2034,6 +2123,24 @@
         if (coverFile) bookCover = await uploadCharacterMedia(coverFile, "book-covers");
         if (crestFile) familyCrest = await uploadCharacterMedia(crestFile, "family-crests");
 
+        // Parse Multiple Siblings
+        const siblingsList = [];
+        document.querySelectorAll("#siblingsContainer .sibling-row").forEach(row => {
+          const name = row.querySelector(".sib-name")?.value.trim();
+          const type = row.querySelector(".sib-type")?.value || "Brother";
+          const isAdopted = row.querySelector(".sib-adopted")?.checked || false;
+          if (name) siblingsList.push({ name, type, isAdopted });
+        });
+
+        // Parse Multiple Relatives
+        const relativesList = [];
+        document.querySelectorAll("#relativesContainer .relative-row").forEach(row => {
+          const name = row.querySelector(".rel-name")?.value.trim();
+          const relation = row.querySelector(".rel-relation")?.value.trim() || "Relative";
+          const isAdopted = row.querySelector(".rel-adopted")?.checked || false;
+          if (name) relativesList.push({ name, relation, isAdopted });
+        });
+
         const payload = {
           name: characterField("adminCharacterName"),
           species: characterField("adminCharacterSpecies"),
@@ -2052,8 +2159,8 @@
             father: characterField("treeFatherInput"),
             mother: characterField("treeMotherInput"),
             aunt: characterField("treeAuntInput"),
-            siblings: characterField("treeSiblingsInput"),
-            siblingType: document.getElementById("treeSiblingTypeInput")?.value || "Brother",
+            siblingsList: siblingsList,
+            relativesList: relativesList,
             partner: characterField("treePartnerInput")
           },
           personality: characterField("adminCharacterPersonality"),
