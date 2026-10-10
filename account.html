@@ -904,6 +904,26 @@
               </div>
             </div>
 
+            <!-- RESTORED SCHOOL CREST AND WORLD MAP UPLOADS -->
+            <div style="background:var(--bg-base);border:1px solid var(--accent-gold);border-radius:4px;padding:16px;">
+              <h4 style="font-family:var(--font-serif);color:var(--accent-gold);margin-bottom:10px;font-size:1.15rem;">School Crest</h4>
+              <div class="form-group">
+                <label class="form-label" for="adminCharacterSchoolCrestFile">Upload School Crest Image:</label>
+                <input type="file" class="form-input" id="adminCharacterSchoolCrestFile" accept="image/*">
+                <label class="form-label" for="adminCharacterSchoolCrestUrl">Or Image URL:</label>
+                <input type="url" class="form-input" id="adminCharacterSchoolCrestUrl" placeholder="https://example.com/school-crest.png">
+              </div>
+            </div>
+            <div style="background:var(--bg-base);border:1px solid var(--accent-gold);border-radius:4px;padding:16px;">
+              <h4 style="font-family:var(--font-serif);color:var(--accent-gold);margin-bottom:10px;font-size:1.15rem;">World Map</h4>
+              <div class="form-group">
+                <label class="form-label" for="adminCharacterWorldMapFile">Upload World Map Image:</label>
+                <input type="file" class="form-input" id="adminCharacterWorldMapFile" accept="image/*">
+                <label class="form-label" for="adminCharacterWorldMapUrl">Or Image URL:</label>
+                <input type="url" class="form-input" id="adminCharacterWorldMapUrl" placeholder="https://example.com/world-map.png">
+              </div>
+            </div>
+
             <!-- FAMILY TREE GENERATIONS FORM -->
             <div style="border:1px solid var(--border-subtle); background:var(--bg-base); border-radius:4px; padding:18px;">
               <h4 style="font-family:var(--font-serif); color:var(--text-primary); margin-bottom:4px; font-size:1.2rem;">🌳 Interactive Family Tree Hierarchy</h4>
@@ -916,10 +936,18 @@
                   <div class="form-group">
                     <label class="form-label">Grandfather (Name &amp; Dates):</label>
                     <input type="text" class="form-input" id="treeGrandfatherInput" placeholder="Arthur Doe (1935 – 2012)">
+                    <label class="form-label" for="treeGrandfatherImageFile">Grandfather portrait (device):</label>
+                    <input type="file" class="form-input" id="treeGrandfatherImageFile" accept="image/*">
+                    <label class="form-label" for="treeGrandfatherImageUrl">Or portrait URL:</label>
+                    <input type="url" class="form-input" id="treeGrandfatherImageUrl" placeholder="https://example.com/portrait.jpg">
                   </div>
                   <div class="form-group">
                     <label class="form-label">Grandmother (Name &amp; Dates):</label>
                     <input type="text" class="form-input" id="treeGrandmotherInput" placeholder="Eleanor Doe (1938 – Present)">
+                    <label class="form-label" for="treeGrandmotherImageFile">Grandmother portrait (device):</label>
+                    <input type="file" class="form-input" id="treeGrandmotherImageFile" accept="image/*">
+                    <label class="form-label" for="treeGrandmotherImageUrl">Or portrait URL:</label>
+                    <input type="url" class="form-input" id="treeGrandmotherImageUrl" placeholder="https://example.com/portrait.jpg">
                   </div>
                 </div>
               </div>
@@ -931,14 +959,26 @@
                   <div class="form-group">
                     <label class="form-label">Father (Name &amp; Dates):</label>
                     <input type="text" class="form-input" id="treeFatherInput" placeholder="Robert Doe (1968 – Present)">
+                    <label class="form-label" for="treeFatherImageFile">Father portrait (device):</label>
+                    <input type="file" class="form-input" id="treeFatherImageFile" accept="image/*">
+                    <label class="form-label" for="treeFatherImageUrl">Or portrait URL:</label>
+                    <input type="url" class="form-input" id="treeFatherImageUrl" placeholder="https://example.com/portrait.jpg">
                   </div>
                   <div class="form-group">
                     <label class="form-label">Mother (Name &amp; Dates):</label>
                     <input type="text" class="form-input" id="treeMotherInput" placeholder="Clara Doe (1970 – Present)">
+                    <label class="form-label" for="treeMotherImageFile">Mother portrait (device):</label>
+                    <input type="file" class="form-input" id="treeMotherImageFile" accept="image/*">
+                    <label class="form-label" for="treeMotherImageUrl">Or portrait URL:</label>
+                    <input type="url" class="form-input" id="treeMotherImageUrl" placeholder="https://example.com/portrait.jpg">
                   </div>
                   <div class="form-group">
                     <label class="form-label">Aunt / Uncle (Name &amp; Dates):</label>
                     <input type="text" class="form-input" id="treeAuntInput" placeholder="Sarah Doe (1965 – Present)">
+                    <label class="form-label" for="treeAuntImageFile">Aunt portrait (device):</label>
+                    <input type="file" class="form-input" id="treeAuntImageFile" accept="image/*">
+                    <label class="form-label" for="treeAuntImageUrl">Or portrait URL:</label>
+                    <input type="url" class="form-input" id="treeAuntImageUrl" placeholder="https://example.com/portrait.jpg">
                   </div>
                 </div>
               </div>
@@ -960,6 +1000,18 @@
                 <div id="siblingsContainer">
                   <!-- Dynamic Sibling Rows Injected Here -->
                 </div>
+              </div>
+
+              <!-- BONDED MATES: separate entries linked to a character or relative -->
+              <div style="border-top:1px dashed var(--border-subtle);padding-top:14px;margin-bottom:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                  <div>
+                    <span style="font-size:.7rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;">Bonded Mates</span>
+                    <p style="font-size:.7rem;color:var(--text-muted);margin-top:3px;">Add a bonded mate for the character or any family-tree relative, with their own portrait.</p>
+                  </div>
+                  <button type="button" id="btnAddBondedMate" class="btn-secondary-action">+ Add Bonded Mate</button>
+                </div>
+                <div id="bondedMatesContainer" style="margin-top:10px;"></div>
               </div>
 
               <!-- MULTIPLE EXTENDED RELATIVES -->
@@ -1413,6 +1465,10 @@
         <button type="button" class="btn-danger-action remove-row-btn" style="padding:6px 10px;">×</button>
       `;
       row.querySelector(".remove-row-btn").addEventListener("click", () => row.remove());
+      const sibImageArea = document.createElement("div");
+      sibImageArea.style.cssText = "grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;align-items:center";
+      sibImageArea.innerHTML = '<label style="flex:1;min-width:190px;font-size:.75rem">Sibling portrait from device<input type="file" class="form-input sib-image-file" accept="image/*"></label><label style="flex:1;min-width:190px;font-size:.75rem">Or portrait URL<input type="url" class="form-input sib-image-url" placeholder="https://example.com/portrait.jpg"></label>';
+      row.appendChild(sibImageArea);
       return row;
     };
 
@@ -1467,6 +1523,58 @@
       });
       return row;
     };
+
+    // Bonded mates are stored separately so each one can link to any existing relative.
+    window.createBondedMateRow = function(name = "", bondedTo = "", image = "") {
+      const row = document.createElement("div");
+      row.className = "dynamic-tree-row bonded-mate-row";
+      row.style.gridTemplateColumns = "minmax(0,1fr)";
+      row.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center;">
+          <input class="form-input mate-name" type="text" placeholder="Bonded mate's name">
+          <input class="form-input mate-bonded-to" type="text" placeholder="Bonded to (exact name of character/relative)">
+          <button type="button" class="btn-danger-action remove-row-btn">×</button>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <img class="mate-image-preview" alt="Bonded mate portrait preview" style="display:none;width:54px;height:54px;object-fit:cover;border:1px solid var(--accent-gold);border-radius:50%;">
+          <label style="font-size:.75rem;color:var(--text-secondary);">Bonded mate portrait:
+            <input type="file" class="form-input mate-image-file" accept="image/*" style="max-width:270px;padding:8px;margin-top:5px;">
+          </label>
+          <label style="font-size:.75rem;color:var(--text-secondary);flex:1;min-width:180px;">Or portrait URL:
+            <input type="url" class="form-input mate-image-url" placeholder="https://example.com/portrait.jpg" style="margin-top:5px;">
+          </label>
+        </div>`;
+      row.querySelector(".mate-name").value = name || "";
+      row.querySelector(".mate-bonded-to").value = bondedTo || "";
+      row.querySelector(".mate-image-url").value = image || "";
+      const preview = row.querySelector(".mate-image-preview");
+      const urlInput = row.querySelector(".mate-image-url");
+      const fileInput = row.querySelector(".mate-image-file");
+      let temporaryPreview = null;
+      const showPreview = url => {
+        preview.style.display = url ? "block" : "none";
+        if (url) preview.src = url;
+        else preview.removeAttribute("src");
+      };
+      showPreview(image);
+      urlInput.addEventListener("input", () => {
+        if (!fileInput.files.length) showPreview(urlInput.value.trim());
+      });
+      fileInput.addEventListener("change", () => {
+        if (temporaryPreview) URL.revokeObjectURL(temporaryPreview);
+        temporaryPreview = fileInput.files[0] ? URL.createObjectURL(fileInput.files[0]) : null;
+        showPreview(temporaryPreview || urlInput.value.trim());
+      });
+      row.querySelector(".remove-row-btn").addEventListener("click", () => {
+        if (temporaryPreview) URL.revokeObjectURL(temporaryPreview);
+        row.remove();
+      });
+      return row;
+    };
+
+    document.getElementById("btnAddBondedMate")?.addEventListener("click", () => {
+      document.getElementById("bondedMatesContainer")?.appendChild(window.createBondedMateRow());
+    });
 
     document.getElementById("btnAddSibling")?.addEventListener("click", () => {
       document.getElementById("siblingsContainer")?.appendChild(window.createSiblingRow());
@@ -2054,8 +2162,12 @@
       document.getElementById("existingCharacterFamilyCrestUrl").value = "";
       document.getElementById("existingCharacterSchoolCrestUrl").value = "";
       document.getElementById("existingCharacterWorldMapUrl").value = "";
+      for (const role of ["Grandfather", "Grandmother", "Father", "Mother", "Aunt"]) {
+        document.getElementById(`tree${role}ImageUrl`).value = "";
+      }
       document.getElementById("siblingsContainer").innerHTML = "";
       document.getElementById("relativesContainer").innerHTML = "";
+      document.getElementById("bondedMatesContainer").innerHTML = "";
       document.getElementById("characterFormLegend").textContent = "Add Character to Wall";
       document.getElementById("adminCharacterSubmitBtn").textContent = "Save Character & Tree";
       document.getElementById("cancelCharacterEditBtn").style.display = "none";
@@ -2100,6 +2212,8 @@
       document.getElementById("adminCharacterImageUrl").value = character.image || (allImgs[0] || "");
       document.getElementById("adminCharacterBookCoverUrl").value = character.bookCover || "";
       document.getElementById("adminCharacterFamilyCrestUrl").value = character.houseCrest || character.familyCrest || "";
+      document.getElementById("adminCharacterSchoolCrestUrl").value = character.schoolCrest || "";
+      document.getElementById("adminCharacterWorldMapUrl").value = character.worldMap || character.worldMapImage || character.mapImage || "";
 
       // Family Tree Fields
       const tree = character.familyTree || {};
@@ -2109,18 +2223,35 @@
       document.getElementById("treeMotherInput").value = tree.mother || "";
       document.getElementById("treeAuntInput").value = tree.aunt || "";
       document.getElementById("treePartnerInput").value = tree.partner || character.partner || "";
+      for (const role of ["Grandfather", "Grandmother", "Father", "Mother", "Aunt"]) {
+        const key = role.charAt(0).toLowerCase() + role.slice(1);
+        document.getElementById(`tree${role}ImageUrl`).value = tree.portraits?.[key] || "";
+      }
 
       // Render Multiple Siblings
       const sibsContainer = document.getElementById("siblingsContainer");
       sibsContainer.innerHTML = "";
       if (Array.isArray(tree.siblingsList) && tree.siblingsList.length > 0) {
         tree.siblingsList.forEach(sib => {
-          sibsContainer.appendChild(window.createSiblingRow(sib.name, sib.type, !!sib.isAdopted));
+          const row = window.createSiblingRow(sib.name, sib.type, !!sib.isAdopted);
+          row.querySelector(".sib-image-url").value = sib.image || "";
+          sibsContainer.appendChild(row);
         });
       } else if (tree.siblings || character.siblings) {
         const oldSibs = (tree.siblings || character.siblings).split(",");
         oldSibs.forEach(s => {
           if (s.trim()) sibsContainer.appendChild(window.createSiblingRow(s.trim(), tree.siblingType || "Brother", false));
+        });
+      }
+
+      // Restore bonded mates and portraits when editing a character.
+      const matesContainer = document.getElementById("bondedMatesContainer");
+      matesContainer.innerHTML = "";
+      if (Array.isArray(tree.bondedMates)) {
+        tree.bondedMates.forEach(mate => {
+          matesContainer.appendChild(window.createBondedMateRow(
+            mate.name || "", mate.bondedTo || "", mate.image || ""
+          ));
         });
       }
 
@@ -2192,15 +2323,21 @@
         const artFile = document.getElementById("adminCharacterImageFile").files[0];
         const coverFile = document.getElementById("adminCharacterBookCoverFile").files[0];
         const crestFile = document.getElementById("adminCharacterFamilyCrestFile").files[0];
+        const schoolCrestFile = document.getElementById("adminCharacterSchoolCrestFile").files[0];
+        const worldMapFile = document.getElementById("adminCharacterWorldMapFile").files[0];
         const galleryFiles = document.getElementById("adminCharacterGalleryFiles")?.files || [];
 
         let image = characterField("adminCharacterImageUrl") || characterField("existingCharacterImageUrl");
         let bookCover = characterField("adminCharacterBookCoverUrl") || characterField("existingCharacterBookCoverUrl");
         let familyCrest = characterField("adminCharacterFamilyCrestUrl") || characterField("existingCharacterFamilyCrestUrl");
+        let schoolCrest = characterField("adminCharacterSchoolCrestUrl") || characterField("existingCharacterSchoolCrestUrl");
+        let worldMap = characterField("adminCharacterWorldMapUrl") || characterField("existingCharacterWorldMapUrl");
 
         if (artFile) image = await uploadCharacterMedia(artFile, "avatars");
         if (coverFile) bookCover = await uploadCharacterMedia(coverFile, "book-covers");
         if (crestFile) familyCrest = await uploadCharacterMedia(crestFile, "family-crests");
+        if (schoolCrestFile) schoolCrest = await uploadCharacterMedia(schoolCrestFile, "school-crests");
+        if (worldMapFile) worldMap = await uploadCharacterMedia(worldMapFile, "world-maps");
 
         // Parse gallery / multiple images
         const galleryList = [];
@@ -2230,14 +2367,28 @@
           if (!galleryList.includes(url)) galleryList.push(url);
         });
 
-        // Parse Multiple Siblings
+        // Preserve and upload core family members' portraits.
+        const portraits = {};
+        for (const role of ["Grandfather", "Grandmother", "Father", "Mother", "Aunt"]) {
+          const key = role.charAt(0).toLowerCase() + role.slice(1);
+          let portrait = document.getElementById(`tree${role}ImageUrl`)?.value.trim() || "";
+          const portraitFile = document.getElementById(`tree${role}ImageFile`)?.files?.[0];
+          if (portraitFile) portrait = await uploadCharacterMedia(portraitFile, "family-portraits");
+          if (portrait) portraits[key] = portrait;
+        }
+
+        // Parse Multiple Siblings, including their individual portraits.
         const siblingsList = [];
-        document.querySelectorAll("#siblingsContainer .sibling-row").forEach(row => {
+        for (const row of document.querySelectorAll("#siblingsContainer .sibling-row")) {
           const name = row.querySelector(".sib-name")?.value.trim();
           const type = row.querySelector(".sib-type")?.value || "Brother";
           const isAdopted = row.querySelector(".sib-adopted")?.checked || false;
-          if (name) siblingsList.push({ name, type, isAdopted });
-        });
+          if (!name) continue;
+          let image = row.querySelector(".sib-image-url")?.value.trim() || "";
+          const photo = row.querySelector(".sib-image-file")?.files?.[0];
+          if (photo) image = await uploadCharacterMedia(photo, "family-portraits");
+          siblingsList.push({ name, type, isAdopted, image });
+        }
 
         // Parse Multiple Relatives
         const relativesList = [];
@@ -2250,6 +2401,18 @@
           const portraitFile = row.querySelector(".rel-image-file")?.files?.[0];
           if (portraitFile) image = await uploadCharacterMedia(portraitFile, "relative-portraits");
           relativesList.push({ name, relation, isAdopted, image });
+        }
+
+        // Upload and save individually linked bonded mate portraits.
+        const bondedMates = [];
+        for (const row of document.querySelectorAll("#bondedMatesContainer .bonded-mate-row")) {
+          const name = row.querySelector(".mate-name")?.value.trim() || "";
+          const bondedTo = row.querySelector(".mate-bonded-to")?.value.trim() || "";
+          if (!name) continue;
+          let mateImage = row.querySelector(".mate-image-url")?.value.trim() || "";
+          const mateFile = row.querySelector(".mate-image-file")?.files?.[0];
+          if (mateFile) mateImage = await uploadCharacterMedia(mateFile, "bonded-mate-portraits");
+          bondedMates.push({ name, bondedTo, image: mateImage });
         }
 
         const primaryImage = galleryList[0] || image || "";
@@ -2278,7 +2441,10 @@
           bookCover,
           houseCrest: familyCrest,
           familyCrest: familyCrest,
+          schoolCrest: schoolCrest,
+          worldMap: worldMap,
           familyTree: {
+            portraits,
             grandfather: characterField("treeGrandfatherInput"),
             grandmother: characterField("treeGrandmotherInput"),
             father: characterField("treeFatherInput"),
@@ -2286,6 +2452,7 @@
             aunt: characterField("treeAuntInput"),
             siblingsList: siblingsList,
             relativesList: relativesList,
+            bondedMates: bondedMates,
             partner: characterField("treePartnerInput")
           },
           personality: characterField("adminCharacterPersonality"),
@@ -2352,20 +2519,27 @@
 
       if (isAdmin) {
         document.getElementById('sidebarUserRole').textContent = "Administrator";
+        // Restore the complete admin menu before loading any optional dashboard data.
         injectAdminSidebarLinks();
-        loadAdminInventory();
-        loadAdminGiftInventory();
-        loadAdminEpubTrackers();
+        for (const loadDashboardData of [loadAdminInventory, loadAdminGiftInventory, loadAdminEpubTrackers]) {
+          try {
+            const task = loadDashboardData();
+            if (task && typeof task.catch === 'function') {
+              task.catch(error => console.error('Admin dashboard data load failed:', error));
+            }
+          } catch (error) {
+            console.error('Admin dashboard data load failed:', error);
+          }
+        }
       }
     }
 
     function injectAdminSidebarLinks() {
       const navList = document.getElementById('sidebarNavList');
-      if (document.getElementById('panel-orders').dataset.injected) return;
-      document.getElementById('panel-orders').dataset.injected = "true";
+      if (!navList || navList.querySelector('[data-admin-settings-nav="true"]')) return;
 
-      navList.innerHTML += `
-        <div class="sidebar-category-header">Store Management</div>
+      navList.insertAdjacentHTML("beforeend", `
+        <div data-admin-settings-nav="true" class="sidebar-category-header">Store Management</div>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('epubtracker', 'Manuscript EPUB Tracker', event)">Manuscript Progress</button>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('orders', 'Global Store Orders', event)">Global Orders</button>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('inventory', 'Catalog Inventory Management', event)">Inventory &amp; Pricing</button>
@@ -2382,7 +2556,7 @@
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('fanartcms', 'Fanart Banner CMS', event)">Fanart Banner</button>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('characterwall', 'Character Wall Management', event)">Character Wall</button>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('policies', 'Store Policies &amp; Terms', event)">Policies &amp; Shipping</button>
-      `;
+      `);
     }
 
     onAuthStateChanged(auth, (user) => {

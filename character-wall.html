@@ -1088,7 +1088,9 @@ body {
       tree.familyMembers,
       tree.members,
       tree.additionalRelatives,
-      tree.extraRelatives
+      tree.extraRelatives,
+      tree.relativesList,
+      tree.siblingsList
     ];
 
     const relatives = [];
@@ -1116,7 +1118,7 @@ body {
     // Also support extra keys saved directly inside familyTree.
     const fixedKeys = new Set([
       "grandfather","grandmother","father","mother","aunt","uncle","siblings","sibling",
-      "relatives","familyMembers","members","additionalRelatives","extraRelatives"
+      "relatives","familyMembers","members","additionalRelatives","extraRelatives","bondedMates"
     ]);
     Object.entries(tree).forEach(([key, value]) => {
       if (fixedKeys.has(key)) return;
@@ -1194,6 +1196,7 @@ body {
     const extras = collectDynamicRelatives(char);
     const tree = char.familyTree || {};
 
+    const familyPortraits = tree.portraits || {};
     const core = [
       normalizeRelative(tree.greatGrandfather, "Great Grandfather"),
       normalizeRelative(tree.greatGrandmother, "Great Grandmother"),
@@ -1204,7 +1207,10 @@ body {
       normalizeRelative(tree.aunt, "Aunt"),
       normalizeRelative(tree.uncle, "Uncle"),
       normalizeRelative(tree.siblings || tree.sibling, "Sibling")
-    ].filter(Boolean);
+    ].filter(Boolean).map(person => ({
+      ...person,
+      image: person.image || familyPortraits[String(person.role).toLowerCase()] || ""
+    }));
 
     const target = {
       name: char.name || "Character",
@@ -1215,7 +1221,25 @@ body {
       isTarget: true
     };
 
-    const all = [...core, target, ...extras];
+    // Bonded mates saved through Admin Settings, each linked to a specific person.
+    // Keep them in the same generation as their partner for a visible pair.
+    const rawMates = Array.isArray(tree.bondedMates) ? tree.bondedMates : [];
+    const basePeople = [...core, target, ...extras];
+    const mates = rawMates.map(mate => {
+      const normalized = normalizeRelative(mate, "Bonded Mate");
+      if (!normalized) return null;
+      const bondedTo = String(mate.bondedTo || "").trim();
+      const partner = basePeople.find(person =>
+        String(person.name || "").trim().toLowerCase() === bondedTo.toLowerCase()
+      );
+      return {
+        ...normalized,
+        role: "Bonded Mate",
+        bondedTo,
+        generation: partner ? inferGeneration(partner) : "Character Generation"
+      };
+    }).filter(Boolean);
+    const all = [...basePeople, ...mates];
 
     // Deduplicate the combined list while retaining the first saved occurrence.
     const seen = new Set();
@@ -1254,6 +1278,20 @@ body {
         members.splice(Math.floor(members.length / 2), 0, me);
       }
 
+      // Put each bonded mate immediately after the person they are bonded to.
+      const linkedMates = members.filter(m => m.role === "Bonded Mate" && m.bondedTo);
+      linkedMates.forEach(mate => {
+        const originalIndex = members.indexOf(mate);
+        const partnerIndex = members.findIndex(m => m !== mate &&
+          String(m.name).trim().toLowerCase() === mate.bondedTo.toLowerCase());
+        if (originalIndex !== -1 && partnerIndex !== -1) {
+          members.splice(originalIndex, 1);
+          const newPartnerIndex = members.findIndex(m => m !== mate &&
+            String(m.name).trim().toLowerCase() === mate.bondedTo.toLowerCase());
+          members.splice(newPartnerIndex + 1, 0, mate);
+        }
+      });
+
       return `
         <section class="dynamic-generation" data-generation="${escapeTreeHTML(label)}">
           <div class="dynamic-generation-title">${escapeTreeHTML(label)}</div>
@@ -1263,7 +1301,11 @@ body {
               const role = String(relative.role || "").toLowerCase();
               const nextRole = String(next?.role || "").toLowerCase();
               const partnerRoles = /wife|husband|spouse|partner/;
-              const hasPartnerLink = Boolean(next) && (partnerRoles.test(role) || partnerRoles.test(nextRole));
+              const linkedBondedMate = Boolean(next) && (
+                String(next.bondedTo || "").trim().toLowerCase() === String(relative.name || "").trim().toLowerCase()
+              );
+              const hasPartnerLink = linkedBondedMate ||
+                (Boolean(next) && (partnerRoles.test(role) || partnerRoles.test(nextRole)));
               return relativeCardHTML(relative, { isTarget: Boolean(relative.isTarget), hasPartnerLink });
             }).join("")}
           </div>
