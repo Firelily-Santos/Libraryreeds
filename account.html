@@ -1416,19 +1416,55 @@
       return row;
     };
 
-    // Dynamic Relative DOM Generator
-    window.createRelativeRow = function(name = "", relation = "Cousin", isAdopted = false) {
+    // Dynamic Relative DOM Generator — supports an individual portrait for every relative.
+    window.createRelativeRow = function(name = "", relation = "Cousin", isAdopted = false, image = "") {
       const row = document.createElement("div");
       row.className = "dynamic-tree-row relative-row";
+      row.style.gridTemplateColumns = "minmax(0,1fr)";
       row.innerHTML = `
-        <input type="text" class="form-input rel-name" placeholder="Name & Dates (e.g. Marcus Vale, 1995 – Present)" value="${name}">
-        <input type="text" class="form-input rel-relation" placeholder="Relation (Cousin, Guardian, etc.)" value="${relation}">
-        <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text-secondary); cursor:pointer;">
-          <input type="checkbox" class="rel-adopted" style="accent-color:var(--accent-gold);" ${isAdopted ? "checked" : ""}> Adopted
-        </label>
-        <button type="button" class="btn-danger-action remove-row-btn" style="padding:6px 10px;">×</button>
-      `;
-      row.querySelector(".remove-row-btn").addEventListener("click", () => row.remove());
+        <div style="display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:center;">
+          <input type="text" class="form-input rel-name" placeholder="Name & Dates">
+          <input type="text" class="form-input rel-relation" placeholder="Relation (Cousin, Guardian, etc.)">
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-secondary);cursor:pointer;">
+            <input type="checkbox" class="rel-adopted" style="accent-color:var(--accent-gold);"> Adopted
+          </label>
+          <button type="button" class="btn-danger-action remove-row-btn" style="padding:6px 10px;">×</button>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <img class="rel-image-preview" alt="Relative portrait preview" style="display:none;width:54px;height:54px;object-fit:cover;border:1px solid var(--accent-gold);border-radius:50%;">
+          <label style="font-size:.75rem;color:var(--text-secondary);">Relative photo from device:
+            <input type="file" class="form-input rel-image-file" accept="image/*" style="max-width:270px;padding:8px;margin-top:5px;">
+          </label>
+          <label style="font-size:.75rem;color:var(--text-secondary);flex:1;min-width:180px;">Or photo URL:
+            <input type="url" class="form-input rel-image-url" placeholder="https://example.com/portrait.jpg" style="margin-top:5px;">
+          </label>
+        </div>`;
+      row.querySelector(".rel-name").value = name || "";
+      row.querySelector(".rel-relation").value = relation || "";
+      row.querySelector(".rel-adopted").checked = !!isAdopted;
+      row.querySelector(".rel-image-url").value = image || "";
+      const preview = row.querySelector(".rel-image-preview");
+      const urlInput = row.querySelector(".rel-image-url");
+      const fileInput = row.querySelector(".rel-image-file");
+      let temporaryPreview = null;
+      function showPreview(url) {
+        preview.style.display = url ? "block" : "none";
+        if (url) preview.src = url;
+        else preview.removeAttribute("src");
+      }
+      showPreview(image);
+      urlInput.addEventListener("input", () => {
+        if (!fileInput.files.length) showPreview(urlInput.value.trim());
+      });
+      fileInput.addEventListener("change", () => {
+        if (temporaryPreview) URL.revokeObjectURL(temporaryPreview);
+        temporaryPreview = fileInput.files[0] ? URL.createObjectURL(fileInput.files[0]) : null;
+        showPreview(temporaryPreview || urlInput.value.trim());
+      });
+      row.querySelector(".remove-row-btn").addEventListener("click", () => {
+        if (temporaryPreview) URL.revokeObjectURL(temporaryPreview);
+        row.remove();
+      });
       return row;
     };
 
@@ -2016,6 +2052,8 @@
       document.getElementById("existingCharacterImagesJson").value = "";
       document.getElementById("existingCharacterBookCoverUrl").value = "";
       document.getElementById("existingCharacterFamilyCrestUrl").value = "";
+      document.getElementById("existingCharacterSchoolCrestUrl").value = "";
+      document.getElementById("existingCharacterWorldMapUrl").value = "";
       document.getElementById("siblingsContainer").innerHTML = "";
       document.getElementById("relativesContainer").innerHTML = "";
       document.getElementById("characterFormLegend").textContent = "Add Character to Wall";
@@ -2042,6 +2080,8 @@
 
       document.getElementById("existingCharacterBookCoverUrl").value = character.bookCover || "";
       document.getElementById("existingCharacterFamilyCrestUrl").value = character.houseCrest || character.familyCrest || "";
+      document.getElementById("existingCharacterSchoolCrestUrl").value = character.schoolCrest || "";
+      document.getElementById("existingCharacterWorldMapUrl").value = character.worldMap || character.worldMapImage || character.mapImage || "";
 
       document.getElementById("adminCharacterName").value = character.name || "";
       document.getElementById("adminCharacterSpecies").value = character.species || "";
@@ -2050,6 +2090,13 @@
       document.getElementById("adminCharacterMain").value = character.mainCharacter || "No";
       document.getElementById("adminCharacterAge").value = character.age || "";
       document.getElementById("adminCharacterLifeStage").value = character.lifeStage || "";
+      document.getElementById("adminCharacterPronouns").value = character.pronouns || "";
+      document.getElementById("adminCharacterBorn").value = character.born || character.placeOfBirth || character.birthPlace || "";
+      document.getElementById("adminCharacterBirthday").value = character.birthday || "";
+      document.getElementById("adminCharacterVoice").value = character.voice || character.voiceDescription || "";
+      document.getElementById("adminCharacterSchoolJobType").value = character.schoolJobType || "";
+      document.getElementById("adminCharacterSchool").value = character.school || "";
+      document.getElementById("adminCharacterJob").value = character.job || "";
       document.getElementById("adminCharacterImageUrl").value = character.image || (allImgs[0] || "");
       document.getElementById("adminCharacterBookCoverUrl").value = character.bookCover || "";
       document.getElementById("adminCharacterFamilyCrestUrl").value = character.houseCrest || character.familyCrest || "";
@@ -2082,7 +2129,7 @@
       relsContainer.innerHTML = "";
       if (Array.isArray(tree.relativesList) && tree.relativesList.length > 0) {
         tree.relativesList.forEach(rel => {
-          relsContainer.appendChild(window.createRelativeRow(rel.name, rel.relation, !!rel.isAdopted));
+          relsContainer.appendChild(window.createRelativeRow(rel.name, rel.relation, !!rel.isAdopted, rel.image || rel.photo || rel.imageUrl || ""));
         });
       } else if (character.otherRelatives) {
         character.otherRelatives.split(",").forEach(r => {
@@ -2157,6 +2204,8 @@
 
         // Parse gallery / multiple images
         const galleryList = [];
+        const editExistingGallery = characterField("editCharacterDocId")
+          ? (adminCharacterCache.get(characterField("editCharacterDocId"))?.images || []) : [];
         if (image) galleryList.push(image);
 
         // Upload extra device gallery files
@@ -2168,6 +2217,11 @@
             }
           }
         }
+
+        // Preserve previously saved gallery pictures when editing a character.
+        editExistingGallery.forEach(url => {
+          if (url && !galleryList.includes(url)) galleryList.push(url);
+        });
 
         // Parse extra URLs from textarea
         const rawGalleryUrls = document.getElementById("adminCharacterGalleryUrls")?.value || "";
@@ -2187,16 +2241,24 @@
 
         // Parse Multiple Relatives
         const relativesList = [];
-        document.querySelectorAll("#relativesContainer .relative-row").forEach(row => {
+        for (const row of document.querySelectorAll("#relativesContainer .relative-row")) {
           const name = row.querySelector(".rel-name")?.value.trim();
           const relation = row.querySelector(".rel-relation")?.value.trim() || "Relative";
           const isAdopted = row.querySelector(".rel-adopted")?.checked || false;
-          if (name) relativesList.push({ name, relation, isAdopted });
-        });
+          if (!name) continue;
+          let image = row.querySelector(".rel-image-url")?.value.trim() || "";
+          const portraitFile = row.querySelector(".rel-image-file")?.files?.[0];
+          if (portraitFile) image = await uploadCharacterMedia(portraitFile, "relative-portraits");
+          relativesList.push({ name, relation, isAdopted, image });
+        }
 
         const primaryImage = galleryList[0] || image || "";
 
+        const editId = characterField("editCharacterDocId");
+        // Keep previously saved character fields that this admin form does not edit.
+        const existingCharacter = editId ? (adminCharacterCache.get(editId) || {}) : {};
         const payload = {
+          ...existingCharacter,
           name: characterField("adminCharacterName"),
           species: characterField("adminCharacterSpecies"),
           book: characterField("adminCharacterBook"),
@@ -2204,6 +2266,13 @@
           mainCharacter: characterField("adminCharacterMain") || "No",
           age: characterField("adminCharacterAge"),
           lifeStage: characterField("adminCharacterLifeStage"),
+          pronouns: characterField("adminCharacterPronouns"),
+          born: characterField("adminCharacterBorn"),
+          birthday: characterField("adminCharacterBirthday"),
+          voice: characterField("adminCharacterVoice"),
+          schoolJobType: characterField("adminCharacterSchoolJobType"),
+          school: characterField("adminCharacterSchool"),
+          job: characterField("adminCharacterJob"),
           image: primaryImage,
           images: galleryList.length > 0 ? galleryList : (primaryImage ? [primaryImage] : []),
           bookCover,
@@ -2224,7 +2293,8 @@
           updatedAt: serverTimestamp()
         };
 
-        const editId = characterField("editCharacterDocId");
+        // Firestore document IDs must not be duplicated in the document payload.
+        delete payload.id;
         if (editId) {
           await updateDoc(doc(db, "character_wall", editId), payload);
         } else {
