@@ -1029,6 +1029,18 @@
               </div>
             </div>
 
+            <!-- MAGICAL BONDING ANIMALS: separate from family tree -->
+            <div style="border:1px solid var(--border-subtle); padding:18px; border-radius:4px; margin-top:14px;">
+              <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap;">
+                <div>
+                  <h3 style="font-size:.85rem;color:var(--accent-gold);">Magical Bonding Animals</h3>
+                  <p style="font-size:.72rem;color:var(--text-secondary);margin-top:4px;">Add magical animal companions for this character. They appear in the character information, never in the family tree.</p>
+                </div>
+                <button type="button" class="btn-secondary-action" id="addMagicalAnimalBtn">+ Add Magical Animal</button>
+              </div>
+              <div id="magicalAnimalsContainer" style="display:flex;flex-direction:column;gap:12px;margin-top:14px;"></div>
+            </div>
+
             <div class="form-group">
               <label class="form-label">Personality:</label>
               <textarea class="form-input" id="adminCharacterPersonality" rows="2" style="resize:vertical;"></textarea>
@@ -2143,6 +2155,33 @@
       return el ? el.value.trim() : "";
     }
 
+    // Magical animal companions belong to the character record, not familyTree.
+    function createMagicalAnimalRow(animal = {}) {
+      const row = document.createElement("div");
+      row.className = "magical-animal-row";
+      row.style.cssText = "padding:14px;border:1px solid var(--border-subtle);background:var(--bg-surface-elevated);display:grid;gap:10px;";
+      row.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <strong style="font-size:.75rem;color:var(--accent-gold);">Magical Animal</strong>
+          <button type="button" class="btn-danger-action remove-magical-animal">Remove</button>
+        </div>
+        <label class="form-label">Animal Name<input class="form-input magical-animal-name" type="text" placeholder="Companion name"></label>
+        <label class="form-label">Species / Type<input class="form-input magical-animal-species" type="text" placeholder="Dragon, phoenix, spirit wolf..."></label>
+        <label class="form-label">Bond / Powers / Description<textarea class="form-input magical-animal-description" rows="2" placeholder="Describe the magical connection"></textarea></label>
+        <label class="form-label">Animal Portrait<input class="form-input magical-animal-file" type="file" accept="image/*"></label>
+        <label class="form-label">Or Image URL<input class="form-input magical-animal-image" type="url" placeholder="https://example.com/animal.png"></label>
+      `;
+      row.querySelector(".magical-animal-name").value = animal.name || "";
+      row.querySelector(".magical-animal-species").value = animal.species || "";
+      row.querySelector(".magical-animal-description").value = animal.description || "";
+      row.querySelector(".magical-animal-image").value = animal.image || "";
+      row.querySelector(".remove-magical-animal").addEventListener("click", () => row.remove());
+      return row;
+    }
+    document.getElementById("addMagicalAnimalBtn")?.addEventListener("click", () => {
+      document.getElementById("magicalAnimalsContainer").appendChild(createMagicalAnimalRow());
+    });
+
     async function uploadCharacterMedia(file, folder) {
       if (!file) return "";
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -2168,6 +2207,7 @@
       document.getElementById("siblingsContainer").innerHTML = "";
       document.getElementById("relativesContainer").innerHTML = "";
       document.getElementById("bondedMatesContainer").innerHTML = "";
+      document.getElementById("magicalAnimalsContainer").innerHTML = "";
       document.getElementById("characterFormLegend").textContent = "Add Character to Wall";
       document.getElementById("adminCharacterSubmitBtn").textContent = "Save Character & Tree";
       document.getElementById("cancelCharacterEditBtn").style.display = "none";
@@ -2268,6 +2308,10 @@
         });
       }
 
+      const animalContainer = document.getElementById("magicalAnimalsContainer");
+      animalContainer.innerHTML = "";
+      (Array.isArray(character.magicalBondingAnimals) ? character.magicalBondingAnimals : [])
+        .forEach(animal => animalContainer.appendChild(createMagicalAnimalRow(animal)));
       document.getElementById("adminCharacterPersonality").value = character.personality || "";
       document.getElementById("adminCharacterAbilities").value = character.abilities || "";
 
@@ -2415,6 +2459,19 @@
           bondedMates.push({ name, bondedTo, image: mateImage });
         }
 
+        const magicalBondingAnimals = [];
+        for (const row of document.querySelectorAll("#magicalAnimalsContainer .magical-animal-row")) {
+          const name = row.querySelector(".magical-animal-name").value.trim();
+          const species = row.querySelector(".magical-animal-species").value.trim();
+          const description = row.querySelector(".magical-animal-description").value.trim();
+          let animalImage = row.querySelector(".magical-animal-image").value.trim();
+          const animalFile = row.querySelector(".magical-animal-file").files[0];
+          if (animalFile) animalImage = await uploadCharacterMedia(animalFile, "magical-animals");
+          if (name || species || description || animalImage) {
+            magicalBondingAnimals.push({ name, species, description, image: animalImage });
+          }
+        }
+
         const primaryImage = galleryList[0] || image || "";
 
         const editId = characterField("editCharacterDocId");
@@ -2455,6 +2512,7 @@
             bondedMates: bondedMates,
             partner: characterField("treePartnerInput")
           },
+          magicalBondingAnimals,
           personality: characterField("adminCharacterPersonality"),
           abilities: characterField("adminCharacterAbilities"),
           updatedAt: serverTimestamp()
