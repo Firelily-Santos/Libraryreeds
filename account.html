@@ -128,6 +128,12 @@
       letter-spacing: 0.05em;
     }
 
+    /* Inventory action buttons: keep Edit and Delete aligned in their own column. */
+    .inventory-table th:last-child, .inventory-table td:last-child { min-width: 174px; width: 174px; }
+    .inventory-table .inventory-row-actions { display: flex; align-items: center; justify-content: flex-start; gap: 8px; flex-wrap: nowrap; }
+    .inventory-table .inventory-row-actions button { flex: 0 0 auto; white-space: nowrap; margin: 0 !important; }
+    #adminBookForm { scroll-margin-top: 110px; }
+
     /* Dynamic Hierarchy Row Elements */
     .dynamic-tree-row {
       display: grid;
@@ -519,6 +525,23 @@
               </div>
             </form>
           </div>
+
+
+          <!-- ADDITIVE: Per-product Offer Details editor (the existing promo banner editor is unchanged) -->
+          <section id="adminProductOfferEditor" style="background:var(--bg-surface-elevated);padding:24px;border:1px solid var(--border-subtle);border-radius:4px;margin-bottom:24px;">
+            <h3 style="font-family:var(--font-serif);font-size:1.3rem;color:var(--accent-gold);margin-bottom:10px;">Product Offer Details Management</h3>
+            <p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:16px;">Set a different Offer Details sidebar for each book, coupon, or gift-shop product. Saved changes appear when visitors open the product in book.html.</p>
+            <form id="lrOfferAdminForm" style="display:flex;flex-direction:column;gap:16px;">
+              <div class="form-group"><label class="form-label" for="lrOfferTarget">Select Product</label><select class="form-input" id="lrOfferTarget" required><option value="">Loading products…</option></select></div>
+              <div class="form-group"><label class="form-label" for="lrOfferTitle">Offer Title</label><input class="form-input" id="lrOfferTitle" placeholder="20% Off Your Next Digital Book" maxlength="180"></div>
+              <div class="form-group"><label class="form-label" for="lrOfferSubtitle">Short Summary</label><textarea class="form-input" id="lrOfferSubtitle" rows="2" placeholder="A special Libraryreeds reader offer"></textarea></div>
+              <div class="form-group"><label class="form-label" for="lrOfferDetails">Full Offer Details</label><textarea class="form-input" id="lrOfferDetails" rows="6" placeholder="Write the complete terms and offer information for this product…" style="resize:vertical;"></textarea></div>
+              <div class="form-group"><label class="form-label" for="lrOfferCode">Optional Promo Code</label><input class="form-input" id="lrOfferCode" placeholder="READ20" maxlength="80"></div>
+              <div class="form-group"><label class="form-label" for="lrOfferExpiry">Expiration Date (optional)</label><input class="form-input" id="lrOfferExpiry" type="date"></div>
+              <label style="display:flex;align-items:center;gap:10px;color:var(--text-secondary);font-size:.85rem;"><input id="lrOfferEnabled" type="checkbox" checked> Publish this product's offer</label>
+              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;"><button class="btn-primary" type="submit">Save Offer Details</button><button class="btn-secondary-action" type="button" id="lrOfferRefresh">Refresh Product List</button><span id="lrOfferAdminStatus" role="status" style="font-size:.8rem;color:var(--accent-gold);"></span></div>
+            </form>
+          </section>
 
           <div style="background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle); margin-bottom: 24px;">
             <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary); margin-bottom: 8px;">Promotional Banner Management</h3>
@@ -2561,6 +2584,204 @@
       renderAdminCharacterTable();
     });
 
+    // ADDITIVE: Keep the admin book catalog and inventory in sync with Firestore.
+    const lrBookValues = {
+      title:'adminBookTitle', author:'adminBookAuthor', tags:'adminBookTags',
+      price:'adminBookPrice', stock:'adminBookStock', taxRate:'adminBookTax',
+      shipping:'adminBookShipping', discount:'adminBookDiscount', volume:'adminBookVolume',
+      series:'adminBookSeries', promoCode:'adminBookPromo', format:'adminBookFormat',
+      publicationDate:'adminBookPubDate', pages:'adminBookPages', publisher:'adminBookPublisher',
+      language:'adminBookLanguage', isbn:'adminBookIsbn', license:'adminBookLicense',
+      imageUrl:'adminBookCover', backImageUrl:'adminBookBackCover', description:'adminBookDesc',
+      priceHardcover:'priceHardcover', pricePaperback:'pricePaperback', priceAudio:'priceAudio'
+    };
+    const lrBookChecks = {
+      isUnlimited:'adminBookIsUnlimited', fmtHardcover:'fmtHardcover',
+      fmtPaperback:'fmtPaperback', fmtEbook:'fmtEbook', fmtAudiobook:'fmtAudiobook',
+      soonHardcover:'soonHardcover', soonPaperback:'soonPaperback',
+      soonEbook:'soonEbook', soonAudio:'soonAudio'
+    };
+    const lrNumericBookFields = new Set(['price','stock','taxRate','shipping','discount','volume','priceHardcover','pricePaperback','priceAudio']);
+    const lrInventoryCache = new Map();
+    const lrBookField = id => document.getElementById(id);
+    function lrResetBookEditor() {
+      lrBookField('adminBookForm')?.reset();
+      if (lrBookField('editBookDocId')) lrBookField('editBookDocId').value = '';
+      if (lrBookField('bookFormLegend')) lrBookField('bookFormLegend').textContent = 'Add New Book to Catalog';
+      if (lrBookField('cancelEditBookBtn')) lrBookField('cancelEditBookBtn').style.display = 'none';
+      const preview = lrBookField('adminBookCoverPreview');
+      if (preview) { preview.removeAttribute('src'); preview.style.display = 'none'; }
+    }
+    function lrEditBook(id) {
+      const book = lrInventoryCache.get(id);
+      if (!book) return;
+      lrBookField('editBookDocId').value = id;
+      for (const [key, fieldId] of Object.entries(lrBookValues)) {
+        const el = lrBookField(fieldId);
+        if (el) el.value = book[key] ?? (key === 'imageUrl' ? (book.coverUrl || book.frontImageUrl || '') : '');
+      }
+      for (const [key, fieldId] of Object.entries(lrBookChecks)) {
+        const el = lrBookField(fieldId);
+        if (el) el.checked = Boolean(book[key]);
+      }
+      if (lrBookField('bookFormLegend')) lrBookField('bookFormLegend').textContent = 'Edit Book: ' + (book.title || 'Untitled');
+      if (lrBookField('cancelEditBookBtn')) lrBookField('cancelEditBookBtn').style.display = 'inline-flex';
+      const preview = lrBookField('adminBookCoverPreview');
+      const cover = book.imageUrl || book.coverUrl || book.frontImageUrl;
+      if (preview && cover) { preview.src = cover; preview.style.display = 'block'; }
+      lrBookField('adminBookForm')?.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+    async function lrDeleteBook(id) {
+      const book = lrInventoryCache.get(id);
+      if (!book || !window.confirm('Delete "' + (book.title || 'this book') + '" from the catalog?')) return;
+      try { await deleteDoc(doc(db, 'books', id)); window.showToast?.('Book removed from inventory.'); }
+      catch(error) { alert('Could not delete book: ' + error.message); }
+    }
+    function lrRenderInventory() {
+      const table = lrBookField('adminInventoryTableBody');
+      if (!table) return;
+      table.replaceChildren();
+      const entries = [...lrInventoryCache.entries()].sort((a,b) => String(a[1].title||'').localeCompare(String(b[1].title||'')));
+      if (!entries.length) {
+        const tr = table.insertRow(); const td = tr.insertCell(); td.colSpan=4;
+        td.textContent='No books in inventory yet. Add a book using the form above.';
+        td.style.cssText='text-align:center;color:var(--text-muted);padding:18px';
+        return;
+      }
+      for (const [id, book] of entries) {
+        const tr = table.insertRow();
+        const title = tr.insertCell();
+        const strong = document.createElement('strong'); strong.textContent=book.title || 'Untitled'; title.append(strong);
+        const author = document.createElement('div'); author.textContent=book.author || 'Unknown author'; title.append(author);
+        const cover = book.imageUrl || book.frontImageUrl || book.coverUrl;
+        if (cover && /^https?:\/\//i.test(cover)) {
+          const img=document.createElement('img'); img.src=cover; img.alt='Cover'; img.loading='lazy';
+          img.style.cssText='width:48px;height:68px;object-fit:contain;float:left;margin-right:10px';
+          title.prepend(img);
+        }
+        tr.insertCell().textContent=(book.format||'Book') + (book.isbn ? ' / '+book.isbn : '');
+        tr.insertCell().textContent='$' + (Number(book.price)||0).toFixed(2);
+        const actions=tr.insertCell();
+        const actionRow=document.createElement('div'); actionRow.className='inventory-row-actions'; actions.append(actionRow);
+        const edit=document.createElement('button'); edit.type='button'; edit.className='btn-secondary-action'; edit.textContent='Edit';
+        edit.addEventListener('click',()=>lrEditBook(id)); actionRow.append(edit);
+        const del=document.createElement('button'); del.type='button'; del.className='btn-danger-action'; del.textContent='Delete';
+        del.addEventListener('click',()=>lrDeleteBook(id)); actionRow.append(del);
+      }
+    }
+    let lrInventoryListenerStarted = false;
+    function loadAdminInventory() {
+      if (lrInventoryListenerStarted) return;
+      lrInventoryListenerStarted = true;
+      return onSnapshot(collection(db, 'books'), snapshot => {
+        lrInventoryCache.clear();
+        snapshot.forEach(item => lrInventoryCache.set(item.id, item.data()));
+        lrRenderInventory();
+        // Refresh existing offer and promo selectors when new books are uploaded.
+        if (typeof populatePromoBannerItems === 'function') populatePromoBannerItems().catch(console.warn);
+        if (typeof window.lrRefreshOfferProducts === 'function') window.lrRefreshOfferProducts();
+      }, error => {
+        lrInventoryListenerStarted=false;
+        const body=lrBookField('adminInventoryTableBody');
+        if (body) { body.replaceChildren(); const row=body.insertRow(); const cell=row.insertCell(); cell.colSpan=4; cell.textContent='Unable to load books: '+error.message; }
+        console.error('Inventory listener failed:',error);
+      });
+    }
+    lrBookField('adminBookCoverFile')?.addEventListener('change',event=>{
+      const file=event.target.files?.[0], preview=lrBookField('adminBookCoverPreview');
+      if(file && preview) { preview.src=URL.createObjectURL(file); preview.style.display='block'; }
+    });
+    lrBookField('cancelEditBookBtn')?.addEventListener('click',lrResetBookEditor);
+    lrBookField('adminBookForm')?.addEventListener('submit', async event => {
+      event.preventDefault();
+      const form=event.currentTarget, button=form.querySelector('[type="submit"]');
+      const oldLabel=button?.textContent;
+      if(button) { button.disabled=true; button.textContent='Saving book…'; }
+      try {
+        const id=lrBookField('editBookDocId')?.value.trim();
+        const previous=id ? (lrInventoryCache.get(id)||{}) : {};
+        const payload={...previous};
+        for(const [key, fieldId] of Object.entries(lrBookValues)) {
+          const field=lrBookField(fieldId);
+          if(field) payload[key]=lrNumericBookFields.has(key) ? (Number(field.value)||0) : field.value.trim();
+        }
+        for(const [key, fieldId] of Object.entries(lrBookChecks)) payload[key]=Boolean(lrBookField(fieldId)?.checked);
+        payload.tags=String(payload.tags||'');
+        const file=lrBookField('adminBookCoverFile')?.files?.[0];
+        if(file) {
+          if(!file.type.startsWith('image/')) throw new Error('Please select an image for the cover.');
+          const storageRef=ref(storage,'book_covers/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_'));
+          await uploadBytes(storageRef,file,{contentType:file.type});
+          payload.imageUrl=await getDownloadURL(storageRef);
+        } else if(id && !payload.imageUrl) payload.imageUrl=previous.imageUrl||previous.coverUrl||previous.frontImageUrl||'';
+        // Keep both cover fields used by different storefront views synchronized.
+        payload.coverUrl=payload.imageUrl;
+        payload.frontImageUrl=payload.imageUrl;
+        payload.updatedAt=serverTimestamp();
+        if(id) await setDoc(doc(db,'books',id),payload,{merge:true});
+        else {payload.createdAt=serverTimestamp(); await addDoc(collection(db,'books'),payload);}
+        lrResetBookEditor();
+        window.showToast?.('Book saved to inventory!');
+      } catch(error) { console.error('Book save failed:',error); alert('Could not save book: '+error.message); }
+      finally { if(button) {button.disabled=false;button.textContent=oldLabel;} }
+    });
+
+    // Restore the missing gift inventory loader; previously its undefined name
+    // prevented the books listener from ever starting.
+    let lrGiftInventoryListenerStarted = false;
+    function loadAdminGiftInventory() {
+      if (lrGiftInventoryListenerStarted) return;
+      lrGiftInventoryListenerStarted = true;
+      return onSnapshot(collection(db, 'giftshop_items'), snapshot => {
+        const table = document.getElementById('adminGiftInventoryTableBody');
+        if (!table) return;
+        table.replaceChildren();
+        if (snapshot.empty) {
+          const row = table.insertRow();
+          const cell = row.insertCell();
+          cell.colSpan = 4;
+          cell.textContent = 'No gift shop products have been added yet.';
+          return;
+        }
+        snapshot.forEach(item => {
+          const data = item.data();
+          const row = table.insertRow();
+          row.insertCell().textContent = data.title || 'Untitled item';
+          row.insertCell().textContent = data.category || 'Gift Shop';
+          row.insertCell().textContent = '$' + (Number(data.price) || 0).toFixed(2) + (data.promoCode ? ' / ' + data.promoCode : '');
+          const actions = row.insertCell();
+          const edit = document.createElement('button');
+          edit.type = 'button';
+          edit.className = 'btn-secondary-action';
+          edit.textContent = 'Edit';
+          edit.addEventListener('click', () => {
+            const select = document.getElementById('giftItemSelectTarget');
+            if (select) {
+              if (![...select.options].some(opt => opt.value === item.id)) {
+                const opt = new Option(data.title || 'Untitled item', item.id);
+                select.appendChild(opt);
+              }
+              select.value = item.id;
+              select.dispatchEvent(new Event('change'));
+              select.scrollIntoView({behavior: 'smooth', block:'center'});
+            }
+          });
+          actions.append(edit);
+        });
+      }, error => {
+        lrGiftInventoryListenerStarted = false;
+        const body = document.getElementById('adminGiftInventoryTableBody');
+        if (body) {
+          body.replaceChildren();
+          const row = body.insertRow();
+          const cell = row.insertCell();
+          cell.colSpan = 4;
+          cell.textContent = 'Unable to load gift inventory: ' + error.message;
+        }
+        console.error('Gift inventory listener failed:', error);
+      });
+    }
+
     function setupAdminInterface(userData, isAdmin) {
       document.body.classList.add("authenticated");
       const navActions = document.querySelector('.nav-actions');
@@ -2688,5 +2909,72 @@
       }
     });
   </script>
+
+  <!-- ADDITIVE: isolated offer admin controller. Does not alter existing admin functions. -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    const cfg = {apiKey:"AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",authDomain:"libraryreeds-638f4.firebaseapp.com",projectId:"libraryreeds-638f4",storageBucket:"libraryreeds-638f4.firebasestorage.app",messagingSenderId:"768304310517",appId:"1:768304310517:web:39b931e6447043d84d3dbc"};
+    const app = getApps().length ? getApp() : initializeApp(cfg);
+    const db = getFirestore(app), auth = getAuth(app);
+    const $ = id => document.getElementById(id);
+    let allowed = false;
+    const status = (msg, error=false) => { $('lrOfferAdminStatus').textContent=msg; $('lrOfferAdminStatus').style.color=error?'#ff6b6b':'var(--accent-gold)'; };
+    const fields = ['lrOfferTitle','lrOfferSubtitle','lrOfferDetails','lrOfferCode','lrOfferExpiry'];
+    async function loadSelected() {
+      fields.forEach(id => $(id).value=''); $('lrOfferEnabled').checked=true;
+      const key=$('lrOfferTarget').value; if (!key) return;
+      status('Loading saved offer…');
+      try {
+        const snap=await getDoc(doc(db,'product_offer_details',key));
+        if ($('lrOfferTarget').value!==key) return;
+        if (snap.exists()) {
+          const d=snap.data(); $('lrOfferTitle').value=d.title||''; $('lrOfferSubtitle').value=d.summary||'';
+          $('lrOfferDetails').value=d.details||''; $('lrOfferCode').value=d.promoCode||'';
+          $('lrOfferExpiry').value=d.expiresOn||''; $('lrOfferEnabled').checked=d.enabled!==false;
+          status('Saved offer loaded.');
+        } else status('No offer saved for this product yet.');
+      } catch (e) { status('Could not load offer: '+e.message,true); }
+    }
+    async function refreshProducts() {
+      if (!allowed) return;
+      const sel=$('lrOfferTarget'), previous=sel.value; sel.replaceChildren(new Option('Select a product…',''));
+      let count=0;
+      for (const [collectionName,prefix,label] of [['books','book','Book'],['giftshop_items','gift','Gift Shop'],['coupons','coupon','Coupon']]) {
+        try {
+          const snap=await getDocs(collection(db,collectionName));
+          snap.forEach(item => { const data=item.data(); sel.add(new Option(label+': '+(data.title||data.name||data.code||item.id),prefix+'_'+item.id)); count++; });
+        } catch (e) { console.warn('Cannot load '+collectionName,e); }
+      }
+      if ([...sel.options].some(o=>o.value===previous)) sel.value=previous;
+      status(count ? count+' products ready. Select one to edit.':'No accessible products found.',!count);
+      if (sel.value) await loadSelected();
+    }
+    onAuthStateChanged(auth, user => {
+      // UI gate only: Firestore security rules must independently restrict writes to true admins.
+      const email=(user?.email||'').toLowerCase();
+      allowed=!!user && (email==='firelily@libraryreeds.com' || email.includes('admin'));
+      const editor=$('adminProductOfferEditor'); if (editor) editor.style.display=allowed?'block':'none';
+      if (allowed) refreshProducts();
+    });
+    $('lrOfferTarget')?.addEventListener('change',loadSelected);
+    $('lrOfferRefresh')?.addEventListener('click',refreshProducts);
+    $('lrOfferAdminForm')?.addEventListener('submit',async event=>{
+      event.preventDefault(); if (!allowed) return status('Admin sign-in required.',true);
+      const key=$('lrOfferTarget').value; if (!key) return status('Select a product first.',true);
+      const [productType,...parts]=key.split('_'); const productId=parts.join('_');
+      status('Saving…');
+      try {
+        await setDoc(doc(db,'product_offer_details',key),{
+          productId,productType,title:$('lrOfferTitle').value.trim(),summary:$('lrOfferSubtitle').value.trim(),
+          details:$('lrOfferDetails').value.trim(),promoCode:$('lrOfferCode').value.trim(),
+          expiresOn:$('lrOfferExpiry').value,enabled:$('lrOfferEnabled').checked,updatedAt:serverTimestamp()
+        },{merge:true});
+        status('Offer details saved. They will appear on this product’s book.html page.');
+      } catch(e) { status('Unable to save: '+e.message,true); }
+    });
+  </script>
+<script type="module" src="./libraryreeds-bookmarks.js"></script>
 </body>
 </html>

@@ -1445,6 +1445,7 @@
       }
 
       updateDisplayedPrice();
+      window.dispatchEvent(new CustomEvent("libraryreeds:item-loaded", {detail: {id: itemIdParam || itemSlugParam, source: collectionSource}}));
       loadDynamicPromoBanner();
     }
 
@@ -1622,5 +1623,44 @@
     window.addEventListener('resize', lockLibraryreedsDetailLayout);
   </script>
 
+
+  <!-- ADDITIVE: loads each product's saved Offer Details from Firestore. -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    const cfg={apiKey:"AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",authDomain:"libraryreeds-638f4.firebaseapp.com",projectId:"libraryreeds-638f4",storageBucket:"libraryreeds-638f4.firebasestorage.app",messagingSenderId:"768304310517",appId:"1:768304310517:web:39b931e6447043d84d3dbc"};
+    const db=getFirestore(getApps().length?getApp():initializeApp(cfg));
+    let requestNumber=0;
+    function addLine(parent,text,style={}) { const el=document.createElement('p'); el.textContent=text; Object.assign(el.style,style); parent.appendChild(el); return el; }
+    async function displayOffer(detail) {
+      const body=document.getElementById('offerSidebarBody'); if (!body) return;
+      const key=(detail.source==='books'?'book':detail.source==='coupons'?'coupon':'gift')+'_'+detail.id;
+      const token=++requestNumber;
+      body.replaceChildren(); addLine(body,'Loading offer details…',{color:'var(--text-secondary)'});
+      try {
+        const snap=await getDoc(doc(db,'product_offer_details',key)); if (token!==requestNumber) return;
+        body.replaceChildren();
+        if (!snap.exists() || snap.data().enabled===false) {
+          addLine(body,'No special offers currently available for this product.',{color:'var(--text-secondary)',lineHeight:'1.6'}); return;
+        }
+        const offer=snap.data();
+        if (offer.title) addLine(body,offer.title,{fontSize:'1.3rem',fontWeight:'700',color:'var(--accent-gold)',marginBottom:'12px'});
+        if (offer.summary) addLine(body,offer.summary,{lineHeight:'1.6',color:'var(--text-primary)'});
+        if (offer.details) { const p=addLine(body,offer.details,{whiteSpace:'pre-wrap',lineHeight:'1.8',color:'var(--text-secondary)',marginTop:'16px'}); }
+        if (offer.promoCode) addLine(body,'Promo code: '+offer.promoCode,{marginTop:'20px',fontWeight:'700',color:'var(--accent-gold)'});
+        if (offer.expiresOn) addLine(body,'Expires: '+offer.expiresOn,{marginTop:'12px',color:'var(--text-secondary)'});
+        if (!offer.title && !offer.summary && !offer.details && !offer.promoCode) addLine(body,'No special offer details have been published yet.');
+      } catch(e) { if(token!==requestNumber)return; body.replaceChildren(); addLine(body,'Offer details are temporarily unavailable.',{color:'var(--text-secondary)'}); console.warn('Offer details load failed',e); }
+    }
+    window.addEventListener('libraryreeds:item-loaded',event=>{ const d=event.detail||{}; if(d.id&&d.source) displayOffer(d); });
+    // Existing product loader may finish before this listener is registered.
+    const params=new URLSearchParams(location.search), id=params.get('id');
+    if(id) {
+      const t=(params.get('type')||'').toLowerCase();
+      const possible=t==='coupon'?['coupons']:t==='gift'||t==='giftshop'?['giftshop_items','coupons','books']:['books','giftshop_items','coupons'];
+      (async()=>{ for (const source of possible) {try {if((await getDoc(doc(db,source,id))).exists()){ displayOffer({id,source}); return; }}catch(e){console.warn('Offer item lookup',e);} }})();
+    }
+  </script>
+<script type="module" src="./libraryreeds-bookmarks.js"></script>
 </body>
 </html>
