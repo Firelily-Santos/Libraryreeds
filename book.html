@@ -618,6 +618,10 @@
             <tr id="rowPages"><td class="spec-label">Length / Units</td><td class="spec-value" id="bookPagesDisplay">—</td></tr>
             <tr><td class="spec-label">Catalog / Vault</td><td class="spec-value" id="bookPublisherDisplay">Libraryreeds Archive</td></tr>
             <tr id="rowLanguage"><td class="spec-label">Category</td><td class="spec-value" id="bookLanguageDisplay">Standard</td></tr>
+            <tr id="lrBookmarkSubcategoryRow" style="display:none"><td class="spec-label">Subcategory</td><td class="spec-value" id="lrBookmarkSubcategory"></td></tr>
+            <tr id="lrBookmarkTypeRow" style="display:none"><td class="spec-label">Bookmark Type</td><td class="spec-value" id="lrBookmarkType"></td></tr>
+            <tr id="lrBookmarkFormatRow" style="display:none"><td class="spec-label">Product Format</td><td class="spec-value" id="lrBookmarkFormat"></td></tr>
+            <tr id="lrBookmarkDeliveryRow" style="display:none"><td class="spec-label">Delivery Method</td><td class="spec-value" id="lrBookmarkDelivery"></td></tr>
             <tr id="rowIsbn"><td class="spec-label">Identifier / SKU</td><td class="spec-value" id="bookIsbnDisplay">—</td></tr>
             <tr><td class="spec-label">Access License</td><td class="spec-value" id="bookLicenseDisplay">Personal Edition</td></tr>
           </table>
@@ -1332,7 +1336,19 @@
       const shippingWidgetBox = document.getElementById('shippingWidgetBox');
       const unlimitedBtn = document.getElementById('btnUnlimitedRead');
 
-      const isPhysicalProduct = item.isPhysical === true || item.type === 'merchandise' || item.format === 'Physical';
+      const lrBookmarkFields = [
+        ['lrBookmarkSubcategoryRow','lrBookmarkSubcategory',item.subcategory || item.subCategory],
+        ['lrBookmarkTypeRow','lrBookmarkType',item.bookmarkType],
+        ['lrBookmarkFormatRow','lrBookmarkFormat',item.productFormat],
+        ['lrBookmarkDeliveryRow','lrBookmarkDelivery',item.deliveryMethod]
+      ];
+      lrBookmarkFields.forEach(([rowId,cellId,value]) => {
+        const row = document.getElementById(rowId);
+        const cell = document.getElementById(cellId);
+        if (row) row.style.display = value && collectionSource === 'giftshop_items' ? '' : 'none';
+        if (cell) cell.textContent = value || '';
+      });
+      const isPhysicalProduct = item.isPhysical === true || item.type === 'merchandise' || item.format === 'Physical' || item.deliveryMethod === 'Physical Shipping' || item.productFormat === 'Physical Printed Bookmark';
       shippingWidgetBox.classList.toggle('active', isPhysicalProduct);
 
       if (!isBookCatalog || collectionSource === 'giftshop_items' || collectionSource === 'coupons') {
@@ -1342,8 +1358,8 @@
         if (unlimitedBtn) unlimitedBtn.style.display = 'none';
 
         document.getElementById('badgePrimary').textContent = isCouponProduct ? "Digital Voucher" : (item.category || "Gift Shop");
-        document.getElementById('badgeSecondary').textContent = item.subCategory || "Direct Vault Item";
-        document.getElementById('badgeTertiary').textContent = item.tag || (isCouponProduct ? "Digital Card" : "Authenticated");
+        document.getElementById('badgeSecondary').textContent = item.subcategory || item.subCategory || "Direct Vault Item";
+        document.getElementById('badgeTertiary').textContent = item.bookmarkType || item.tag || (isCouponProduct ? "Digital Card" : "Authenticated");
 
         baseItemPrice = parseFloat(item.price || item.cost || 0);
         selectedFormat = item.category || 'Standard';
@@ -1353,11 +1369,11 @@
         document.getElementById('bookPublisherDisplay').textContent = 'Libraryreeds Gift Shop';
         document.getElementById('bookLanguageDisplay').textContent = item.category || 'Curated Goods';
         document.getElementById('bookIsbnDisplay').textContent = item.sku || item.code || item.slug || itemIdParam;
-        document.getElementById('bookLicenseDisplay').textContent = item.license || 'Authentic Merchandise';
+        document.getElementById('bookLicenseDisplay').textContent = item.license || (item.deliveryMethod === "Instant Digital Download" ? "Digital Download" : 'Authentic Merchandise');
 
         const notice = document.getElementById('bookNoticeDisplay');
         if (notice) {
-          notice.textContent = isPhysicalProduct ? "Ready for Shipping" : (isCouponProduct ? "In Stock • Digital Delivery" : "In Stock");
+          notice.textContent = isPhysicalProduct ? "Ready for Shipping" : (item.deliveryMethod === "Instant Digital Download" ? "Digital Download" : (isCouponProduct ? "In Stock • Digital Delivery" : "In Stock"));
         }
       } else {
         coverViewport?.classList.remove('is-gift-item');

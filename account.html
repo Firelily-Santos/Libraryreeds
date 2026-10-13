@@ -196,7 +196,7 @@
           <div id="notificationDropdown" style="display: none; position: absolute; right: 0; top: 32px; width: 320px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); z-index: 300; flex-direction: column; overflow: hidden;">
             <div style="padding: 12px 16px; background: var(--bg-surface-elevated); border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
               <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-gold);">Notifications</span>
-              <button id="clearNotificationsBtn" style="background: transparent; border: none; color: var(--text-muted); font-size: 0.65rem; cursor: pointer; text-transform: uppercase;">Mark All Read</button>
+              <button type="button" id="clearNotificationsBtn" style="background: transparent; border: none; color: var(--text-muted); font-size: 0.65rem; cursor: pointer; text-transform: uppercase;">Mark All Read</button>
             </div>
             <div id="notificationDropdownList" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column;">
               <p style="padding: 16px; color: var(--text-muted); font-size: 0.8rem; text-align: center;">No new alerts</p>
@@ -247,6 +247,7 @@
           <div class="sidebar-category-header">Overview</div>
           <button type="button" class="sidebar-tab-btn active" onclick="switchPanel('general', 'Account Dashboard', event)">My Profile</button>
           <button type="button" class="sidebar-tab-btn" onclick="switchPanel('userorders', 'My Order History', event)">My Orders</button>
+          <a class="sidebar-tab-btn" style="display:block;text-decoration:none" href="./coupons.html">My Digital Coupons &amp; QR</a>
           <button type="button" class="sidebar-tab-btn" onclick="switchPanel('fanartupload', 'Fanart Gallery Upload', event)">Submit Fanart</button>
           <button type="button" class="sidebar-tab-btn" onclick="switchPanel('notifications-section', 'Live Admin Notifications', event)">Live Notifications</button>
           <button type="button" class="sidebar-tab-btn" onclick="window.location.href='membership.html'">View Membership Page</button>
@@ -1235,8 +1236,49 @@
                   <option value="Gift Cards">Gift Cards</option>
                   <option value="Coupons & Perks">Coupons & Perks</option>
                   <option value="Virtual Add-ons">Virtual Add-ons</option>
+                  <option value="Book Accessories">Book Accessories</option>
+                  <option value="Stationery &amp; Reading Accessories">Stationery &amp; Reading Accessories</option>
                 </select>
               </div>
+            </div>
+
+            <!-- Optional bookmark classifications; hidden for unrelated gift shop products. -->
+            <div id="adminGiftBookmarkFields" style="display:none;border:1px solid var(--border-subtle);border-radius:6px;padding:16px;">
+              <h4 style="margin:0 0 12px;">Bookmark Details</h4>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;">
+                <div class="form-group">
+                  <label class="form-label" for="adminGiftSubcategory">Subcategory</label>
+                  <select class="form-input" id="adminGiftSubcategory">
+                    <option value="Bookmarks">Bookmarks</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adminGiftBookmarkType">Bookmark Type</label>
+                  <select class="form-input" id="adminGiftBookmarkType">
+                    <option value="Digital Bookmark">Digital Bookmark</option>
+                    <option value="Printable Bookmark">Printable Bookmark</option>
+                    <option value="Physical Bookmark">Physical Bookmark</option>
+                    <option value="Personalized Bookmark">Personalized Bookmark</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adminGiftBookmarkFormat">Product Format</label>
+                  <select class="form-input" id="adminGiftBookmarkFormat">
+                    <option value="Printable PDF">Printable PDF</option>
+                    <option value="Digital Image">Digital Image (PNG / JPG)</option>
+                    <option value="Physical Printed Bookmark">Physical Printed Bookmark</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adminGiftDeliveryMethod">Delivery Method</label>
+                  <select class="form-input" id="adminGiftDeliveryMethod">
+                    <option value="Instant Digital Download">Instant Digital Download</option>
+                    <option value="Physical Shipping">Physical Shipping</option>
+                    <option value="Custom Order">Custom Order</option>
+                  </select>
+                </div>
+              </div>
+              <small style="color:var(--text-secondary);">For digital bookmarks, select Digital Download in Fulfillment below and upload the customer PDF or image.</small>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -1253,11 +1295,44 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
               <div class="form-group">
                 <label class="form-label">Front Cover / Image URL:</label>
-                <input type="url" class="form-input" id="adminGiftImageUrl" placeholder="https://example.com/front.jpg" required>
+                <input type="url" class="form-input" id="adminGiftImageUrl" placeholder="https://example.com/front.jpg">
               </div>
               <div class="form-group">
                 <label class="form-label">Back Cover Image URL (Optional):</label>
                 <input type="url" class="form-input" id="adminGiftBackCoverUrl" placeholder="https://example.com/back.jpg">
+              </div>
+            </div>
+
+            <!-- ADDITIVE: Upload product photos directly from your device. URL fields above remain usable. -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;">
+              <div class="form-group">
+                <label class="form-label" for="adminGiftFrontFile">Upload Product Image (Front):</label>
+                <input type="file" class="form-input" id="adminGiftFrontFile" accept="image/*">
+                <small style="color:var(--text-secondary);">Choose an image from your device instead of entering an image URL.</small>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="adminGiftBackFile">Upload Back Image (Optional):</label>
+                <input type="file" class="form-input" id="adminGiftBackFile" accept="image/*">
+              </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;">
+              <img id="adminGiftFrontPreview" alt="Product image preview" style="display:none;width:130px;height:130px;object-fit:contain;background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:4px;">
+              <img id="adminGiftBackPreview" alt="Back image preview" style="display:none;width:130px;height:130px;object-fit:contain;background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:4px;">
+            </div>
+
+
+            <!-- LibraryReeds digital downloads: the original is stored privately, not in imageUrl. -->
+            <div class="form-group" style="border:1px solid var(--border-subtle);padding:16px;border-radius:6px;">
+              <label class="form-label" for="adminGiftProductType">Fulfillment / Product Type:</label>
+              <select class="form-input" id="adminGiftProductType">
+                <option value="physical">Physical product / existing product</option>
+                <option value="digital">Digital download (wallpaper, printable, PDF, etc.)</option>
+              </select>
+              <div id="adminGiftDownloadFields" style="display:none;margin-top:12px;">
+                <label class="form-label" for="adminGiftDigitalFile">Upload the original customer download:</label>
+                <input class="form-input" type="file" id="adminGiftDigitalFile" accept=".png,.jpg,.jpeg,.webp,.pdf,.zip,.epub,image/png,image/jpeg,image/webp,application/pdf,application/zip,application/epub+zip">
+                <small style="color:var(--text-secondary);display:block;margin-top:8px;">Upload a separate preview image above. The original file is stored in private Firebase Storage, never exposed as a public image URL. Upload a replacement file when editing if you want to change it.</small>
+                <div id="adminGiftStoredDownload" style="margin-top:8px;color:var(--accent-gold);"></div>
               </div>
             </div>
 
@@ -2726,6 +2801,167 @@
       finally { if(button) {button.disabled=false;button.textContent=oldLabel;} }
     });
 
+    // Gift Shop merchandise: create and update products in the same collection
+    // giftshop.html already listens to in real time.
+    const lrGiftForm = document.getElementById('adminGiftMerchandiseForm');
+    const lrGiftInput = (id) => document.getElementById(id);
+    function lrGiftFormFill(id, product) {
+      const fields = {
+        editGiftItemId: id, adminGiftTitle: product.title || '',
+        adminGiftPrice: product.price ?? '', adminGiftCategory: product.category || 'Merchandise / Apparel',
+        adminGiftPromo: product.promoCode || '', adminGiftDiscountPct: product.discountPercent ?? 0,
+        adminGiftImageUrl: product.frontImageUrl || product.imageUrl || '',
+        adminGiftBackCoverUrl: product.backImageUrl || '', adminGiftDesc: product.description || '',
+        adminGiftProductType: product.productType || 'physical',
+        adminGiftSubcategory: product.subcategory || 'Bookmarks',
+        adminGiftBookmarkType: product.bookmarkType || 'Digital Bookmark',
+        adminGiftBookmarkFormat: product.productFormat || 'Printable PDF',
+        adminGiftDeliveryMethod: product.deliveryMethod || 'Instant Digital Download'
+      };
+      for (const [key, value] of Object.entries(fields)) {
+        const field = lrGiftInput(key); if (field) field.value = value;
+      }
+      lrGiftInput('adminGiftStoredDownload').textContent = product.digitalFilePath ? 'Original download already uploaded (stored privately).' : '';
+      lrGiftToggleDownload();
+      lrGiftToggleBookmark();
+      const cancel = lrGiftInput('cancelEditGiftBtn');
+      if (cancel) cancel.style.display = id ? 'inline-block' : 'none';
+      lrGiftForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function lrGiftToggleDownload() {
+      const digital = lrGiftInput('adminGiftProductType')?.value === 'digital';
+      if (lrGiftInput('adminGiftDownloadFields')) lrGiftInput('adminGiftDownloadFields').style.display = digital ? 'block' : 'none';
+    }
+    function lrGiftToggleBookmark() {
+      const category = lrGiftInput('adminGiftCategory')?.value || '';
+      const fields = lrGiftInput('adminGiftBookmarkFields');
+      if (fields) fields.style.display = ['Book Accessories', 'Stationery & Reading Accessories'].includes(category) ? 'block' : 'none';
+    }
+    lrGiftInput('adminGiftCategory')?.addEventListener('change', lrGiftToggleBookmark);
+    lrGiftToggleBookmark();
+    lrGiftInput('adminGiftProductType')?.addEventListener('change', lrGiftToggleDownload);
+    lrGiftToggleDownload();
+    // Local previews; Firebase Storage handles hosting when Save is clicked.
+    const lrGiftPreviewUrls = new Map();
+    function lrGiftShowPreview(fileId, previewId) {
+      const el = lrGiftInput(previewId);
+      if (!el) return;
+      const old = lrGiftPreviewUrls.get(previewId);
+      if (old) URL.revokeObjectURL(old);
+      const file = lrGiftInput(fileId)?.files?.[0];
+      if (!file) { el.removeAttribute('src'); el.style.display = 'none'; lrGiftPreviewUrls.delete(previewId); return; }
+      const objectUrl = URL.createObjectURL(file);
+      lrGiftPreviewUrls.set(previewId, objectUrl);
+      el.src = objectUrl; el.style.display = 'block';
+    }
+    for (const [fileId, previewId] of [['adminGiftFrontFile', 'adminGiftFrontPreview'], ['adminGiftBackFile', 'adminGiftBackPreview']]) {
+      lrGiftInput(fileId)?.addEventListener('change', () => lrGiftShowPreview(fileId, previewId));
+    }
+    async function lrGiftUploadPhoto(file, side) {
+      if (!file) return '';
+      if (!file.type.startsWith('image/')) throw new Error('Only image files can be uploaded.');
+      if (file.size > 10 * 1024 * 1024) throw new Error('Product images must be 10 MB or smaller.');
+      const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const uniqueId = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + '-' + Math.random().toString(36).slice(2);
+      const photoRef = ref(storage, `giftshop_products/${side}/${uniqueId}-${cleanName}`);
+      await uploadBytes(photoRef, file, { contentType: file.type });
+      return getDownloadURL(photoRef);
+    }
+    function lrGiftClearPreviews() {
+      for (const [fileId, previewId] of [['adminGiftFrontFile', 'adminGiftFrontPreview'], ['adminGiftBackFile', 'adminGiftBackPreview']]) {
+        const fileInput = lrGiftInput(fileId);
+        if (fileInput) fileInput.value = '';
+        lrGiftShowPreview(fileId, previewId);
+      }
+    }
+    lrGiftInput('cancelEditGiftBtn')?.addEventListener('click', () => {
+      lrGiftForm?.reset(); lrGiftClearPreviews(); lrGiftInput('adminGiftDigitalFile').value = ''; lrGiftFormFill('', {});
+    });
+    lrGiftForm?.addEventListener('submit', async event => {
+      event.preventDefault();
+      const user = auth.currentUser;
+      if (!user || (user.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+        alert('Only the administrator can save Gift Shop products.'); return;
+      }
+      const title = lrGiftInput('adminGiftTitle').value.trim();
+      const price = Number(lrGiftInput('adminGiftPrice').value);
+      const imageUrl = lrGiftInput('adminGiftImageUrl').value.trim();
+      const discountPercent = Number(lrGiftInput('adminGiftDiscountPct').value || 0);
+      const frontFile = lrGiftInput('adminGiftFrontFile')?.files?.[0];
+      const backFile = lrGiftInput('adminGiftBackFile')?.files?.[0];
+      const digitalFile = lrGiftInput('adminGiftDigitalFile')?.files?.[0];
+      const productType = lrGiftInput('adminGiftProductType').value;
+      if (!title || (!imageUrl && !frontFile) || !Number.isFinite(price) || price < 0 || !Number.isFinite(discountPercent) || discountPercent < 0 || discountPercent > 100) {
+        alert('Enter a title, upload a product image or enter an image URL, a valid price, and a discount between 0 and 100%.'); return;
+      }
+      const id = lrGiftInput('editGiftItemId').value;
+      const button = lrGiftForm.querySelector('button[type="submit"]');
+      const oldLabel = button.textContent;
+      button.disabled = true; button.textContent = 'Saving Product...';
+      const payload = {
+        title, price, imageUrl, frontImageUrl: imageUrl,
+        backImageUrl: lrGiftInput('adminGiftBackCoverUrl').value.trim(),
+        category: lrGiftInput('adminGiftCategory').value,
+        promoCode: lrGiftInput('adminGiftPromo').value.trim().toUpperCase(),
+        discountPercent, description: lrGiftInput('adminGiftDesc').value.trim(),
+        productType, isDigital: productType === 'digital',
+        subcategory: ['Book Accessories', 'Stationery & Reading Accessories'].includes(lrGiftInput('adminGiftCategory').value) ? lrGiftInput('adminGiftSubcategory').value : '',
+        bookmarkType: ['Book Accessories', 'Stationery & Reading Accessories'].includes(lrGiftInput('adminGiftCategory').value) ? lrGiftInput('adminGiftBookmarkType').value : '',
+        productFormat: ['Book Accessories', 'Stationery & Reading Accessories'].includes(lrGiftInput('adminGiftCategory').value) ? lrGiftInput('adminGiftBookmarkFormat').value : '',
+        deliveryMethod: ['Book Accessories', 'Stationery & Reading Accessories'].includes(lrGiftInput('adminGiftCategory').value) ? lrGiftInput('adminGiftDeliveryMethod').value : '',
+        updatedAt: serverTimestamp()
+      };
+      try {
+        // Upload first and save Firebase Storage download URLs to the existing
+        // image fields already read by giftshop.html and the product detail page.
+        if (frontFile) {
+          button.textContent = 'Uploading Product Image...';
+          const uploadedFront = await lrGiftUploadPhoto(frontFile, 'front');
+          payload.imageUrl = uploadedFront;
+          payload.frontImageUrl = uploadedFront;
+        }
+        if (backFile) {
+          button.textContent = 'Uploading Back Image...';
+          payload.backImageUrl = await lrGiftUploadPhoto(backFile, 'back');
+        }
+        // Use a stable ID so the private Storage object and product record match.
+        const productRef = id ? doc(db, 'giftshop_items', id) : doc(collection(db, 'giftshop_items'));
+        if (productType === 'digital') {
+          if (!digitalFile && !id) throw new Error('Please upload the digital file customers will receive.');
+          if (digitalFile) {
+            if (digitalFile.size > 50 * 1024 * 1024) throw new Error('Digital file must be 50 MB or smaller.');
+            const allowed = /\.(png|jpe?g|webp|pdf|zip|epub)$/i.test(digitalFile.name);
+            if (!allowed) throw new Error('Use PNG, JPG, WEBP, PDF, ZIP, or EPUB.');
+            const safeName = digitalFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+            const privatePath = `paid_downloads/${productRef.id}/${Date.now()}-${safeName}`;
+            button.textContent = 'Uploading Private Digital File...';
+            await uploadBytes(ref(storage, privatePath), digitalFile, {
+              contentType: digitalFile.type || 'application/octet-stream',
+              customMetadata: { productId: productRef.id }
+            });
+            // Deliberately DO NOT call getDownloadURL on a paid original file.
+            payload.digitalFilePath = privatePath;
+            payload.digitalFileName = digitalFile.name;
+          }
+        } else {
+          payload.digitalFilePath = '';
+          payload.digitalFileName = '';
+        }
+        button.textContent = 'Saving Product...';
+        if (id) await updateDoc(productRef, payload);
+        else await setDoc(productRef, { ...payload, createdAt: serverTimestamp() });
+        lrGiftForm.reset(); lrGiftClearPreviews(); lrGiftInput('adminGiftDigitalFile').value = ''; lrGiftFormFill('', {});
+        window.showToast?.('Gift Shop product saved! The new slot will appear on giftshop.html.');
+        alert('Gift Shop product saved successfully. It will appear on the Gift Shop page.');
+        populateGiftItemSelect();
+      } catch (error) {
+        console.error('Gift Shop product save failed:', error);
+        alert('Could not save Gift Shop product: ' + error.message);
+      } finally {
+        button.disabled = false; button.textContent = oldLabel;
+      }
+    });
+
     // Restore the missing gift inventory loader; previously its undefined name
     // prevented the books listener from ever starting.
     let lrGiftInventoryListenerStarted = false;
@@ -2755,6 +2991,21 @@
           edit.className = 'btn-secondary-action';
           edit.textContent = 'Edit';
           edit.addEventListener('click', () => {
+            lrGiftFormFill(item.id, data);
+          });
+          actions.append(edit);
+          const remove = document.createElement('button');
+          remove.type = 'button'; remove.className = 'btn-danger-action';
+          remove.textContent = 'Delete'; remove.style.marginLeft = '8px';
+          remove.addEventListener('click', async () => {
+            if (!auth.currentUser || (auth.currentUser.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return;
+            if (!confirm('Delete this Gift Shop product?')) return;
+            try { await deleteDoc(doc(db, 'giftshop_items', item.id)); populateGiftItemSelect(); }
+            catch (error) { alert('Could not delete product: ' + error.message); }
+          });
+          actions.append(remove);
+          /* Existing item selector is preserved for other gift-shop tools.
+          edit.addEventListener('click', () => {
             const select = document.getElementById('giftItemSelectTarget');
             if (select) {
               if (![...select.options].some(opt => opt.value === item.id)) {
@@ -2767,6 +3018,7 @@
             }
           });
           actions.append(edit);
+          */
         });
       }, error => {
         lrGiftInventoryListenerStarted = false;
@@ -2825,6 +3077,7 @@
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('fanartupload', 'Fanart Gallery Admin Upload', event)">Fanart Upload</button>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('timersetting', 'Countdown Timers Control', event)">Timer Control</button>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('giftshop', 'Manage Gift Shop & Virtual Cards', event)">Gift Shop &amp; Cards</button>
+        <a class="sidebar-tab-btn" style="display:block;text-decoration:none" href="./coupon-admin.html">Digital Coupon QR Admin</a>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('announcement', 'Announcement Bar Control', event)">Announcement Bar</button>
 
         <div class="sidebar-category-header">Content Management</div>
@@ -2844,7 +3097,15 @@
           setupAdminInterface({ displayName: "Carl R. Trombley Jr.", email: "firelily@libraryreeds.com" }, true);
           return;
         }
-        window.safeNavigate("login.html");
+        // Keep the account page open during transient authentication changes.
+        // Do not redirect away while an administrator is typing, pasting or scrolling.
+        // Firebase/Firestore rules still enforce access to protected data.
+        document.body.classList.remove('authenticated');
+        const navLogin = document.getElementById('navLoginBtn');
+        if (navLogin) navLogin.style.display = 'inline-flex';
+        const navProfile = document.getElementById('navProfileMenu');
+        if (navProfile) navProfile.style.display = 'none';
+        window.showToast?.('Session not signed in. Sign in again to save changes.');
         return;
       }
       const isAdmin = user.email && (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || user.email.toLowerCase().includes('admin'));
@@ -2861,10 +3122,18 @@
       if (popover) popover.style.display = "none";
     });
 
-    const handleSignOut = async () => {
-      try { await signOut(auth); } catch (err) {}
-      localStorage.clear();
-      window.safeNavigate("index.html");
+    const handleSignOut = async (event) => {
+      // Never sign out because of a synthetic event or unrelated form interaction.
+      if (event && !event.isTrusted) return;
+      if (!window.confirm('Sign out of Libraryreeds?')) return;
+      try {
+        await signOut(auth);
+        // Preserve unrelated local settings and unsaved page state until deliberate logout.
+        window.safeNavigate('index.html');
+      } catch (err) {
+        console.error('Sign-out failed:', err);
+        window.showToast?.('Unable to sign out. Please try again.');
+      }
     };
 
     document.getElementById('logoutBtn')?.addEventListener('click', handleSignOut);

@@ -711,6 +711,14 @@
             updateCategoryChips(categories);
         }
 
+        function bookmarkLabel(value) {
+            return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        }
+        function bookmarkDetails(item) {
+            const values = [item.subcategory, item.bookmarkType, item.productFormat, item.deliveryMethod].filter(Boolean);
+            return values.length ? `<div class="lr-bookmark-details" style="display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 0">${values.map(value => `<span style="font-size:11px;padding:4px 7px;border:1px solid var(--border-subtle);border-radius:12px;color:var(--text-secondary)">${bookmarkLabel(value)}</span>`).join('')}</div>` : '';
+        }
+
         function buildItemCardHTML(itemId, item) {
             const basePrice = parseFloat(item.price || 0);
             const discount = parseFloat(item.discountPercent || 0);
@@ -734,6 +742,7 @@
                 <div class="slot-meta">
                     <span class="slot-title">${item.title || 'Untitled Item'}</span>
                     <span class="slot-subtitle">${item.category || 'Gift Item'}</span>
+                    ${bookmarkDetails(item)}
                 </div>
                 <div class="slot-price-row">
                     <span class="slot-price">
@@ -878,7 +887,8 @@
                 const titleMatch = (item.title || '').toLowerCase().includes(queryText) || 
                                    (item.description || '').toLowerCase().includes(queryText) ||
                                    (item.category || '').toLowerCase().includes(queryText) ||
-                                   (item.promoCode || '').toLowerCase().includes(queryText);
+                                   (item.promoCode || '').toLowerCase().includes(queryText) ||
+                                   [item.subcategory,item.bookmarkType,item.productFormat,item.deliveryMethod].some(v => String(v || '').toLowerCase().includes(queryText));
                 const catMatch = !catVal || catVal === 'Gift Cards' || item.category === catVal;
                 const occMatch = !occVal || item.occasion === occVal;
                 const price = parseFloat(item.price || 0);
