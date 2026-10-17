@@ -518,7 +518,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, addDoc, serverTimestamp, query, orderBy, limit, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, addDoc, serverTimestamp, query, orderBy, limit, updateDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
@@ -901,8 +901,10 @@
 
   <!-- Shared Firebase notification sync: injected 2026-10-06 -->
   <script type="module" id="libraryreedsSharedNotificationSync">
+    import { getAuth as getNotificationAuth, onAuthStateChanged as onNotificationAuthChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, limit, onSnapshot, writeBatch, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, query, orderBy, limit, onSnapshot, writeBatch, doc, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 
     const firebaseConfig = {
@@ -999,18 +1001,45 @@
       }
     }
 
+    // Limit notifications to the signed-in owner; admin stream to admin only.
     let latestRows = [];
-    const sharedNotificationQuery = query(
-      collection(sharedDb, 'admin_notifications'),
-      orderBy('timestamp', 'desc'),
-      limit(SHARED_NOTIFICATION_LIMIT)
-    );
+    let notificationCollection = null;
+    let stopNotificationSync = null;
+    const notificationAuth = getNotificationAuth(sharedApp);
+    const NOTIFICATION_ADMIN_UID = 'zlbkFntgN9emWShy7q5361lJncu1';
 
-    onSnapshot(sharedNotificationQuery, snapshot => {
-      latestRows = snapshot.docs.map(snap => ({ id: snap.id, data: snap.data() }));
-      renderNotifications(latestRows);
-    }, error => {
-      console.warn('Notification sync listener:', error?.message || error);
+    onNotificationAuthChanged(notificationAuth, user => {
+      if (stopNotificationSync) { stopNotificationSync(); stopNotificationSync = null; }
+      latestRows = [];
+      notificationCollection = null;
+      renderNotifications([]);
+      if (!user) {
+        if (status) { status.hidden = false; status.textContent = 'Sign in to see notifications.'; }
+        return;
+      }
+      const isNotificationAdmin = user.uid === NOTIFICATION_ADMIN_UID;
+      notificationCollection = isNotificationAdmin ? 'admin_notifications' : 'notifications';
+      const notificationQuery = isNotificationAdmin
+        ? query(collection(sharedDb, 'admin_notifications'), orderBy('timestamp', 'desc'), limit(SHARED_NOTIFICATION_LIMIT))
+        : query(collection(sharedDb, 'notifications'), where('userId', '==', user.uid), limit(SHARED_NOTIFICATION_LIMIT));
+      stopNotificationSync = onSnapshot(notificationQuery, snapshot => {
+        latestRows = snapshot.docs.map(snap => ({ id: snap.id, data: snap.data() }));
+        if (!isNotificationAdmin) {
+          const millis = value => value?.toMillis?.() || (typeof value === 'number' ? value : 0);
+          latestRows.sort((a, b) => millis(b.data.timestamp) - millis(a.data.timestamp));
+        }
+        renderNotifications(latestRows);
+      }, error => {
+        latestRows = [];
+        renderNotifications([]);
+        if (status) {
+          status.hidden = false;
+          status.textContent = error?.code === 'permission-denied'
+            ? 'Your account cannot access notifications with the current Firebase permissions.'
+            : 'Notifications could not be loaded.';
+        }
+        console.warn('Notification sync listener:', error?.code || error?.message || error);
+      });
     });
 
     if (markAllButton) {
@@ -1025,7 +1054,7 @@
         try {
           const batch = writeBatch(sharedDb);
           unreadRows.forEach(row => {
-            batch.update(doc(sharedDb, 'admin_notifications', row.id), {
+            batch.update(doc(sharedDb, notificationCollection, row.id), {
               read: true,
               readAt: serverTimestamp()
             });
