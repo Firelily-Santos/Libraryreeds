@@ -468,7 +468,7 @@
         <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
         <div class="user-profile-menu" id="navProfileMenu">
           <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
-            <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+            <img id="navUserAvatar" class="nav-user-avatar" src="" alt="Profile picture">
             <span id="navUserName">Patron</span>
           </button>
           <div class="dropdown-menu-popover" id="profileDropdown">
@@ -1012,7 +1012,7 @@
         if (dropdownUserName) dropdownUserName.textContent = displayName;
         if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
 
-        let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
+        let resolvedAvatar = user.photoURL || localStorage.getItem('libraryreeds_user_avatar');
         if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
           try {
             const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -1637,5 +1637,78 @@
     }
   </script>
 <script type="module" src="./libraryreeds-bookmarks.js"></script>
+  <script type="module">
+// Library Reeds shared profile synchronization • Firebase v10.8.0
+import {getApps,getApp,initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {getAuth,onAuthStateChanged,updateProfile} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import {getFirestore,doc,onSnapshot,setDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+import {getStorage,ref,uploadBytes,getDownloadURL} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
+const app=getApps().find(a=>a.options.projectId==='libraryreeds-638f4')||initializeApp({apiKey:"AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",authDomain:"libraryreeds-638f4.firebaseapp.com",projectId:"libraryreeds-638f4",storageBucket:"libraryreeds-638f4.firebasestorage.app",messagingSenderId:"768304310517",appId:"1:768304310517:web:39b931e6447043d84d3dbc"});
+const auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
+const fallback='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="50" fill="#202b39"/><circle cx="50" cy="36" r="18" fill="#a8b6c6"/><path d="M15 100c2-30 16-44 35-44s33 14 35 44" fill="#a8b6c6"/></svg>');
+const imageSelectors=['#navUserAvatar','#sidebarAvatarImg','#formUserAvatar','.nav-user-avatar','.sidebar-avatar'];
+const nameSelectors=['#navUserName','#sidebarDisplayName','#dropdownUserName','#formUserName'];
+let stopListening=()=>{},activeUserId=null;
+function updateImages(url){
+  const resolved=typeof url==='string'&&/^https:\/\//i.test(url)?url:fallback;
+  document.querySelectorAll(imageSelectors.join(',')).forEach(el=>{
+    if(el.tagName!=='IMG')return;
+    el.onerror=()=>{el.onerror=null;el.src=fallback;};
+    el.src=resolved;
+  });
+}
+function updateNames(name){if(!name)return;document.querySelectorAll(nameSelectors.join(',')).forEach(el=>el.textContent=name);}
+function updateHeader(profile,user){
+  const url=profile?.photoURL||profile?.avatarUrl||profile?.profileImageUrl||user?.photoURL||'';
+  updateImages(url);
+  updateNames(profile?.displayName||user?.displayName||user?.email?.split('@')[0]||'Patron');
+  if(user?.email){const email=document.getElementById('dropdownUserEmail');if(email)email.textContent=user.email;}
+}
+onAuthStateChanged(auth,user=>{
+  stopListening();stopListening=()=>{};activeUserId=user?.uid||null;
+  if(!user){updateImages('');return;}
+  updateHeader(null,user);
+  stopListening=onSnapshot(doc(db,'users',user.uid),snap=>{
+    if(activeUserId!==user.uid)return;
+    updateHeader(snap.exists()?snap.data():null,user);
+  },error=>{console.warn('Profile sync read unavailable:',error.code||error.message);updateHeader(null,user);});
+});
+// Handles account.html profile form; other pages only read their signed-in user's profile.
+const form=document.getElementById('profileUpdateForm');
+if(form)form.addEventListener('submit',async event=>{
+  event.preventDefault();
+  const user=auth.currentUser, status=document.getElementById('profileSaveStatus');
+  const button=form.querySelector('[type="submit"]');
+  const report=message=>{if(status){status.textContent=message;status.style.display='block';}};
+  if(!user){report('Sign in to update your profile.');return;}
+  const name=document.getElementById('profileNameInput')?.value.trim()||'';
+  const file=document.getElementById('profileImageFile')?.files?.[0]||null;
+  if(!name&&!file){report('Enter a name or choose a photo.');return;}
+  if(file&&(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>5*1024*1024)){report('Select a JPG, PNG, or WebP image smaller than 5 MB.');return;}
+  if(button)button.disabled=true;
+  report('Saving your profile…');
+  try{
+    let photoURL=user.photoURL||'';
+    if(file){
+      const ext={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[file.type];
+      const uploadRef=ref(storage,`avatars/${user.uid}-${Date.now()}.${ext}`);
+      await uploadBytes(uploadRef,file,{contentType:file.type});
+      photoURL=await getDownloadURL(uploadRef);
+    }
+    const changes={};
+    if(name)changes.displayName=name;
+    if(file)changes.photoURL=photoURL;
+    await updateProfile(user,changes);
+    updateHeader({displayName:name||user.displayName,photoURL},user);
+    try{
+      await setDoc(doc(db,'users',user.uid),{...(name?{displayName:name}:{}),...(file?{photoURL,avatarUrl:photoURL}:{}),updatedAt:serverTimestamp()},{merge:true});
+      report('Profile saved. Your photo and username will sync across Library Reeds pages.');
+    }catch(e){report('Saved in Firebase Authentication, but Firestore sync failed: '+(e.code||e.message));}
+    if(file)document.getElementById('profileImageFile').value='';
+  }catch(e){console.error('Profile photo upload failed:',e);report('Could not save profile: '+(e.code||e.message));}
+  finally{if(button)button.disabled=false;}
+});
+
+</script>
 </body>
 </html>
