@@ -270,48 +270,52 @@
       </aside>
 
       <div class="content-panel">
-        <!-- Admin-only payment configuration guidance. Sensitive financial info stays with processor. -->
+        <!-- Stripe & MAJORITY: administrative setup only; no bank details or secret keys in client HTML. -->
         <section id="panel-payment-payouts" class="settings-card lr-payout-settings" style="display:none;" aria-labelledby="lrPayoutTitle">
           <div class="lr-payout-head">
             <div>
-              <p class="lr-payout-eyebrow">STORE MANAGEMENT / SECURE PAYMENTS</p>
-              <h2 class="card-title" id="lrPayoutTitle">Payment &amp; Payouts</h2>
-              <p class="lr-payout-lead">Manage your payment provider separately from your storefront. Customers buy in <strong>cart.html</strong>, and verified orders unlock the existing parchment receipt.</p>
+              <p class="lr-payout-eyebrow">LIBRARY REEDS / SECURE PAYMENTS</p>
+              <h2 class="card-title" id="lrPayoutTitle">Stripe &amp; MAJORITY Payouts</h2>
+              <p class="lr-payout-lead">Your Stripe account is managed securely through Stripe. Library Reeds uses Firebase Cloud Functions for payment creation and Stripe webhooks for verification.</p>
             </div>
-            <span class="lr-payout-state" role="status">Setup required</span>
+            <span class="lr-payout-state" id="lrStripeConnectionState" role="status">Backend setup required</span>
           </div>
           <div class="lr-payout-grid">
             <div class="lr-payout-tile">
-              <h3>Customer checkout</h3>
-              <p>Stripe Checkout can securely accept payments after a server-side integration is deployed. No active connection is configured by this page.</p>
-              <div class="lr-payout-meta"><strong>Storefront</strong><span>cart.html</span></div>
-              <div class="lr-payout-meta"><strong>Receipt</strong><span>After server-verified payment</span></div>
-              <a class="lr-payout-action" href="https://dashboard.stripe.com/" target="_blank" rel="noopener noreferrer">Open Stripe Dashboard ↗</a>
+              <h3>Stripe checkout</h3>
+              <p>Accept payments for books, bookmarks and other eligible products only after your secure checkout backend is deployed and tested.</p>
+              <div class="lr-payout-meta"><strong>Checkout page</strong><span>cart.html</span></div>
+              <div class="lr-payout-meta"><strong>Payment verification</strong><span>Stripe webhook required</span></div>
+              <div class="lr-payout-meta"><strong>Live payment status</strong><span>Not verified by this page</span></div>
+              <a class="lr-payout-action" href="https://dashboard.stripe.com/" target="_blank" rel="noopener noreferrer">Manage Stripe Account ↗</a>
             </div>
             <div class="lr-payout-tile">
-              <h3>Bank payouts</h3>
-              <p>Set up your MAJORITY checking account inside Stripe's secure dashboard, if both services accept the account for business payouts.</p>
-              <div class="lr-payout-meta"><strong>Payout bank</strong><span>Not verified here</span></div>
-              <div class="lr-payout-meta"><strong>Transfer status</strong><span>Check directly in Stripe</span></div>
+              <h3>MAJORITY payout destination</h3>
+              <p>Add your MAJORITY checking details inside Stripe's secure payout settings. Eligibility and acceptance must be confirmed by Stripe and MAJORITY.</p>
+              <div class="lr-payout-meta"><strong>Destination</strong><span>Configured within Stripe</span></div>
+              <div class="lr-payout-meta"><strong>Verification</strong><span>Check Stripe Dashboard</span></div>
               <a class="lr-payout-action" href="https://dashboard.stripe.com/settings/payouts" target="_blank" rel="noopener noreferrer">Manage Payout Bank ↗</a>
             </div>
           </div>
           <div class="lr-payout-tile">
-            <h3>Payment activity</h3>
-            <p>Review actual charges and payouts in Stripe. Order records on this website must be updated by a trusted Firebase webhook, not by a customer's browser.</p>
-            <a class="lr-payout-action secondary" href="https://dashboard.stripe.com/payments" target="_blank" rel="noopener noreferrer">View Stripe Payments ↗</a>
+            <h3>Sales, refunds &amp; payouts</h3>
+            <p>Review actual transactions in Stripe. This admin page intentionally does not invent transaction totals or imply payouts have been verified.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <a class="lr-payout-action secondary" href="https://dashboard.stripe.com/payments" target="_blank" rel="noopener noreferrer">View Payments ↗</a>
+              <a class="lr-payout-action secondary" href="https://dashboard.stripe.com/payouts" target="_blank" rel="noopener noreferrer">View Payouts ↗</a>
+            </div>
           </div>
           <div class="lr-payout-setup">
-            <h3>Before accepting real orders</h3>
+            <h3>Required before live checkout</h3>
             <ol>
-              <li>Verify your business and identity securely with Stripe.</li>
-              <li>Add and verify your payout bank in Stripe (never on this page).</li>
-              <li>Deploy a Firebase checkout function that calculates trusted cart totals.</li>
-              <li>Deploy a verified payment webhook to mark orders paid and unlock the receipt.</li>
-              <li>Test successful, failed, and cancelled orders before going live.</li>
+              <li>Finish Stripe identity and business verification in your Stripe account.</li>
+              <li>Add your MAJORITY payout bank in Stripe if eligible.</li>
+              <li>Deploy a Firebase Cloud Function that creates Stripe Checkout sessions using server-side product prices.</li>
+              <li>Deploy a Stripe webhook with signature verification; only your trusted server marks orders paid or issues digital products.</li>
+              <li>Connect cart.html to the checkout function, then test successful, canceled, and failed payments.</li>
             </ol>
           </div>
-          <p class="lr-payout-safety">Your SSN, EIN, routing number, bank account number and secret API keys must <strong>not</strong> be typed into Library Reeds HTML or stored in client-accessible Firestore documents.</p>
+          <p class="lr-payout-safety">Security: Never put Stripe secret API keys, webhook signing secrets, MAJORITY routing/account numbers, or SSN into this HTML page, local storage, or client-readable Firestore documents. This panel alone does not activate Stripe payments.</p>
         </section>
         <div id="panel-general" class="settings-card">
           <h2 class="card-title">Profile Settings</h2>
@@ -1718,6 +1722,8 @@
     const storage = getStorage(app);
 
     const ADMIN_EMAIL = "firelily@libraryreeds.com";
+    const LR_ADMIN_UID = "zlbkFntgN9emWShy7q5361lJncu1";
+    const lrIsAdmin = user => !!(user && (user.uid === LR_ADMIN_UID || (user.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase()));
     const RAW_BOT_TOKEN = "8688974138:AAFW_DZq1AJm_fM4S0FvEENswninQ1–5t0";
     const TELEGRAM_BOT_TOKEN = RAW_BOT_TOKEN.replace(/[\u2013\u2014]/g, '--').trim();
     const TELEGRAM_CHAT_ID = "8726195655";
@@ -2247,7 +2253,7 @@
 
     function requireCharacterAdmin() {
       const user = auth.currentUser;
-      return !!(user && user.email && (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || user.email.toLowerCase().includes("admin")));
+      return lrIsAdmin(user);
     }
 
     function characterField(id) {
@@ -2746,22 +2752,65 @@
       }
     }
     let lrInventoryListenerStarted = false;
-    function loadAdminInventory() {
+    let lrInventoryUnsubscribe = null;
+    function lrInventoryNotice(message, retry = false) {
+      const body = lrBookField('adminInventoryTableBody');
+      if (!body) return;
+      body.replaceChildren();
+      const cell = body.insertRow().insertCell();
+      cell.colSpan = 4;
+      cell.style.cssText = 'text-align:center;padding:18px;white-space:normal;';
+      const label = document.createElement('span');
+      label.textContent = message;
+      cell.append(label);
+      if (retry) {
+        const button = document.createElement('button');
+        button.type='button';button.className='btn-secondary-action';
+        button.textContent='Retry loading books';
+        button.style.marginLeft='12px';
+        button.addEventListener('click', () => loadAdminInventory(true));
+        cell.append(button);
+      }
+    }
+    function loadAdminInventory(force = false) {
+      if (force && lrInventoryUnsubscribe) {
+        lrInventoryUnsubscribe();
+        lrInventoryUnsubscribe = null;
+        lrInventoryListenerStarted = false;
+      }
       if (lrInventoryListenerStarted) return;
+      if (!auth.currentUser) {
+        lrInventoryNotice('Sign in to your administrator account to load books.', true);
+        return;
+      }
       lrInventoryListenerStarted = true;
-      return onSnapshot(collection(db, 'books'), snapshot => {
-        lrInventoryCache.clear();
-        snapshot.forEach(item => lrInventoryCache.set(item.id, item.data()));
-        lrRenderInventory();
-        // Refresh existing offer and promo selectors when new books are uploaded.
-        if (typeof populatePromoBannerItems === 'function') populatePromoBannerItems().catch(console.warn);
-        if (typeof window.lrRefreshOfferProducts === 'function') window.lrRefreshOfferProducts();
-      }, error => {
-        lrInventoryListenerStarted=false;
-        const body=lrBookField('adminInventoryTableBody');
-        if(body) body.innerHTML='<tr><td colspan="4">Unable to load books. Check your Firebase permissions.</td></tr>';
-        console.error('Inventory listener failed:',error);
-      });
+      lrInventoryNotice('Loading inventory from Firebase…');
+      try {
+        lrInventoryUnsubscribe = onSnapshot(collection(db, 'books'), snapshot => {
+          lrInventoryCache.clear();
+          snapshot.forEach(item => lrInventoryCache.set(item.id, item.data()));
+          lrRenderInventory();
+          try {
+            const promoResult = typeof populatePromoBannerItems === 'function' ? populatePromoBannerItems() : null;
+            promoResult?.catch?.(console.warn);
+          } catch (e) { console.warn('Promo refresh failed:', e); }
+          try { window.lrRefreshOfferProducts?.(); }
+          catch (e) { console.warn('Offer selector refresh failed:', e); }
+        }, error => {
+          lrInventoryListenerStarted = false;
+          lrInventoryUnsubscribe = null;
+          console.error('Inventory listener failed:', error);
+          const detail = error?.code === 'permission-denied'
+            ? 'Firebase denied reading the books collection. Check Firestore rules and the signed-in administrator UID.'
+            : `Could not load books: ${error?.message || 'Unknown Firebase error'}`;
+          lrInventoryNotice(detail, true);
+        });
+      } catch (error) {
+        lrInventoryListenerStarted = false;
+        lrInventoryUnsubscribe = null;
+        console.error('Could not start inventory listener:', error);
+        lrInventoryNotice('Unable to start inventory: ' + (error?.message || error), true);
+      }
     }
     lrBookField('adminBookCoverFile')?.addEventListener('change',event=>{
       const file=event.target.files?.[0], preview=lrBookField('adminBookCoverPreview');
@@ -2820,15 +2869,20 @@
         document.getElementById('sidebarUserRole').textContent = "Administrator";
         // Restore the complete admin menu before loading any optional dashboard data.
         injectAdminSidebarLinks();
-        for (const loadDashboardData of [loadAdminInventory, loadAdminGiftInventory, loadAdminEpubTrackers]) {
+        // Start the book listener independently: missing optional dashboard helpers must not block it.
+        try { loadAdminInventory(); }
+        catch (error) { console.error('Book inventory startup failed:', error); lrInventoryNotice('Unable to start the book inventory: ' + (error?.message || error), true); }
+        // Some account.html builds do not include the legacy gift inventory helper.
+        // Never reference an undeclared identifier directly in an array literal.
+        for (const loadDashboardData of [
+          typeof loadAdminGiftInventory === 'function' ? loadAdminGiftInventory : null,
+          typeof loadAdminEpubTrackers === 'function' ? loadAdminEpubTrackers : null
+        ]) {
+          if (!loadDashboardData) continue;
           try {
             const task = loadDashboardData();
-            if (task && typeof task.catch === 'function') {
-              task.catch(error => console.error('Admin dashboard data load failed:', error));
-            }
-          } catch (error) {
-            console.error('Admin dashboard data load failed:', error);
-          }
+            if (task && typeof task.catch === 'function') task.catch(error => console.error('Admin dashboard data load failed:', error));
+          } catch (error) { console.error('Admin dashboard data load failed:', error); }
         }
       }
     }
@@ -2868,7 +2922,7 @@
         window.safeNavigate("login.html");
         return;
       }
-      const isAdmin = user.email && (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || user.email.toLowerCase().includes('admin'));
+      const isAdmin = lrIsAdmin(user);
       setupAdminInterface(user, isAdmin);
     });
 
