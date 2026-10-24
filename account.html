@@ -280,6 +280,12 @@
             </div>
             <span class="lr-payout-state" id="lrStripeConnectionState" role="status">Backend setup required</span>
           </div>
+          <div class="lr-payout-tile" style="margin-bottom:18px;">
+            <h3>Stripe test connection</h3>
+            <p>Verify the Firebase server can authenticate with Stripe in test mode. This will not charge a customer or enable live checkout.</p>
+            <button type="button" id="lrTestStripeConnection" class="lr-payout-action" style="cursor:pointer;font:inherit;">Test Stripe Connection</button>
+            <p id="lrStripeTestResult" role="status" aria-live="polite" style="margin-top:12px;white-space:pre-wrap;">Not tested yet.</p>
+          </div>
           <div class="lr-payout-grid">
             <div class="lr-payout-tile">
               <h3>Stripe checkout</h3>
@@ -3123,5 +3129,63 @@ if(form)form.addEventListener('submit',async event=>{
 });
 
 </script>
+
+  <!-- Additive Stripe test controller: no API secrets in this page. -->
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
+    const cfg = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+    const app = getApps().find(a => a.options.projectId === 'libraryreeds-638f4') || initializeApp(cfg);
+    const auth = getAuth(app);
+    const button = document.getElementById('lrTestStripeConnection');
+    const output = document.getElementById('lrStripeTestResult');
+    const state = document.getElementById('lrStripeConnectionState');
+    // The backend performs the authoritative admin UID check.
+    const adminUid = 'zlbkFntgN9emWShy7q5361lJncu1';
+    if (button && output) {
+      button.disabled = true;
+      onAuthStateChanged(auth, user => {
+        const isAdmin = Boolean(user && user.uid === adminUid);
+        button.disabled = !isAdmin;
+        output.textContent = !user ? 'Sign in as the Library Reeds administrator to test Stripe.'
+          : !isAdmin ? 'Only the Library Reeds administrator can run this test.' : 'Ready to test Stripe (test mode).';
+      });
+      button.addEventListener('click', async () => {
+        if (button.disabled) return;
+        const user = auth.currentUser;
+        if (!user || user.uid !== adminUid) {
+          output.textContent = 'Administrator sign-in required.';
+          return;
+        }
+        button.disabled = true;
+        output.textContent = 'Testing secure Stripe connection…';
+        try {
+          await user.getIdToken();
+          const test = httpsCallable(getFunctions(app, 'us-central1'), 'lrStripeConnectionTest');
+          const result = await test({});
+          if (result.data?.connected === true && result.data?.mode === 'test') {
+            output.textContent = 'Success: Stripe test connection verified. No payment was created.';
+            if (state) state.textContent = 'Test connection verified';
+          } else {
+            output.textContent = 'Test returned an unexpected result. Check Cloud Functions logs.';
+          }
+        } catch (error) {
+          const code = error?.code || 'unknown';
+          output.textContent = 'Stripe test failed (' + code + '): ' + (error?.message || 'Check Cloud Functions logs.');
+          console.error('Library Reeds Stripe test:', code);
+        } finally {
+          button.disabled = !auth.currentUser || auth.currentUser.uid !== adminUid;
+        }
+      });
+    }
+  </script>
 </body>
 </html>
