@@ -582,6 +582,9 @@
     // The server must create an order and a real commercial checkout session.
     const startBookCheckout = httpsCallable(couponFunctions, "lrStartBookCheckout");
 
+    // Verified coupon tracker
+    let lrVerifiedCoupon = null;
+
     const navLoginBtn = document.getElementById("navLoginBtn");
     const navProfileMenu = document.getElementById("navProfileMenu");
     const navUserName = document.getElementById("navUserName");
