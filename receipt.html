@@ -389,6 +389,8 @@
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { doc, getFirestore, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+  import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
     authDomain: "libraryreeds-638f4.firebaseapp.com",
@@ -421,7 +423,7 @@
     return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(cents / 100);
   }
 
-  function showPaidOrder(orderId, order, user) {
+  function showPaidOrder(orderId, order, user, requestDownload) {
     const date = order.createdAt?.toDate?.();
     put('order-number', orderId);
     put('order-date', date ? new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(date) : 'Unavailable');
@@ -434,7 +436,51 @@
     const list = byId('order-items');
     list.replaceChildren();
     put('item-count', '');
-    if (order.productId) {
+    if (Array.isArray(order.items) && order.items.length) {
+      let itemCount = 0;
+      order.items.forEach((item, itemIndex) => {
+        const row = document.createElement('div');
+        row.className = 'item';
+        const details = document.createElement('div');
+        const title = document.createElement('div');
+        title.className = 'item-title';
+        title.textContent = item.productTitle || 'Libraryreeds item';
+        const quantity = document.createElement('div');
+        quantity.className = 'item-details';
+        quantity.textContent = 'Qty ' + item.quantity;
+        itemCount += item.quantity;
+        details.append(title, quantity);
+        row.append(details);
+
+        if (item.downloadPath) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'btn btn-secondary';
+          button.textContent = 'Download file';
+          button.addEventListener('click', async () => {
+            button.disabled = true;
+            button.textContent = 'Preparing download…';
+            try {
+              const result = await requestDownload({ orderId, itemIndex });
+              const url = new URL(result.data.url);
+              if (url.protocol !== 'https:' || url.hostname !== 'storage.googleapis.com') {
+                throw new Error('Unexpected download URL');
+              }
+              window.location.assign(url.href);
+              button.textContent = 'Download file';
+            } catch {
+              button.textContent = 'Download unavailable. Retry';
+            } finally {
+              button.disabled = false;
+            }
+          });
+          row.append(button);
+        }
+
+        list.append(row);
+      });
+      put('item-count', itemCount + (itemCount === 1 ? ' item' : ' items'));
+    } else if (order.productId) {
       const quantity = Number.isSafeInteger(order.quantity) && order.quantity > 0 ? order.quantity : null;
       const row = document.createElement('div');
       row.className = 'item';
@@ -479,6 +525,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const requestDownload = httpsCallable(getFunctions(app, 'us-central1'), 'lrGetPaidDownload');
     let stopOrderListener;
 
     onAuthStateChanged(auth, user => {
@@ -501,7 +548,7 @@
           showStatus('Payment pending', 'We’re waiting for confirmation from Stripe. This page will update when verification is complete.');
           return;
         }
-        showPaidOrder(orderId, order, user);
+        showPaidOrder(orderId, order, user, requestDownload);
       }, () => {
         showStatus('Order unavailable', 'We could not load this order. Check your connection and purchasing account, then reload the page.');
       });
