@@ -948,9 +948,9 @@
                 allGiftItems = [];
                 snapshot.forEach((docSnap) => {
                     const item = docSnap.data();
-                    const displayItem = docSnap.id === "KpjmKGmMPcNAEnoFzu1P"
-                        ? { ...item, price: 17.99, discountPercent: 0 }
-                        : item;
+                    const isHalloweenWallpaper = docSnap.id === "KpjmKGmMPcNAEnoFzu1P" ||
+                        String(item.title ?? "").trim().toLowerCase() === "libraryreeds halloween phonewallpaper";
+                    const displayItem = isHalloweenWallpaper ? { ...item, price: 17.99, discountPercent: 0 } : item;
                     allGiftItems.push({ id: docSnap.id, data: displayItem });
                 });
 
