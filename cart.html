@@ -582,6 +582,8 @@
     // Stripe test-mode checkout is restricted to the administrator and one book.
     // Admin-only single-book Stripe TEST function. Not a customer checkout.
     const startBookCheckout = httpsCallable(couponFunctions, "lrCreateStripeTestCheckout");
+    const startLiveCheckout = httpsCallable(couponFunctions, "lrCreateStripeLiveCheckout");
+    const livePilot = new URLSearchParams(location.search).get("livePilot") === "1";
 
     // Shared coupon state. Expose it across module/classic script boundaries.
     // This is UI state only; the server must validate every discount.
@@ -858,20 +860,50 @@
           }
           const items = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
           if (!items.length) { status.textContent = 'Your cart is empty.'; return; }
-          // This is intentionally restricted to the administrator's single test book.
-          // The backend independently checks administrator authorization and Firestore price.
-          const supportedBookId = 'WjeedmII1WbQGD4wHJ3I';
-          const supported = items.length === 1 &&
-            String(items[0].itemId || items[0].productId || items[0].id || '').replace(/^book_/, '') === supportedBookId &&
-            Number(items[0].quantity || 1) === 1;
-          if (!supported) {
-            status.textContent = 'Stripe test checkout currently supports only one copy of the configured test book. Multiple items and gift shop checkout are not enabled yet. Your cart was not changed.';
-            return;
+          if (livePilot) {
+            const item = items[0];
+            const itemId = String(item.itemId || item.productId || item.id || '');
+            if (items.length !== 1 || itemId !== 'KpjmKGmMPcNAEnoFzu1P' ||
+                Number(item.quantity || 1) !== 1 || item.appliedCoupon || item.isGift) {
+              status.textContent = 'For the live pilot, put one Halloween PhoneWallpaper in your cart without a coupon or gift recipient.';
+              return;
+            }
+          } else {
+            // This is intentionally restricted to the administrator's single test book.
+            // The backend independently checks administrator authorization and Firestore price.
+            const supportedBookId = 'WjeedmII1WbQGD4wHJ3I';
+            const supported = items.length === 1 &&
+              String(items[0].itemId || items[0].productId || items[0].id || '').replace(/^book_/, '') === supportedBookId &&
+              Number(items[0].quantity || 1) === 1;
+            if (!supported) {
+              status.textContent = 'Stripe test checkout currently supports only one copy of the configured test book. Multiple items and gift shop checkout are not enabled yet. Your cart was not changed.';
+              return;
+            }
           }
           continueToCheckoutBtn.disabled = true;
-          status.textContent = 'Opening Stripe test checkout. Stripe will calculate the book price securely from Firestore; the estimated cart total may differ.';
+          status.textContent = livePilot
+            ? 'Opening live Stripe checkout. Review the price and tax in Stripe before paying.'
+            : 'Opening Stripe test checkout. Stripe will calculate the book price securely from Firestore; the estimated cart total may differ.';
           try {
-            const result = await startBookCheckout();
+            let result;
+            if (livePilot) {
+              const pilotKey = 'lrLiveWallpaperPilotCheckoutId';
+              let checkoutId = sessionStorage.getItem(pilotKey);
+              if (!checkoutId) {
+                checkoutId = crypto.randomUUID();
+                sessionStorage.setItem(pilotKey, checkoutId);
+              }
+              result = await startLiveCheckout({
+                checkoutId,
+                items: [{
+                  productType: 'giftshop_items',
+                  productId: 'KpjmKGmMPcNAEnoFzu1P',
+                  quantity: 1
+                }]
+              });
+            } else {
+              result = await startBookCheckout();
+            }
             const { orderId, url: paymentUrl } = result.data || {};
             if (!orderId || !/^[A-Za-z0-9_-]{1,128}$/.test(String(orderId))) {
               throw new Error('Checkout did not return a valid Firestore order ID. Update the server test checkout function first.');
