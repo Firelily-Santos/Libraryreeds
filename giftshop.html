@@ -947,7 +947,11 @@
             onSnapshot(collection(db, "giftshop_items"), (snapshot) => {
                 allGiftItems = [];
                 snapshot.forEach((docSnap) => {
-                    allGiftItems.push({ id: docSnap.id, data: docSnap.data() });
+                    const item = docSnap.data();
+                    const isHalloweenWallpaper = docSnap.id === "KpjmKGmMPcNAEnoFzu1P" ||
+                        String(item.title ?? "").trim().toLowerCase() === "libraryreeds halloween phonewallpaper";
+                    const displayItem = isHalloweenWallpaper ? { ...item, price: 17.99, discountPercent: 0 } : item;
+                    allGiftItems.push({ id: docSnap.id, data: displayItem });
                 });
 
                 if (allGiftItems.length > 0) {
