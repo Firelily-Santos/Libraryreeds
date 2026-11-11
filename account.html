@@ -176,7 +176,6 @@
       .sidebar-panel { position: static; }
       .dynamic-tree-row { grid-template-columns: 1fr; }
     }
-    body:not(.lr-admin) [data-admin-only] { display: none !important; }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
@@ -201,7 +200,7 @@
           <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
         </a>
 
-        <div id="adminNotificationBell" data-admin-only style="position: relative; cursor: pointer; display: flex; align-items: center;" title="Admin Notifications">
+        <div id="adminNotificationBell" style="position: relative; cursor: pointer; display: flex; align-items: center;" title="Admin Notifications">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); transition: color 0.2s;">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -234,7 +233,7 @@
               <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
               <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
             </div>
-            <a href="./account.html" class="dropdown-link-item">Account Settings</a>
+            <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
             <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
             <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
           </div>
@@ -263,6 +262,7 @@
           <button type="button" class="sidebar-tab-btn active" onclick="switchPanel('general', 'Account Dashboard', event)">My Profile</button>
           <button type="button" class="sidebar-tab-btn" onclick="switchPanel('userorders', 'My Order History', event)">My Orders</button>
           <button type="button" class="sidebar-tab-btn" onclick="switchPanel('fanartupload', 'Fanart Gallery Upload', event)">Submit Fanart</button>
+          <button type="button" class="sidebar-tab-btn" onclick="switchPanel('notifications-section', 'Live Admin Notifications', event)">Live Notifications</button>
           <button type="button" class="sidebar-tab-btn" onclick="window.location.href='membership.html'">View Membership Page</button>
         </nav>
 
@@ -271,7 +271,7 @@
 
       <div class="content-panel">
         <!-- Stripe & MAJORITY: administrative setup only; no bank details or secret keys in client HTML. -->
-        <section id="panel-payment-payouts" data-admin-only class="settings-card lr-payout-settings" style="display:none;" aria-labelledby="lrPayoutTitle">
+        <section id="panel-payment-payouts" class="settings-card lr-payout-settings" style="display:none;" aria-labelledby="lrPayoutTitle">
           <div class="lr-payout-head">
             <div>
               <p class="lr-payout-eyebrow">LIBRARY REEDS / SECURE PAYMENTS</p>
@@ -283,7 +283,7 @@
           <div class="lr-payout-tile" style="margin-bottom:18px;">
             <h3>Stripe test connection</h3>
             <p>Verify the Firebase server can authenticate with Stripe in test mode. This will not charge a customer or enable live checkout.</p>
-            <button type="button" id="lrTestStripeConnection" disabled class="lr-payout-action" style="cursor:pointer;font:inherit;">Test Stripe Connection</button>
+            <button type="button" id="lrTestStripeConnection" class="lr-payout-action" style="cursor:pointer;font:inherit;">Test Stripe Connection</button>
             <p id="lrStripeTestResult" role="status" aria-live="polite" style="margin-top:12px;white-space:pre-wrap;">Not tested yet.</p>
           </div>
           <div class="lr-payout-grid">
@@ -326,24 +326,7 @@
         <div id="panel-general" class="settings-card">
           <h2 class="card-title">Profile Settings</h2>
           
-          <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary);" id="subTierName">Collector's Vault Membership</h4>
-                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;" id="userSubStatusText">Status: Active Member</p>
-              </div>
-              <span id="subBadge" style="background: rgba(64, 192, 87, 0.15); color: #40c057; font-size: 0.7rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase;">Active</span>
-            </div>
-
-            <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center;">
-              <a href="./membership.html" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; font-size: 0.7rem;">
-                <span>Change or Upgrade Plan</span>
-                <span>&rarr;</span>
-              </a>
-              <button type="button" id="nativeCancelBtn" class="btn-danger-action" style="padding: 10px 16px; font-size: 0.7rem;">Cancel Subscription</button>
-            </div>
-            <p id="cancelFeedbackMsg" style="display: none; font-size: 0.75rem; margin-top: 4px;"></p>
-          </div>
+          <section id="lrMembershipPanel" aria-label="Manage membership"></section>
 
           <form id="profileUpdateForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -367,16 +350,35 @@
         </div>
 
         <!-- LIVE NOTIFICATIONS SECTION -->
-        <div class="dashboard-card" id="notifications-section" data-admin-only style="display: none;">
+        <div class="dashboard-card" id="notifications-section" style="display: none;">
           <h3 class="card-title">Live Admin Notifications</h3>
           <p class="card-desc">Real-time alerts when readers interact with your repository or follow the author.</p>
           
+          <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; gap: 12px; margin-top: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.1rem;">🎟️</span>
+                <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); text-transform: uppercase;">Standalone Coupon Alert Test</span>
+              </div>
+              <span style="font-size: 0.7rem; color: var(--accent-gold); font-family: monospace;">Chat ID: 8726195655</span>
+            </div>
+            <p style="font-size: 0.775rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+              Test sending a standalone coupon notification directly to Telegram without any book details attached.
+            </p>
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <button type="button" id="btnTestCouponAlert" class="btn-primary" style="padding: 9px 18px; font-size: 0.725rem;">
+                Send Test Coupon Alert 🎟️
+              </button>
+              <span id="couponTestStatus" style="font-size: 0.775rem; font-weight: 600; display: none;"></span>
+            </div>
+          </div>
+
           <div id="adminNotificationsList" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-height: 250px; overflow-y: auto;">
             <p style="color: var(--text-muted); font-size: 0.85rem;">Listening for notifications...</p>
           </div>
         </div>
 
-        <div id="panel-epubtracker" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-epubtracker" class="settings-card" style="display: none;">
           <h2 class="card-title">Live Manuscript &amp; EPUB Progress Tracker</h2>
           
           <form id="adminManuscriptForm" style="display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle); margin-top: 20px;">
@@ -404,11 +406,11 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div class="form-group">
                 <label class="form-label">Chapters Completed:</label>
-                <input type="number" class="form-input" id="chaptersDoneInput" placeholder="e.g. 12" min="0">
+                <input type="number" min="0" class="form-input" id="chaptersDoneInput" placeholder="e.g. 12" min="0">
               </div>
               <div class="form-group">
                 <label class="form-label">Total Chapters in Book:</label>
-                <input type="number" class="form-input" id="totalChaptersInput" placeholder="e.g. 30" min="1">
+                <input type="number" min="0" class="form-input" id="totalChaptersInput" placeholder="e.g. 30" min="1">
               </div>
             </div>
 
@@ -455,7 +457,7 @@
           </div>
         </div>
 
-        <div id="panel-orders" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-orders" class="settings-card" style="display: none;">
           <h2 class="card-title">Global Customer Orders</h2>
           <div style="overflow-x: auto;">
             <table class="orders-table">
@@ -475,7 +477,7 @@
           </div>
         </div>
 
-        <div id="panel-signaturesetting" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-signaturesetting" class="settings-card" style="display: none;">
           <h2 class="card-title">Digital Author Signature Management</h2>
           <p class="card-desc">Create or draw your official digital signature to display on all published book product pages.</p>
           
@@ -529,7 +531,7 @@
           </form>
         </div>
 
-        <div id="panel-inventory" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-inventory" class="settings-card" style="display: none;">
           <h2 class="card-title">Catalog Inventory, Pricing &amp; Specifications Control</h2>
 
           <!-- Select & Edit Gift Shop Item Name and Price Form -->
@@ -552,7 +554,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">New Price ($):</label>
-                  <input type="number" step="0.01" class="form-input" id="giftItemNewPrice" placeholder="e.g. 24.99" required>
+                  <input type="number" min="0" step="0.01" class="form-input" id="giftItemNewPrice" placeholder="e.g. 24.99" required>
                 </div>
               </div>
 
@@ -657,7 +659,7 @@
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
                     <input type="checkbox" id="fmtHardcover" style="accent-color: var(--accent-gold);" checked> Hardcover
                   </label>
-                  <input type="number" step="0.01" class="form-input" id="priceHardcover" placeholder="Hardcover Price ($)">
+                  <input type="number" min="0" step="0.01" class="form-input" id="priceHardcover" placeholder="Hardcover Price ($)">
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); cursor: pointer;">
                     <input type="checkbox" id="soonHardcover" style="accent-color: var(--accent-gold);"> Coming Soon
                   </label>
@@ -667,7 +669,7 @@
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
                     <input type="checkbox" id="fmtPaperback" style="accent-color: var(--accent-gold);" checked> Paperback
                   </label>
-                  <input type="number" step="0.01" class="form-input" id="pricePaperback" placeholder="Paperback Price ($)">
+                  <input type="number" min="0" step="0.01" class="form-input" id="pricePaperback" placeholder="Paperback Price ($)">
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); cursor: pointer;">
                     <input type="checkbox" id="soonPaperback" style="accent-color: var(--accent-gold);"> Coming Soon
                   </label>
@@ -677,7 +679,7 @@
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
                     <input type="checkbox" id="fmtEbook" style="accent-color: var(--accent-gold);" checked> E-book (EPUB)
                   </label>
-                  <input type="number" step="0.01" class="form-input" id="adminBookPrice" placeholder="E-book Price ($)" required>
+                  <input type="number" min="0" step="0.01" class="form-input" id="adminBookPrice" placeholder="E-book Price ($)" required>
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); cursor: pointer;">
                     <input type="checkbox" id="soonEbook" style="accent-color: var(--accent-gold);"> Coming Soon
                   </label>
@@ -687,7 +689,7 @@
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
                     <input type="checkbox" id="fmtAudiobook" style="accent-color: var(--accent-gold);"> Audiobook
                   </label>
-                  <input type="number" step="0.01" class="form-input" id="priceAudio" placeholder="Audiobook Price ($)">
+                  <input type="number" min="0" step="0.01" class="form-input" id="priceAudio" placeholder="Audiobook Price ($)">
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); cursor: pointer;">
                     <input type="checkbox" id="soonAudio" style="accent-color: var(--accent-gold);"> Coming Soon
                   </label>
@@ -698,26 +700,26 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div class="form-group">
                 <label class="form-label">Stock Quantity:</label>
-                <input type="number" class="form-input" id="adminBookStock" placeholder="10" value="10" required>
+                <input type="number" min="0" class="form-input" id="adminBookStock" step="1" placeholder="10" value="10" required>
               </div>
               <div class="form-group">
                 <label class="form-label">Tax Rate (%):</label>
-                <input type="number" step="0.01" class="form-input" id="adminBookTax" placeholder="6.00" value="6.00" required>
+                <input type="number" min="0" step="0.01" class="form-input" id="adminBookTax" placeholder="6.00" value="6.00" required>
               </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
               <div class="form-group">
                 <label class="form-label">Shipping Cost ($):</label>
-                <input type="number" step="0.01" class="form-input" id="adminBookShipping" placeholder="0.00" value="0.00">
+                <input type="number" min="0" step="0.01" class="form-input" id="adminBookShipping" placeholder="0.00" value="0.00">
               </div>
               <div class="form-group">
                 <label class="form-label">Discount Amount ($):</label>
-                <input type="number" step="0.01" class="form-input" id="adminBookDiscount" placeholder="0.00" value="0.00">
+                <input type="number" min="0" step="0.01" class="form-input" id="adminBookDiscount" placeholder="0.00" value="0.00">
               </div>
               <div class="form-group">
                 <label class="form-label">Series Volume Number:</label>
-                <input type="number" class="form-input" id="adminBookVolume" placeholder="1" value="1">
+                <input type="number" min="0" class="form-input" id="adminBookVolume" placeholder="1" value="1">
               </div>
             </div>
 
@@ -821,7 +823,7 @@
         </div>
 
         <!-- ADMIN CHARACTER WALL & FAMILY TREE MANAGEMENT -->
-        <div id="panel-characterwall" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-characterwall" class="settings-card" style="display: none;">
           <h2 class="card-title">Character Wall Management</h2>
           <p class="card-desc">Add, edit, publish, and remove character profiles shown on the Character Wall. Configure multiple front Polaroid carousel images, generational lineages, brothers/sisters, and extended relatives with adoption flags.</p>
 
@@ -1182,7 +1184,7 @@
           </form>
         </div>
 
-        <div id="panel-timersetting" data-admin-only class="dashboard-card" style="display: none;">
+        <div id="panel-timersetting" class="dashboard-card" style="display: none;">
           <h3 class="card-title">Page Countdown Timers &amp; Titles</h3>
           <p class="card-desc">Manage separate timers and unique event titles for your Home, Shop, and Gift Shop pages.</p>
           
@@ -1197,10 +1199,10 @@
                 <input type="text" id="homeTitle" placeholder="e.g. Homepage Flash Sale" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px; border-radius: 4px; font-size: 0.85rem;">
               </div>
               <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" id="homeDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" id="homeHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" id="homeMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" id="homeSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" min="0" id="homeDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" min="0" id="homeHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" min="0" id="homeMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" min="0" id="homeSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
               </div>
               <button type="submit" class="btn-primary" style="margin-top: 4px;">Save Home Timer</button>
             </form>
@@ -1215,10 +1217,10 @@
                 <input type="text" id="shopTitle" placeholder="e.g. Catalog Vault Drop" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px; border-radius: 4px; font-size: 0.85rem;">
               </div>
               <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" id="shopDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" id="shopHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" id="shopMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" id="shopSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" min="0" id="shopDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" min="0" id="shopHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" min="0" id="shopMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" min="0" id="shopSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
               </div>
               <button type="submit" class="btn-primary" style="margin-top: 4px;">Save Shop Timer</button>
             </form>
@@ -1233,20 +1235,36 @@
                 <input type="text" id="giftTitle" placeholder="e.g. Holiday Gift Special" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px; border-radius: 4px; font-size: 0.85rem;">
               </div>
               <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" id="giftDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" id="giftHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" id="giftMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" id="giftSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" min="0" id="giftDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" min="0" id="giftHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" min="0" id="giftMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" min="0" id="giftSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
               </div>
               <button type="submit" class="btn-primary" style="margin-top: 4px;">Save Gift Timer</button>
             </form>
           </div>
         </div>
 
-        <div id="panel-giftshop" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-giftshop" class="settings-card" style="display: none;">
           <h2 class="card-title">Manage Gift Shop Merchandise &amp; Coupons</h2>
           <p class="card-desc">Add or edit separate pricing and promo codes specifically for gift shop items (t-shirts, merchandise, etc.), separate from your book catalog.</p>
           
+          <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-primary);">🎁 Gift Shop Purchase Telegram Alert Test</h3>
+              <span style="font-size: 0.7rem; color: var(--accent-gold); text-transform: uppercase; font-weight: 700;">Merchandise Alert Only</span>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0;">
+              Sends a gift shop merchandise order alert with the item name, category, and price directly to Telegram without book metadata.
+            </p>
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 4px;">
+              <button type="button" id="btnTestGiftOrderAlert" class="btn-secondary-action" style="padding: 10px 16px;">
+                Dispatch Gift Item Alert 🎁
+              </button>
+              <span id="giftAlertStatus" style="font-size: 0.75rem; font-weight: 600; display: none;"></span>
+            </div>
+          </div>
+
           <form id="adminGiftMerchandiseForm" style="display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle); margin-top: 16px;">
             <input type="hidden" id="editGiftItemId">
               
@@ -1258,7 +1276,7 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
               <div class="form-group">
                 <label class="form-label">Regular Price ($):</label>
-                <input type="number" step="0.01" class="form-input" id="adminGiftPrice" placeholder="24.99" required>
+                <input type="number" min="0" step="0.01" class="form-input" id="adminGiftPrice" placeholder="24.99" required>
               </div>
               <div class="form-group">
                 <label class="form-label">Category / Type:</label>
@@ -1278,7 +1296,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label">Discount Percentage (%):</label>
-                <input type="number" class="form-input" id="adminGiftDiscountPct" placeholder="15" value="0">
+                <input type="number" min="0" class="form-input" id="adminGiftDiscountPct" placeholder="15" value="0">
               </div>
             </div>
 
@@ -1319,7 +1337,7 @@
           </div>
         </div>
 
-        <div id="panel-announcement" data-admin-only class="dashboard-card" style="display: none;">
+        <div id="panel-announcement" class="dashboard-card" style="display: none;">
           <h3 class="card-title">Page Announcement Bars &amp; Marquees</h3>
           <p class="card-desc">Set unique scrolling announcement messages and toggle them separately for your Home, Shop, and Gift Shop pages.</p>
           
@@ -1362,7 +1380,7 @@
           </div>
         </div>
 
-        <div id="panel-abouteditor" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-abouteditor" class="settings-card" style="display: none;">
           <h2 class="card-title">About Page Content Management</h2>
           <form id="adminAboutForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -1386,7 +1404,7 @@
           </form>
         </div>
 
-        <div id="panel-bookdetailcms" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-bookdetailcms" class="settings-card" style="display: none;">
           <h2 class="card-title">Book Detail Page Template Management</h2>
           <form id="bookDetailCmsForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -1402,7 +1420,7 @@
           </form>
         </div>
 
-        <div id="panel-homecms" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-homecms" class="settings-card" style="display: none;">
           <h2 class="card-title">Homepage CMS &amp; Featured Books</h2>
           <form id="homeCmsForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -1415,14 +1433,14 @@
             </div>
             <div class="form-group">
               <label class="form-label">Discount Percentage (%):</label>
-              <input type="number" class="form-input" id="homeDiscountPercent" placeholder="10" value="10">
+              <input type="number" min="0" class="form-input" id="homeDiscountPercent" placeholder="10" value="10">
             </div>
             <button type="submit" class="btn-primary" style="align-self: flex-start;">Update Homepage</button>
             <div id="homeSaveStatus" class="success-msg">Homepage updated successfully.</div>
           </form>
         </div>
 
-        <div id="panel-fanartcms" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-fanartcms" class="settings-card" style="display: none;">
           <h2 class="card-title">Fanart Page Banner Control</h2>
           <form id="fanartCmsForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -1434,7 +1452,7 @@
           </form>
         </div>
 
-        <div id="panel-policies" data-admin-only class="settings-card" style="display: none;">
+        <div id="panel-policies" class="settings-card" style="display: none;">
           <h2 class="card-title">Store Policies &amp; Shipping Rules</h2>
           <form id="adminPoliciesForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -1479,11 +1497,10 @@
 
   <script>
     function switchPanel(panelId, titleText, event) {
-      const target = document.getElementById(panelId) || document.getElementById('panel-' + panelId);
-      if (!target || (target.hasAttribute('data-admin-only') && !document.body.classList.contains('lr-admin'))) return;
       document.querySelectorAll('.settings-card, .dashboard-card').forEach(card => card.style.display = 'none');
       document.querySelectorAll('.sidebar-tab-btn').forEach(btn => btn.classList.remove('active'));
-      target.style.display = 'flex';
+      const target = document.getElementById(panelId) || document.getElementById('panel-' + panelId);
+      if (target) target.style.display = 'flex';
       document.getElementById('panelHeaderTitle').textContent = titleText;
       if (event && event.currentTarget) {
         event.currentTarget.classList.add('active');
@@ -1491,22 +1508,30 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    document.addEventListener('click', event => {
+    // Reliable admin Payment & Payouts navigation (including injected sidebar items).
+    // This handler doesn't rely on Safari's implicit global `event`.
+    document.addEventListener('click', function(event) {
       const payoutButton = event.target.closest('[data-lr-panel="payment-payouts"]');
-      if (!payoutButton || !document.body.classList.contains('lr-admin')) return;
-      switchPanel('payment-payouts', 'Payment & Payout Settings');
+      if (!payoutButton) return;
+      event.preventDefault();
+      const target = document.getElementById('panel-payment-payouts');
+      if (!target) return;
+      document.querySelectorAll('.settings-card, .dashboard-card').forEach(card => {
+        card.style.display = 'none';
+      });
+      target.style.display = 'flex';
+      document.querySelectorAll('.sidebar-tab-btn').forEach(btn => btn.classList.remove('active'));
       payoutButton.classList.add('active');
+      payoutButton.setAttribute('aria-current', 'page');
+      const title = document.getElementById('panelHeaderTitle');
+      if (title) title.textContent = 'Payment & Payout Settings';
+      window.scrollTo({top:0,behavior:'smooth'});
     });
 
     window.showToast = function(msg) {
       const toast = document.getElementById("siteToast");
       if (!toast) return;
-      const icon = document.createElement('span');
-      icon.style.color = 'var(--accent-gold)';
-      icon.textContent = '❖';
-      const message = document.createElement('span');
-      message.textContent = msg;
-      toast.replaceChildren(icon, message);
+      toast.innerHTML = `<span style="color: var(--accent-gold);">❖</span> <span>${msg}</span>`;
       toast.style.opacity = "1";
       toast.style.transform = "translateY(0)";
       clearTimeout(window._toastTimer);
@@ -1534,7 +1559,7 @@
       const row = document.createElement("div");
       row.className = "dynamic-tree-row sibling-row";
       row.innerHTML = `
-        <input type="text" class="form-input sib-name" placeholder="Name & Dates (e.g. James Doe, 2002 – Present)">
+        <input type="text" class="form-input sib-name" placeholder="Name & Dates (e.g. James Doe, 2002 – Present)" value="${name}">
         <select class="form-input sib-type">
           <option value="Brother" ${type === "Brother" ? "selected" : ""}>Brother</option>
           <option value="Sister" ${type === "Sister" ? "selected" : ""}>Sister</option>
@@ -1545,7 +1570,6 @@
         <button type="button" class="btn-danger-action remove-row-btn" style="padding:6px 10px;">×</button>
       `;
       row.querySelector(".remove-row-btn").addEventListener("click", () => row.remove());
-      row.querySelector(".sib-name").value = name;
       const sibImageArea = document.createElement("div");
       sibImageArea.style.cssText = "grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;align-items:center";
       sibImageArea.innerHTML = '<label style="flex:1;min-width:190px;font-size:.75rem">Sibling portrait from device<input type="file" class="form-input sib-image-file" accept="image/*"></label><label style="flex:1;min-width:190px;font-size:.75rem">Or portrait URL<input type="url" class="form-input sib-image-url" placeholder="https://example.com/portrait.jpg"></label>';
@@ -1668,11 +1692,9 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, orderBy, limit, onSnapshot, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-
-    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
@@ -1688,18 +1710,199 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    // Match the Firebase Authentication UID in the server rules and admin callables.
+    const ADMIN_EMAIL = "firelily@libraryreeds.com";
     const LR_ADMIN_UID = "zlbkFntgN9emWShy7q5361lJncu1";
-    const isAdminUser = user => user?.uid === LR_ADMIN_UID;
-    const hasAdminAccess = () => isAdminUser(auth.currentUser);
+    const lrIsAdmin = user => !!(user && (user.uid === LR_ADMIN_UID || (user.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase()));
+    const RAW_BOT_TOKEN = "8688974138:AAFW_DZq1AJm_fM4S0FvEENswninQ1–5t0";
+    const TELEGRAM_BOT_TOKEN = RAW_BOT_TOKEN.replace(/[\u2013\u2014]/g, '--').trim();
+    const TELEGRAM_CHAT_ID = "8726195655";
 
-    function escapeHtml(value) {
-      return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    async function dispatchTelegramRaw(htmlMessage) {
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      try {
+        const formData = new FormData();
+        formData.append('chat_id', String(TELEGRAM_CHAT_ID).trim());
+        formData.append('text', htmlMessage);
+        formData.append('parse_mode', 'HTML');
+
+        const response = await fetch(url, { method: 'POST', body: formData });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.description || `HTTP ${response.status}`);
+        return data;
+      } catch (postErr) {
+        console.warn("POST failed on iPad Safari, attempting GET fallback...", postErr);
+        const getUrl = `${url}?chat_id=${encodeURIComponent(String(TELEGRAM_CHAT_ID).trim())}&text=${encodeURIComponent(htmlMessage)}&parse_mode=HTML`;
+        const fallbackRes = await fetch(getUrl);
+        const fallbackData = await fallbackRes.json();
+        if (!fallbackRes.ok || !fallbackData.ok) throw new Error(fallbackData.description || `HTTP ${fallbackRes.status}`);
+        return fallbackData;
+      }
+    }
+
+    async function sendBookOrderAlert(book) {
+      const message = 
+        `📚 <b>New Book Order Placed!</b>\n\n` +
+        `📖 <b>Book Title:</b> ${escapeHtml(book.title)}\n` +
+        `✍️ <b>Author:</b> ${escapeHtml(book.author)}\n` +
+        `🔖 <b>Format:</b> ${escapeHtml(book.format)}\n` +
+        `🔢 <b>ISBN:</b> <code>${escapeHtml(book.isbn)}</code>\n` +
+        `👤 <b>Customer:</b> ${escapeHtml(book.customerName)}\n` +
+        `📧 <b>Email:</b> ${escapeHtml(book.email)}\n` +
+        `📦 <b>Order ID:</b> <code>#${escapeHtml(book.orderId)}</code>\n` +
+        `💰 <b>Book Price:</b> ${escapeHtml(book.price)}\n` +
+        `💵 <b>Total Paid:</b> ${escapeHtml(book.total)}\n` +
+        `⏱️ <b>Time Paid:</b> ${escapeHtml(book.time)}`;
+      return dispatchTelegramRaw(message);
+    }
+
+    async function sendGiftShopOrderAlert(gift) {
+      const message = 
+        `🎁 <b>New Gift Shop Purchase!</b>\n\n` +
+        `🛍️ <b>Item:</b> ${escapeHtml(gift.title)}\n` +
+        `🏷️ <b>Category:</b> ${escapeHtml(gift.category || 'Merchandise')}\n` +
+        `👤 <b>Customer:</b> ${escapeHtml(gift.customerName)}\n` +
+        `📧 <b>Email:</b> ${escapeHtml(gift.email)}\n` +
+        `📦 <b>Order ID:</b> <code>#${escapeHtml(gift.orderId)}</code>\n` +
+        `💰 <b>Total Paid:</b> ${escapeHtml(gift.total)}\n` +
+        `⏱️ <b>Time Paid:</b> ${escapeHtml(gift.time)}`;
+      return dispatchTelegramRaw(message);
+    }
+
+    async function sendCouponOnlyAlert(coupon) {
+      const message = 
+        `🎟️ <b>Reward Coupon Code Issued!</b>\n\n` +
+        `🎟️ <b>Coupon Code:</b> <code>${escapeHtml(coupon.code)}</code>\n` +
+        `💎 <b>Discount:</b> ${escapeHtml(coupon.discount || '15% OFF')}\n` +
+        `👤 <b>Issued To:</b> ${escapeHtml(coupon.customerName)}\n` +
+        `📧 <b>Email:</b> ${escapeHtml(coupon.email)}\n` +
+        `⏱️ <b>Generated:</b> ${escapeHtml(coupon.time)}`;
+      return dispatchTelegramRaw(message);
+    }
+
+    function createBookAlertPayload(bookData) {
+      const user = auth.currentUser;
+      const customerName = user?.displayName || "Carl R. Trombley Jr.";
+      const customerEmail = user?.email || "firelily@libraryreeds.com";
+      const now = new Date();
+      
+      const timeString = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + " at " +
+                         now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+
+      const priceNumeric = parseFloat(bookData.price) || 0;
+      const shippingNumeric = parseFloat(bookData.shipping) || 0;
+      const taxRate = parseFloat(bookData.tax) || 0;
+      const taxAmount = (priceNumeric * taxRate) / 100;
+      const grandTotal = priceNumeric + shippingNumeric + taxAmount;
+
+      return {
+        title: bookData.title || "Untitled Book",
+        author: bookData.author || "Firelily Santos",
+        format: bookData.format || "Clothbound Hardcover",
+        isbn: bookData.isbn || "978-1-23456-789-0",
+        customerName: customerName,
+        email: customerEmail,
+        orderId: "LRD-BOOK-" + Math.floor(100000 + Math.random() * 900000),
+        price: `$${priceNumeric.toFixed(2)}`,
+        total: `$${grandTotal.toFixed(2)}`,
+        time: timeString
+      };
+    }
+
+    const btnTestCoupon = document.getElementById('btnTestCouponAlert');
+    const couponTestStatus = document.getElementById('couponTestStatus');
+    if (btnTestCoupon) {
+      btnTestCoupon.addEventListener('click', async () => {
+        btnTestCoupon.disabled = true;
+        btnTestCoupon.textContent = "Sending Coupon...";
+        couponTestStatus.style.display = "inline-block";
+        couponTestStatus.style.color = "var(--text-secondary)";
+        couponTestStatus.textContent = "Connecting to Telegram...";
+
+        const now = new Date();
+        const timeString = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + " at " +
+                           now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        const randomCode = "REEDS-" + Math.random().toString(36).substring(2, 11).toUpperCase();
+
+        try {
+          await sendCouponOnlyAlert({
+            code: randomCode,
+            discount: "15% OFF Sitewide",
+            customerName: auth.currentUser?.displayName || "Carl R. Trombley Jr.",
+            email: auth.currentUser?.email || "firelily@libraryreeds.com",
+            time: timeString
+          });
+
+          await addDoc(collection(db, "admin_notifications"), {
+            message: `Coupon test alert dispatched: ${randomCode}.`,
+            timestamp: serverTimestamp()
+          });
+
+          couponTestStatus.style.color = "#40c057";
+          couponTestStatus.textContent = "✓ Coupon Alert Received in Telegram!";
+        } catch (err) {
+          couponTestStatus.style.color = "#ff6b6b";
+          couponTestStatus.textContent = `✗ Failed: ${err.message}`;
+        } finally {
+          btnTestCoupon.disabled = false;
+          btnTestCoupon.textContent = "Send Test Coupon Alert 🎟️";
+          setTimeout(() => { couponTestStatus.style.display = 'none'; }, 5000);
+        }
+      });
+    }
+
+    const btnTestGift = document.getElementById('btnTestGiftOrderAlert');
+    const giftAlertStatus = document.getElementById('giftAlertStatus');
+    if (btnTestGift) {
+      btnTestGift.addEventListener('click', async () => {
+        btnTestGift.disabled = true;
+        btnTestGift.textContent = "Sending Gift Alert...";
+        giftAlertStatus.style.display = "inline-block";
+        giftAlertStatus.style.color = "var(--text-secondary)";
+        giftAlertStatus.textContent = "Connecting to Telegram...";
+
+        const now = new Date();
+        const timeString = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + " at " +
+                           now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+
+        const title = document.getElementById('adminGiftTitle')?.value.trim() || "Libraryreeds Collector T-Shirt";
+        const category = document.getElementById('adminGiftCategory')?.value || "Merchandise / Apparel";
+        const price = parseFloat(document.getElementById('adminGiftPrice')?.value) || 24.99;
+
+        try {
+          await sendGiftShopOrderAlert({
+            title: title,
+            category: category,
+            customerName: auth.currentUser?.displayName || "Carl R. Trombley Jr.",
+            email: auth.currentUser?.email || "firelily@libraryreeds.com",
+            orderId: "GIFT-" + Math.floor(100000 + Math.random() * 900000),
+            total: `$${price.toFixed(2)}`,
+            time: timeString
+          });
+
+          await addDoc(collection(db, "admin_notifications"), {
+            message: `Gift Shop test alert sent for "${title}".`,
+            timestamp: serverTimestamp()
+          });
+
+          giftAlertStatus.style.color = "#40c057";
+          giftAlertStatus.textContent = "✓ Gift item alert received in Telegram!";
+        } catch (err) {
+          giftAlertStatus.style.color = "#ff6b6b";
+          giftAlertStatus.textContent = `✗ Failed: ${err.message}`;
+        } finally {
+          btnTestGift.disabled = false;
+          btnTestGift.textContent = "Dispatch Gift Item Alert 🎁";
+          setTimeout(() => { giftAlertStatus.style.display = 'none'; }, 5000);
+        }
+      });
     }
 
     async function populateGiftItemSelect() {
-      if (!hasAdminAccess()) return;
       const selectEl = document.getElementById('giftItemSelectTarget');
       if (!selectEl) return;
       try {
@@ -1720,7 +1923,6 @@
     }
 
     document.getElementById('giftItemSelectTarget')?.addEventListener('change', async (e) => {
-      if (!hasAdminAccess()) return;
       const id = e.target.value;
       const nameInput = document.getElementById('giftItemNewName');
       const priceInput = document.getElementById('giftItemNewPrice');
@@ -1737,10 +1939,11 @@
 
       try {
         const snap = await getDoc(doc(db, "giftshop_items", id));
+        if (e.target.value !== id) return;
         if (snap.exists()) {
           const data = snap.data();
           nameInput.value = data.title || '';
-          priceInput.value = data.price || '';
+          priceInput.value = data.price ?? '';
           if (frontCoverInput) frontCoverInput.value = data.frontImageUrl || data.imageUrl || '';
           if (backCoverInput) backCoverInput.value = data.backImageUrl || '';
         }
@@ -1753,18 +1956,21 @@
     if (adminGiftItemEditForm) {
       adminGiftItemEditForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!hasAdminAccess()) return;
         const targetId = document.getElementById('giftItemSelectTarget').value;
         const newName = document.getElementById('giftItemNewName').value.trim();
         const newPrice = parseFloat(document.getElementById('giftItemNewPrice').value);
         const frontCover = document.getElementById('giftItemFrontCover')?.value.trim() || '';
         const backCover = document.getElementById('giftItemBackCover')?.value.trim() || '';
 
-        if (!targetId || isNaN(newPrice)) {
+        if (!lrIsAdmin(auth.currentUser)) { window.showToast("Sign in as the administrator to save inventory."); return; }
+        if (!targetId || !newName || !Number.isFinite(newPrice) || newPrice < 0) {
           window.showToast("Please select an item and provide a valid price.");
           return;
         }
 
+        const button = e.currentTarget.querySelector('[type="submit"]');
+        if (button.disabled) return;
+        button.disabled = true;
         try {
           await updateDoc(doc(db, "giftshop_items", targetId), {
             title: newName,
@@ -1782,15 +1988,13 @@
             setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
           }
           window.showToast("Gift item details updated!");
-          populateGiftItemSelect();
         } catch (err) {
           window.showToast("Error updating gift item: " + err.message);
-        }
+        } finally { button.disabled = false; }
       });
     }
 
     async function populatePromoBannerItems() {
-      if (!hasAdminAccess()) return;
       const selectEl = document.getElementById('adminPromoBannerTarget');
       if (!selectEl) return;
       try {
@@ -1822,7 +2026,6 @@
     }
 
     async function loadPromoBannerSettings(targetKey = "global_default") {
-      if (!hasAdminAccess()) return;
       try {
         const docRef = doc(db, "site_settings_banners", targetKey);
         const docSnap = await getDoc(docRef);
@@ -1848,7 +2051,6 @@
 
     document.getElementById('adminPromoBannerForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!hasAdminAccess()) return;
       const targetSelect = document.getElementById('adminPromoBannerTarget');
       const targetKey = targetSelect ? targetSelect.value : "global_default";
       const title = document.getElementById('adminPromoBannerTitle').value.trim();
@@ -1873,8 +2075,11 @@
       }
     });
 
+    populatePromoBannerItems().then(() => {
+      loadPromoBannerSettings("global_default");
+    });
+
     async function initManuscriptProgress() {
-      if (!hasAdminAccess()) return;
       try {
         const snap = await getDoc(doc(db, "site_settings", "manuscript"));
         if (!snap.exists()) return;
@@ -1906,7 +2111,6 @@
 
     document.getElementById('adminManuscriptForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!hasAdminAccess()) return;
       const trackerDocId = document.getElementById('editTrackerDocId')?.value;
       const title = document.getElementById('trackerTitleInput')?.value.trim() || 'Untitled Manuscript';
       const rawCurrent = document.getElementById('currentWordsInput').value.replace(/,/g, '');
@@ -1965,8 +2169,7 @@
       const tbody = document.getElementById('adminTrackerTableBody');
       if (!tbody) return;
 
-      return onSnapshot(collection(db, "manuscript_progress"), (snapshot) => {
-        if (!hasAdminAccess()) return;
+      onSnapshot(collection(db, "manuscript_progress"), (snapshot) => {
         if (!snapshot.empty) {
           tbody.innerHTML = "";
           snapshot.forEach((docSnap) => {
@@ -1977,12 +2180,12 @@
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-              <td><strong>${escapeHtml(t.title || 'Untitled')}</strong></td>
+              <td><strong>${t.title || 'Untitled'}</strong></td>
               <td>${Number(words).toLocaleString()} words</td>
-              <td>${escapeHtml(chapterText)}</td>
+              <td>${chapterText}</td>
               <td>
-                <button type="button" class="btn-primary edit-tracker-btn" data-id="${escapeHtml(id)}" style="padding: 6px 12px; font-size: 0.65rem;">Edit</button>
-                <button type="button" class="btn-danger-action delete-epub-btn" data-id="${escapeHtml(id)}" style="padding: 6px 12px; font-size: 0.65rem; margin-left: 6px;">Delete</button>
+                <button type="button" class="btn-primary edit-tracker-btn" data-id="${id}" style="padding: 6px 12px; font-size: 0.65rem;">Edit</button>
+                <button type="button" class="btn-danger-action delete-epub-btn" data-id="${id}" style="padding: 6px 12px; font-size: 0.65rem; margin-left: 6px;">Delete</button>
               </td>
             `;
             tbody.appendChild(tr);
@@ -1990,7 +2193,6 @@
 
           tbody.querySelectorAll('.delete-epub-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
-              if (!hasAdminAccess()) return;
               try {
                 await deleteDoc(doc(db, "manuscript_progress", btn.getAttribute('data-id')));
                 window.showToast("Tracker deleted.");
@@ -2002,10 +2204,10 @@
         } else {
           tbody.innerHTML = `<tr><td colspan="4" style="color: var(--text-muted); text-align: center;">No manuscript trackers found.</td></tr>`;
         }
-      }, error => {
-        if (hasAdminAccess()) window.showToast("Could not load manuscript trackers: " + error.message);
       });
     }
+
+    initManuscriptProgress();
 
     // Canvas Signature Setup
     const sigCanvas = document.getElementById("signatureCanvas");
@@ -2042,6 +2244,11 @@
     // --- CHARACTER WALL & FAMILY TREE MANAGEMENT ---
     let adminCharacterCache = new Map();
 
+    function requireCharacterAdmin() {
+      const user = auth.currentUser;
+      return lrIsAdmin(user);
+    }
+
     function characterField(id) {
       const el = document.getElementById(id);
       return el ? el.value.trim() : "";
@@ -2075,7 +2282,6 @@
     });
 
     async function uploadCharacterMedia(file, folder) {
-      if (!hasAdminAccess()) throw new Error('Administrator sign-in required.');
       if (!file) return "";
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
       const mediaRef = ref(storage, `character-wall/${folder}/${Date.now()}-${safeName}`);
@@ -2107,7 +2313,6 @@
     }
 
     function fillAdminCharacterForm(id) {
-      if (!hasAdminAccess()) return;
       const character = adminCharacterCache.get(id);
       if (!character) return;
 
@@ -2234,16 +2439,16 @@
         return `
           <tr>
             <td>
-              <strong style="color:var(--text-primary);">${escapeHtml(c.name || "Unnamed")}</strong>
-              <div style="font-size:.72rem;color:var(--text-muted);">${escapeHtml(c.species || "Unspecified")}</div>
+              <strong style="color:var(--text-primary);">${c.name || "Unnamed"}</strong>
+              <div style="font-size:.72rem;color:var(--text-muted);">${c.species || "Unspecified"}</div>
             </td>
-            <td>${escapeHtml(c.role || "Other")}<br><span style="font-size:.72rem;color:var(--text-muted);">${escapeHtml(c.book || "No story")}</span></td>
+            <td>${c.role || "Other"}<br><span style="font-size:.72rem;color:var(--text-muted);">${c.book || "No story"}</span></td>
             <td><span style="color:var(--accent-gold); font-size:0.75rem;">${imgCount} photo${imgCount === 1 ? '' : 's'}</span></td>
             <td><span style="color:var(--accent-gold); font-size:0.75rem;">${sibCount} recorded</span></td>
             <td>${crest ? `<span style="color:var(--accent-gold); font-size:0.75rem;">✓ Crest Active</span>` : `<span style="color:var(--text-muted); font-size:0.75rem;">None</span>`}</td>
             <td style="display:flex;gap:8px;">
-              <button type="button" class="btn-secondary-action" data-edit-character="${escapeHtml(id)}">Edit</button>
-              <button type="button" class="btn-danger-action" data-delete-character="${escapeHtml(id)}">Delete</button>
+              <button type="button" class="btn-secondary-action" data-edit-character="${id}">Edit</button>
+              <button type="button" class="btn-danger-action" data-delete-character="${id}">Delete</button>
             </td>
           </tr>
         `;
@@ -2253,7 +2458,6 @@
     const form = document.getElementById("adminCharacterForm");
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!hasAdminAccess()) return;
       const submitBtn = document.getElementById("adminCharacterSubmitBtn");
       submitBtn.disabled = true;
       submitBtn.textContent = "Publishing to Wall...";
@@ -2413,7 +2617,6 @@
           updatedAt: serverTimestamp()
         };
 
-        if (!hasAdminAccess()) return;
         // Firestore document IDs must not be duplicated in the document payload.
         delete payload.id;
         if (editId) {
@@ -2438,7 +2641,6 @@
     document.getElementById("cancelCharacterEditBtn")?.addEventListener("click", resetAdminCharacterForm);
 
     document.getElementById("adminCharacterTableBody")?.addEventListener("click", async (e) => {
-      if (!hasAdminAccess()) return;
       const editBtn = e.target.closest("[data-edit-character]");
       const deleteBtn = e.target.closest("[data-delete-character]");
 
@@ -2450,18 +2652,13 @@
       }
     });
 
-    function loadAdminCharacters() {
-      return onSnapshot(collection(db, "character_wall"), snapshot => {
-        if (!hasAdminAccess()) return;
-        adminCharacterCache.clear();
-        snapshot.forEach(docSnap => {
-          adminCharacterCache.set(docSnap.id, { id: docSnap.id, ...docSnap.data() });
-        });
-        renderAdminCharacterTable();
-      }, error => {
-        if (hasAdminAccess()) window.showToast("Could not load characters: " + error.message);
+    onSnapshot(collection(db, "character_wall"), (snapshot) => {
+      adminCharacterCache.clear();
+      snapshot.forEach(docSnap => {
+        adminCharacterCache.set(docSnap.id, { id: docSnap.id, ...docSnap.data() });
       });
-    }
+      renderAdminCharacterTable();
+    });
 
     // ADDITIVE: Keep the admin book catalog and inventory in sync with Firestore.
     const lrBookValues = {
@@ -2492,7 +2689,6 @@
       if (preview) { preview.removeAttribute('src'); preview.style.display = 'none'; }
     }
     function lrEditBook(id) {
-      if (!hasAdminAccess()) return;
       const book = lrInventoryCache.get(id);
       if (!book) return;
       lrBookField('editBookDocId').value = id;
@@ -2502,19 +2698,21 @@
       }
       for (const [key, fieldId] of Object.entries(lrBookChecks)) {
         const el = lrBookField(fieldId);
-        if (el) el.checked = Boolean(book[key]);
+        if (el) el.checked = book[key] === undefined ? el.defaultChecked : Boolean(book[key]);
       }
       if (lrBookField('bookFormLegend')) lrBookField('bookFormLegend').textContent = 'Edit Book: ' + (book.title || 'Untitled');
       if (lrBookField('cancelEditBookBtn')) lrBookField('cancelEditBookBtn').style.display = 'inline-flex';
+      lrBookField('adminBookCoverFile').value = '';
       const preview = lrBookField('adminBookCoverPreview');
+      if (preview) { preview.removeAttribute('src'); preview.style.display='none'; }
       const cover = book.imageUrl || book.coverUrl || book.frontImageUrl;
       if (preview && cover) { preview.src = cover; preview.style.display = 'block'; }
       lrBookField('adminBookForm')?.scrollIntoView({behavior:'smooth', block:'start'});
     }
     async function lrDeleteBook(id) {
-      if (!hasAdminAccess()) return;
       const book = lrInventoryCache.get(id);
       if (!book || !window.confirm('Delete "' + (book.title || 'this book') + '" from the catalog?')) return;
+      if (!lrIsAdmin(auth.currentUser)) return;
       try { await deleteDoc(doc(db, 'books', id)); window.showToast?.('Book removed from inventory.'); }
       catch(error) { alert('Could not delete book: ' + error.message); }
     }
@@ -2541,7 +2739,11 @@
           title.prepend(img);
         }
         tr.insertCell().textContent=(book.format||'Book') + (book.isbn ? ' / '+book.isbn : '');
-        tr.insertCell().textContent='$' + (Number(book.price)||0).toFixed(2);
+        const pricing = tr.insertCell();
+        pricing.textContent='$' + (Number(book.price)||0).toFixed(2);
+        const stockLabel=document.createElement('div');
+        stockLabel.textContent=book.stock == null ? 'Stock not set' : 'Stock: ' + book.stock;
+        pricing.append(stockLabel);
         const actions=tr.insertCell();
         const edit=document.createElement('button'); edit.type='button'; edit.className='btn-secondary-action'; edit.textContent='Edit';
         edit.addEventListener('click',()=>lrEditBook(id)); actions.append(edit);
@@ -2577,7 +2779,7 @@
         lrInventoryListenerStarted = false;
       }
       if (lrInventoryListenerStarted) return;
-      if (!hasAdminAccess()) {
+      if (!lrIsAdmin(auth.currentUser)) {
         lrInventoryNotice('Sign in to your administrator account to load books.', true);
         return;
       }
@@ -2585,7 +2787,6 @@
       lrInventoryNotice('Loading inventory from Firebase…');
       try {
         lrInventoryUnsubscribe = onSnapshot(collection(db, 'books'), snapshot => {
-          if (!hasAdminAccess()) return;
           lrInventoryCache.clear();
           snapshot.forEach(item => lrInventoryCache.set(item.id, item.data()));
           lrRenderInventory();
@@ -2593,6 +2794,8 @@
             const promoResult = typeof populatePromoBannerItems === 'function' ? populatePromoBannerItems() : null;
             promoResult?.catch?.(console.warn);
           } catch (e) { console.warn('Promo refresh failed:', e); }
+          try { window.lrRefreshOfferProducts?.(); }
+          catch (e) { console.warn('Offer selector refresh failed:', e); }
         }, error => {
           lrInventoryListenerStarted = false;
           lrInventoryUnsubscribe = null;
@@ -2616,19 +2819,29 @@
     lrBookField('cancelEditBookBtn')?.addEventListener('click',lrResetBookEditor);
     lrBookField('adminBookForm')?.addEventListener('submit', async event => {
       event.preventDefault();
-      if (!hasAdminAccess()) return;
       const form=event.currentTarget, button=form.querySelector('[type="submit"]');
+      if(button?.disabled) return;
       const oldLabel=button?.textContent;
       if(button) { button.disabled=true; button.textContent='Saving book…'; }
       try {
         const id=lrBookField('editBookDocId')?.value.trim();
         const previous=id ? (lrInventoryCache.get(id)||{}) : {};
-        const payload={...previous};
+        if (!lrIsAdmin(auth.currentUser)) throw new Error('Sign in as the administrator to save inventory.');
+        const payload={};
         for(const [key, fieldId] of Object.entries(lrBookValues)) {
           const field=lrBookField(fieldId);
-          if(field) payload[key]=lrNumericBookFields.has(key) ? (Number(field.value)||0) : field.value.trim();
+          if(field) {
+            const value=field.value.trim();
+            if(lrNumericBookFields.has(key)) {
+              const number=value === '' ? 0 : Number(value);
+              if(!Number.isFinite(number) || number < 0 || (key === 'stock' && !Number.isInteger(number)))
+                throw new Error('Enter a valid nonnegative ' + (key === 'stock' ? 'whole stock quantity.' : key + '.'));
+              payload[key]=number;
+            } else payload[key]=value;
+          }
         }
         for(const [key, fieldId] of Object.entries(lrBookChecks)) payload[key]=Boolean(lrBookField(fieldId)?.checked);
+        if(!payload.title || !payload.author) throw new Error('Enter a book title and author.');
         payload.tags=String(payload.tags||'');
         const file=lrBookField('adminBookCoverFile')?.files?.[0];
         if(file) {
@@ -2637,7 +2850,6 @@
           await uploadBytes(storageRef,file,{contentType:file.type});
           payload.imageUrl=await getDownloadURL(storageRef);
         } else if(id && !payload.imageUrl) payload.imageUrl=previous.imageUrl||previous.coverUrl||previous.frontImageUrl||'';
-        if (!hasAdminAccess()) return;
         // Keep both cover fields used by different storefront views synchronized.
         payload.coverUrl=payload.imageUrl;
         payload.frontImageUrl=payload.imageUrl;
@@ -2650,142 +2862,153 @@
       finally { if(button) {button.disabled=false;button.textContent=oldLabel;} }
     });
 
-    const stripeButton = document.getElementById('lrTestStripeConnection');
-    const stripeResult = document.getElementById('lrStripeTestResult');
-    const stripeState = document.getElementById('lrStripeConnectionState');
 
-    stripeButton.addEventListener('click', async () => {
-      if (!hasAdminAccess() || stripeButton.disabled) return;
-      stripeButton.disabled = true;
-      stripeResult.textContent = 'Testing secure Stripe connection…';
+    // Gift inventory: one live source for the table and quick-edit selector.
+    const lrGiftCache = new Map();
+    let lrGiftUnsubscribe = null;
+    const lrGiftFields = {
+      title:'adminGiftTitle', price:'adminGiftPrice', category:'adminGiftCategory',
+      promoCode:'adminGiftPromo', discountPct:'adminGiftDiscountPct',
+      imageUrl:'adminGiftImageUrl', backImageUrl:'adminGiftBackCoverUrl', description:'adminGiftDesc'
+    };
+    function lrGiftNotice(message, retry=false) {
+      const body=lrBookField('adminGiftInventoryTableBody');
+      if(!body) return;
+      body.replaceChildren();
+      const cell=body.insertRow().insertCell(); cell.colSpan=4; cell.textContent=message;
+      if(retry) {
+        const button=document.createElement('button'); button.type='button';
+        button.className='btn-secondary-action'; button.textContent='Retry loading gifts';
+        button.addEventListener('click',()=>loadAdminGiftInventory()); cell.append(button);
+      }
+    }
+    function lrResetGiftEditor() {
+      lrBookField('adminGiftMerchandiseForm')?.reset();
+      lrBookField('editGiftItemId').value='';
+      lrBookField('cancelEditGiftBtn').style.display='none';
+    }
+    function lrEditGift(id) {
+      const item=lrGiftCache.get(id); if(!item) return;
+      lrResetGiftEditor();
+      lrBookField('editGiftItemId').value=id;
+      for(const [key,fieldId] of Object.entries(lrGiftFields)) {
+        const field=lrBookField(fieldId);
+        const value=item[key] ?? (key==='imageUrl' ? item.frontImageUrl || '' : '');
+        if(field.tagName==='SELECT' && value && !Array.from(field.options).some(o=>o.value===String(value)))
+          field.add(new Option(value,value));
+        field.value=value;
+      }
+      lrBookField('cancelEditGiftBtn').style.display='inline-flex';
+      lrBookField('adminGiftMerchandiseForm').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    async function lrDeleteGift(id) {
+      if(!lrIsAdmin(auth.currentUser)) return;
+      const item=lrGiftCache.get(id);
+      if(!item || !confirm('Delete "'+(item.title || 'this gift')+'" from the gift shop?')) return;
       try {
-        const test = httpsCallable(getFunctions(app, 'us-central1'), 'lrStripeConnectionTest');
-        const result = await test({});
-        if (!hasAdminAccess()) return;
-        if (result.data?.connected === true && result.data?.mode === 'test') {
-          stripeResult.textContent = 'Success: Stripe test connection verified. No payment was created.';
-          stripeState.textContent = 'Test connection verified';
-        } else {
-          stripeResult.textContent = 'Test returned an unexpected result. Check Cloud Functions logs.';
-        }
-      } catch (error) {
-        if (hasAdminAccess()) stripeResult.textContent = 'Stripe test failed: ' + error.message;
-      } finally {
-        stripeButton.disabled = !hasAdminAccess();
-      }
-    });
-
-    function loadAdminNotifications() {
-      const notifications = query(collection(db, 'admin_notifications'), orderBy('timestamp', 'desc'), limit(50));
-      const badge = document.getElementById('notificationBadge');
-      const list = document.getElementById('notificationDropdownList');
-      const panelList = document.getElementById('adminNotificationsList');
-
-      function render(listElement, documents) {
-        listElement.replaceChildren();
-        if (!documents.length) listElement.textContent = 'No new alerts';
-        for (const documentSnapshot of documents) {
-          const { message, read } = documentSnapshot.data();
-          const row = document.createElement('div');
-          row.style.cssText = 'padding:12px 16px;border-bottom:1px solid var(--border-subtle);font-size:.8rem;';
-          if (!read) {
-            row.style.background = 'var(--bg-surface-elevated)';
-            row.style.fontWeight = '700';
-          }
-          row.textContent = message || 'Notification';
-          listElement.append(row);
+        await deleteDoc(doc(db,'giftshop_items',id));
+        if(lrBookField('editGiftItemId').value===id) lrResetGiftEditor();
+        window.showToast?.('Gift item deleted.');
+      } catch(error) { alert('Could not delete gift item: '+error.message); }
+    }
+    function lrRenderGifts() {
+      const body=lrBookField('adminGiftInventoryTableBody');
+      const select=lrBookField('giftItemSelectTarget'), selected=select.value;
+      select.replaceChildren(new Option('-- Choose a Gift Shop Item to Edit --',''));
+      body.replaceChildren();
+      const items=[...lrGiftCache.entries()].sort((a,b)=>String(a[1].title||'').localeCompare(String(b[1].title||'')));
+      for(const [id,item] of items) {
+        const price='$'+(Number(item.price)||0).toFixed(2);
+        select.add(new Option((item.title||'Untitled')+' ('+price+')',id));
+        const row=body.insertRow();
+        row.insertCell().textContent=item.title||'Untitled';
+        row.insertCell().textContent=item.category||'Uncategorized';
+        row.insertCell().textContent=price+(item.promoCode ? ' / '+item.promoCode : '');
+        const actions=row.insertCell();
+        for(const [label,handler,css] of [['Edit',()=>lrEditGift(id),'btn-secondary-action'],['Delete',()=>lrDeleteGift(id),'btn-danger-action']]) {
+          const button=document.createElement('button'); button.type='button'; button.className=css;
+          button.textContent=label; button.addEventListener('click',handler); actions.append(button);
         }
       }
-
-      return onSnapshot(notifications, snapshot => {
-        if (!hasAdminAccess()) return;
-        const unread = snapshot.docs.filter(item => !item.data().read).length;
-        badge.textContent = unread > 99 ? '99+' : String(unread);
-        badge.style.display = unread ? 'flex' : 'none';
-        render(list, snapshot.docs);
-        render(panelList, snapshot.docs);
-      }, error => {
-        if (hasAdminAccess()) panelList.textContent = 'Could not load notifications: ' + error.message;
+      if(!items.length) lrGiftNotice('No gift items yet. Add an item using the Gift Shop form.');
+      select.value=lrGiftCache.has(selected) ? selected : '';
+      if(selected && !lrGiftCache.has(selected)) select.dispatchEvent(new Event('change'));
+    }
+    function loadAdminGiftInventory() {
+      if(!lrIsAdmin(auth.currentUser) || lrGiftUnsubscribe) return;
+      lrGiftNotice('Loading gift inventory…');
+      lrGiftUnsubscribe=onSnapshot(collection(db,'giftshop_items'),snapshot=>{
+        lrGiftCache.clear(); snapshot.forEach(item=>lrGiftCache.set(item.id,item.data()));
+        lrRenderGifts();
+        populatePromoBannerItems().catch(console.warn);
+        window.lrRefreshOfferProducts?.();
+      },error=>{
+        lrGiftUnsubscribe=null;
+        lrGiftNotice('Could not load gift inventory: '+error.message,true);
+        const select=lrBookField('giftItemSelectTarget');
+        select.replaceChildren(new Option('Unable to load gift items. Retry below in Gift Shop.',''));
       });
     }
-
-    const $ = id => document.getElementById(id);
-    const status = (msg, error=false) => { $('lrOfferAdminStatus').textContent=msg; $('lrOfferAdminStatus').style.color=error?'#ff6b6b':'var(--accent-gold)'; };
-    const fields = ['lrOfferTitle','lrOfferSubtitle','lrOfferDetails','lrOfferCode','lrOfferExpiry'];
-    async function loadSelected() {
-      if (!hasAdminAccess()) return;
-      fields.forEach(id => $(id).value=''); $('lrOfferEnabled').checked=true;
-      const key=$('lrOfferTarget').value; if (!key) return;
-      status('Loading saved offer…');
+    lrBookField('cancelEditGiftBtn')?.addEventListener('click',lrResetGiftEditor);
+    lrBookField('adminGiftMerchandiseForm')?.addEventListener('submit',async event=>{
+      event.preventDefault();
+      const button=event.currentTarget.querySelector('[type="submit"]');
+      if(button.disabled) return;
+      button.disabled=true;
       try {
-        const snap=await getDoc(doc(db,'product_offer_details',key));
-        if (!hasAdminAccess() || $('lrOfferTarget').value!==key) return;
-        if (snap.exists()) {
-          const d=snap.data(); $('lrOfferTitle').value=d.title||''; $('lrOfferSubtitle').value=d.summary||'';
-          $('lrOfferDetails').value=d.details||''; $('lrOfferCode').value=d.promoCode||'';
-          $('lrOfferExpiry').value=d.expiresOn||''; $('lrOfferEnabled').checked=d.enabled!==false;
-          status('Saved offer loaded.');
-        } else status('No offer saved for this product yet.');
-      } catch (e) { status('Could not load offer: '+e.message,true); }
-    }
-    async function refreshProducts() {
-      if (!hasAdminAccess()) return;
-      const sel=$('lrOfferTarget'), previous=sel.value; sel.replaceChildren(new Option('Select a product…',''));
-      let count=0;
-      for (const [collectionName,prefix,label] of [['books','book','Book'],['giftshop_items','gift','Gift Shop'],['coupons','coupon','Coupon']]) {
-        try {
-          const snap=await getDocs(collection(db,collectionName));
-          if (!hasAdminAccess()) return;
-          snap.forEach(item => { const data=item.data(); sel.add(new Option(label+': '+(data.title||data.name||data.code||item.id),prefix+'_'+item.id)); count++; });
-        } catch (e) { console.warn('Cannot load '+collectionName,e); }
-      }
-      if ([...sel.options].some(o=>o.value===previous)) sel.value=previous;
-      status(count ? count+' products ready. Select one to edit.':'No accessible products found.',!count);
-      if (sel.value) await loadSelected();
-    }
-    $('lrOfferTarget')?.addEventListener('change',loadSelected);
-    $('lrOfferRefresh')?.addEventListener('click',refreshProducts);
-    $('lrOfferAdminForm')?.addEventListener('submit',async event=>{
-      event.preventDefault(); if (!hasAdminAccess()) return status('Admin sign-in required.',true);
-      const key=$('lrOfferTarget').value; if (!key) return status('Select a product first.',true);
-      const [productType,...parts]=key.split('_'); const productId=parts.join('_');
-      status('Saving…');
-      try {
-        await setDoc(doc(db,'product_offer_details',key),{
-          productId,productType,title:$('lrOfferTitle').value.trim(),summary:$('lrOfferSubtitle').value.trim(),
-          details:$('lrOfferDetails').value.trim(),promoCode:$('lrOfferCode').value.trim(),
-          expiresOn:$('lrOfferExpiry').value,enabled:$('lrOfferEnabled').checked,updatedAt:serverTimestamp()
-        },{merge:true});
-        status('Offer details saved. They will appear on this product’s book.html page.');
-      } catch(e) { status('Unable to save: '+e.message,true); }
+        if(!lrIsAdmin(auth.currentUser)) throw new Error('Sign in as the administrator to save inventory.');
+        const payload={};
+        for(const [key,fieldId] of Object.entries(lrGiftFields)) payload[key]=lrBookField(fieldId).value.trim();
+        payload.price=Number(payload.price); payload.discountPct=Number(payload.discountPct);
+        if(!payload.title || !Number.isFinite(payload.price) || payload.price<0)
+          throw new Error('Enter a title and a valid nonnegative price.');
+        if(!Number.isFinite(payload.discountPct) || payload.discountPct<0 || payload.discountPct>100)
+          throw new Error('Discount must be between 0 and 100.');
+        payload.promoCode=payload.promoCode.toUpperCase();
+        payload.frontImageUrl=payload.imageUrl;
+        payload.updatedAt=serverTimestamp();
+        const id=lrBookField('editGiftItemId').value;
+        if(id) await updateDoc(doc(db,'giftshop_items',id),payload);
+        else { payload.createdAt=serverTimestamp(); await addDoc(collection(db,'giftshop_items'),payload); }
+        lrResetGiftEditor(); window.showToast?.('Gift item saved to inventory!');
+      } catch(error) { alert('Could not save gift item: '+error.message); }
+      finally { button.disabled=false; }
     });
 
-    const adminListeners = [];
-    let activeUserUid;
-    let signingOut = false;
+    function setupAdminInterface(userData, isAdmin) {
+      document.body.classList.add("authenticated");
+      const navActions = document.querySelector('.nav-actions');
+      if (navActions) navActions.classList.add('auth-loaded');
 
-    function startAdminDashboard() {
-      injectAdminSidebarLinks();
-      stripeButton.disabled = false;
-      for (const subscribe of [loadAdminEpubTrackers, loadAdminCharacters, loadAdminNotifications]) {
-        const unsubscribe = subscribe();
-        if (unsubscribe) adminListeners.push(unsubscribe);
+      const navLoginBtn = document.getElementById('navLoginBtn');
+      const navProfileMenu = document.getElementById('navProfileMenu');
+      if (navLoginBtn) navLoginBtn.style.display = "none";
+      if (navProfileMenu) navProfileMenu.style.display = "block";
+
+      const name = userData.displayName || (userData.email ? userData.email.split('@')[0] : "Patron");
+      document.getElementById('sidebarDisplayName').textContent = name;
+      document.getElementById('navUserName').textContent = name;
+
+      if (isAdmin) {
+        document.getElementById('sidebarUserRole').textContent = "Administrator";
+        // Restore the complete admin menu before loading any optional dashboard data.
+        injectAdminSidebarLinks();
+        // Start the book listener independently: missing optional dashboard helpers must not block it.
+        try { loadAdminInventory(); }
+        catch (error) { console.error('Book inventory startup failed:', error); lrInventoryNotice('Unable to start the book inventory: ' + (error?.message || error), true); }
+        // Some account.html builds do not include the legacy gift inventory helper.
+        // Never reference an undeclared identifier directly in an array literal.
+        for (const loadDashboardData of [
+          typeof loadAdminGiftInventory === 'function' ? loadAdminGiftInventory : null,
+          typeof loadAdminEpubTrackers === 'function' ? loadAdminEpubTrackers : null
+        ]) {
+          if (!loadDashboardData) continue;
+          try {
+            const task = loadDashboardData();
+            if (task && typeof task.catch === 'function') task.catch(error => console.error('Admin dashboard data load failed:', error));
+          } catch (error) { console.error('Admin dashboard data load failed:', error); }
+        }
       }
-      loadAdminInventory();
-      refreshProducts().catch(error => console.warn('Offer selector refresh failed:', error));
-      populateGiftItemSelect();
-      loadPromoBannerSettings();
-      initManuscriptProgress();
-    }
-
-    function stopAdminDashboard() {
-      adminListeners.splice(0).forEach(unsubscribe => unsubscribe());
-      lrInventoryUnsubscribe?.();
-      lrInventoryUnsubscribe = null;
-      lrInventoryListenerStarted = false;
-      document.body.classList.remove('lr-admin');
-      stripeButton.disabled = true;
-      document.getElementById('sidebarUserRole').textContent = 'Reader Account';
     }
 
     function injectAdminSidebarLinks() {
@@ -2793,55 +3016,47 @@
       if (!navList || navList.querySelector('[data-admin-settings-nav="true"]')) return;
 
       navList.insertAdjacentHTML("beforeend", `
-        <div data-admin-only data-admin-settings-nav="true" class="sidebar-category-header">Store Management</div>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('notifications-section', 'Live Admin Notifications', event)">Live Notifications</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('epubtracker', 'Manuscript EPUB Tracker', event)">Manuscript Progress</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('orders', 'Global Store Orders', event)">Global Orders</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" data-lr-panel="payment-payouts" aria-controls="panel-payment-payouts">Payment &amp; Payouts</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('inventory', 'Catalog Inventory Management', event)">Inventory &amp; Pricing</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('fanartupload', 'Fanart Gallery Admin Upload', event)">Fanart Upload</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('timersetting', 'Countdown Timers Control', event)">Timer Control</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('giftshop', 'Manage Gift Shop & Virtual Cards', event)">Gift Shop &amp; Cards</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('announcement', 'Announcement Bar Control', event)">Announcement Bar</button>
+        <div data-admin-settings-nav="true" class="sidebar-category-header">Store Management</div>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('epubtracker', 'Manuscript EPUB Tracker', event)">Manuscript Progress</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('orders', 'Global Store Orders', event)">Global Orders</button>
+        <button type="button" class="sidebar-tab-btn" data-lr-panel="payment-payouts" aria-controls="panel-payment-payouts">Payment &amp; Payouts</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('inventory', 'Catalog Inventory Management', event)">Inventory &amp; Pricing</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('fanartupload', 'Fanart Gallery Admin Upload', event)">Fanart Upload</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('timersetting', 'Countdown Timers Control', event)">Timer Control</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('giftshop', 'Manage Gift Shop & Virtual Cards', event)">Gift Shop &amp; Cards</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('announcement', 'Announcement Bar Control', event)">Announcement Bar</button>
 
-        <div data-admin-only class="sidebar-category-header">Content Management</div>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('signaturesetting', 'Digital Author Signature', event)">Author Signature</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('abouteditor', 'About Page CMS', event)">About Author Page</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('bookdetailcms', 'Book Detail Page CMS', event)">Book Detail Page</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('homecms', 'Homepage CMS & Featured Books', event)">Homepage CMS</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('fanartcms', 'Fanart Banner CMS', event)">Fanart Banner</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('characterwall', 'Character Wall Management', event)">Character Wall</button>
-        <button type="button" data-admin-only class="sidebar-tab-btn" onclick="switchPanel('policies', 'Store Policies &amp; Terms', event)">Policies &amp; Shipping</button>
+        <div class="sidebar-category-header">Content Management</div>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('signaturesetting', 'Digital Author Signature', event)">Author Signature</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('abouteditor', 'About Page CMS', event)">About Author Page</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('bookdetailcms', 'Book Detail Page CMS', event)">Book Detail Page</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('homecms', 'Homepage CMS & Featured Books', event)">Homepage CMS</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('fanartcms', 'Fanart Banner CMS', event)">Fanart Banner</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('characterwall', 'Character Wall Management', event)">Character Wall</button>
+        <button type="button" class="sidebar-tab-btn" onclick="switchPanel('policies', 'Store Policies &amp; Terms', event)">Policies &amp; Shipping</button>
       `);
     }
 
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, (user) => {
+      if (!lrIsAdmin(user)) {
+        lrInventoryUnsubscribe?.(); lrInventoryUnsubscribe=null; lrInventoryListenerStarted=false;
+        lrGiftUnsubscribe?.(); lrGiftUnsubscribe=null;
+        lrInventoryCache.clear(); lrGiftCache.clear();
+        lrResetBookEditor(); lrResetGiftEditor();
+        lrInventoryNotice('Sign in as the administrator to load inventory.');
+        lrGiftNotice('Sign in as the administrator to load gift inventory.');
+        lrBookField('giftItemSelectTarget').replaceChildren(new Option('-- Sign in as administrator --',''));
+      }
       if (!user) {
-        stopAdminDashboard();
-        document.querySelector('.nav-actions')?.classList.add('auth-loaded');
-        window.safeNavigate(signingOut ? 'index.html' : 'login.html');
+        if (window.location.protocol === 'blob:' || window.location.href.startsWith('blob:')) {
+          setupAdminInterface({ displayName: "Demo Administrator", email: "admin@example.invalid" }, true);
+          return;
+        }
+        window.safeNavigate("login.html");
         return;
       }
-      if (activeUserUid && activeUserUid !== user.uid) {
-        stopAdminDashboard();
-        window.location.reload();
-        return;
-      }
-      if (activeUserUid === user.uid) return;
-      activeUserUid = user.uid;
-
-      const isAdmin = isAdminUser(user);
-      document.body.classList.add('authenticated');
-      document.body.classList.toggle('lr-admin', isAdmin);
-      document.querySelector('.nav-actions')?.classList.add('auth-loaded');
-      document.getElementById('navLoginBtn').style.display = 'none';
-      document.getElementById('navProfileMenu').style.display = 'block';
-      const name = user.displayName || user.email?.split('@')[0] || 'Patron';
-      document.getElementById('sidebarDisplayName').textContent = name;
-      document.getElementById('navUserName').textContent = name;
-      document.getElementById('sidebarUserRole').textContent = isAdmin ? 'Administrator' : 'Reader Account';
-
-      if (isAdmin) startAdminDashboard();
+      const isAdmin = lrIsAdmin(user);
+      setupAdminInterface(user, isAdmin);
     });
 
     document.getElementById("profileTriggerBtn")?.addEventListener("click", (e) => {
@@ -2855,25 +3070,124 @@
     });
 
     const handleSignOut = async () => {
-      if (signingOut) return;
-      signingOut = true;
-      try {
-        await signOut(auth);
-      } catch (error) {
-        signingOut = false;
-        window.showToast('Could not sign out: ' + error.message);
-      }
+      try { await signOut(auth); } catch (err) {}
+      localStorage.clear();
+      window.safeNavigate("index.html");
     };
 
     document.getElementById('logoutBtn')?.addEventListener('click', handleSignOut);
     document.getElementById('dropdownLogoutBtn')?.addEventListener('click', handleSignOut);
   </script>
 
+  <!-- Notification Counter Sync -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+
+    const sharedApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const sharedDb = getFirestore(sharedApp);
+    const badge = document.getElementById('notificationBadge');
+    const list = document.getElementById('notificationDropdownList');
+
+    const q = query(collection(sharedDb, 'admin_notifications'), orderBy('timestamp', 'desc'), limit(50));
+    onSnapshot(q, (snapshot) => {
+      const unreadCount = snapshot.docs.filter(d => !d.data().read).length;
+      if (badge) {
+        badge.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+        badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+      }
+      if (list && !snapshot.empty) {
+        list.innerHTML = snapshot.docs.map(docSnap => {
+          const d = docSnap.data();
+          return `
+            <div style="padding:12px 16px; border-bottom:1px solid var(--border-subtle); background:${d.read ? 'transparent' : 'var(--bg-surface-elevated)'};">
+              <div style="font-size:0.8rem; color:var(--text-primary); font-weight:${d.read ? '400' : '700'};">${d.message || 'Notification'}</div>
+            </div>
+          `;
+        }).join('');
+      }
+    });
+  </script>
+
+  <!-- ADDITIVE: isolated offer admin controller. Does not alter existing admin functions. -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    const cfg = {apiKey:"AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",authDomain:"libraryreeds-638f4.firebaseapp.com",projectId:"libraryreeds-638f4",storageBucket:"libraryreeds-638f4.firebasestorage.app",messagingSenderId:"768304310517",appId:"1:768304310517:web:39b931e6447043d84d3dbc"};
+    const app = getApps().length ? getApp() : initializeApp(cfg);
+    const db = getFirestore(app), auth = getAuth(app);
+    const $ = id => document.getElementById(id);
+    let allowed = false;
+    const status = (msg, error=false) => { $('lrOfferAdminStatus').textContent=msg; $('lrOfferAdminStatus').style.color=error?'#ff6b6b':'var(--accent-gold)'; };
+    const fields = ['lrOfferTitle','lrOfferSubtitle','lrOfferDetails','lrOfferCode','lrOfferExpiry'];
+    async function loadSelected() {
+      fields.forEach(id => $(id).value=''); $('lrOfferEnabled').checked=true;
+      const key=$('lrOfferTarget').value; if (!key) return;
+      status('Loading saved offer…');
+      try {
+        const snap=await getDoc(doc(db,'product_offer_details',key));
+        if ($('lrOfferTarget').value!==key) return;
+        if (snap.exists()) {
+          const d=snap.data(); $('lrOfferTitle').value=d.title||''; $('lrOfferSubtitle').value=d.summary||'';
+          $('lrOfferDetails').value=d.details||''; $('lrOfferCode').value=d.promoCode||'';
+          $('lrOfferExpiry').value=d.expiresOn||''; $('lrOfferEnabled').checked=d.enabled!==false;
+          status('Saved offer loaded.');
+        } else status('No offer saved for this product yet.');
+      } catch (e) { status('Could not load offer: '+e.message,true); }
+    }
+    async function refreshProducts() {
+      if (!allowed) return;
+      const sel=$('lrOfferTarget'), previous=sel.value; sel.replaceChildren(new Option('Select a product…',''));
+      let count=0;
+      for (const [collectionName,prefix,label] of [['books','book','Book'],['giftshop_items','gift','Gift Shop'],['coupons','coupon','Coupon']]) {
+        try {
+          const snap=await getDocs(collection(db,collectionName));
+          snap.forEach(item => { const data=item.data(); sel.add(new Option(label+': '+(data.title||data.name||data.code||item.id),prefix+'_'+item.id)); count++; });
+        } catch (e) { console.warn('Cannot load '+collectionName,e); }
+      }
+      if ([...sel.options].some(o=>o.value===previous)) sel.value=previous;
+      status(count ? count+' products ready. Select one to edit.':'No accessible products found.',!count);
+      if (sel.value) await loadSelected();
+    }
+    onAuthStateChanged(auth, user => {
+      // UI gate only: Firestore security rules must independently restrict writes to true admins.
+      const email=(user?.email||'').toLowerCase();
+      allowed=!!user && (email==='firelily@libraryreeds.com' || email.includes('admin'));
+      const editor=$('adminProductOfferEditor'); if (editor) editor.style.display=allowed?'block':'none';
+      if (allowed) refreshProducts();
+    });
+    $('lrOfferTarget')?.addEventListener('change',loadSelected);
+    $('lrOfferRefresh')?.addEventListener('click',refreshProducts);
+    $('lrOfferAdminForm')?.addEventListener('submit',async event=>{
+      event.preventDefault(); if (!allowed) return status('Admin sign-in required.',true);
+      const key=$('lrOfferTarget').value; if (!key) return status('Select a product first.',true);
+      const [productType,...parts]=key.split('_'); const productId=parts.join('_');
+      status('Saving…');
+      try {
+        await setDoc(doc(db,'product_offer_details',key),{
+          productId,productType,title:$('lrOfferTitle').value.trim(),summary:$('lrOfferSubtitle').value.trim(),
+          details:$('lrOfferDetails').value.trim(),promoCode:$('lrOfferCode').value.trim(),
+          expiresOn:$('lrOfferExpiry').value,enabled:$('lrOfferEnabled').checked,updatedAt:serverTimestamp()
+        },{merge:true});
+        status('Offer details saved. They will appear on this product’s book.html page.');
+      } catch(e) { status('Unable to save: '+e.message,true); }
+    });
+  </script>
   <script type="module">
 // Library Reeds shared profile synchronization • Firebase v10.8.0
 import {getApps,getApp,initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
 import {getAuth,onAuthStateChanged,updateProfile} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-import {getFirestore,doc,onSnapshot,setDoc} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+import {getFirestore,doc,onSnapshot,setDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 import {getStorage,ref,uploadBytes,getDownloadURL} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
 const app=getApps().find(a=>a.options.projectId==='libraryreeds-638f4')||initializeApp({apiKey:"AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",authDomain:"libraryreeds-638f4.firebaseapp.com",projectId:"libraryreeds-638f4",storageBucket:"libraryreeds-638f4.firebasestorage.app",messagingSenderId:"768304310517",appId:"1:768304310517:web:39b931e6447043d84d3dbc"});
 const auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
@@ -2923,19 +3237,17 @@ if(form)form.addEventListener('submit',async event=>{
     let photoURL=user.photoURL||'';
     if(file){
       const ext={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[file.type];
-      const uploadRef=ref(storage,`avatars_by_user/${user.uid}/${Date.now()}.${ext}`);
+      const uploadRef=ref(storage,`avatars/${user.uid}-${Date.now()}.${ext}`);
       await uploadBytes(uploadRef,file,{contentType:file.type});
       photoURL=await getDownloadURL(uploadRef);
     }
     const changes={};
     if(name)changes.displayName=name;
     if(file)changes.photoURL=photoURL;
-    if(auth.currentUser?.uid!==user.uid)return;
     await updateProfile(user,changes);
-    if(auth.currentUser?.uid!==user.uid)return;
     updateHeader({displayName:name||user.displayName,photoURL},user);
     try{
-      await setDoc(doc(db,'users',user.uid),changes,{merge:true});
+      await setDoc(doc(db,'users',user.uid),{...(name?{displayName:name}:{}),...(file?{photoURL,avatarUrl:photoURL}:{}),updatedAt:serverTimestamp()},{merge:true});
       report('Profile saved. Your photo and username will sync across Library Reeds pages.');
     }catch(e){report('Saved in Firebase Authentication, but Firestore sync failed: '+(e.code||e.message));}
     if(file)document.getElementById('profileImageFile').value='';
@@ -2945,5 +3257,63 @@ if(form)form.addEventListener('submit',async event=>{
 
 </script>
 
+  <!-- Additive Stripe test controller: no API secrets in this page. -->
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
+    const cfg = {
+      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+      authDomain: "libraryreeds-638f4.firebaseapp.com",
+      projectId: "libraryreeds-638f4",
+      storageBucket: "libraryreeds-638f4.firebasestorage.app",
+      messagingSenderId: "768304310517",
+      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+    };
+    const app = getApps().find(a => a.options.projectId === 'libraryreeds-638f4') || initializeApp(cfg);
+    const auth = getAuth(app);
+    const button = document.getElementById('lrTestStripeConnection');
+    const output = document.getElementById('lrStripeTestResult');
+    const state = document.getElementById('lrStripeConnectionState');
+    // The backend performs the authoritative admin UID check.
+    const adminUid = 'zlbkFntgN9emWShy7q5361lJncu1';
+    if (button && output) {
+      button.disabled = true;
+      onAuthStateChanged(auth, user => {
+        const isAdmin = Boolean(user && user.uid === adminUid);
+        button.disabled = !isAdmin;
+        output.textContent = !user ? 'Sign in as the Library Reeds administrator to test Stripe.'
+          : !isAdmin ? 'Only the Library Reeds administrator can run this test.' : 'Ready to test Stripe (test mode).';
+      });
+      button.addEventListener('click', async () => {
+        if (button.disabled) return;
+        const user = auth.currentUser;
+        if (!user || user.uid !== adminUid) {
+          output.textContent = 'Administrator sign-in required.';
+          return;
+        }
+        button.disabled = true;
+        output.textContent = 'Testing secure Stripe connection…';
+        try {
+          await user.getIdToken();
+          const test = httpsCallable(getFunctions(app, 'us-central1'), 'lrStripeConnectionTest');
+          const result = await test({});
+          if (result.data?.connected === true && result.data?.mode === 'test') {
+            output.textContent = 'Success: Stripe test connection verified. No payment was created.';
+            if (state) state.textContent = 'Test connection verified';
+          } else {
+            output.textContent = 'Test returned an unexpected result. Check Cloud Functions logs.';
+          }
+        } catch (error) {
+          const code = error?.code || 'unknown';
+          output.textContent = 'Stripe test failed (' + code + '): ' + (error?.message || 'Check Cloud Functions logs.');
+          console.error('Library Reeds Stripe test:', code);
+        } finally {
+          button.disabled = !auth.currentUser || auth.currentUser.uid !== adminUid;
+        }
+      });
+    }
+  </script>
+<script type="module" src="./membership-controls.js"></script>
 </body>
 </html>
