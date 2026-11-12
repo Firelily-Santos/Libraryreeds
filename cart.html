@@ -428,7 +428,7 @@
           <span id="cartTax">$0.00</span>
         </div>
         <div class="summary-row total">
-          <span>Total Due</span>
+          <span>Estimated total</span>
           <span id="cartTotal">$0.00</span>
         </div>
         <!-- Coupon pre-check: never discount the client-side payment total. -->
@@ -452,18 +452,18 @@
       <!-- FULFILLMENT DETAILS DISPLAY BOX -->
       <div class="fulfillment-box" id="fulfillmentDetailsBox">
         <h4>📦 Fulfillment Details</h4>
-        <p><strong>Estimated Delivery:</strong> <span id="summaryEstDelivery">3-5 Business Days (Instants Available)</span></p>
+        <p><strong>Estimated Delivery:</strong> <span id="summaryEstDelivery">Delivery details shown with your purchased items</span></p>
         <p><strong>Shipping Address:</strong> <span id="summaryShippingAddress">Loading address from account...</span></p>
         <p><strong>Billing Address:</strong> <span id="summaryBillingAddress">Loading billing from account...</span></p>
       </div>
 
-      <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">Your order will be sent to your configured, approved commercial checkout provider. Complete payment there, then return here for confirmation. This site will not mark your order paid without independent verification.</p>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">Review your order in Stripe and complete payment there. Your receipt will open after checkout.</p>
       <div style="background: var(--bg-base); padding: 20px; border-radius: 4px; border: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
         <span style="font-size: 0.85rem; color: var(--text-muted);">Encrypted SSL Transaction</span>
         <span style="font-size: 1.25rem; font-weight: 700; color: var(--accent-gold);" id="step2TotalDisplay">$0.00</span>
       </div>
-      <button type="button" class="btn-checkout" id="continueToCheckoutBtn">Continue to Stripe Test Payment</button>
-      <p id="checkoutStatus" role="status" aria-live="polite" style="font-size:.85rem;line-height:1.6;color:var(--text-secondary)">TEST MODE: Admin-only, one configured book ($24.99). Payments and receipts are verified by the server. Other products, shipping, tax and coupons are not enabled for Stripe checkout yet.</p>
+      <button type="button" class="btn-checkout" id="continueToCheckoutBtn">Continue to Secure Payment</button>
+      <p id="checkoutStatus" role="status" aria-live="polite" style="font-size:.85rem;line-height:1.6;color:var(--text-secondary)">Review the final price and tax in Stripe before paying.</p>
     </div>
   </main>
 
@@ -579,9 +579,42 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const couponFunctions = getFunctions(app, "us-central1");
-    // Stripe test-mode checkout is restricted to the administrator and one book.
-    // Admin-only single-book Stripe TEST function. Not a customer checkout.
-    const startBookCheckout = httpsCallable(couponFunctions, "lrCreateStripeTestCheckout");
+    const testMode = new URLSearchParams(location.search).get("mode") === "test";
+    const startCheckout = httpsCallable(couponFunctions,
+      testMode ? "lrCreateStripeTestCheckout" : "lrCreateStripeLiveCheckout");
+    document.getElementById("continueToCheckoutBtn").textContent =
+      testMode ? "Continue to Stripe Test Payment" : "Continue to Secure Payment";
+    document.getElementById("checkoutStatus").textContent = testMode
+      ? "Test mode · Complete a sample payment with a Stripe test card."
+      : "Review the final price and tax in Stripe before paying.";
+
+    function readStoredCart() {
+      try {
+        const value = JSON.parse(localStorage.getItem("libraryreeds_cart") || "[]");
+        return Array.isArray(value) ? value : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function checkoutItem(item) {
+      if (!item || typeof item !== "object") throw new Error("Remove the invalid item and add it again from the shop.");
+      let productId = String(item.itemId || item.productId || item.id || "");
+      const type = String(item.productType || item.type || "").toLowerCase();
+      let productType = "catalog";
+      if (["books", "book"].includes(type) || productId.startsWith("book_")) productType = "books";
+      if (["gift", "giftshop", "giftshop_items", "giftshop_item"].includes(type) ||
+          productId.startsWith("gift_") || productId.startsWith("giftshop_")) productType = "giftshop_items";
+      productId = productId.replace(/^(book_|giftshop_|gift_)/, "");
+      const quantity = Number(item.quantity ?? 1);
+      if (!/^[A-Za-z0-9_-]{1,128}$/.test(productId) || !Number.isSafeInteger(quantity) || quantity < 1 || quantity > 20) {
+        throw new Error("An item or quantity is invalid. Remove it and add it again from the shop.");
+      }
+      return { productType, productId, quantity,
+        format: productType === "giftshop_items" ? "" : String(item.format || ""),
+        ...(item.isGift ? { isGift: true } : {}),
+        ...(item.appliedCoupon ? { appliedCoupon: true } : {}) };
+    }
 
     // Shared coupon state. Expose it across module/classic script boundaries.
     // This is UI state only; the server must validate every discount.
@@ -700,7 +733,7 @@
 
     // Compute cart totals with quantity support
     document.addEventListener("DOMContentLoaded", () => {
-      const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+      const cart = readStoredCart();
       const container = document.getElementById('cartItemsContainer');
       const badge = document.getElementById('cartBadgeCount');
       const subtotalEl = document.getElementById('cartSubtotal');
@@ -826,8 +859,8 @@
 
       if (proceedCheckoutBtn) {
         proceedCheckoutBtn.addEventListener('click', () => {
-          const currentCart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
-          if (window.lrVerifiedCoupon) {
+          const currentCart = readStoredCart();
+          if (window.lrVerifiedCoupon || couponInput?.value.trim()) {
             alert('Your coupon is valid, but discounted checkout is not connected yet. Clear the coupon to proceed at the regular total; your coupon will not be used.');
             return;
           }
@@ -848,7 +881,7 @@
       if (continueToCheckoutBtn) {
         continueToCheckoutBtn.addEventListener('click', async () => {
           const status = document.getElementById('checkoutStatus');
-          if (window.lrVerifiedCoupon) {
+          if (window.lrVerifiedCoupon || couponInput?.value.trim()) {
             status.textContent = 'Coupon checkout is not enabled. Clear the coupon to continue without it.';
             return;
           }
@@ -856,25 +889,24 @@
             status.textContent = 'Please sign in before paying, so we can associate a verified receipt with your account.';
             return;
           }
-          const items = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+          const items = readStoredCart();
           if (!items.length) { status.textContent = 'Your cart is empty.'; return; }
-          // This is intentionally restricted to the administrator's single test book.
-          // The backend independently checks administrator authorization and Firestore price.
-          const supportedBookId = 'WjeedmII1WbQGD4wHJ3I';
-          const supported = items.length === 1 &&
-            String(items[0].itemId || items[0].productId || items[0].id || '').replace(/^book_/, '') === supportedBookId &&
-            Number(items[0].quantity || 1) === 1;
-          if (!supported) {
-            status.textContent = 'Stripe test checkout currently supports only one copy of the configured test book. Multiple items and gift shop checkout are not enabled yet. Your cart was not changed.';
-            return;
-          }
           continueToCheckoutBtn.disabled = true;
-          status.textContent = 'Opening Stripe test checkout. Stripe will calculate the book price securely from Firestore; the estimated cart total may differ.';
+          status.textContent = testMode ? "Opening Stripe test checkout…" : "Opening secure Stripe checkout…";
           try {
-            const result = await startBookCheckout();
+            const serverItems = items.map(checkoutItem);
+            const attemptKey = "lrCartCheckoutAttempt";
+            const signature = JSON.stringify({ uid: auth.currentUser.uid, testMode, items: serverItems });
+            let attempt;
+            try { attempt = JSON.parse(sessionStorage.getItem(attemptKey) || "null"); } catch {}
+            if (attempt?.signature !== signature) {
+              attempt = { signature, checkoutId: crypto.randomUUID() };
+              sessionStorage.setItem(attemptKey, JSON.stringify(attempt));
+            }
+            const result = await startCheckout({ checkoutId: attempt.checkoutId, items: serverItems });
             const { orderId, url: paymentUrl } = result.data || {};
             if (!orderId || !/^[A-Za-z0-9_-]{1,128}$/.test(String(orderId))) {
-              throw new Error('Checkout did not return a valid Firestore order ID. Update the server test checkout function first.');
+              throw new Error('Checkout could not be started. Please try again.');
             }
             const url = new URL(paymentUrl);
             if (url.protocol !== 'https:' || url.hostname !== 'checkout.stripe.com') {
@@ -885,6 +917,7 @@
             sessionStorage.setItem('lrPendingCartSnapshot', JSON.stringify(items));
             location.assign(url.href);
           } catch(error) {
+            if (error.details?.restartCheckout) sessionStorage.removeItem('lrCartCheckoutAttempt');
             status.textContent = `Checkout unavailable: ${error.message || 'Server checkout setup is incomplete.'} No charge was made here.`;
             continueToCheckoutBtn.disabled = false;
           }
@@ -897,7 +930,7 @@
       }
       function showReceipt(orderId, order) {
         const verified = order?.paid === true && order?.paymentVerified === true;
-        setReceiptText('receiptTitle', verified ? 'ORDER RECEIPT' : 'ORDER STATUS');
+        setReceiptText('receiptTitle', verified ? (order.stripeMode === 'test' ? 'TEST PAYMENT RECEIPT' : 'ORDER RECEIPT') : 'ORDER STATUS');
         setReceiptText('receiptStatusMessage', verified
           ? '✨ Your payment has been independently verified. Thank you for your order! ✨'
           : 'Payment has not yet been verified. This is NOT a paid receipt.');
@@ -912,16 +945,22 @@
         const list = document.getElementById('receiptBookCardsList');
         if (list) {
           list.replaceChildren();
-          const p = document.createElement('p');
-          p.textContent = 'The verified order record is your source of truth for purchased items.';
-          list.appendChild(p);
+          const orderItems = Array.isArray(order.items) ? order.items : [{
+            productTitle: order.productTitle || order.productId || "Purchased item",
+            quantity: order.quantity || 1
+          }];
+          for (const item of orderItems) {
+            const row = document.createElement("p");
+            row.textContent = String(item.productTitle || "Purchased item") + " × " + String(item.quantity || 1);
+            list.appendChild(row);
+          }
         }
         for (const id of ['receiptSubtotal','receiptDiscount','receiptShipping','receiptTax']) setReceiptText(id, 'See order record');
         setReceiptText('receiptTaxLabel', 'Tax:');
         if (receiptOverlay) receiptOverlay.classList.add('active');
       }
 
-      // Stripe test returns ?stripe_test_return=1; order ID is saved in sessionStorage.
+      // The order ID links this return to a server-verified payment.
       // The return itself NEVER proves payment. Only trusted order fields do.
       const query = new URLSearchParams(location.search);
       if (query.has('checkout_return') || query.has('orderId') || query.has('stripe_test_return')) {
@@ -956,6 +995,7 @@
                 }
                 sessionStorage.removeItem('lrPendingCartSnapshot');
                 sessionStorage.removeItem('lrPendingCartOrder');
+                sessionStorage.removeItem('lrCartCheckoutAttempt');
               }
             }, error => {
               if (status) status.textContent = `Could not check payment status: ${error.message}`;
@@ -999,7 +1039,7 @@
     });
 
     window.removeItem = function(index) {
-      let cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
+      let cart = readStoredCart();
       cart.splice(index, 1);
       localStorage.setItem('libraryreeds_cart', JSON.stringify(cart));
       window.location.reload();

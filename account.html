@@ -326,24 +326,7 @@
         <div id="panel-general" class="settings-card">
           <h2 class="card-title">Profile Settings</h2>
           
-          <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary);" id="subTierName">Collector's Vault Membership</h4>
-                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;" id="userSubStatusText">Status: Active Member</p>
-              </div>
-              <span id="subBadge" style="background: rgba(64, 192, 87, 0.15); color: #40c057; font-size: 0.7rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase;">Active</span>
-            </div>
-
-            <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center;">
-              <a href="./membership.html" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; font-size: 0.7rem;">
-                <span>Change or Upgrade Plan</span>
-                <span>&rarr;</span>
-              </a>
-              <button type="button" id="nativeCancelBtn" class="btn-danger-action" style="padding: 10px 16px; font-size: 0.7rem;">Cancel Subscription</button>
-            </div>
-            <p id="cancelFeedbackMsg" style="display: none; font-size: 0.75rem; margin-top: 4px;"></p>
-          </div>
+          <section id="lrMembershipPanel" aria-label="Manage membership"></section>
 
           <form id="profileUpdateForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -423,11 +406,11 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div class="form-group">
                 <label class="form-label">Chapters Completed:</label>
-                <input type="number" class="form-input" id="chaptersDoneInput" placeholder="e.g. 12" min="0">
+                <input type="number" min="0" class="form-input" id="chaptersDoneInput" placeholder="e.g. 12" min="0">
               </div>
               <div class="form-group">
                 <label class="form-label">Total Chapters in Book:</label>
-                <input type="number" class="form-input" id="totalChaptersInput" placeholder="e.g. 30" min="1">
+                <input type="number" min="0" class="form-input" id="totalChaptersInput" placeholder="e.g. 30" min="1">
               </div>
             </div>
 
@@ -571,7 +554,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">New Price ($):</label>
-                  <input type="number" step="0.01" class="form-input" id="giftItemNewPrice" placeholder="e.g. 24.99" required>
+                  <input type="number" min="0" step="0.01" class="form-input" id="giftItemNewPrice" placeholder="e.g. 24.99" required>
                 </div>
               </div>
 
@@ -676,7 +659,7 @@
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
                     <input type="checkbox" id="fmtHardcover" style="accent-color: var(--accent-gold);" checked> Hardcover
                   </label>
-                  <input type="number" step="0.01" class="form-input" id="priceHardcover" placeholder="Hardcover Price ($)">
+                  <input type="number" min="0" step="0.01" class="form-input" id="priceHardcover" placeholder="Hardcover Price ($)">
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); cursor: pointer;">
                     <input type="checkbox" id="soonHardcover" style="accent-color: var(--accent-gold);"> Coming Soon
                   </label>
@@ -686,7 +669,7 @@
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
                     <input type="checkbox" id="fmtPaperback" style="accent-color: var(--accent-gold);" checked> Paperback
                   </label>
-                  <input type="number" step="0.01" class="form-input" id="pricePaperback" placeholder="Paperback Price ($)">
+                  <input type="number" min="0" step="0.01" class="form-input" id="pricePaperback" placeholder="Paperback Price ($)">
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); cursor: pointer;">
                     <input type="checkbox" id="soonPaperback" style="accent-color: var(--accent-gold);"> Coming Soon
                   </label>
@@ -696,7 +679,7 @@
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
                     <input type="checkbox" id="fmtEbook" style="accent-color: var(--accent-gold);" checked> E-book (EPUB)
                   </label>
-                  <input type="number" step="0.01" class="form-input" id="adminBookPrice" placeholder="E-book Price ($)" required>
+                  <input type="number" min="0" step="0.01" class="form-input" id="adminBookPrice" placeholder="E-book Price ($)" required>
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); cursor: pointer;">
                     <input type="checkbox" id="soonEbook" style="accent-color: var(--accent-gold);"> Coming Soon
                   </label>
@@ -706,7 +689,7 @@
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
                     <input type="checkbox" id="fmtAudiobook" style="accent-color: var(--accent-gold);"> Audiobook
                   </label>
-                  <input type="number" step="0.01" class="form-input" id="priceAudio" placeholder="Audiobook Price ($)">
+                  <input type="number" min="0" step="0.01" class="form-input" id="priceAudio" placeholder="Audiobook Price ($)">
                   <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); cursor: pointer;">
                     <input type="checkbox" id="soonAudio" style="accent-color: var(--accent-gold);"> Coming Soon
                   </label>
@@ -717,26 +700,26 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div class="form-group">
                 <label class="form-label">Stock Quantity:</label>
-                <input type="number" class="form-input" id="adminBookStock" placeholder="10" value="10" required>
+                <input type="number" min="0" class="form-input" id="adminBookStock" step="1" placeholder="10" value="10" required>
               </div>
               <div class="form-group">
                 <label class="form-label">Tax Rate (%):</label>
-                <input type="number" step="0.01" class="form-input" id="adminBookTax" placeholder="6.00" value="6.00" required>
+                <input type="number" min="0" step="0.01" class="form-input" id="adminBookTax" placeholder="6.00" value="6.00" required>
               </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
               <div class="form-group">
                 <label class="form-label">Shipping Cost ($):</label>
-                <input type="number" step="0.01" class="form-input" id="adminBookShipping" placeholder="0.00" value="0.00">
+                <input type="number" min="0" step="0.01" class="form-input" id="adminBookShipping" placeholder="0.00" value="0.00">
               </div>
               <div class="form-group">
                 <label class="form-label">Discount Amount ($):</label>
-                <input type="number" step="0.01" class="form-input" id="adminBookDiscount" placeholder="0.00" value="0.00">
+                <input type="number" min="0" step="0.01" class="form-input" id="adminBookDiscount" placeholder="0.00" value="0.00">
               </div>
               <div class="form-group">
                 <label class="form-label">Series Volume Number:</label>
-                <input type="number" class="form-input" id="adminBookVolume" placeholder="1" value="1">
+                <input type="number" min="0" class="form-input" id="adminBookVolume" placeholder="1" value="1">
               </div>
             </div>
 
@@ -1216,10 +1199,10 @@
                 <input type="text" id="homeTitle" placeholder="e.g. Homepage Flash Sale" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px; border-radius: 4px; font-size: 0.85rem;">
               </div>
               <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" id="homeDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" id="homeHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" id="homeMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" id="homeSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" min="0" id="homeDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" min="0" id="homeHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" min="0" id="homeMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" min="0" id="homeSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
               </div>
               <button type="submit" class="btn-primary" style="margin-top: 4px;">Save Home Timer</button>
             </form>
@@ -1234,10 +1217,10 @@
                 <input type="text" id="shopTitle" placeholder="e.g. Catalog Vault Drop" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px; border-radius: 4px; font-size: 0.85rem;">
               </div>
               <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" id="shopDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" id="shopHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" id="shopMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" id="shopSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" min="0" id="shopDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" min="0" id="shopHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" min="0" id="shopMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" min="0" id="shopSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
               </div>
               <button type="submit" class="btn-primary" style="margin-top: 4px;">Save Shop Timer</button>
             </form>
@@ -1252,10 +1235,10 @@
                 <input type="text" id="giftTitle" placeholder="e.g. Holiday Gift Special" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px; border-radius: 4px; font-size: 0.85rem;">
               </div>
               <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" id="giftDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" id="giftHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" id="giftMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
-                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" id="giftSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Days</label><input type="number" min="0" id="giftDays" value="0" min="0" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Hours</label><input type="number" min="0" id="giftHours" value="0" min="0" max="23" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Mins</label><input type="number" min="0" id="giftMinutes" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
+                <div><label style="font-size: 0.65rem; color: var(--text-muted);">Secs</label><input type="number" min="0" id="giftSeconds" value="0" min="0" max="59" style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 6px; border-radius: 4px; font-size: 0.8rem;"></div>
               </div>
               <button type="submit" class="btn-primary" style="margin-top: 4px;">Save Gift Timer</button>
             </form>
@@ -1293,7 +1276,7 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
               <div class="form-group">
                 <label class="form-label">Regular Price ($):</label>
-                <input type="number" step="0.01" class="form-input" id="adminGiftPrice" placeholder="24.99" required>
+                <input type="number" min="0" step="0.01" class="form-input" id="adminGiftPrice" placeholder="24.99" required>
               </div>
               <div class="form-group">
                 <label class="form-label">Category / Type:</label>
@@ -1302,6 +1285,9 @@
                   <option value="Gift Cards">Gift Cards</option>
                   <option value="Coupons & Perks">Coupons & Perks</option>
                   <option value="Virtual Add-ons">Virtual Add-ons</option>
+                  <option value="Wallpapers">Wallpapers</option>
+                  <option value="Bookmarks">Bookmarks</option>
+                  <option value="Coupons">Coupons</option>
                 </select>
               </div>
             </div>
@@ -1313,7 +1299,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label">Discount Percentage (%):</label>
-                <input type="number" class="form-input" id="adminGiftDiscountPct" placeholder="15" value="0">
+                <input type="number" min="0" max="100" step="0.01" class="form-input" id="adminGiftDiscountPct" placeholder="15" value="0">
               </div>
             </div>
 
@@ -1341,6 +1327,8 @@
 
           <div style="margin-top: 32px;">
             <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary); margin-bottom: 12px;">Existing Gift Shop Items &amp; Pricing</h3>
+            <button type="button" id="refreshGiftInventoryBtn" class="btn-secondary-action">Refresh gift inventory</button>
+            <p id="giftInventoryStatus" role="status" aria-live="polite"></p>
             <div style="overflow-x: auto;">
               <table class="inventory-table">
                 <thead>
@@ -1450,7 +1438,7 @@
             </div>
             <div class="form-group">
               <label class="form-label">Discount Percentage (%):</label>
-              <input type="number" class="form-input" id="homeDiscountPercent" placeholder="10" value="10">
+              <input type="number" min="0" class="form-input" id="homeDiscountPercent" placeholder="10" value="10">
             </div>
             <button type="submit" class="btn-primary" style="align-self: flex-start;">Update Homepage</button>
             <div id="homeSaveStatus" class="success-msg">Homepage updated successfully.</div>
@@ -1956,10 +1944,11 @@
 
       try {
         const snap = await getDoc(doc(db, "giftshop_items", id));
+        if (e.target.value !== id) return;
         if (snap.exists()) {
           const data = snap.data();
           nameInput.value = data.title || '';
-          priceInput.value = data.price || '';
+          priceInput.value = data.price ?? '';
           if (frontCoverInput) frontCoverInput.value = data.frontImageUrl || data.imageUrl || '';
           if (backCoverInput) backCoverInput.value = data.backImageUrl || '';
         }
@@ -1978,11 +1967,15 @@
         const frontCover = document.getElementById('giftItemFrontCover')?.value.trim() || '';
         const backCover = document.getElementById('giftItemBackCover')?.value.trim() || '';
 
-        if (!targetId || isNaN(newPrice)) {
+        if (!lrIsAdmin(auth.currentUser)) { window.showToast("Sign in as the administrator to save inventory."); return; }
+        if (!targetId || !newName || !Number.isFinite(newPrice) || newPrice < 0) {
           window.showToast("Please select an item and provide a valid price.");
           return;
         }
 
+        const button = e.currentTarget.querySelector('[type="submit"]');
+        if (button.disabled) return;
+        button.disabled = true;
         try {
           await updateDoc(doc(db, "giftshop_items", targetId), {
             title: newName,
@@ -2000,10 +1993,9 @@
             setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
           }
           window.showToast("Gift item details updated!");
-          populateGiftItemSelect();
         } catch (err) {
           window.showToast("Error updating gift item: " + err.message);
-        }
+        } finally { button.disabled = false; }
       });
     }
 
@@ -2711,11 +2703,13 @@
       }
       for (const [key, fieldId] of Object.entries(lrBookChecks)) {
         const el = lrBookField(fieldId);
-        if (el) el.checked = Boolean(book[key]);
+        if (el) el.checked = book[key] === undefined ? el.defaultChecked : Boolean(book[key]);
       }
       if (lrBookField('bookFormLegend')) lrBookField('bookFormLegend').textContent = 'Edit Book: ' + (book.title || 'Untitled');
       if (lrBookField('cancelEditBookBtn')) lrBookField('cancelEditBookBtn').style.display = 'inline-flex';
+      lrBookField('adminBookCoverFile').value = '';
       const preview = lrBookField('adminBookCoverPreview');
+      if (preview) { preview.removeAttribute('src'); preview.style.display='none'; }
       const cover = book.imageUrl || book.coverUrl || book.frontImageUrl;
       if (preview && cover) { preview.src = cover; preview.style.display = 'block'; }
       lrBookField('adminBookForm')?.scrollIntoView({behavior:'smooth', block:'start'});
@@ -2723,6 +2717,7 @@
     async function lrDeleteBook(id) {
       const book = lrInventoryCache.get(id);
       if (!book || !window.confirm('Delete "' + (book.title || 'this book') + '" from the catalog?')) return;
+      if (!lrIsAdmin(auth.currentUser)) return;
       try { await deleteDoc(doc(db, 'books', id)); window.showToast?.('Book removed from inventory.'); }
       catch(error) { alert('Could not delete book: ' + error.message); }
     }
@@ -2749,7 +2744,11 @@
           title.prepend(img);
         }
         tr.insertCell().textContent=(book.format||'Book') + (book.isbn ? ' / '+book.isbn : '');
-        tr.insertCell().textContent='$' + (Number(book.price)||0).toFixed(2);
+        const pricing = tr.insertCell();
+        pricing.textContent='$' + (Number(book.price)||0).toFixed(2);
+        const stockLabel=document.createElement('div');
+        stockLabel.textContent=book.stock == null ? 'Stock not set' : 'Stock: ' + book.stock;
+        pricing.append(stockLabel);
         const actions=tr.insertCell();
         const edit=document.createElement('button'); edit.type='button'; edit.className='btn-secondary-action'; edit.textContent='Edit';
         edit.addEventListener('click',()=>lrEditBook(id)); actions.append(edit);
@@ -2785,7 +2784,7 @@
         lrInventoryListenerStarted = false;
       }
       if (lrInventoryListenerStarted) return;
-      if (!auth.currentUser) {
+      if (!lrIsAdmin(auth.currentUser)) {
         lrInventoryNotice('Sign in to your administrator account to load books.', true);
         return;
       }
@@ -2826,17 +2825,28 @@
     lrBookField('adminBookForm')?.addEventListener('submit', async event => {
       event.preventDefault();
       const form=event.currentTarget, button=form.querySelector('[type="submit"]');
+      if(button?.disabled) return;
       const oldLabel=button?.textContent;
       if(button) { button.disabled=true; button.textContent='Saving book…'; }
       try {
         const id=lrBookField('editBookDocId')?.value.trim();
         const previous=id ? (lrInventoryCache.get(id)||{}) : {};
-        const payload={...previous};
+        if (!lrIsAdmin(auth.currentUser)) throw new Error('Sign in as the administrator to save inventory.');
+        const payload={};
         for(const [key, fieldId] of Object.entries(lrBookValues)) {
           const field=lrBookField(fieldId);
-          if(field) payload[key]=lrNumericBookFields.has(key) ? (Number(field.value)||0) : field.value.trim();
+          if(field) {
+            const value=field.value.trim();
+            if(lrNumericBookFields.has(key)) {
+              const number=value === '' ? 0 : Number(value);
+              if(!Number.isFinite(number) || number < 0 || (key === 'stock' && !Number.isInteger(number)))
+                throw new Error('Enter a valid nonnegative ' + (key === 'stock' ? 'whole stock quantity.' : key + '.'));
+              payload[key]=number;
+            } else payload[key]=value;
+          }
         }
         for(const [key, fieldId] of Object.entries(lrBookChecks)) payload[key]=Boolean(lrBookField(fieldId)?.checked);
+        if(!payload.title || !payload.author) throw new Error('Enter a book title and author.');
         payload.tags=String(payload.tags||'');
         const file=lrBookField('adminBookCoverFile')?.files?.[0];
         if(file) {
@@ -2855,6 +2865,130 @@
         window.showToast?.('Book saved to inventory!');
       } catch(error) { console.error('Book save failed:',error); alert('Could not save book: '+error.message); }
       finally { if(button) {button.disabled=false;button.textContent=oldLabel;} }
+    });
+
+
+    // Gift inventory: one live source for the table and quick-edit selector.
+    const lrGiftCache = new Map();
+    let lrGiftUnsubscribe = null;
+    const lrGiftFields = {
+      title:'adminGiftTitle', price:'adminGiftPrice', category:'adminGiftCategory',
+      promoCode:'adminGiftPromo', discountPercent:'adminGiftDiscountPct',
+      imageUrl:'adminGiftImageUrl', backImageUrl:'adminGiftBackCoverUrl', description:'adminGiftDesc'
+    };
+    function lrGiftNotice(message, retry=false) {
+      const body=lrBookField('adminGiftInventoryTableBody');
+      if(!body) return;
+      body.replaceChildren();
+      const cell=body.insertRow().insertCell(); cell.colSpan=4; cell.textContent=message;
+      if(retry) {
+        const button=document.createElement('button'); button.type='button';
+        button.className='btn-secondary-action'; button.textContent='Retry loading gifts';
+        button.addEventListener('click',()=>loadAdminGiftInventory()); cell.append(button);
+      }
+    }
+    function lrResetGiftEditor() {
+      lrBookField('adminGiftMerchandiseForm')?.reset();
+      lrBookField('editGiftItemId').value='';
+      lrBookField('cancelEditGiftBtn').style.display='none';
+    }
+    function lrEditGift(id) {
+      const item=lrGiftCache.get(id); if(!item) return;
+      lrResetGiftEditor();
+      lrBookField('editGiftItemId').value=id;
+      for(const [key,fieldId] of Object.entries(lrGiftFields)) {
+        const field=lrBookField(fieldId);
+        const value=item[key] ?? (key==='discountPercent' ? item.discountPct ?? 0 : key==='imageUrl' ? item.frontImageUrl || '' : '');
+        if(field.tagName==='SELECT' && value && !Array.from(field.options).some(o=>o.value===String(value)))
+          field.add(new Option(value,value));
+        field.value=value;
+      }
+      lrBookField('cancelEditGiftBtn').style.display='inline-flex';
+      lrBookField('adminGiftMerchandiseForm').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    async function lrDeleteGift(id) {
+      if(!lrIsAdmin(auth.currentUser)) return;
+      const item=lrGiftCache.get(id);
+      if(!item || !confirm('Delete "'+(item.title || 'this gift')+'" from the gift shop?')) return;
+      try {
+        await deleteDoc(doc(db,'giftshop_items',id));
+        if(lrBookField('editGiftItemId').value===id) lrResetGiftEditor();
+        window.showToast?.('Gift item deleted.');
+      } catch(error) { alert('Could not delete gift item: '+error.message); }
+    }
+    function lrRenderGifts() {
+      const body=lrBookField('adminGiftInventoryTableBody');
+      const select=lrBookField('giftItemSelectTarget'), selected=select.value;
+      select.replaceChildren(new Option('-- Choose a Gift Shop Item to Edit --',''));
+      body.replaceChildren();
+      const items=[...lrGiftCache.entries()].sort((a,b)=>String(a[1].title||'').localeCompare(String(b[1].title||'')));
+      for(const [id,item] of items) {
+        const price='$'+(Number(item.price)||0).toFixed(2);
+        select.add(new Option((item.title||'Untitled')+' ('+price+')',id));
+        const row=body.insertRow();
+        row.insertCell().textContent=item.title||'Untitled';
+        row.insertCell().textContent=item.category||'Uncategorized';
+        const discount=Number(item.discountPercent ?? item.discountPct ?? 0);
+        row.insertCell().textContent=price+(discount>0 ? ' / '+discount+'% discount' : '')+(item.promoCode ? ' / '+item.promoCode : '');
+        const actions=row.insertCell();
+        for(const [label,handler,css] of [['Edit',()=>lrEditGift(id),'btn-secondary-action'],['Delete',()=>lrDeleteGift(id),'btn-danger-action']]) {
+          const button=document.createElement('button'); button.type='button'; button.className=css;
+          button.textContent=label; button.addEventListener('click',handler); actions.append(button);
+        }
+      }
+      if(!items.length) lrGiftNotice('No gift items yet. Add an item using the Gift Shop form.');
+      select.value=lrGiftCache.has(selected) ? selected : '';
+      if(selected && !lrGiftCache.has(selected)) select.dispatchEvent(new Event('change'));
+    }
+    function loadAdminGiftInventory() {
+      if(!lrIsAdmin(auth.currentUser) || lrGiftUnsubscribe) return;
+      lrGiftNotice('Loading gift inventory…');
+      lrGiftUnsubscribe=onSnapshot(collection(db,'giftshop_items'),snapshot=>{
+        lrGiftCache.clear(); snapshot.forEach(item=>lrGiftCache.set(item.id,item.data()));
+        lrRenderGifts();
+        populatePromoBannerItems().catch(console.warn);
+        window.lrRefreshOfferProducts?.();
+      },error=>{
+        lrGiftUnsubscribe=null;
+        lrGiftNotice('Could not load gift inventory: '+error.message,true);
+        const select=lrBookField('giftItemSelectTarget');
+        select.replaceChildren(new Option('Unable to load gift items. Retry below in Gift Shop.',''));
+      });
+    }
+    lrBookField('refreshGiftInventoryBtn')?.addEventListener('click',()=>{
+      lrGiftUnsubscribe?.(); lrGiftUnsubscribe=null; loadAdminGiftInventory();
+    });
+    lrBookField('cancelEditGiftBtn')?.addEventListener('click',lrResetGiftEditor);
+    lrBookField('adminGiftMerchandiseForm')?.addEventListener('submit',async event=>{
+      event.preventDefault();
+      const button=event.currentTarget.querySelector('[type="submit"]');
+      if(button.disabled) return;
+      button.disabled=true;
+      try {
+        if(!lrIsAdmin(auth.currentUser)) throw new Error('Sign in as the administrator to save inventory.');
+        const payload={};
+        for(const [key,fieldId] of Object.entries(lrGiftFields)) payload[key]=lrBookField(fieldId).value.trim();
+        if(payload.price==='') throw new Error('Enter a price before saving.');
+        payload.price=Number(payload.price); payload.discountPercent=Number(payload.discountPercent);
+        payload.discountPct=payload.discountPercent; // Keep older readers compatible.
+        if(!payload.title || !Number.isFinite(payload.price) || payload.price<0)
+          throw new Error('Enter a title and a valid nonnegative price.');
+        if(!Number.isFinite(payload.discountPercent) || payload.discountPercent<0 || payload.discountPercent>100)
+          throw new Error('Discount must be between 0 and 100.');
+        payload.promoCode=payload.promoCode.toUpperCase();
+        payload.frontImageUrl=payload.imageUrl;
+        payload.updatedAt=serverTimestamp();
+        const id=lrBookField('editGiftItemId').value;
+        if(id) await updateDoc(doc(db,'giftshop_items',id),payload);
+        else { payload.createdAt=serverTimestamp(); await addDoc(collection(db,'giftshop_items'),payload); }
+        lrResetGiftEditor();
+        lrBookField('giftInventoryStatus').textContent='Gift item saved. The shop reads its price and discount from this inventory.';
+        window.showToast?.('Gift item saved to inventory!');
+      } catch(error) {
+        lrBookField('giftInventoryStatus').textContent='Could not save gift item: '+error.message;
+        alert('Could not save gift item: '+error.message);
+      }
+      finally { button.disabled=false; }
     });
 
     function setupAdminInterface(userData, isAdmin) {
@@ -2920,6 +3054,15 @@
     }
 
     onAuthStateChanged(auth, (user) => {
+      if (!lrIsAdmin(user)) {
+        lrInventoryUnsubscribe?.(); lrInventoryUnsubscribe=null; lrInventoryListenerStarted=false;
+        lrGiftUnsubscribe?.(); lrGiftUnsubscribe=null;
+        lrInventoryCache.clear(); lrGiftCache.clear();
+        lrResetBookEditor(); lrResetGiftEditor();
+        lrInventoryNotice('Sign in as the administrator to load inventory.');
+        lrGiftNotice('Sign in as the administrator to load gift inventory.');
+        lrBookField('giftItemSelectTarget').replaceChildren(new Option('-- Sign in as administrator --',''));
+      }
       if (!user) {
         if (window.location.protocol === 'blob:' || window.location.href.startsWith('blob:')) {
           setupAdminInterface({ displayName: "Demo Administrator", email: "admin@example.invalid" }, true);
@@ -3187,5 +3330,43 @@ if(form)form.addEventListener('submit',async event=>{
       });
     }
   </script>
+<script type="module" src="./membership-controls.js"></script>
+<!-- Library Reeds gift inventory fix 2026-11-12 -->
+<script id="lrAccountNotificationBellFix">
+(() => {
+  const host = document.getElementById('adminNotificationBell');
+  const dropdown = document.getElementById('notificationDropdown');
+  if (!host || !dropdown || host.querySelector('#notificationBellToggle')) return;
+  const toggle = document.createElement('button');
+  toggle.id = 'notificationBellToggle';
+  toggle.type = 'button';
+  toggle.setAttribute('aria-label', 'Notifications');
+  toggle.setAttribute('aria-controls', dropdown.id);
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.style.cssText = 'position:relative;display:flex;align-items:center;justify-content:center;min-width:36px;min-height:36px;padding:8px;background:transparent;border:0;color:inherit;cursor:pointer;';
+  const icon = host.querySelector('svg');
+  const badge = document.getElementById('notificationBadge');
+  host.insertBefore(toggle, dropdown);
+  if (icon) toggle.append(icon);
+  if (badge) toggle.append(badge);
+  dropdown.style.width = 'min(320px, calc(100vw - 32px))';
+  dropdown.style.top = 'calc(100% + 8px)';
+  function setOpen(open) {
+    dropdown.style.display = open ? 'flex' : 'none';
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('click', event => {
+    if (!host.contains(event.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+})();
+
+</script>
 </body>
 </html>

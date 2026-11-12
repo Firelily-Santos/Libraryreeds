@@ -457,10 +457,11 @@
       <div class="toggle-shell" id="toggle" role="tablist" aria-label="Billing cycle">
         <span class="toggle-thumb"></span>
         <button class="active" data-cycle="monthly" role="tab" aria-selected="true">Monthly</button>
-        <button data-cycle="yearly" role="tab" aria-selected="false">Yearly<span class="save">−20%</span></button>
+        <button data-cycle="yearly" role="tab" aria-selected="false">Yearly</button>
       </div>
     </header>
 
+    <section id="lrMembershipPanel" aria-label="Manage membership"></section>
     <section class="trinity" aria-label="Membership tiers">
       <article class="slab">
         <p class="tier-label">Tier 01</p>
@@ -481,7 +482,7 @@
           <li class="off"><span class="mark">−</span> Signed book editions</li>
         </ul>
 
-        <button class="cta" data-tier="Fan">
+        <button disabled class="cta" data-tier="Fan">
           <span class="cta-text">Select FanArt Supporter <span class="arrow">→</span></span>
         </button>
       </article>
@@ -506,7 +507,7 @@
           <li class="off"><span class="mark">−</span> Signed & numbered editions</li>
         </ul>
 
-        <button class="cta" data-tier="Reader">
+        <button disabled class="cta" data-tier="Reader">
           <span class="cta-text">Select Reader <span class="arrow">→</span></span>
         </button>
       </article>
@@ -531,7 +532,7 @@
           <li><span class="mark">+</span> Annual hand-bound limited edition</li>
         </ul>
 
-        <button class="cta" data-tier="Collector">
+        <button disabled class="cta" data-tier="Collector">
           <span class="cta-text">Select Collector <span class="arrow">→</span></span>
         </button>
       </article>
@@ -570,7 +571,7 @@
     if (user) {
       if (navLoginBtn) navLoginBtn.style.display = "none";
       if (navProfileMenu) navProfileMenu.style.display = "block";
-      const displayName = user.displayName || user.email.split("@")[0];
+      const displayName = user.displayName || user.email?.split("@")[0] || "Member";
       if (navUserName) navUserName.textContent = displayName;
       if (dropdownUserName) dropdownUserName.textContent = displayName;
       if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
@@ -618,12 +619,6 @@
     });
   }
 
-  const CHECKOUT_LINKS = {
-    Fan: { monthly: 'https://buy.stripe.com/bJedR83VocnB8mYbyG8ww04', yearly: 'https://buy.stripe.com/6oUaEW4Zs3R5fPq0U28ww05' },
-    Reader: { monthly: 'https://buy.stripe.com/fZuaEW2RkcnB46I9qy8ww02', yearly: 'https://buy.stripe.com/7sYaEWfE62N132E1Y68ww03' },
-    Collector: { monthly: 'https://buy.stripe.com/cNi3cueA2fzNfPqgT08ww06', yearly: 'https://buy.stripe.com/14A9AS3VocnBcDeeKS8ww07' }
-  };
-
   const toggleShell = document.getElementById('toggle');
   const buttons = toggleShell.querySelectorAll('button');
   const priceFrames = document.querySelectorAll('.price-frame');
@@ -649,15 +644,6 @@
 
   buttons.forEach(b => b.addEventListener('click', () => setCycle(b.dataset.cycle)));
 
-  document.querySelectorAll('.cta').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const cycle = toggleShell.classList.contains('yearly') ? 'yearly' : 'monthly';
-      const tier = btn.dataset.tier;
-      const link = CHECKOUT_LINKS[tier] && CHECKOUT_LINKS[tier][cycle];
-      if (link) window.open(link, '_blank', 'noopener,noreferrer');
-    });
-  });
-
   let raf = null;
   document.addEventListener('mousemove', (e) => {
     if (raf) return;
@@ -669,5 +655,6 @@
     });
   });
 </script>
+<script type="module" src="./membership-controls.js"></script>
 </body>
 </html>
