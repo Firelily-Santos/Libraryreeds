@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Libraryreeds | Patron Access &amp; Authentication</title>
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Libraryreeds | Sign In</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,7 +18,7 @@
       --border-focus: rgba(197, 168, 128, 0.4);
       --text-primary: #f0f2f5;
       --text-secondary: #9ba1b0;
-      --text-muted: #5d6373;
+      --text-muted: #9ba1b0;
       --accent-gold: #c5a880;
       --accent-gold-hover: #d8be9b;
       --font-serif: "Cormorant Garamond", Georgia, serif;
@@ -24,28 +26,8 @@
       --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Anti-flash auth loading guard */
-    .nav-actions {
-      visibility: hidden;
-    }
-    .nav-actions.auth-loaded {
-      visibility: visible;
-    }
-
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
     body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
-
-    #siteAnnouncementBannerContainer {
-      overflow: hidden;
-      white-space: nowrap;
-      background: var(--accent-gold);
-      color: var(--bg-base);
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 8px 16px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
 
     .top-nav {
       border-bottom: 1px solid var(--border-subtle);
@@ -122,89 +104,93 @@
     .btn-primary:hover { background: var(--accent-gold-hover); }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
+    [hidden] { display: none !important; }
     .error-msg {
       color: #ff6b6b;
       font-size: 0.8rem;
       text-align: center;
-      display: none;
       line-height: 1.4;
     }
 
     footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
-    .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border-subtle); }
-    .footer-col { display: flex; flex-direction: column; gap: 14px; }
-    .footer-col-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); text-transform: uppercase; }
-    .footer-links-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; }
-    .footer-link:hover { color: var(--accent-gold); }
-    .footer-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
     .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+    .helper-text { color: var(--text-secondary); font-size: .8rem; line-height: 1.6; }
+    .login-card > .helper-text { text-align: center; }
+    .text-button { background: none; border: 0; padding: 8px 0; color: var(--accent-gold); font: inherit; font-size: .8rem; cursor: pointer; text-align: left; }
+    .remember-label { display: flex; align-items: center; gap: 10px; font-size: .8rem; line-height: 1.6; }
+    input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-gold); flex-shrink: 0; }
+    .btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border-focus); }
+    .btn-secondary:hover { background: var(--bg-surface-elevated); }
+    .divider { text-align: center; color: var(--text-secondary); font-size: .8rem; }
+    :focus-visible { outline: 2px solid var(--accent-gold); outline-offset: 4px; }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+    @media (max-width: 600px) {
+      .nav-container { padding: 16px; flex-wrap: wrap; gap: 18px; }
+      .nav-actions { gap: 20px; flex-wrap: wrap; }
+      .login-main { margin: 40px auto; padding: 0 16px; }
+      .login-card { padding: 28px 22px; }
+      .form-input { font-size: 16px; }
+      footer { padding: 24px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
   </style>
 </head>
 <body>
 
-  <div id="siteAnnouncementBannerContainer">
-    <div id="siteAnnouncementBannerText" style="text-align: center;">Welcome to Libraryreeds | Explore our catalog</div>
-  </div>
-
-  <nav class="top-nav">
+  <nav class="top-nav" aria-label="Main navigation">
     <div class="nav-container">
       <a href="./index.html" class="brand-group">
-        <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
+        <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="" referrerpolicy="no-referrer" class="brand-logo-img">
         <span class="brand-title">Libraryreeds</span>
       </a>
       <div class="nav-actions">
-        <a href="./index.html" class="nav-link">Home</a>
         <a href="./shop.html" class="nav-link">Shop</a>
-        <a href="./about.html" class="nav-link">About</a>
-        <a href="./cart.html" class="nav-link">Cart</a>
       </div>
     </div>
   </nav>
 
   <main class="login-main">
     <div class="login-card">
-      <h1 class="login-title">Patron Sign In</h1>
+      <h1 class="login-title">Sign In</h1>
+      <p class="helper-text">Access your Libraryreeds account.</p>
       <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
         <div class="form-group">
           <label class="form-label" for="loginEmail">Email Address:</label>
-          <input type="email" class="form-input" id="loginEmail" placeholder="patron@example.com" required autocomplete="email">
+          <input type="email" class="form-input" id="loginEmail" placeholder="you@example.com" name="email" required autocomplete="username" autocapitalize="none" spellcheck="false">
         </div>
         <div class="form-group">
           <label class="form-label" for="loginPassword">Password:</label>
-          <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+          <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" name="password" required autocomplete="current-password">
         </div>
-        <div id="loginError" class="error-msg"></div>
-        <button type="submit" id="submitBtn" class="btn-primary" style="margin-top: 8px;">Sign In to Account</button>
+        <button type="button" id="showPassword" class="text-button" aria-controls="loginPassword" aria-pressed="false">Show password</button>
+        <label class="remember-label"><input type="checkbox" id="rememberMe"> Keep me signed in on this device</label>
+        <p class="helper-text">Leave unchecked on shared devices.</p>
+        <div id="loginError" class="error-msg" role="alert" tabindex="-1" hidden></div>
+        <p id="loginStatus" class="helper-text" role="status" aria-live="polite">Loading sign-in…</p>
+        <button type="submit" id="submitBtn" disabled class="btn-primary" style="margin-top: 8px;">Sign In to Account</button>
+        <button type="button" id="resetPassword" class="text-button" disabled>Forgot password?</button>
       </form>
+      <div class="divider" aria-hidden="true">or</div>
+      <button type="button" id="googleSignIn" class="btn-primary btn-secondary" disabled>Continue with Google</button>
+      <noscript><p class="helper-text">Enable JavaScript to sign in.</p></noscript>
     </div>
   </main>
 
   <footer>
-    <div class="footer-container">
-      <div class="footer-col">
-        <h4 class="footer-col-title">Libraryreeds</h4>
-        <p class="footer-text">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
-      </div>
-      <div class="footer-col">
-        <h4 class="footer-col-title">Quick Shortcuts</h4>
-        <ul class="footer-links-list">
-          <li><a href="./index.html" class="footer-link">Home</a></li>
-          <li><a href="./shop.html" class="footer-link">Browse Catalog</a></li>
-          <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>&copy; 2026 Libraryreeds. All rights reserved.</span>
-      <span>Official Archival Repository</span>
-    </div>
+    <div class="footer-bottom"><span>&copy; 2026 Libraryreeds. All rights reserved.</span></div>
   </footer>
-
+  <script>
+    // Keep navigation usable even if the authentication SDK cannot load.
+    window.loginLoadTimer = setTimeout(() => {
+      document.getElementById('loginStatus').textContent = 'Sign-in could not load. Check your connection and reload this page.';
+    }, 15000);
+  </script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword,
+      GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail,
+      setPersistence, browserSessionPersistence, browserLocalPersistence
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
@@ -215,58 +201,148 @@
       appId: "1:768304310517:web:39b931e6447043d84d3dbc"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    const $ = (id) => document.getElementById(id);
+    const form = $('loginForm');
+    const errorBox = $('loginError');
+    const status = $('loginStatus');
+    const controls = [...form.querySelectorAll('input, button'), $('googleSignIn')];
+    let ready = false;
+    let busy = false;
+    let leaving = false;
+    let auth;
+    let unsubscribe;
 
-    // 1. Auth check: reveal navigation and redirect if already signed in
-    onAuthStateChanged(auth, (user) => {
-      const navActions = document.querySelector('.nav-actions');
-      if (navActions) navActions.classList.add('auth-loaded');
+    function setBusy(value) {
+      busy = value;
+      controls.forEach(control => { control.disabled = value || !ready; });
+      form.setAttribute('aria-busy', String(value));
+      $('submitBtn').textContent = value ? 'Please wait…' : 'Sign In to Account';
+    }
+    function clearMessages() {
+      errorBox.hidden = true;
+      errorBox.textContent = '';
+      status.textContent = '';
+    }
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+      errorBox.focus();
+    }
+    function handleError(error) {
+      // Never render provider error messages, credentials, tokens, or account existence.
+      const code = error?.code;
+      const messages = {
+        'auth/network-request-failed': 'Check your connection and try again.',
+        'auth/too-many-requests': 'Too many attempts. Please wait before trying again.',
+        'auth/popup-blocked': 'Allow pop-ups for this site, then try Google sign-in again.',
+        'auth/popup-closed-by-user': 'Google sign-in was closed. You can try again.',
+        'auth/cancelled-popup-request': 'Please complete one sign-in attempt at a time.',
+        'auth/operation-not-allowed': 'This sign-in method is unavailable. Try another method.',
+        'auth/unauthorized-domain': 'Sign-in is unavailable on this address. Please use www.libraryreeds.org.',
+        'auth/account-exists-with-different-credential': 'Try the sign-in method you originally used.',
+        'auth/multi-factor-auth-required': 'This account requires additional verification. Use your existing verification-enabled sign-in page.'
+      };
+      showError(messages[code] || 'Unable to sign in. Check your email and password, or try your original sign-in method.');
+    }
+    function goToAccount() {
+      if (leaving) return;
+      leaving = true;
+      $('loginPassword').value = '';
+      // Fixed local destination; URL parameters cannot redirect to an outside site.
+      // Authorization belongs in account.html AND Firebase rules/backend checks.
+      window.location.replace('./account.html');
+    }
+    async function persistence() {
+      await setPersistence(auth, $('rememberMe').checked
+        ? browserLocalPersistence : browserSessionPersistence);
+    }
 
-      if (user) {
-        window.location.replace("./index.html");
-      }
+    $('showPassword').addEventListener('click', () => {
+      const show = $('loginPassword').type === 'password';
+      $('loginPassword').type = show ? 'text' : 'password';
+      $('showPassword').textContent = show ? 'Hide password' : 'Show password';
+      $('showPassword').setAttribute('aria-pressed', String(show));
     });
-
-    // 2. Announcement banner listener
-    onSnapshot(doc(db, "settings", "announcement"), (snap) => {
-      if (!snap.exists()) return;
-      const data = snap.data();
-      const textNode = document.getElementById('siteAnnouncementBannerText');
-      if (textNode && data.bannerText) {
-        textNode.textContent = data.bannerText;
-      }
-    });
-
-    // 3. Login form submission
-    const loginForm = document.getElementById('loginForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const errorBox = document.getElementById('loginError');
-
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorBox.style.display = "none";
-      errorBox.textContent = "";
-
-      const email = document.getElementById('loginEmail').value.trim();
-      const pass = document.getElementById('loginPassword').value;
-
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!ready || busy || leaving || !form.reportValidity()) return;
+      clearMessages();
+      setBusy(true);
       try {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Signing In...";
-
-        await signInWithEmailAndPassword(auth, email, pass);
-        window.location.replace("./index.html");
-      } catch (err) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Sign In to Account";
-
-        errorBox.textContent = err.code === 'auth/invalid-credential' 
-          ? "Invalid email or password." 
-          : "Sign-in error: " + err.message;
-        errorBox.style.display = "block";
+        await persistence();
+        await signInWithEmailAndPassword(auth, $('loginEmail').value.trim(), $('loginPassword').value);
+        goToAccount();
+      } catch (error) {
+        $('loginPassword').value = '';
+        handleError(error);
+      } finally {
+        if (!leaving) setBusy(false);
       }
+    });
+    $('googleSignIn').addEventListener('click', async () => {
+      if (!ready || busy || leaving) return;
+      clearMessages();
+      setBusy(true);
+      try {
+        await persistence();
+        const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        await signInWithPopup(auth, provider);
+        goToAccount();
+      } catch (error) {
+        handleError(error);
+      } finally {
+        if (!leaving) setBusy(false);
+      }
+    });
+    $('resetPassword').addEventListener('click', async () => {
+      if (!ready || busy || leaving) return;
+      clearMessages();
+      const email = $('loginEmail');
+      email.value = email.value.trim();
+      if (!email.reportValidity()) return;
+      setBusy(true);
+      try {
+        await sendPasswordResetEmail(auth, email.value);
+        status.textContent = 'If this email has a password account, you’ll receive a reset link. Check your inbox and spam folder. For Google accounts, use Continue with Google.';
+      } catch (error) {
+        if (['auth/user-not-found', 'auth/invalid-email'].includes(error?.code)) {
+          status.textContent = 'If this email has a password account, you’ll receive a reset link. Check your inbox and spam folder. For Google accounts, use Continue with Google.';
+        } else {
+          handleError(error);
+        }
+      } finally {
+        setBusy(false);
+      }
+    });
+    try {
+      auth = getAuth(initializeApp(firebaseConfig));
+      unsubscribe = onAuthStateChanged(auth, user => {
+        clearTimeout(window.loginLoadTimer);
+        if (user) { goToAccount(); return; }
+        ready = true;
+        status.textContent = '';
+        setBusy(false);
+      }, () => {
+        clearTimeout(window.loginLoadTimer);
+        ready = false;
+        setBusy(false);
+        showError('Sign-in could not load. Please reload the page.');
+      });
+    } catch {
+      clearTimeout(window.loginLoadTimer);
+      ready = false;
+      setBusy(false);
+      showError('Sign-in could not load. Please reload the page.');
+    }
+    window.addEventListener('pagehide', () => {
+      clearTimeout(window.loginLoadTimer);
+      $('loginPassword').value = '';
+      if (unsubscribe) unsubscribe();
+    });
+    // Reinitialize auth if the browser restores this page from its back/forward cache.
+    window.addEventListener('pageshow', event => {
+      if (event.persisted) window.location.reload();
     });
   </script>
 </body>
