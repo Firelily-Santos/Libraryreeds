@@ -1270,12 +1270,6 @@
         }
 
         if (matchedData) {
-          const isHalloweenWallpaper = matchedCollection === "giftshop_items" &&
-            (itemIdParam === "KpjmKGmMPcNAEnoFzu1P" ||
-              String(matchedData.title ?? "").trim().toLowerCase() === "libraryreeds halloween phonewallpaper");
-          if (isHalloweenWallpaper) {
-            matchedData = { ...matchedData, price: 17.99 };
-          }
           currentItemData = matchedData;
           isBookCatalog = (matchedCollection === "books" && matchedData.formatPrices !== undefined);
           isCouponProduct = Boolean(
@@ -1716,5 +1710,6 @@ if(form)form.addEventListener('submit',async event=>{
 });
 
 </script>
+<!-- Library Reeds gift inventory fix 2026-11-12 -->
 </body>
 </html>

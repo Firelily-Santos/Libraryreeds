@@ -1285,6 +1285,9 @@
                   <option value="Gift Cards">Gift Cards</option>
                   <option value="Coupons & Perks">Coupons & Perks</option>
                   <option value="Virtual Add-ons">Virtual Add-ons</option>
+                  <option value="Wallpapers">Wallpapers</option>
+                  <option value="Bookmarks">Bookmarks</option>
+                  <option value="Coupons">Coupons</option>
                 </select>
               </div>
             </div>
@@ -1296,7 +1299,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label">Discount Percentage (%):</label>
-                <input type="number" min="0" class="form-input" id="adminGiftDiscountPct" placeholder="15" value="0">
+                <input type="number" min="0" max="100" step="0.01" class="form-input" id="adminGiftDiscountPct" placeholder="15" value="0">
               </div>
             </div>
 
@@ -1324,6 +1327,8 @@
 
           <div style="margin-top: 32px;">
             <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-primary); margin-bottom: 12px;">Existing Gift Shop Items &amp; Pricing</h3>
+            <button type="button" id="refreshGiftInventoryBtn" class="btn-secondary-action">Refresh gift inventory</button>
+            <p id="giftInventoryStatus" role="status" aria-live="polite"></p>
             <div style="overflow-x: auto;">
               <table class="inventory-table">
                 <thead>
@@ -2868,7 +2873,7 @@
     let lrGiftUnsubscribe = null;
     const lrGiftFields = {
       title:'adminGiftTitle', price:'adminGiftPrice', category:'adminGiftCategory',
-      promoCode:'adminGiftPromo', discountPct:'adminGiftDiscountPct',
+      promoCode:'adminGiftPromo', discountPercent:'adminGiftDiscountPct',
       imageUrl:'adminGiftImageUrl', backImageUrl:'adminGiftBackCoverUrl', description:'adminGiftDesc'
     };
     function lrGiftNotice(message, retry=false) {
@@ -2893,7 +2898,7 @@
       lrBookField('editGiftItemId').value=id;
       for(const [key,fieldId] of Object.entries(lrGiftFields)) {
         const field=lrBookField(fieldId);
-        const value=item[key] ?? (key==='imageUrl' ? item.frontImageUrl || '' : '');
+        const value=item[key] ?? (key==='discountPercent' ? item.discountPct ?? 0 : key==='imageUrl' ? item.frontImageUrl || '' : '');
         if(field.tagName==='SELECT' && value && !Array.from(field.options).some(o=>o.value===String(value)))
           field.add(new Option(value,value));
         field.value=value;
@@ -2923,7 +2928,8 @@
         const row=body.insertRow();
         row.insertCell().textContent=item.title||'Untitled';
         row.insertCell().textContent=item.category||'Uncategorized';
-        row.insertCell().textContent=price+(item.promoCode ? ' / '+item.promoCode : '');
+        const discount=Number(item.discountPercent ?? item.discountPct ?? 0);
+        row.insertCell().textContent=price+(discount>0 ? ' / '+discount+'% discount' : '')+(item.promoCode ? ' / '+item.promoCode : '');
         const actions=row.insertCell();
         for(const [label,handler,css] of [['Edit',()=>lrEditGift(id),'btn-secondary-action'],['Delete',()=>lrDeleteGift(id),'btn-danger-action']]) {
           const button=document.createElement('button'); button.type='button'; button.className=css;
@@ -2949,6 +2955,9 @@
         select.replaceChildren(new Option('Unable to load gift items. Retry below in Gift Shop.',''));
       });
     }
+    lrBookField('refreshGiftInventoryBtn')?.addEventListener('click',()=>{
+      lrGiftUnsubscribe?.(); lrGiftUnsubscribe=null; loadAdminGiftInventory();
+    });
     lrBookField('cancelEditGiftBtn')?.addEventListener('click',lrResetGiftEditor);
     lrBookField('adminGiftMerchandiseForm')?.addEventListener('submit',async event=>{
       event.preventDefault();
@@ -2959,10 +2968,12 @@
         if(!lrIsAdmin(auth.currentUser)) throw new Error('Sign in as the administrator to save inventory.');
         const payload={};
         for(const [key,fieldId] of Object.entries(lrGiftFields)) payload[key]=lrBookField(fieldId).value.trim();
-        payload.price=Number(payload.price); payload.discountPct=Number(payload.discountPct);
+        if(payload.price==='') throw new Error('Enter a price before saving.');
+        payload.price=Number(payload.price); payload.discountPercent=Number(payload.discountPercent);
+        payload.discountPct=payload.discountPercent; // Keep older readers compatible.
         if(!payload.title || !Number.isFinite(payload.price) || payload.price<0)
           throw new Error('Enter a title and a valid nonnegative price.');
-        if(!Number.isFinite(payload.discountPct) || payload.discountPct<0 || payload.discountPct>100)
+        if(!Number.isFinite(payload.discountPercent) || payload.discountPercent<0 || payload.discountPercent>100)
           throw new Error('Discount must be between 0 and 100.');
         payload.promoCode=payload.promoCode.toUpperCase();
         payload.frontImageUrl=payload.imageUrl;
@@ -2970,8 +2981,13 @@
         const id=lrBookField('editGiftItemId').value;
         if(id) await updateDoc(doc(db,'giftshop_items',id),payload);
         else { payload.createdAt=serverTimestamp(); await addDoc(collection(db,'giftshop_items'),payload); }
-        lrResetGiftEditor(); window.showToast?.('Gift item saved to inventory!');
-      } catch(error) { alert('Could not save gift item: '+error.message); }
+        lrResetGiftEditor();
+        lrBookField('giftInventoryStatus').textContent='Gift item saved. The shop reads its price and discount from this inventory.';
+        window.showToast?.('Gift item saved to inventory!');
+      } catch(error) {
+        lrBookField('giftInventoryStatus').textContent='Could not save gift item: '+error.message;
+        alert('Could not save gift item: '+error.message);
+      }
       finally { button.disabled=false; }
     });
 
@@ -3315,5 +3331,6 @@ if(form)form.addEventListener('submit',async event=>{
     }
   </script>
 <script type="module" src="./membership-controls.js"></script>
+<!-- Library Reeds gift inventory fix 2026-11-12 -->
 </body>
 </html>

@@ -721,7 +721,7 @@
 
         function buildItemCardHTML(itemId, item) {
             const basePrice = parseFloat(item.price || 0);
-            const discount = parseFloat(item.discountPercent || 0);
+            const discount = Math.min(100, Math.max(0, Number(item.discountPercent ?? item.discountPct ?? 0) || 0));
             
             const isCoupon = Boolean(item.promoCode || item.category === 'Gift Cards' || item.category === 'Coupons');
             const finalPrice = (!isCoupon && discount > 0) ? basePrice * (1 - (discount / 100)) : basePrice;
@@ -948,10 +948,7 @@
                 allGiftItems = [];
                 snapshot.forEach((docSnap) => {
                     const item = docSnap.data();
-                    const isHalloweenWallpaper = docSnap.id === "KpjmKGmMPcNAEnoFzu1P" ||
-                        String(item.title ?? "").trim().toLowerCase() === "libraryreeds halloween phonewallpaper";
-                    const displayItem = isHalloweenWallpaper ? { ...item, price: 17.99, discountPercent: 0 } : item;
-                    allGiftItems.push({ id: docSnap.id, data: displayItem });
+                    allGiftItems.push({ id: docSnap.id, data: item });
                 });
 
                 if (allGiftItems.length > 0) {
@@ -1123,5 +1120,6 @@
     }
   </script>
 
+<!-- Library Reeds gift inventory fix 2026-11-12 -->
 </body>
 </html>
