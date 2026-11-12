@@ -3332,5 +3332,41 @@ if(form)form.addEventListener('submit',async event=>{
   </script>
 <script type="module" src="./membership-controls.js"></script>
 <!-- Library Reeds gift inventory fix 2026-11-12 -->
+<script id="lrAccountNotificationBellFix">
+(() => {
+  const host = document.getElementById('adminNotificationBell');
+  const dropdown = document.getElementById('notificationDropdown');
+  if (!host || !dropdown || host.querySelector('#notificationBellToggle')) return;
+  const toggle = document.createElement('button');
+  toggle.id = 'notificationBellToggle';
+  toggle.type = 'button';
+  toggle.setAttribute('aria-label', 'Notifications');
+  toggle.setAttribute('aria-controls', dropdown.id);
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.style.cssText = 'position:relative;display:flex;align-items:center;justify-content:center;min-width:36px;min-height:36px;padding:8px;background:transparent;border:0;color:inherit;cursor:pointer;';
+  const icon = host.querySelector('svg');
+  const badge = document.getElementById('notificationBadge');
+  host.insertBefore(toggle, dropdown);
+  if (icon) toggle.append(icon);
+  if (badge) toggle.append(badge);
+  dropdown.style.width = 'min(320px, calc(100vw - 32px))';
+  dropdown.style.top = 'calc(100% + 8px)';
+  function setOpen(open) {
+    dropdown.style.display = open ? 'flex' : 'none';
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('click', event => {
+    if (!host.contains(event.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+})();
+
+</script>
 </body>
 </html>
