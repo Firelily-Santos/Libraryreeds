@@ -151,8 +151,8 @@
 
   <main class="login-main">
     <div class="login-card">
-      <h1 class="login-title">Sign In</h1>
-      <p class="helper-text">Access your Libraryreeds account.</p>
+      <h1 id="authTitle" class="login-title">Sign In</h1>
+      <p id="authDescription" class="helper-text">Access your Libraryreeds account.</p>
       <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
         <div class="form-group">
           <label class="form-label" for="loginEmail">Email Address:</label>
@@ -162,7 +162,12 @@
           <label class="form-label" for="loginPassword">Password:</label>
           <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" name="password" required autocomplete="current-password">
         </div>
-        <button type="button" id="showPassword" class="text-button" aria-controls="loginPassword" aria-pressed="false">Show password</button>
+        <div id="confirmPasswordGroup" class="form-group" hidden>
+          <label class="form-label" for="confirmPassword">Confirm Password:</label>
+          <input type="password" class="form-input" id="confirmPassword" name="confirmPassword" autocomplete="new-password" disabled>
+          <p class="helper-text">Use at least 12 characters. Your password must also meet the account’s password requirements.</p>
+        </div>
+        <button type="button" id="showPassword" class="text-button" aria-controls="loginPassword confirmPassword" aria-pressed="false">Show password</button>
         <label class="remember-label"><input type="checkbox" id="rememberMe"> Keep me signed in on this device</label>
         <p class="helper-text">Leave unchecked on shared devices.</p>
         <div id="loginError" class="error-msg" role="alert" tabindex="-1" hidden></div>
@@ -170,6 +175,8 @@
         <button type="submit" id="submitBtn" disabled class="btn-primary" style="margin-top: 8px;">Sign In to Account</button>
         <button type="button" id="resetPassword" class="text-button" disabled>Forgot password?</button>
       </form>
+      <p id="accountPrompt" class="helper-text">New to Libraryreeds?</p>
+      <button type="button" id="toggleSignup" class="btn-primary btn-secondary" aria-controls="loginForm" disabled>Create an account</button>
       <div class="divider" aria-hidden="true">or</div>
       <button type="button" id="googleSignIn" class="btn-primary btn-secondary" disabled>Continue with Google</button>
       <noscript><p class="helper-text">Enable JavaScript to sign in.</p></noscript>
@@ -187,7 +194,7 @@
   </script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword,
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword,
       GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail,
       setPersistence, browserSessionPersistence, browserLocalPersistence
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -205,7 +212,8 @@
     const form = $('loginForm');
     const errorBox = $('loginError');
     const status = $('loginStatus');
-    const controls = [...form.querySelectorAll('input, button'), $('googleSignIn')];
+    const controls = [...form.querySelectorAll('input, button'), $('googleSignIn'), $('toggleSignup')];
+    let signup = false;
     let ready = false;
     let busy = false;
     let leaving = false;
@@ -215,8 +223,9 @@
     function setBusy(value) {
       busy = value;
       controls.forEach(control => { control.disabled = value || !ready; });
+      $('confirmPassword').disabled = value || !ready || !signup;
       form.setAttribute('aria-busy', String(value));
-      $('submitBtn').textContent = value ? 'Please wait…' : 'Sign In to Account';
+      $('submitBtn').textContent = value ? 'Please wait…' : (signup ? 'Create Account' : 'Sign In to Account');
     }
     function clearMessages() {
       errorBox.hidden = true;
@@ -232,6 +241,8 @@
       // Never render provider error messages, credentials, tokens, or account existence.
       const code = error?.code;
       const messages = {
+        'auth/weak-password': 'Choose a stronger password that meets the account’s password requirements.',
+        'auth/password-does-not-meet-requirements': 'Choose a stronger password that meets the account’s password requirements.',
         'auth/network-request-failed': 'Check your connection and try again.',
         'auth/too-many-requests': 'Too many attempts. Please wait before trying again.',
         'auth/popup-blocked': 'Allow pop-ups for this site, then try Google sign-in again.',
@@ -242,12 +253,15 @@
         'auth/account-exists-with-different-credential': 'Try the sign-in method you originally used.',
         'auth/multi-factor-auth-required': 'This account requires additional verification. Use your existing verification-enabled sign-in page.'
       };
-      showError(messages[code] || 'Unable to sign in. Check your email and password, or try your original sign-in method.');
+      showError(messages[code] || (signup
+        ? 'Unable to create an account with these details. Check your entries, or try signing in or resetting your password.'
+        : 'Unable to sign in. Check your email and password, or try your original sign-in method.'));
     }
     function goToAccount() {
       if (leaving) return;
       leaving = true;
       $('loginPassword').value = '';
+      $('confirmPassword').value = '';
       // Fixed local destination; URL parameters cannot redirect to an outside site.
       // Authorization belongs in account.html AND Firebase rules/backend checks.
       window.location.replace('./account.html');
@@ -260,20 +274,59 @@
     $('showPassword').addEventListener('click', () => {
       const show = $('loginPassword').type === 'password';
       $('loginPassword').type = show ? 'text' : 'password';
+      $('confirmPassword').type = show ? 'text' : 'password';
       $('showPassword').textContent = show ? 'Hide password' : 'Show password';
       $('showPassword').setAttribute('aria-pressed', String(show));
+    });
+    $('toggleSignup').addEventListener('click', () => {
+      if (!ready || busy || leaving) return;
+      signup = !signup;
+      clearMessages();
+      $('authTitle').textContent = signup ? 'Create an Account' : 'Sign In';
+      document.title = signup ? 'Libraryreeds | Create an Account' : 'Libraryreeds | Sign In';
+      $('authDescription').textContent = signup ? 'Join Libraryreeds with your email and password.' : 'Access your Libraryreeds account.';
+      $('accountPrompt').textContent = signup ? 'Already have an account?' : 'New to Libraryreeds?';
+      $('toggleSignup').textContent = signup ? 'Back to sign in' : 'Create an account';
+      $('confirmPasswordGroup').hidden = !signup;
+      $('confirmPassword').required = signup;
+      $('loginPassword').minLength = signup ? 12 : 0;
+      $('loginPassword').autocomplete = signup ? 'new-password' : 'current-password';
+      $('loginPassword').value = '';
+      $('confirmPassword').value = '';
+      $('loginPassword').type = 'password';
+      $('confirmPassword').type = 'password';
+      $('showPassword').textContent = 'Show password';
+      $('showPassword').setAttribute('aria-pressed', 'false');
+      $('resetPassword').hidden = signup;
+      setBusy(false);
+      $('loginEmail').focus();
     });
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!ready || busy || leaving || !form.reportValidity()) return;
       clearMessages();
+      if (signup && $('loginPassword').value.length < 12) {
+        showError('Use a password with at least 12 characters.');
+        return;
+      }
+      if (signup && $('loginPassword').value !== $('confirmPassword').value) {
+        showError('Your passwords do not match. Please enter them again.');
+        return;
+      }
       setBusy(true);
       try {
         await persistence();
-        await signInWithEmailAndPassword(auth, $('loginEmail').value.trim(), $('loginPassword').value);
+        if (signup) {
+          // Firebase creates an ordinary auth account. Never assign roles, claims,
+          // admin flags, or write authorization documents from this public page.
+          await createUserWithEmailAndPassword(auth, $('loginEmail').value.trim(), $('loginPassword').value);
+        } else {
+          await signInWithEmailAndPassword(auth, $('loginEmail').value.trim(), $('loginPassword').value);
+        }
         goToAccount();
       } catch (error) {
         $('loginPassword').value = '';
+      $('confirmPassword').value = '';
         handleError(error);
       } finally {
         if (!leaving) setBusy(false);
@@ -319,7 +372,7 @@
       auth = getAuth(initializeApp(firebaseConfig));
       unsubscribe = onAuthStateChanged(auth, user => {
         clearTimeout(window.loginLoadTimer);
-        if (user) { goToAccount(); return; }
+        if (user) { if (!busy) goToAccount(); return; }
         ready = true;
         status.textContent = '';
         setBusy(false);
@@ -338,6 +391,7 @@
     window.addEventListener('pagehide', () => {
       clearTimeout(window.loginLoadTimer);
       $('loginPassword').value = '';
+      $('confirmPassword').value = '';
       if (unsubscribe) unsubscribe();
     });
     // Reinitialize auth if the browser restores this page from its back/forward cache.
