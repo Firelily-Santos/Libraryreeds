@@ -221,7 +221,10 @@
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-</head>
+<style id="lr-about-editor-styles">
+#panel-abouteditor{gap:24px;border-radius:9px}#panel-abouteditor .lr-about-editor-heading{display:flex;align-items:start;justify-content:space-between;gap:22px;flex-wrap:wrap}#panel-abouteditor .card-title{margin-bottom:12px}#panel-abouteditor .lr-about-eyebrow{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:12px;font-weight:700}#panel-abouteditor .lr-about-help{font-size:12px;line-height:1.8;color:var(--text-secondary);margin:0}#panel-abouteditor .lr-about-open{font-size:12px;color:var(--accent-gold);background:transparent;border:0;padding:12px 0;text-decoration:none;cursor:pointer;display:block;text-align:left}#panel-abouteditor fieldset{border:0;padding:0;min-width:0}#panel-abouteditor .lr-about-editor-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(240px,.85fr);gap:24px;align-items:start}#panel-abouteditor .lr-about-editor-fields{display:flex;flex-direction:column;gap:20px;min-width:0}#panel-abouteditor .lr-about-group{background:var(--bg-base);border:1px solid var(--border-subtle);padding:22px;border-radius:7px;display:flex;flex-direction:column;gap:20px}#panel-abouteditor .lr-about-group h3{font:600 21px var(--font-serif);color:var(--accent-gold)}#panel-abouteditor .form-input{border-radius:5px;min-height:44px;font-size:13px;line-height:1.6}#panel-abouteditor textarea{resize:vertical}#panel-abouteditor .lr-about-preview-panel{position:sticky;top:105px;background:var(--bg-base);border:1px solid var(--border-focus);padding:24px;border-radius:100px 100px 7px 7px;overflow-wrap:anywhere}#panel-abouteditor .lr-about-preview-panel>.lr-about-eyebrow{text-align:center;margin:12px 0 20px}#panel-abouteditor .lr-about-mini-portrait{width:130px;height:155px;margin:0 auto 20px;border-radius:70px 70px 4px 4px;border:1px solid var(--border-focus);position:relative;overflow:hidden;background:linear-gradient(135deg,#2a323b,#141a25);display:grid;place-items:center}#panel-abouteditor .lr-about-mini-portrait span{font:italic 52px var(--font-serif);color:var(--accent-gold)}#panel-abouteditor .lr-about-mini-portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#panel-abouteditor #lrAboutPreviewName{font:500 30px var(--font-serif);margin-bottom:12px}#panel-abouteditor .lr-about-preview-panel hr{border:0;border-top:1px solid var(--border-subtle);margin:22px 0}#panel-abouteditor #lrAboutPreviewHeading{font:500 23px var(--font-serif);margin-bottom:14px}#panel-abouteditor #lrAboutPreviewBody p{font-size:12px;color:var(--text-secondary);line-height:1.85;margin-bottom:12px}#panel-abouteditor #lrAboutPreviewQuote{border-left:2px solid var(--accent-gold);padding-left:14px;font:italic 19px/1.5 var(--font-serif);color:var(--accent-gold);margin:18px 0}#panel-abouteditor .lr-about-check{display:flex;align-items:center;gap:12px;font-size:13px;min-height:36px;color:var(--text-secondary)}#panel-abouteditor input[type=checkbox]{accent-color:var(--accent-gold);width:17px;height:17px}#panel-abouteditor .lr-about-publish{display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-top:1px solid var(--border-subtle);padding-top:24px;margin-top:26px}#panel-abouteditor .lr-about-status{font-size:13px;line-height:1.75;margin-top:16px;color:var(--accent-gold)}#panel-abouteditor .lr-about-preview-panel button{margin-top:16px}#panel-abouteditor :focus-visible{outline:2px solid var(--accent-gold);outline-offset:3px}#panel-abouteditor button:disabled{opacity:.55;cursor:not-allowed}@media(max-width:1100px){#panel-abouteditor .lr-about-editor-grid{grid-template-columns:1fr}#panel-abouteditor .lr-about-preview-panel{position:static;border-radius:8px}}@media(max-width:600px){#panel-abouteditor{padding:20px 16px}#panel-abouteditor .lr-about-group{padding:18px 14px}#panel-abouteditor .form-input{font-size:16px}}
+</style><style id="lrPublishedBooksStyle">#panel-abouteditor .lr-published-editor{border-top:1px solid var(--border-focus);padding-top:32px;display:flex;flex-direction:column;gap:24px}#panel-abouteditor .lr-published-import{background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:7px;padding:20px;display:grid;gap:12px;margin-bottom:24px}#panel-abouteditor .lr-published-inline{display:flex;gap:12px;align-items:center}#panel-abouteditor .lr-published-inline select{min-width:0;flex:1}#panel-abouteditor .lr-published-inline button{min-height:44px;flex-shrink:0}#panel-abouteditor .lr-published-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:20px}#panel-abouteditor .lr-published-wide{grid-column:1/-1}#panel-abouteditor .lr-published-actions{display:flex;gap:12px;flex-wrap:wrap;padding-top:20px}#panel-abouteditor .lr-published-saved-head{display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap}#panel-abouteditor .lr-published-saved-head h3{font:600 24px var(--font-serif)}#panel-abouteditor .lr-published-list{display:grid;gap:12px}#panel-abouteditor .lr-published-row{display:flex;gap:16px;align-items:center;padding:16px;background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:6px}#panel-abouteditor .lr-published-row img{width:54px;height:78px;object-fit:cover;border-radius:3px;flex-shrink:0}#panel-abouteditor .lr-published-row-info{flex:1;min-width:0;overflow-wrap:anywhere}#panel-abouteditor .lr-published-row h4{font:600 22px var(--font-serif);margin-bottom:5px}#panel-abouteditor .lr-published-row p{font-size:11px;line-height:1.8;color:var(--text-secondary)}#panel-abouteditor .lr-published-row-actions{display:flex;gap:8px;flex-wrap:wrap}#panel-abouteditor .lr-published-list:empty:after{content:'No books loaded yet.';font-size:12px;color:var(--text-secondary)}html:not([data-lr-admin="true"]) [data-lr-admin-panel]{display:none!important}html:not([data-lr-admin="true"]) [data-admin-settings-nav]{display:none!important}@media(max-width:650px){#panel-abouteditor .lr-published-fields{grid-template-columns:1fr}#panel-abouteditor .lr-published-inline{flex-direction:column;align-items:stretch}#panel-abouteditor .lr-published-row{align-items:start;flex-wrap:wrap}#panel-abouteditor .lr-published-row-actions{width:100%}}
+</style></head>
 <body>
 
   <nav class="top-nav">
@@ -314,7 +317,7 @@
 
       <div class="content-panel">
 
-<section id="panel-maintenance" class="settings-card" style="display:none" aria-labelledby="lrMaintenanceTitle">
+<section id="panel-maintenance" class="settings-card" style="display:none" aria-labelledby="lrMaintenanceTitle" data-lr-admin-panel>
  <h2 id="lrMaintenanceTitle" class="section-title">Coming Soon / Maintenance</h2>
  <p style="color:var(--text-secondary);line-height:1.7">Show visitors a Coming Soon page while you update Library Reeds. You can keep browsing and editing while signed in as the administrator.</p>
  <form id="lrMaintenanceForm" style="display:flex;flex-direction:column;gap:20px">
@@ -329,7 +332,7 @@
 </section>
 
         <!-- Stripe & MAJORITY: administrative setup only; no bank details or secret keys in client HTML. -->
-        <section id="panel-payment-payouts" class="settings-card lr-payout-settings" style="display:none;" aria-labelledby="lrPayoutTitle">
+        <section id="panel-payment-payouts" class="settings-card lr-payout-settings" style="display:none;" aria-labelledby="lrPayoutTitle" data-lr-admin-panel>
           <div class="lr-payout-head">
             <div>
               <p class="lr-payout-eyebrow">LIBRARY REEDS / SECURE PAYMENTS</p>
@@ -476,7 +479,7 @@
           </div>
         </div>
 
-        <div id="panel-epubtracker" class="settings-card" style="display: none;">
+        <div id="panel-epubtracker" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Live Manuscript &amp; EPUB Progress Tracker</h2>
           
           <form id="adminManuscriptForm" style="display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle); margin-top: 20px;">
@@ -555,7 +558,7 @@
           </div>
         </div>
 
-        <div id="panel-orders" class="settings-card" style="display: none;">
+        <div id="panel-orders" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Global Customer Orders</h2>
           <div style="overflow-x: auto;">
             <table class="orders-table">
@@ -575,7 +578,7 @@
           </div>
         </div>
 
-        <div id="panel-signaturesetting" class="settings-card" style="display: none;">
+        <div id="panel-signaturesetting" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Digital Author Signature Management</h2>
           <p class="card-desc">Create or draw your official digital signature to display on all published book product pages.</p>
           
@@ -629,7 +632,7 @@
           </form>
         </div>
 
-        <div id="panel-inventory" class="settings-card" style="display: none;">
+        <div id="panel-inventory" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Catalog Inventory, Pricing &amp; Specifications Control</h2>
 
           <!-- Select & Edit Gift Shop Item Name and Price Form -->
@@ -921,7 +924,7 @@
         </div>
 
         <!-- ADMIN CHARACTER WALL & FAMILY TREE MANAGEMENT -->
-        <div id="panel-characterwall" class="settings-card" style="display: none;">
+        <div id="panel-characterwall" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Character Wall Management</h2>
           <p class="card-desc">Add, edit, publish, and remove character profiles shown on the Character Wall. Configure multiple front Polaroid carousel images, generational lineages, brothers/sisters, and extended relatives with adoption flags.</p>
 
@@ -1243,7 +1246,7 @@
           </div>
         </div>
 
-        <div id="panel-fanartupload" class="settings-card" style="display: none;">
+        <div id="panel-fanartupload" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Fanart Gallery Upload</h2>
           <p class="card-desc">Submit your illustrations to be featured in the community Fanart Gallery exhibition.</p>
           <form id="adminFanartForm" style="display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 24px; border-radius: 4px; border: 1px solid var(--border-subtle);">
@@ -1282,7 +1285,7 @@
           </form>
         </div>
 
-        <div id="panel-timersetting" class="dashboard-card" style="display: none;">
+        <div id="panel-timersetting" class="dashboard-card" style="display: none;" data-lr-admin-panel>
           <h3 class="card-title">Page Countdown Timers &amp; Titles</h3>
           <p class="card-desc">Manage separate timers and unique event titles for your Home, Shop, and Gift Shop pages.</p>
           
@@ -1343,7 +1346,7 @@
           </div>
         </div>
 
-        <div id="panel-giftshop" class="settings-card" style="display: none;">
+        <div id="panel-giftshop" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Manage Gift Shop Merchandise &amp; Coupons</h2>
           <p class="card-desc">Add or edit separate pricing and promo codes specifically for gift shop items (t-shirts, merchandise, etc.), separate from your book catalog.</p>
           
@@ -1440,7 +1443,7 @@
           </div>
         </div>
 
-        <div id="panel-announcement" class="dashboard-card" style="display: none;">
+        <div id="panel-announcement" class="dashboard-card" style="display: none;" data-lr-admin-panel>
           <h3 class="card-title">Page Announcement Bars &amp; Marquees</h3>
           <p class="card-desc">Set unique scrolling announcement messages and toggle them separately for your Home, Shop, and Gift Shop pages.</p>
           
@@ -1483,31 +1486,29 @@
           </div>
         </div>
 
-        <div id="panel-abouteditor" class="settings-card" style="display: none;">
-          <h2 class="card-title">About Page Content Management</h2>
-          <form id="adminAboutForm" style="display: flex; flex-direction: column; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label">Headline / Subtitle:</label>
-              <input type="text" class="form-input" id="aboutAdminHeading" placeholder="Refusing to be boxed into just one world.">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Featured Quote:</label>
-              <input type="text" class="form-input" id="aboutAdminQuote" placeholder="This is my very first novel...">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Author Circular Image URL:</label>
-              <input type="url" class="form-input" id="aboutAuthorImageUrl" placeholder="https://image-url.com/avatar.jpg">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Full Bio Paragraphs:</label>
-              <textarea class="form-input" id="aboutAdminBody" rows="6" style="resize: vertical;"></textarea>
-            </div>
-            <button type="submit" class="btn-primary" style="align-self: flex-start;">Publish to About Page</button>
-            <div id="aboutSaveStatus" class="success-msg">About page updated successfully.</div>
-          </form>
-        </div>
+        <section id="panel-abouteditor" class="settings-card" style="display:none" aria-labelledby="lrAboutEditorTitle" data-lr-admin-panel><div class="lr-about-editor-heading"><div><p class="lr-about-eyebrow">Your author page</p><h2 id="lrAboutEditorTitle" class="card-title">Tell your story.</h2><p class="lr-about-help">Shape the page readers see. Preview your edits, then publish when you're ready.</p></div><a href="./about.html" target="_blank" rel="noopener" class="lr-about-open">View public page ↗</a></div><form id="adminAboutForm"><fieldset id="lrAboutFields" disabled><div class="lr-about-editor-grid"><div class="lr-about-editor-fields"><section class="lr-about-group"><h3>01 · Author & biography</h3><div class="form-group"><label for="aboutAdminName" class="form-label">Author name</label><input class="form-input" id="aboutAdminName" type="text" maxlength="100" required></div><div class="form-group"><label for="aboutAdminIntro" class="form-label">Short introduction</label><textarea class="form-input" id="aboutAdminIntro" rows="3" maxlength="500"></textarea></div><div class="form-group"><label for="aboutAdminHeading" class="form-label">Biography heading</label><input class="form-input" id="aboutAdminHeading" type="text" maxlength="180"></div><div class="form-group"><label for="aboutAdminQuote" class="form-label">Featured quote (optional)</label><textarea class="form-input" id="aboutAdminQuote" rows="3" maxlength="600"></textarea></div><div class="form-group"><label for="aboutAdminBody" class="form-label">Biography</label><textarea class="form-input" id="aboutAdminBody" rows="9" maxlength="15000"></textarea><small class="lr-about-help">Separate paragraphs with a blank line. Text is published as plain text.</small></div><div class="form-group"><label for="aboutAuthorImageUrl" class="form-label">Portrait image URL (optional)</label><input class="form-input" id="aboutAuthorImageUrl" type="url" maxlength="2000"><small class="lr-about-help">Use a public HTTPS image URL. Leave blank for an elegant initials portrait. Use a photo you own.</small></div><div class="form-group"><label for="aboutAdminGenres" class="form-label">Story themes / genres (comma separated)</label><input class="form-input" id="aboutAdminGenres" type="text" maxlength="200"></div></section><section class="lr-about-group"><h3>02 · On your writing desk</h3><div class="form-group"><label for="aboutWritingTitle" class="form-label">Project title</label><input class="form-input" id="aboutWritingTitle" type="text" maxlength="150"></div><div class="form-group"><label for="aboutWritingSubtitle" class="form-label">Series / subtitle</label><input class="form-input" id="aboutWritingSubtitle" type="text" maxlength="180"></div><div class="form-group"><label for="aboutWritingStatus" class="form-label">Project status</label><select class="form-input" id="aboutWritingStatus"><option>In progress</option><option>Coming soon</option><option>Available now</option></select></div><div class="form-group"><label for="aboutWritingBody" class="form-label">Project introduction (avoid spoilers)</label><textarea class="form-input" id="aboutWritingBody" rows="3" maxlength="2000"></textarea></div></section><section class="lr-about-group"><h3>03 · Contact & social links</h3><div class="form-group"><label for="aboutContactEmail" class="form-label">Public contact email (optional)</label><input class="form-input" id="aboutContactEmail" type="email" maxlength="180"><small class="lr-about-help">This address will be visible to every visitor. Leave blank to hide it.</small></div><div class="form-group"><label for="aboutInstagramUrl" class="form-label">Instagram URL (optional)</label><input class="form-input" id="aboutInstagramUrl" type="url" maxlength="2000"></div><div class="form-group"><label for="aboutFacebookUrl" class="form-label">Facebook URL (optional)</label><input class="form-input" id="aboutFacebookUrl" type="url" maxlength="2000"></div></section><section class="lr-about-group"><h3>04 · Page sections</h3><label class="lr-about-check"><input type="checkbox" id="aboutShowWriting" checked> Show the writing desk</label><label class="lr-about-check"><input type="checkbox" id="aboutShowBooks" checked> Show published books</label><label class="lr-about-check"><input type="checkbox" id="aboutShowFaq" checked> Show reader questions</label><p class="lr-about-help">Use the Published Works editor below to add and choose books for this page. Store inventory and prices are managed separately.</p></section></div><aside class="lr-about-preview-panel"><p class="lr-about-eyebrow">Live editor preview</p><div class="lr-about-mini-portrait"><span id="lrAboutPreviewInitials">FS</span><img id="lrAboutPreviewImage" alt="Author preview" hidden></div><p id="lrAboutPreviewName">Firelily Santos</p><p id="lrAboutPreviewIntro" class="lr-about-help"></p><hr><h3 id="lrAboutPreviewHeading"></h3><div id="lrAboutPreviewBody"></div><blockquote id="lrAboutPreviewQuote" hidden></blockquote><p class="lr-about-help">This preview shows your author introduction. Open the full page preview to review the complete layout.</p><button type="button" id="lrAboutFullPreview" class="btn-secondary-action">Preview full page ↗</button><button type="button" id="lrAboutReload" class="lr-about-open">Reload published content</button></aside></div><div class="lr-about-publish"><button type="submit" id="lrAboutPublish" class="btn-primary">Publish author page</button><span class="lr-about-help" id="lrAboutDirty">No unpublished changes.</span></div></fieldset><p id="aboutSaveStatus" class="lr-about-status" role="status" aria-live="polite">Sign in with your admin account to load this editor.</p></form><section class="lr-published-editor" aria-labelledby="lrPublishedTitle">
+ <div class="lr-about-editor-heading"><div><p class="lr-about-eyebrow">Your published works</p><h2 id="lrPublishedTitle" class="card-title">Add books to your author page.</h2><p class="lr-about-help">Choose a book from your store or add a published title manually. Only books marked visible appear on your About page.</p></div><a class="lr-about-open" href="./about.html#books" target="_blank" rel="noopener">View published books ↗</a></div>
+ <form id="lrPublishedBookForm"><fieldset id="lrPublishedFields" disabled>
+  <div class="lr-published-import"><label for="lrPublishedCatalog" class="form-label">Start with a book in your inventory (optional)</label><div class="lr-published-inline"><select id="lrPublishedCatalog" class="form-input"><option value="">Select a catalog book…</option></select><button type="button" id="lrPublishedImport" class="btn-secondary-action">Use this book</button></div><p class="lr-about-help">Review the details before saving. Adding a book here does not change its inventory or store price.</p></div>
+  <input id="lrPublishedEditId" type="hidden"><input id="lrPublishedSourceId" type="hidden">
+  <div class="lr-published-fields">
+   <div class="form-group"><label for="lrPublishedBookTitle" class="form-label">Book title</label><input id="lrPublishedBookTitle" class="form-input" required maxlength="180"></div>
+   <div class="form-group"><label for="lrPublishedBookAuthor" class="form-label">Author</label><input id="lrPublishedBookAuthor" class="form-input" required maxlength="100" value="Firelily Santos"></div>
+   <div class="form-group"><label for="lrPublishedDate" class="form-label">Publication date (optional)</label><input id="lrPublishedDate" class="form-input" type="date"></div>
+   <div class="form-group"><label for="lrPublishedOrder" class="form-label">Display order</label><input id="lrPublishedOrder" class="form-input" type="number" min="0" max="9999" step="1" value="0"><small class="lr-about-help">Lower numbers appear first.</small></div>
+   <div class="form-group lr-published-wide"><label for="lrPublishedSummary" class="form-label">Short description (optional)</label><textarea id="lrPublishedSummary" class="form-input" rows="3" maxlength="1500"></textarea></div>
+   <div class="form-group"><label for="lrPublishedCoverUrl" class="form-label">Cover image URL (optional)</label><input id="lrPublishedCoverUrl" class="form-input" type="url" placeholder="https://…" maxlength="2000"></div>
+   <div class="form-group"><label for="lrPublishedCoverFile" class="form-label">Or upload a cover</label><input id="lrPublishedCoverFile" class="form-input" type="file" accept="image/jpeg,image/png,image/webp"><small class="lr-about-help">JPG, PNG, or WebP, up to 5 MB. Uploading replaces the cover URL.</small></div>
+   <div class="form-group lr-published-wide"><label for="lrPublishedPurchaseUrl" class="form-label">External book / purchase URL (optional)</label><input id="lrPublishedPurchaseUrl" class="form-input" type="url" placeholder="https://…" maxlength="2000"><small class="lr-about-help" id="lrPublishedSourceNote">Use your store, publisher, or retailer's HTTPS link. Leave blank to show the book without a purchase button.</small></div>
+  </div>
+  <label class="lr-about-check"><input type="checkbox" id="lrPublishedVisible" checked> Show this published book on the About Author page</label>
+  <div class="lr-published-actions"><button type="submit" id="lrPublishedSave" class="btn-primary">Add published book</button><button type="button" id="lrPublishedCancel" class="btn-secondary-action">Clear / add another</button></div>
+ </fieldset><p id="lrPublishedStatus" class="lr-about-status" role="status" aria-live="polite">Sign in as the administrator to manage published books.</p></form>
+ <div class="lr-published-saved-head"><h3>Books added to this page</h3><button type="button" id="lrPublishedRetry" class="lr-about-open">Refresh list</button></div><div id="lrPublishedBooksList" class="lr-published-list" aria-label="Published books on author page"></div>
+</section>
+</section>
 
-        <div id="panel-bookdetailcms" class="settings-card" style="display: none;">
+        <div id="panel-bookdetailcms" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Book Detail Page Template Management</h2>
           <form id="bookDetailCmsForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -1523,7 +1524,7 @@
           </form>
         </div>
 
-        <div id="panel-homecms" class="settings-card" style="display: none;">
+        <div id="panel-homecms" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Homepage CMS &amp; Featured Books</h2>
           <form id="homeCmsForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -1543,7 +1544,7 @@
           </form>
         </div>
 
-        <div id="panel-fanartcms" class="settings-card" style="display: none;">
+        <div id="panel-fanartcms" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Fanart Page Banner Control</h2>
           <form id="fanartCmsForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -1555,7 +1556,7 @@
           </form>
         </div>
 
-        <div id="panel-policies" class="settings-card" style="display: none;">
+        <div id="panel-policies" class="settings-card" style="display: none;" data-lr-admin-panel>
           <h2 class="card-title">Store Policies &amp; Shipping Rules</h2>
           <form id="adminPoliciesForm" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="form-group">
@@ -1600,6 +1601,8 @@
 
   <script>
     function switchPanel(panelId, titleText, event) {
+      const key=String(panelId).replace(/^panel-/, '');
+      if (!['general','userorders'].includes(key) && window.lrAdminAuthorized !== true) return;
       document.querySelectorAll('.settings-card, .dashboard-card').forEach(card => card.style.display = 'none');
       document.querySelectorAll('.sidebar-tab-btn').forEach(btn => btn.classList.remove('active'));
       const target = document.getElementById(panelId) || document.getElementById('panel-' + panelId);
@@ -1634,7 +1637,7 @@
     window.showToast = function(msg) {
       const toast = document.getElementById("siteToast");
       if (!toast) return;
-      toast.innerHTML = `<span style="color: var(--accent-gold);">❖</span> <span>${msg}</span>`;
+      const mark=document.createElement('span');mark.textContent='❖';mark.style.color='var(--accent-gold)';const message=document.createElement('span');message.textContent=String(msg);toast.replaceChildren(mark,message);
       toast.style.opacity = "1";
       toast.style.transform = "translateY(0)";
       clearTimeout(window._toastTimer);
@@ -1662,7 +1665,7 @@
       const row = document.createElement("div");
       row.className = "dynamic-tree-row sibling-row";
       row.innerHTML = `
-        <input type="text" class="form-input sib-name" placeholder="Name & Dates (e.g. James Doe, 2002 – Present)" value="${name}">
+        <input type="text" class="form-input sib-name" placeholder="Name & Dates (e.g. James Doe, 2002 – Present)" >
         <select class="form-input sib-type">
           <option value="Brother" ${type === "Brother" ? "selected" : ""}>Brother</option>
           <option value="Sister" ${type === "Sister" ? "selected" : ""}>Sister</option>
@@ -1672,6 +1675,7 @@
         </label>
         <button type="button" class="btn-danger-action remove-row-btn" style="padding:6px 10px;">×</button>
       `;
+      row.querySelector(".sib-name").value = name || "";
       row.querySelector(".remove-row-btn").addEventListener("click", () => row.remove());
       const sibImageArea = document.createElement("div");
       sibImageArea.style.cssText = "grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;align-items:center";
@@ -1827,7 +1831,7 @@
 
     function escapeHtml(str) {
       if (!str) return '';
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return String(str).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
     }
 
     async function dispatchTelegramRaw() {
@@ -2142,6 +2146,7 @@
 
     document.getElementById('adminPromoBannerForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (!lrIsAdmin(auth.currentUser)) return;
       const targetSelect = document.getElementById('adminPromoBannerTarget');
       const targetKey = targetSelect ? targetSelect.value : "global_default";
       const title = document.getElementById('adminPromoBannerTitle').value.trim();
@@ -2202,6 +2207,7 @@
 
     document.getElementById('adminManuscriptForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (!lrIsAdmin(auth.currentUser)) return;
       const trackerDocId = document.getElementById('editTrackerDocId')?.value;
       const title = document.getElementById('trackerTitleInput')?.value.trim() || 'Untitled Manuscript';
       const rawCurrent = document.getElementById('currentWordsInput').value.replace(/,/g, '');
@@ -2271,12 +2277,12 @@
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-              <td><strong>${t.title || 'Untitled'}</strong></td>
+              <td><strong>${escapeHtml(t.title || 'Untitled')}</strong></td>
               <td>${Number(words).toLocaleString()} words</td>
-              <td>${chapterText}</td>
+              <td>${escapeHtml(chapterText)}</td>
               <td>
-                <button type="button" class="btn-primary edit-tracker-btn" data-id="${id}" style="padding: 6px 12px; font-size: 0.65rem;">Edit</button>
-                <button type="button" class="btn-danger-action delete-epub-btn" data-id="${id}" style="padding: 6px 12px; font-size: 0.65rem; margin-left: 6px;">Delete</button>
+                <button type="button" class="btn-primary edit-tracker-btn" data-id="${escapeHtml(id)}" style="padding: 6px 12px; font-size: 0.65rem;">Edit</button>
+                <button type="button" class="btn-danger-action delete-epub-btn" data-id="${escapeHtml(id)}" style="padding: 6px 12px; font-size: 0.65rem; margin-left: 6px;">Delete</button>
               </td>
             `;
             tbody.appendChild(tr);
@@ -2530,16 +2536,16 @@
         return `
           <tr>
             <td>
-              <strong style="color:var(--text-primary);">${c.name || "Unnamed"}</strong>
-              <div style="font-size:.72rem;color:var(--text-muted);">${c.species || "Unspecified"}</div>
+              <strong style="color:var(--text-primary);">${escapeHtml(c.name || "Unnamed")}</strong>
+              <div style="font-size:.72rem;color:var(--text-muted);">${escapeHtml(c.species || "Unspecified")}</div>
             </td>
-            <td>${c.role || "Other"}<br><span style="font-size:.72rem;color:var(--text-muted);">${c.book || "No story"}</span></td>
+            <td>${escapeHtml(c.role || "Other")}<br><span style="font-size:.72rem;color:var(--text-muted);">${escapeHtml(c.book || "No story")}</span></td>
             <td><span style="color:var(--accent-gold); font-size:0.75rem;">${imgCount} photo${imgCount === 1 ? '' : 's'}</span></td>
             <td><span style="color:var(--accent-gold); font-size:0.75rem;">${sibCount} recorded</span></td>
             <td>${crest ? `<span style="color:var(--accent-gold); font-size:0.75rem;">✓ Crest Active</span>` : `<span style="color:var(--text-muted); font-size:0.75rem;">None</span>`}</td>
             <td style="display:flex;gap:8px;">
-              <button type="button" class="btn-secondary-action" data-edit-character="${id}">Edit</button>
-              <button type="button" class="btn-danger-action" data-delete-character="${id}">Delete</button>
+              <button type="button" class="btn-secondary-action" data-edit-character="${escapeHtml(id)}">Edit</button>
+              <button type="button" class="btn-danger-action" data-delete-character="${escapeHtml(id)}">Delete</button>
             </td>
           </tr>
         `;
@@ -2549,6 +2555,7 @@
     const form = document.getElementById("adminCharacterForm");
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (!lrIsAdmin(auth.currentUser)) return;
       const submitBtn = document.getElementById("adminCharacterSubmitBtn");
       submitBtn.disabled = true;
       submitBtn.textContent = "Publishing to Wall...";
@@ -3180,44 +3187,14 @@
     document.getElementById('dropdownLogoutBtn')?.addEventListener('click', handleSignOut);
   </script>
 
-  <!-- Notification Counter Sync -->
-  <script type="module">
-    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
-      authDomain: "libraryreeds-638f4.firebaseapp.com",
-      projectId: "libraryreeds-638f4",
-      storageBucket: "libraryreeds-638f4.firebasestorage.app",
-      messagingSenderId: "768304310517",
-      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
-    };
-
-    const sharedApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    const sharedDb = getFirestore(sharedApp);
-    const badge = document.getElementById('notificationBadge');
-    const list = document.getElementById('notificationDropdownList');
-
-    const q = query(collection(sharedDb, 'admin_notifications'), orderBy('timestamp', 'desc'), limit(50));
-    onSnapshot(q, (snapshot) => {
-      const unreadCount = snapshot.docs.filter(d => !d.data().read).length;
-      if (badge) {
-        badge.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
-        badge.style.display = unreadCount > 0 ? 'flex' : 'none';
-      }
-      if (list && !snapshot.empty) {
-        list.innerHTML = snapshot.docs.map(docSnap => {
-          const d = docSnap.data();
-          return `
-            <div style="padding:12px 16px; border-bottom:1px solid var(--border-subtle); background:${d.read ? 'transparent' : 'var(--bg-surface-elevated)'};">
-              <div style="font-size:0.8rem; color:var(--text-primary); font-weight:${d.read ? '400' : '700'};">${d.message || 'Notification'}</div>
-            </div>
-          `;
-        }).join('');
-      }
-    });
-  </script>
+  <script type="module" id="lrAdminNotificationsSecure">import {initializeApp,getApps} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {getAuth,onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import {getFirestore,collection,query,orderBy,limit,onSnapshot} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+const cfg={"apiKey": "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg", "authDomain": "libraryreeds-638f4.firebaseapp.com", "projectId": "libraryreeds-638f4", "storageBucket": "libraryreeds-638f4.firebasestorage.app", "messagingSenderId": "768304310517", "appId": "1:768304310517:web:39b931e6447043d84d3dbc"},app=getApps().find(a=>a.options.projectId===cfg.projectId)||initializeApp(cfg),db=getFirestore(app),auth=getAuth(app);
+let stop=()=>{},active=0;const list=document.getElementById('notificationDropdownList'),badge=document.getElementById('notificationBadge');
+onAuthStateChanged(auth,user=>{stop();stop=()=>{};const sequence=++active;list.replaceChildren();badge.style.display='none';if(user?.uid!=='zlbkFntgN9emWShy7q5361lJncu1')return;
+stop=onSnapshot(query(collection(db,'admin_notifications'),orderBy('timestamp','desc'),limit(50)),snapshot=>{if(sequence!==active)return;const unread=snapshot.docs.filter(d=>!d.data().read).length;badge.textContent=unread>99?'99+':unread;badge.style.display=unread?'flex':'none';list.replaceChildren();if(snapshot.empty){list.textContent='No notifications yet.';return}snapshot.forEach(snap=>{const row=document.createElement('div');row.style.cssText='padding:12px 16px;border-bottom:1px solid var(--border-subtle);font-size:12px';row.textContent=snap.data().message||'Notification';list.append(row)})},()=>{if(sequence===active)list.textContent='Notifications could not be loaded.'});});
+</script>
 
   <!-- ADDITIVE: isolated offer admin controller. Does not alter existing admin functions. -->
   <script type="module">
@@ -3262,8 +3239,7 @@
     }
     onAuthStateChanged(auth, user => {
       // UI gate only: Firestore security rules must independently restrict writes to true admins.
-      const email=(user?.email||'').toLowerCase();
-      allowed=!!user && (email==='firelily@libraryreeds.com' || email.includes('admin'));
+      allowed=!!user && user.uid==='zlbkFntgN9emWShy7q5361lJncu1';
       const editor=$('adminProductOfferEditor'); if (editor) editor.style.display=allowed?'block':'none';
       if (allowed) refreshProducts();
     });
@@ -3568,5 +3544,88 @@ form.addEventListener('submit',async event=>{
 });
 
 </script>
-</body>
+<script type="module" id="lrAboutEditorModule">
+import {initializeApp,getApps} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {getAuth,onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import {getFirestore,doc,getDoc,setDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+const cfg={"apiKey": "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg", "authDomain": "libraryreeds-638f4.firebaseapp.com", "projectId": "libraryreeds-638f4", "storageBucket": "libraryreeds-638f4.firebasestorage.app", "messagingSenderId": "768304310517", "appId": "1:768304310517:web:39b931e6447043d84d3dbc"},defaults={"authorName": "Firelily Santos", "intro": "Stories of magic, courage, and finding where you belong. Welcome to my corner of Libraryreeds.", "heading": "A little about the storyteller.", "quote": "", "body": "I'm Firelily Santos, the author behind Silverthorne Academy and the creator of Libraryreeds.\n\nMy stories explore magical worlds, unexpected powers, and the courage it takes to step into the unknown. Libraryreeds is a place to discover my writing and share in the worlds taking shape on the page.\n\nThank you for being here. Whether you're discovering a story for the first time or returning to see what's next, I'm glad you're part of the journey.", "imageUrl": "", "genres": "Fantasy, Magic, Adventure", "writingTitle": "Silverthorne Academy", "writingSubtitle": "Infinity Blaze \u2014 Book 1", "writingBody": "Samantha's ordinary life in Miami changes when a power she doesn't understand begins to surface. Silverthorne Academy opens the door to a world of magic\u2014and a future she never imagined.", "writingStatus": "In progress", "showWriting": true, "showBooks": true, "showFaq": true, "contactEmail": "", "instagramUrl": "", "facebookUrl": ""},fields={"authorName": "aboutAdminName", "intro": "aboutAdminIntro", "heading": "aboutAdminHeading", "quote": "aboutAdminQuote", "body": "aboutAdminBody", "imageUrl": "aboutAuthorImageUrl", "genres": "aboutAdminGenres", "writingTitle": "aboutWritingTitle", "writingSubtitle": "aboutWritingSubtitle", "writingStatus": "aboutWritingStatus", "writingBody": "aboutWritingBody", "contactEmail": "aboutContactEmail", "instagramUrl": "aboutInstagramUrl", "facebookUrl": "aboutFacebookUrl", "showWriting": "aboutShowWriting", "showBooks": "aboutShowBooks", "showFaq": "aboutShowFaq"};
+const app=getApps().find(a=>a.options.projectId===cfg.projectId)||initializeApp(cfg),auth=getAuth(app),db=getFirestore(app),contentRef=doc(db,'settings','about_content'),$=id=>document.getElementById(id);
+const form=$('adminAboutForm'),fieldset=$('lrAboutFields'),publish=$('lrAboutPublish'),status=$('aboutSaveStatus');
+let loaded=false,dirty=false,saving=false,preview=null,version=null,session=0;
+const isAdmin=()=>auth.currentUser?.uid==='zlbkFntgN9emWShy7q5361lJncu1';
+const safeUrl=v=>{if(!v)return '';try{const u=new URL(v);if(u.protocol==='https:')return u.href}catch{}throw Error('Image and social links must be complete HTTPS addresses.');};
+function read(){return Object.fromEntries(Object.entries(fields).map(([key,id])=>[key,$(id).type==='checkbox'?$(id).checked:$(id).value.trim()]));}
+function updatePreview(){const d=read();$('lrAboutPreviewName').textContent=d.authorName||'Author name';$('lrAboutPreviewIntro').textContent=d.intro;$('lrAboutPreviewHeading').textContent=d.heading;$('lrAboutPreviewQuote').textContent=d.quote;$('lrAboutPreviewQuote').hidden=!d.quote;$('lrAboutPreviewInitials').textContent=d.authorName.split(/\s+/).filter(Boolean).slice(0,2).map(p=>p[0]).join('');$('lrAboutPreviewBody').replaceChildren(...d.body.split(/\n\s*\n/).filter(p=>p.trim()).map(p=>{const el=document.createElement('p');el.textContent=p;return el}));const image=$('lrAboutPreviewImage');let url='';try{url=safeUrl(d.imageUrl)}catch{}image.hidden=!url;if(url&&image.getAttribute('src')!==url)image.src=url;else if(!url)image.removeAttribute('src');if(preview&&!preview.closed)preview.postMessage({type:'lr-about-preview',content:d},location.origin);}
+$('lrAboutPreviewImage').addEventListener('error',()=>{$('lrAboutPreviewImage').hidden=true});
+function dirtyState(value){dirty=value;$('lrAboutDirty').textContent=value?'You have unpublished changes.':'No unpublished changes.';}
+function populate(data){const d={...defaults,...data};if(!data.imageUrl&&data.authorImageUrl)d.imageUrl=data.authorImageUrl;for(const [key,id] of Object.entries(fields)){if($(id).type==='checkbox')$(id).checked=d[key]!==false;else $(id).value=d[key]??'';}dirtyState(false);updatePreview();}
+async function load(){if(!isAdmin())return;const active=++session;loaded=false;fieldset.disabled=true;status.textContent='Loading your published author content…';try{const snap=await getDoc(contentRef);if(active!==session||!isAdmin())return;const d=snap.exists()?snap.data():{};version=d.updatedAt?.toMillis?.()??null;populate(d);loaded=true;fieldset.disabled=false;status.textContent=snap.exists()?'Published content loaded. Preview any edits before publishing.':'No author content has been saved yet. Review the starter text, then publish.';}catch{if(active!==session)return;status.textContent='Your content could not be loaded. Nothing has been changed. Check your connection and Firestore access, then retry.';const retry=document.createElement('button');retry.type='button';retry.className='btn-secondary-action';retry.textContent='Retry loading';retry.onclick=load;status.append(document.createTextNode(' '),retry);}}
+onAuthStateChanged(auth,user=>{session++;loaded=false;fieldset.disabled=true;if(user?.uid==='zlbkFntgN9emWShy7q5361lJncu1')load();else status.textContent='Only your signed-in administrator account can edit this page.';});
+form.addEventListener('input',()=>{dirtyState(true);updatePreview();status.textContent='Previewing unpublished edits.'});form.addEventListener('change',()=>{dirtyState(true);updatePreview()});
+$('lrAboutReload').addEventListener('click',()=>{if(dirty&&!confirm('Discard unpublished edits and reload the saved page?'))return;load()});
+$('lrAboutFullPreview').addEventListener('click',()=>{preview=window.open('./about.html','lrAboutPreview');if(!preview)status.textContent='Your browser blocked the preview window. Allow pop-ups for this site and try again.';else updatePreview()});
+window.addEventListener('message',e=>{if(e.origin===location.origin&&e.source===preview&&e.data?.type==='lr-about-preview-ready')updatePreview()});
+window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+form.addEventListener('submit',async e=>{
+ e.preventDefault();if(saving||!loaded||!isAdmin())return;if(!form.reportValidity())return;
+ let data;try{data=read();if(!data.authorName)throw Error('Enter your author name.');for(const key of ['imageUrl','instagramUrl','facebookUrl'])data[key]=safeUrl(data[key]);if(data.contactEmail&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contactEmail))throw Error('Enter a valid contact email or leave it blank.');}catch(error){status.textContent=error.message;return}
+ saving=true;fieldset.disabled=true;publish.textContent='Publishing…';status.textContent='Saving your author page…';const uid=auth.currentUser.uid;
+ try{
+ const latest=await getDoc(contentRef);if(!isAdmin()||auth.currentUser.uid!==uid)throw Error('Your admin session changed. Reload the editor.');const latestVersion=latest.data()?.updatedAt?.toMillis?.()??null;if(latestVersion!==version)throw Error('The saved page changed in another window. Copy any edits you want to keep, then reload the published content.');
+ await setDoc(contentRef,{...data,authorImageUrl:data.imageUrl,updatedAt:serverTimestamp(),updatedBy:uid},{merge:true});dirtyState(false);status.textContent='Published successfully. Visitors can now see your saved author content.';
+ // Refresh the concurrency token. If this read fails, require a reload before another save.
+ try{const saved=await getDoc(contentRef);version=saved.data()?.updatedAt?.toMillis?.()??null;}catch{loaded=false;status.textContent+=' Reload this editor before making another change.';}
+ }catch(error){status.textContent='Not published. '+(error.message||'Check your connection and admin permissions, then try again.');}
+ finally{saving=false;fieldset.disabled=!isAdmin();publish.disabled=!loaded||!isAdmin();publish.textContent='Publish author page';}
+});
+</script>
+<script type="module" id="lrAdminUiBoundary">import {initializeApp,getApps} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {getAuth,onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+const cfg={"apiKey": "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg", "authDomain": "libraryreeds-638f4.firebaseapp.com", "projectId": "libraryreeds-638f4", "storageBucket": "libraryreeds-638f4.firebasestorage.app", "messagingSenderId": "768304310517", "appId": "1:768304310517:web:39b931e6447043d84d3dbc"},app=getApps().find(a=>a.options.projectId===cfg.projectId)||initializeApp(cfg),auth=getAuth(app);
+window.lrAdminAuthorized=false;
+const allowed=()=>auth.currentUser?.uid==='zlbkFntgN9emWShy7q5361lJncu1';
+// Interface checks are supplementary; database rules and server checks enforce authorization.
+for(const type of ['click','submit','change'])document.addEventListener(type,event=>{
+ if(event.target.closest('[data-lr-admin-panel]')&&!allowed()){event.preventDefault();event.stopImmediatePropagation();window.showToast?.('Sign in with your administrator account to change these settings.');}
+},true);
+onAuthStateChanged(auth,user=>{
+ const admin=user?.uid==='zlbkFntgN9emWShy7q5361lJncu1';window.lrAdminAuthorized=admin;document.documentElement.dataset.lrAdmin=String(admin);
+ if(!admin){document.querySelectorAll('[data-lr-admin-panel]').forEach(panel=>panel.style.display='none');document.querySelectorAll('[data-admin-settings-nav="true"]').forEach(node=>node.remove());document.querySelectorAll('#sidebarNavList .sidebar-tab-btn').forEach(node=>{const action=node.getAttribute('onclick')||'';if(!action.includes("'general'")&&!action.includes("'userorders'"))node.remove()});const general=document.getElementById('panel-general');if(general)general.style.display='flex';}
+});
+</script><script type="module" id="lrPublishedBooksModule">import {initializeApp,getApps} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {getAuth,onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import {getFirestore,doc,collection,onSnapshot,getDoc,getDocs,setDoc,serverTimestamp,runTransaction} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+import {getStorage,ref,uploadBytes,getDownloadURL} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
+const cfg={"apiKey": "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg", "authDomain": "libraryreeds-638f4.firebaseapp.com", "projectId": "libraryreeds-638f4", "storageBucket": "libraryreeds-638f4.firebasestorage.app", "messagingSenderId": "768304310517", "appId": "1:768304310517:web:39b931e6447043d84d3dbc"};
+const app=getApps().find(a=>a.options.projectId===cfg.projectId)||initializeApp(cfg),auth=getAuth(app),db=getFirestore(app),storage=getStorage(app),$=id=>document.getElementById(id);
+const isAdmin=()=>auth.currentUser?.uid==='zlbkFntgN9emWShy7q5361lJncu1';
+const form=$('lrPublishedBookForm'),fields=$('lrPublishedFields'),status=$('lrPublishedStatus'),list=$('lrPublishedBooksList');
+let unsubscribe=()=>{},session=0,busy=false,loaded=false,editorDirty=false,editVersion=null;const rows=new Map(),catalog=new Map();
+function report(message){status.textContent=message;}
+function current(uid){if(!isAdmin()||auth.currentUser.uid!==uid)throw Error('Your admin session changed. Reload and sign in again.');}
+function https(value){if(!value)return '';try{const url=new URL(value);if(url.protocol==='https:'&&!url.username&&!url.password)return url.href}catch{}throw Error('Use a complete HTTPS image or purchase URL.');}
+function reset(){form.reset();$('lrPublishedEditId').value='';$('lrPublishedSourceId').value='';$('lrPublishedOrder').value='0';$('lrPublishedBookAuthor').value=$('aboutAdminName')?.value||'Firelily Santos';$('lrPublishedSourceNote').textContent="Use your store, publisher, or retailer's HTTPS link. Leave blank to show the book without a purchase button.";$('lrPublishedSave').textContent='Add published book';editorDirty=false;editVersion=null;}
+function canReplace(){return !editorDirty||confirm('Discard the unsaved book details?');}
+function edit(id){if(!canReplace())return;const b=rows.get(id);if(!b)return;reset();$('lrPublishedEditId').value=id;$('lrPublishedSourceId').value=b.sourceBookId||'';for(const [key,input] of [['title','lrPublishedBookTitle'],['author','lrPublishedBookAuthor'],['coverUrl','lrPublishedCoverUrl'],['description','lrPublishedSummary'],['publicationDate','lrPublishedDate'],['purchaseUrl','lrPublishedPurchaseUrl'],['sortOrder','lrPublishedOrder']])$(input).value=b[key]??'';$('lrPublishedVisible').checked=b.visible===true;editVersion=b.updatedAt?.toMillis?.()??null;$('lrPublishedSave').textContent='Save book changes';if(b.sourceBookId)$('lrPublishedSourceNote').textContent='This book links to its existing store page. Add an external HTTPS link only if you want to use a different destination.';report('Editing '+b.title+'. Save to update the public page.');form.scrollIntoView({behavior:'smooth',block:'start'});}
+function render(){list.replaceChildren();if(!rows.size){const p=document.createElement('p');p.className='lr-about-help';p.textContent='No published books added yet. Use the form above to add your first title.';list.append(p);return}for(const [id,b] of [...rows].sort((a,b)=>(a[1].sortOrder||0)-(b[1].sortOrder||0)||String(a[1].title).localeCompare(String(b[1].title)))){const row=document.createElement('article');row.className='lr-published-row';let cover='';try{cover=https(b.coverUrl)}catch{}if(cover){const img=document.createElement('img');img.src=cover;img.alt='';img.loading='lazy';img.onerror=()=>img.remove();row.append(img)}const info=document.createElement('div');info.className='lr-published-row-info';const title=document.createElement('h4');title.textContent=b.title||'Untitled';const details=document.createElement('p');details.textContent=[b.author,b.visible?'Visible on author page':'Hidden from author page','Order: '+(b.sortOrder||0)].filter(Boolean).join(' · ');info.append(title,details);const actions=document.createElement('div');actions.className='lr-published-row-actions';const button=document.createElement('button');button.type='button';button.className='btn-secondary-action';button.textContent='Edit';button.disabled=busy;button.addEventListener('click',()=>edit(id));const toggle=document.createElement('button');toggle.type='button';toggle.className='btn-secondary-action';toggle.textContent=b.visible?'Hide from page':'Show on page';toggle.disabled=busy;toggle.addEventListener('click',()=>toggleVisible(id));actions.append(button,toggle);row.append(info,actions);list.append(row)}}
+async function toggleVisible(id){if(busy||!loaded||!isAdmin())return;const b=rows.get(id),user=auth.currentUser;if(!b)return;busy=true;fields.disabled=true;render();try{await runTransaction(db,async tx=>{const target=doc(db,'author_published_books',id),snap=await tx.get(target);current(user.uid);if(!snap.exists())throw Error('This book was removed. Refresh the list.');tx.update(target,{visible:!b.visible,updatedAt:serverTimestamp(),updatedBy:user.uid});});current(user.uid);report(b.visible?'Book hidden from your author page.':'Book added back to your author page.');}catch(e){report('Could not change visibility. '+e.message)}finally{busy=false;fields.disabled=!loaded||!isAdmin();render()}}
+async function loadCatalog(active){const uid=auth.currentUser.uid;try{const snap=await getDocs(collection(db,'books'));if(active!==session)return;current(uid);catalog.clear();$('lrPublishedCatalog').replaceChildren(new Option('Select a catalog book…',''));for(const book of [...snap.docs].sort((a,b)=>String(a.data().title).localeCompare(String(b.data().title)))){catalog.set(book.id,book.data());$('lrPublishedCatalog').add(new Option(book.data().title||'Untitled',book.id));}}catch{if(active===session)report('The inventory list could not be loaded. You can still add a published book manually.');}}
+function start(){unsubscribe();loaded=false;rows.clear();render();fields.disabled=true;if(!isAdmin()){report('Only your administrator account can manage these books.');return}const active=++session;report('Loading published books…');loadCatalog(active);unsubscribe=onSnapshot(collection(db,'author_published_books'),snap=>{if(active!==session||!isAdmin())return;rows.clear();snap.forEach(s=>rows.set(s.id,s.data()));loaded=true;fields.disabled=busy;render();report('Published book list loaded. Changes to books are saved separately from your biography.');},()=>{if(active!==session)return;loaded=false;fields.disabled=true;report('Books could not be loaded. Deploy the security update, then refresh this list.');});}
+onAuthStateChanged(auth,()=>{session++;reset();start()});
+$('lrPublishedRetry').addEventListener('click',()=>{if(!busy)start()});
+$('lrPublishedImport').addEventListener('click',()=>{const id=$('lrPublishedCatalog').value,b=catalog.get(id);if(!b)return report('Choose a book from your inventory first.');if(!canReplace())return;reset();$('lrPublishedSourceId').value=id;$('lrPublishedBookTitle').value=b.title||'';$('lrPublishedBookAuthor').value=b.author||'Firelily Santos';$('lrPublishedCoverUrl').value=b.imageUrl||b.frontImageUrl||b.coverUrl||'';$('lrPublishedSummary').value=String(b.description||'').slice(0,1500);$('lrPublishedDate').value=/^\d{4}-\d{2}-\d{2}$/.test(b.publicationDate||'')?b.publicationDate:'';$('lrPublishedSourceNote').textContent='This book will link to its existing store page unless you add an external purchase URL.';editorDirty=true;report('Catalog details copied into the form. Confirm this book has been published, then select Add published book.');});
+$('lrPublishedCancel').addEventListener('click',()=>{if(canReplace()){reset();report('Ready to add another published book.')}});
+form.addEventListener('input',event=>{if(event.target.id!=='lrPublishedCatalog')editorDirty=true});form.addEventListener('change',event=>{if(event.target.id!=='lrPublishedCatalog')editorDirty=true});
+window.addEventListener('beforeunload',e=>{if(editorDirty){e.preventDefault();e.returnValue=''}});
+async function prepareCover(file){if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>5*1024*1024)throw Error('Choose a JPG, PNG, or WebP cover up to 5 MB.');const image=new Image(),url=URL.createObjectURL(file);try{await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('This cover could not be opened as an image.'));image.src=url});if(!image.naturalWidth||!image.naturalHeight||image.naturalWidth*image.naturalHeight>40000000)throw Error('Choose a smaller image.');const scale=Math.min(1,1400/image.naturalWidth,1400/image.naturalHeight),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));const ctx=canvas.getContext('2d');if(!ctx)throw Error('Image processing is unavailable.');ctx.fillStyle='#ffffff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,canvas.width,canvas.height);const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.9));if(!blob||blob.size>5*1024*1024)throw Error('Choose a smaller image.');return blob;}finally{URL.revokeObjectURL(url)}}
+form.addEventListener('submit',async event=>{
+ event.preventDefault();if(!isAdmin()||!loaded||busy||!form.reportValidity())return;
+ const uid=auth.currentUser.uid,id=$('lrPublishedEditId').value,target=id?doc(db,'author_published_books',id):doc(collection(db,'author_published_books'));let payload;
+ try{const order=Number($('lrPublishedOrder').value);if(!Number.isInteger(order)||order<0||order>9999)throw Error('Enter a display order between 0 and 9999.');payload={title:$('lrPublishedBookTitle').value.trim(),author:$('lrPublishedBookAuthor').value.trim(),description:$('lrPublishedSummary').value.trim(),coverUrl:https($('lrPublishedCoverUrl').value.trim()),purchaseUrl:https($('lrPublishedPurchaseUrl').value.trim()),sourceBookId:$('lrPublishedSourceId').value,publicationDate:$('lrPublishedDate').value,sortOrder:order,visible:$('lrPublishedVisible').checked,updatedBy:uid};if(!payload.title||!payload.author)throw Error('Enter a title and author.');}catch(e){report(e.message);return}
+ busy=true;fields.disabled=true;render();$('lrPublishedSave').textContent='Saving…';report('Saving published book…');
+ try{const file=$('lrPublishedCoverFile').files?.[0];if(file){const image=await prepareCover(file);current(uid);const imageRef=ref(storage,`author-books/${uid}/${target.id}/${crypto.randomUUID()}.jpg`);await uploadBytes(imageRef,image,{contentType:'image/jpeg'});payload.coverUrl=await getDownloadURL(imageRef);}current(uid);await runTransaction(db,async tx=>{const existing=await tx.get(target);current(uid);if(id&&(!existing.exists()||(existing.data().updatedAt?.toMillis?.()??null)!==editVersion))throw Error('This book changed in another window. Refresh the list, then edit its latest version.');tx.set(target,{...payload,updatedAt:serverTimestamp(),...(!existing.exists()?{createdAt:serverTimestamp()}: {})},{merge:true});});current(uid);reset();report('Saved. '+(payload.visible?'This published book now appears on your About page.':'This book is saved but hidden from your About page.'));}
+ catch(e){report('Book not saved. '+(e.code==='permission-denied'?'Deploy the admin security update and confirm you are signed in as the administrator.':e.message));}
+ finally{busy=false;fields.disabled=!loaded||!isAdmin();$('lrPublishedSave').textContent=$('lrPublishedEditId').value?'Save book changes':'Add published book';render();}
+});
+</script></body>
 </html>
