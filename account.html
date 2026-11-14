@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="./lr-maintenance-loader.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Libraryreeds | Master Admin &amp; Account Center</title>
@@ -3120,6 +3119,8 @@
 
       navList.insertAdjacentHTML("beforeend", `
         <div data-admin-settings-nav="true" class="sidebar-category-header">Store Management</div>
+        <button type="button" id="lrMaintenanceNav" class="sidebar-tab-btn" onclick="switchPanel('maintenance', 'Website Status', event)">Coming Soon / Maintenance</button>
+
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('epubtracker', 'Manuscript EPUB Tracker', event)">Manuscript Progress</button>
         <button type="button" class="sidebar-tab-btn" onclick="switchPanel('orders', 'Global Store Orders', event)">Global Orders</button>
         <button type="button" class="sidebar-tab-btn" data-lr-panel="payment-payouts" aria-controls="panel-payment-payouts">Payment &amp; Payouts</button>
@@ -3498,6 +3499,74 @@ window.addEventListener('pageshow',event=>{if(event.persisted)window.location.re
 })();
 
 </script>
-<script type="module" src="./lr-maintenance-admin.js"></script>
+<script type="module" id="lrMaintenanceInlineController">
+const viewDefaults={"title": "Coming Soon", "message": "Library Reeds will be back soon."};
+function showNotice(data,preview=false){
+ hideNotice();
+ let style=document.getElementById('lr-maintenance-style');
+ if(!style){style=document.createElement('style');style.id='lr-maintenance-style';style.textContent="#lr-maintenance-screen{position:fixed;inset:0;z-index:2147483647;background:#0f1720;color:#eee8da;overflow:auto;display:grid;place-items:center;padding:24px;box-sizing:border-box;font-family:Georgia,serif}#lr-maintenance-screen *{box-sizing:border-box}#lr-maintenance-screen .lr-m-card{max-width:680px;width:100%;text-align:center;border:1px solid #786446;padding:clamp(24px,6vw,64px);background:radial-gradient(ellipse at top,#283134,#111c26 75%);box-shadow:0 16px 80px #0005}#lr-maintenance-screen .lr-m-brand{color:#cfb77b;letter-spacing:.2em;font:12px/1.6 system-ui;text-transform:uppercase}#lr-maintenance-screen h1{font-weight:400;font-size:clamp(36px,8vw,64px);line-height:1.15;margin:24px 0;overflow-wrap:anywhere}#lr-maintenance-screen .lr-m-message{white-space:pre-wrap;overflow-wrap:anywhere;font:17px/1.8 system-ui;color:#d0cabc;margin-bottom:36px}#lr-maintenance-screen a,#lr-maintenance-screen button{color:#e0c98e;font:13px system-ui;background:transparent;border:1px solid #786446;padding:12px 18px;text-decoration:none;cursor:pointer}";document.head.append(style);}
+ const screen=document.createElement('section');screen.id='lr-maintenance-screen';screen.setAttribute('role','dialog');screen.setAttribute('aria-modal','true');screen.setAttribute('aria-labelledby','lr-m-heading');screen.tabIndex=-1;
+ const card=document.createElement('div');card.className='lr-m-card';
+ const brand=document.createElement('div');brand.className='lr-m-brand';brand.textContent='Library Reeds';
+ const heading=document.createElement('h1');heading.id='lr-m-heading';heading.textContent=data.title||viewDefaults.title;
+ const message=document.createElement('p');message.className='lr-m-message';message.textContent=data.message||viewDefaults.message;
+ const action=document.createElement(preview?'button':'a');action.textContent=preview?'Close preview':'Administrator sign in';
+ if(preview){action.type='button';action.onclick=()=>hideNotice();}else{action.href=new URL('./login.html',import.meta.url).href;}
+ card.append(brand,heading,message,action);screen.append(card);document.body.append(screen);
+ screen._previousFocus=document.activeElement;
+ for(const el of document.body.children){if(el!==screen&&el.tagName!=='SCRIPT'&&el.tagName!=='STYLE'){screen._inert??=[];screen._inert.push([el,el.inert]);el.inert=true;}}
+ screen.focus();screen.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();action.focus();}if(e.key==='Escape'&&preview)hideNotice();});
+ document.documentElement.style.overflow='hidden';
+ return screen;
+}
+function hideNotice(){const screen=document.getElementById('lr-maintenance-screen');if(!screen)return;for(const [el,value] of screen._inert||[])el.inert=value;const focus=screen._previousFocus;screen.remove();document.documentElement.style.overflow='';if(focus?.isConnected)focus.focus();}
+
+import {initializeApp,getApps} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {getAuth,onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import {getFirestore,doc,onSnapshot,setDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+const app=getApps().find(a=>a.options.projectId==='libraryreeds-638f4')||initializeApp({"apiKey": "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg", "authDomain": "libraryreeds-638f4.firebaseapp.com", "projectId": "libraryreeds-638f4", "storageBucket": "libraryreeds-638f4.firebasestorage.app", "messagingSenderId": "768304310517", "appId": "1:768304310517:web:39b931e6447043d84d3dbc"});
+const auth=getAuth(app),db=getFirestore(app),statusRef=doc(db,'lr_public_status','maintenance');
+const isAdmin=u=>Boolean(u&&u.uid==='zlbkFntgN9emWShy7q5361lJncu1');
+const defaults={enabled:false,title:'Coming Soon',message:'We’re making a little magic behind the scenes. Library Reeds will be back soon. Thank you for your patience!'};
+
+const form=document.getElementById('lrMaintenanceForm'),save=document.getElementById('lrMaintenanceSave'),enabled=document.getElementById('lrMaintenanceEnabled'),heading=document.getElementById('lrMaintenanceHeading'),message=document.getElementById('lrMaintenanceMessage'),status=document.getElementById('lrMaintenanceStatus');
+let stop=null,loaded=false,dirty=false,saving=false;
+function values(){return {enabled:enabled.checked,title:heading.value.trim(),message:message.value.trim()};}
+form.addEventListener('input',()=>{dirty=true;status.textContent='Unsaved changes. Save website status to apply them.';});
+document.getElementById('lrMaintenancePreview').onclick=()=>showNotice(values(),true);
+onAuthStateChanged(auth,user=>{
+ stop?.();loaded=false;dirty=false;save.disabled=true;
+ if(!isAdmin(user)){hideNotice();document.getElementById('lrMaintenanceNav')?.remove();document.getElementById('panel-maintenance').style.display='none';status.textContent='Sign in as the administrator to manage website status.';return;}
+ const nav=document.getElementById('sidebarNavList');
+ if(nav&&!document.getElementById('lrMaintenanceNav')){const button=document.createElement('button');button.type='button';button.id='lrMaintenanceNav';button.className='sidebar-tab-btn';button.textContent='Coming Soon / Maintenance';button.onclick=event=>{if(isAdmin(auth.currentUser))window.switchPanel('maintenance','Website Status',event);};nav.append(button);}
+ stop=onSnapshot(statusRef,snapshot=>{
+  const data=snapshot.exists()?snapshot.data():defaults;
+  loaded=true;save.disabled=saving;
+  if(!dirty&&!saving){enabled.checked=data.enabled===true;heading.value=data.title||defaults.title;message.value=data.message||defaults.message;status.textContent=data.enabled===true?'Coming Soon is ON — visitors see your notice.':'Website is LIVE — visitors can browse normally.';}
+ },error=>{loaded=false;save.disabled=true;status.textContent='Could not load website status. Check your connection and the maintenance Firestore rule. '+error.code;});
+});
+form.addEventListener('submit',async event=>{
+ event.preventDefault();if(!isAdmin(auth.currentUser)||!loaded||saving)return;
+ const data=values();if(!data.title||!data.message){status.textContent='Enter a heading and message.';return;}
+ saving=true;save.disabled=true;status.textContent='Saving website status…';
+ try{
+ if(data.enabled){
+  const required=['lr-maintenance-loader.js','lr-maintenance.js','lr-maintenance-view.js'];
+  const responses=await Promise.all(required.map(async name=>{
+   const response=await fetch(new URL('./'+name,location.href),{cache:'no-store'});
+   const content=await response.text();
+   return {name,ok:response.ok&&!/^\s*(<!doctype|<html)/i.test(content)};
+  }));
+  const missing=responses.filter(r=>!r.ok).map(r=>r.name);
+  if(missing.length)throw new Error('Publish these visitor files beside account.html first: '+missing.join(', '));
+  const home=await fetch(new URL('./index.html',location.href),{cache:'no-store'});
+  if(!home.ok||!(await home.text()).includes('lr-maintenance-loader.js'))throw new Error('The homepage needs the visitor notice installed. Run install-coming-soon.cjs on your website folder, then publish the changed HTML pages.');
+ }
+ await setDoc(statusRef,{...data,updatedAt:serverTimestamp()});dirty=false;status.textContent=data.enabled?'Saved. Coming Soon is ON for visitors.':'Saved. Your website is LIVE again.';}
+ catch(error){status.textContent='Not saved. '+(error.message||('Check your connection and Firestore permissions. '+error.code));}
+ finally{saving=false;save.disabled=!loaded||!isAdmin(auth.currentUser);}
+});
+
+</script>
 </body>
 </html>
