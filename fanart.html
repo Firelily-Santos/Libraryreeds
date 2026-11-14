@@ -112,9 +112,49 @@
     .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; }
     .footer-link:hover { color: var(--accent-gold); }
     .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 20px; }
+
+    /* Gallery refresh */
+    :root { --text-muted: #939aaa; }
+    body { background-image: radial-gradient(ellipse at 50% 0, #24203255, transparent 55%); }
+    .nav-actions { visibility: visible; flex-wrap: wrap; }
+    .nav-container { flex-wrap: wrap; }
+    .fanart-main { max-width: 1240px; gap: 30px; padding-top: 32px; }
+    .fanart-banner-container { border-radius: 16px; box-shadow: 0 16px 60px #0003; }
+    .fanart-banner-overlay { padding: 28px 32px; background: linear-gradient(110deg, #1d202b, #11141c); }
+    .fanart-banner-title { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; }
+    .fanart-banner-subtitle { line-height: 1.7; max-width: 620px; }
+    .eyebrow { color: var(--accent-gold); font-size: .66rem; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 10px; font-weight: 700; }
+    .gallery-toolbar { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .gallery-count { color: var(--text-secondary); font-size: .75rem; margin-top: 5px; }
+    .gallery-controls { display: flex; flex-wrap: wrap; gap: 10px; }
+    .gallery-controls label { display: flex; flex-direction: column; gap: 7px; font-size: .7rem; color: var(--text-secondary); }
+    input, select { font: inherit; color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; max-width: 100%; }
+    .fanart-card { padding: 12px; gap: 10px; border-radius: 13px; min-width: 0; }
+    .art-preview { width: 100%; height: 270px; border: 0; border-radius: 8px; overflow: hidden; background: var(--bg-surface-elevated); color: var(--text-secondary); cursor: zoom-in; }
+    .art-preview img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .art-title { font-family: var(--font-serif); font-size: 1.5rem; line-height: 1.2; padding: 4px 5px 0; overflow-wrap: anywhere; }
+    .art-artist { color: var(--text-secondary); font-size: .76rem; padding: 0 5px 7px; overflow-wrap: anywhere; }
+    .art-sale { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 5px 4px; margin-top: auto; border-top: 1px solid var(--border-subtle); color: var(--accent-gold); }
+    .art-sale a { color: var(--accent-gold); font-size: .75rem; }
+    .gallery-state { grid-column: 1 / -1; padding: 50px 24px; text-align: center; background: var(--bg-surface); border: 1px dashed var(--border-focus); border-radius: 12px; color: var(--text-secondary); line-height: 1.8; }
+    .character-page-button { border-radius: 8px; }
+    :focus-visible { outline: 2px solid var(--accent-gold); outline-offset: 4px; }
+    .skip-link { position: fixed; left: 16px; top: -80px; z-index: 500; background: var(--accent-gold); color: #111; padding: 12px; }
+    .skip-link:focus { top: 10px; }
+    dialog { margin: auto; width: min(960px, 94vw); max-height: 94dvh; padding: 20px; color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border-focus); border-radius: 14px; }
+    dialog::backdrop { background: #000d; }
+    dialog img { width: 100%; max-height: 72dvh; object-fit: contain; display: block; margin: 16px 0; }
+    .viewer-close { float: right; padding: 8px 14px; background: var(--bg-surface-elevated); color: var(--text-primary); border: 1px solid var(--border-focus); border-radius: 6px; cursor: pointer; }
+    .notification-row { padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); font-size: .8rem; line-height: 1.5; overflow-wrap: anywhere; }
+    .notification-row.unread { background: var(--bg-surface-elevated); }
+    .notification-row small { display: block; color: var(--accent-gold); margin-top: 5px; }
+    @media (max-width: 1050px) { .nav-actions { gap: 16px; width: 100%; } .top-nav { position: relative; padding: 18px 20px; } }
+    @media (max-width: 600px) { .fanart-main { padding: 20px 16px 48px; } .fanart-banner-overlay { padding: 22px; } .gallery-controls, .gallery-controls label, .gallery-controls input { width: 100%; } .footer-bottom { flex-direction: column; gap: 10px; align-items: start; } #notificationDropdown { position: fixed !important; top: 140px !important; right: 12px !important; width: min(320px, calc(100vw - 24px)) !important; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } .fanart-card:hover { transform: none; } }
   </style>
 </head>
 <body>
+  <a href="#galleryMain" class="skip-link">Skip to gallery</a>
 
   <nav class="top-nav">
     <div class="nav-container">
@@ -125,7 +165,7 @@
       <div class="nav-actions">
         <a href="./index.html" class="nav-link">Home</a>
         <a href="./shop.html" class="nav-link">Shop</a>
-        <a href="./fanart.html" class="nav-link active">Fanart</a>
+        <a href="./fanart.html" class="nav-link active" aria-current="page">Fanart</a>
         <a href="./about.html" class="nav-link">About</a>
         <a href="./giftshop.html" class="nav-link">Gift Shop</a>
         <a href="./membership.html" class="nav-link">Membership</a>
@@ -135,7 +175,7 @@
       </a>
 
       <!-- Notification Bell Widget (Global) -->
-      <div id="adminNotificationBell" style="position: relative; cursor: pointer; display: none; align-items: center;" title="Admin Notifications">
+      <div id="adminNotificationBell" role="button" tabindex="0" aria-label="Admin notifications" aria-expanded="false" aria-controls="notificationDropdown" style="position: relative; cursor: pointer; display: none; align-items: center;" title="Admin Notifications">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); transition: color 0.2s;">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -159,7 +199,7 @@
       </a>
       <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
       <div class="user-profile-menu" id="navProfileMenu">
-          <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
+          <button type="button" class="profile-trigger-btn" id="profileTriggerBtn" aria-expanded="false" aria-controls="profileDropdown">
               <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
               <span id="navUserName">Patron</span>
           </button>
@@ -168,32 +208,47 @@
               <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
               <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
             </div>
-            <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+            <a href="./account.html" id="accountSettingsLink" class="dropdown-link-item">User Settings Account</a>
             <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
             <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
           </div>
       </div>
     </div>
+    </div>
   </nav>
 
-  <main class="fanart-main">
+  <main class="fanart-main" id="galleryMain">
     <div class="fanart-banner-container">
       <img id="fanartHeaderBannerImg" src="https://cdn.phototourl.com/member/2026-09-17-a425a557-005a-483b-a541-5890a024ea95.png" alt="Fanart Banner" class="fanart-banner-img">
       <div class="fanart-banner-overlay">
+        <p class="eyebrow">The Libraryreeds community</p>
         <h1 class="fanart-banner-title">Community Fanart Gallery</h1>
-        <p class="fanart-banner-subtitle">Explore stunning artwork inspired by the volumes of Libraryreeds.</p>
+        <p class="fanart-banner-subtitle">Stories spark imagination. Discover characters and worlds through our community’s artwork.</p>
       </div>
     </div>
 
     <div class="character-page-action">
-      <a href="./character-wall.html" class="character-page-button">Character Page</a>
+      <a href="./character-wall.html" class="character-page-button">Explore the Character Wall &rarr;</a>
     </div>
 
-    <div class="fanart-grid" id="publicFanartContainer">
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Loading gallery submissions...</p>
+    <section aria-labelledby="galleryHeading">
+      <div class="gallery-toolbar">
+        <div><h2 class="section-title" id="galleryHeading">Art inspired by stories</h2><p id="galleryCount" class="gallery-count" role="status">Connecting to the gallery…</p></div>
+        <div class="gallery-controls">
+          <label>Find artwork<input type="search" id="gallerySearch" placeholder="Search title or artist" maxlength="200"></label>
+          <label>Show<select id="galleryFilter"><option value="all">All artwork</option><option value="sale">Available to purchase</option></select></label>
+        </div>
+      </div>
+    </section>
+    <div class="fanart-grid" id="publicFanartContainer" aria-busy="true">
+      <p class="gallery-state" role="status">Loading the community gallery…</p>
     </div>
   </main>
 
+  <dialog id="artViewer" aria-labelledby="viewerTitle">
+    <button class="viewer-close" id="closeViewer" type="button">Close ×</button>
+    <h2 id="viewerTitle" class="section-title"></h2><img id="viewerImage" alt=""><p id="viewerArtist" class="art-artist"></p>
+  </dialog>
   <footer>
     <div class="footer-container">
       <div class="footer-col">
@@ -209,7 +264,7 @@
           <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
           <li><a href="./giftshop.html" class="footer-link">Gift Shop</a></li>
           <li><a href="./membership.html" class="footer-link">Membership</a></li>
-          <li><a href="./account.html" class="footer-link">Master Account Center</a></li>
+          <li><a href="./account.html" class="footer-link">Account Settings</a></li>
         </ul>
       </div>
     </div>
@@ -219,11 +274,16 @@
     </div>
   </footer>
 
+  <script>
+    setTimeout(() => {
+      const grid = document.getElementById('publicFanartContainer');
+      if (grid.getAttribute('aria-busy') === 'true') {
+        grid.replaceChildren(Object.assign(document.createElement('p'), {className: 'gallery-state', textContent: 'The gallery is taking longer than expected. Please refresh to try again.'}));
+        document.getElementById('galleryCount').textContent = 'Connection delayed';
+      }
+    }, 18000);
+  </script>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, limit, updateDoc, doc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
     const firebaseConfig = {
       apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
       authDomain: "libraryreeds-638f4.firebaseapp.com",
@@ -232,356 +292,109 @@
       messagingSenderId: "768304310517",
       appId: "1:768304310517:web:39b931e6447043d84d3dbc"
     };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const ADMIN_EMAIL = "firelily@libraryreeds.com";
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
-      let totalQty = 0;
-      cart.forEach(ci => { totalQty += parseInt(ci.quantity || 1); });
-      const badge = document.getElementById('cartBadgeCount');
-      if (totalQty > 0 && badge) {
-        badge.textContent = totalQty;
-        badge.style.display = "flex";
-      }
-
-      const wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
-      const wishlistBadge = document.getElementById('wishlistBadgeCount');
-      if (wishlist.length > 0 && wishlistBadge) {
-        wishlistBadge.textContent = wishlist.length;
-        wishlistBadge.style.display = "flex";
-      }
-    });
-
-    const navLoginBtn = document.getElementById("navLoginBtn");
-    const navProfileMenu = document.getElementById("navProfileMenu");
-    const navUserName = document.getElementById("navUserName");
-    const dropdownUserName = document.getElementById("dropdownUserName");
-    const dropdownUserEmail = document.getElementById("dropdownUserEmail");
-    const profileTriggerBtn = document.getElementById("profileTriggerBtn");
-    const profileDropdown = document.getElementById("profileDropdown");
-
-    onAuthStateChanged(auth, async (user) => {
-      const navActions = document.querySelector('.nav-actions');
-      if (navActions) navActions.classList.add('auth-loaded');
-
-      const bell = document.getElementById('adminNotificationBell');
-      const dropdown = document.getElementById('notificationDropdown');
-      const clearBtn = document.getElementById('clearNotificationsBtn');
-      const isAdmin = user && (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || user.email.toLowerCase().includes('admin'));
-
-      if (bell) {
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+    import { getFirestore, collection, onSnapshot, query, orderBy, limit, doc, getDoc, writeBatch, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+    const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
+    const $ = id => document.getElementById(id);
+    const avatarFallback = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#252a38"/><circle cx="40" cy="29" r="13" fill="#c5a880"/><path d="M15 76v-10a25 25 0 0 1 50 0v10" fill="#c5a880"/></svg>');
+    function safeImage(value) { try { const u = new URL(String(value || ''), location.href); return ['https:', 'http:'].includes(u.protocol) ? u.href : ''; } catch { return ''; } }
+    function storedArray(key) { try { const a = JSON.parse(localStorage.getItem(key) || '[]'); return Array.isArray(a) ? a : []; } catch { return []; } }
+    function badges() {
+      const qty = storedArray('libraryreeds_cart').reduce((sum, row) => { const n = Number(row?.quantity ?? 1); return sum + (Number.isFinite(n) && n > 0 ? Math.floor(n) : 0); }, 0);
+      [[$('cartBadgeCount'), qty], [$('wishlistBadgeCount'), storedArray('literalis_wishlist').length]].forEach(([el, n]) => { el.textContent = n > 99 ? '99+' : n; el.style.display = n ? 'flex' : 'none'; });
+    }
+    badges(); window.addEventListener('storage', badges);
+    const profile = $('profileDropdown'), bell = $('adminNotificationBell'), panel = $('notificationDropdown');
+    function closeMenus() { profile.style.display = panel.style.display = 'none'; $('profileTriggerBtn').setAttribute('aria-expanded', 'false'); bell.setAttribute('aria-expanded', 'false'); }
+    $('profileTriggerBtn').addEventListener('click', e => { e.stopPropagation(); const open = profile.style.display !== 'flex'; closeMenus(); profile.style.display = open ? 'flex' : 'none'; $('profileTriggerBtn').setAttribute('aria-expanded', String(open)); });
+    profile.addEventListener('click', e => e.stopPropagation());
+    bell.addEventListener('click', e => { e.stopPropagation(); const open = panel.style.display !== 'flex'; closeMenus(); panel.style.display = open ? 'flex' : 'none'; bell.setAttribute('aria-expanded', String(open)); });
+    bell.addEventListener('keydown', e => { if (e.target === bell && ['Enter', ' '].includes(e.key)) { e.preventDefault(); bell.click(); } });
+    panel.addEventListener('click', e => e.stopPropagation());
+    document.addEventListener('click', closeMenus);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { const trigger = profile.style.display === 'flex' ? $('profileTriggerBtn') : panel.style.display === 'flex' ? bell : null; closeMenus(); trigger?.focus(); } });
+    let stopNotifications = null, notificationRows = [], authRevision = 0;
+    function renderNotes() {
+      const list = $('notificationDropdownList'); list.replaceChildren();
+      const unread = notificationRows.filter(r => !r.data.read).length;
+      $('notificationBadge').textContent = unread > 99 ? '99+' : unread;
+      $('notificationBadge').style.display = unread ? 'flex' : 'none';
+      $('clearNotificationsBtn').disabled = !unread;
+      $('clearNotificationsBtn').textContent = unread ? 'Mark All Read' : 'All Read';
+      if (!notificationRows.length) list.textContent = 'No notifications yet.';
+      notificationRows.forEach(({data}) => {
+        const row = document.createElement('div'); row.className = 'notification-row' + (data.read ? '' : ' unread');
+        const message = document.createElement('span'); message.textContent = data.message || data.title || data.body || 'New activity';
+        const time = document.createElement('small'); const date = data.timestamp?.toDate?.(); time.textContent = date && Number.isFinite(date.getTime()) ? date.toLocaleString() : 'Just now';
+        row.append(message, time); list.append(row);
+      });
+    }
+    onAuthStateChanged(auth, async user => {
+      const revision = ++authRevision; stopNotifications?.(); stopNotifications = null; notificationRows = []; renderNotes(); closeMenus(); bell.style.display = 'none';
+      $('navLoginBtn').style.display = user ? 'none' : 'inline-block'; $('navProfileMenu').style.display = user ? 'block' : 'none';
+      $('accountSettingsLink').textContent = 'User Settings Account';
+      $('navUserAvatar').src = avatarFallback;
+      if (!user) return;
+      const name = user.displayName || user.email?.split('@')[0] || 'Reader';
+      $('navUserName').textContent = $('dropdownUserName').textContent = name; $('dropdownUserEmail').textContent = user.email || '';
+      $('navUserAvatar').src = safeImage(user.photoURL) || avatarFallback;
+      $('navUserAvatar').onerror = () => { $('navUserAvatar').src = avatarFallback; };
+      try {
+        const token = await user.getIdTokenResult();
+        if (revision !== authRevision) return;
+        // This controls presentation only. Firestore rules must enforce authorization.
+        const isAdmin = token.claims.admin === true || (user.emailVerified && user.email?.toLowerCase() === 'firelily@libraryreeds.com');
         if (isAdmin) {
-          bell.style.display = 'flex';
-          bell.onclick = (e) => {
-            e.stopPropagation();
-            dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
-          };
-          document.addEventListener('click', () => {
-            if (dropdown) dropdown.style.display = "none";
-          });
-          if (dropdown) dropdown.onclick = (e) => e.stopPropagation();
-
-          let lastNotificationCount = null;
-          const notificationQuery = query(collection(db, "admin_notifications"), orderBy("timestamp", "desc"), limit(15));
-
-          onSnapshot(notificationQuery, (snapshot) => {
-            const badge = document.getElementById('notificationBadge');
-            const listContainer = document.getElementById('notificationDropdownList');
-            if (!badge || !listContainer) return;
-
-            let unreadCount = 0;
-            let html = "";
-
-            snapshot.forEach((docSnap) => {
-              const note = docSnap.data();
-              if (!note.read) unreadCount++;
-
-              const timeStr = note.timestamp ? new Date(note.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now';
-
-              html += `
-                <div style="padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); background: ${note.read ? 'transparent' : 'var(--bg-surface-elevated)'}; display: flex; flex-direction: column; gap: 4px;">
-                  <span style="font-size: 0.8rem; color: var(--text-primary); line-height: 1.4;">${note.message || 'New activity'}</span>
-                  <span style="font-size: 0.65rem; color: var(--accent-gold);">${timeStr}</span>
-                </div>
-              `;
-            });
-
-            if (snapshot.empty) {
-              listContainer.innerHTML = `<p style="padding: 16px; color: var(--text-muted); font-size: 0.8rem; text-align: center;">No notifications found</p>`;
-              badge.style.display = "none";
-            } else {
-              listContainer.innerHTML = html;
-              if (unreadCount > 0) {
-                badge.textContent = unreadCount;
-                badge.style.display = "flex";
-              } else {
-                badge.style.display = "none";
-              }
-            }
-          });
+          $('accountSettingsLink').textContent = 'Admin Settings Account'; bell.style.display = 'flex';
+          stopNotifications = onSnapshot(query(collection(db, 'admin_notifications'), orderBy('timestamp', 'desc'), limit(50)), snap => { notificationRows = snap.docs.map(d => ({id:d.id, data:d.data()})); renderNotes(); }, () => { notificationRows = []; renderNotes(); $('notificationDropdownList').textContent = 'Notifications are unavailable right now.'; });
         }
-      }
-
-      if (user) {
-        if (navLoginBtn) navLoginBtn.style.display = "none";
-        if (navProfileMenu) navProfileMenu.style.display = "block";
-
-        const displayName = user.displayName || user.email.split("@")[0];
-        if (navUserName) navUserName.textContent = displayName;
-        if (dropdownUserName) dropdownUserName.textContent = displayName;
-        if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
-
-        let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
-        if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
-          try {
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            if (userDoc.exists() && userDoc.data().photoURL) resolvedAvatar = userDoc.data().photoURL;
-          } catch(e) {}
-        }
-        if ((!resolvedAvatar || resolvedAvatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
-          resolvedAvatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
-        }
-        if (resolvedAvatar) {
-          localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
-          document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => { img.src = resolvedAvatar; });
-        }
-      } else {
-        localStorage.removeItem('libraryreeds_user_avatar');
-        if (navLoginBtn) navLoginBtn.style.display = "inline-block";
-        if (navProfileMenu) navProfileMenu.style.display = "none";
-      }
+        const saved = await getDoc(doc(db, 'users', user.uid));
+        if (revision === authRevision && saved.exists()) $('navUserAvatar').src = safeImage(saved.data().photoURL) || safeImage(user.photoURL) || avatarFallback;
+      } catch (error) { console.warn('Account display could not be fully loaded:', error.code || 'unavailable'); }
     });
-
-    if (profileTriggerBtn && profileDropdown) {
-      profileTriggerBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
-      });
-      document.addEventListener("click", () => { profileDropdown.style.display = "none"; });
-    }
-
-    const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
-    if (dropdownLogoutBtn) {
-      dropdownLogoutBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        try {
-          await signOut(auth);
-          localStorage.clear();
-          sessionStorage.clear();
-        } finally {
-          window.location.replace("index.html");
-        }
-      });
-    }
-
-    function renderFanartGalleryItem(docId, item) {
-      const card = document.createElement('div');
-      card.className = 'fanart-card';
-
-      let saleActionHTML = '';
-      if (item.forSale && item.price > 0) {
-        saleActionHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-            <span style="font-family: var(--font-serif); font-weight: 700; color: var(--accent-gold);">$${parseFloat(item.price).toFixed(2)}</span>
-            <a href="book.html?id=${docId}&type=fanart" style="background: var(--bg-surface-elevated); color: var(--accent-gold); border: 1px solid var(--border-focus); padding: 6px 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; text-decoration: none; border-radius: 2px;">Go to Details</a>
-          </div>
-        `;
-      }
-
-      card.innerHTML = `
-        <div style="width: 100%; height: 220px; background: var(--bg-surface-elevated); border-radius: 4px; overflow: hidden;">
-          <img src="${item.imageUrl || ''}" alt="${item.title || 'Fanart'}" style="width: 100%; height: 100%; object-fit: cover;">
-        </div>
-        <h3 style="font-family: var(--font-serif); font-size: 1rem; margin-top: 8px; color: var(--text-primary);">${item.title || 'Untitled Artwork'}</h3>
-        <p style="font-size: 0.75rem; color: var(--text-secondary);">By ${item.artist || 'Community Artist'}</p>
-        ${saleActionHTML}
-      `;
-
+    $('clearNotificationsBtn').addEventListener('click', async e => {
+      e.stopPropagation(); const unread = notificationRows.filter(r => !r.data.read); if (!unread.length) return;
+      const btn = $('clearNotificationsBtn'); btn.disabled = true; btn.textContent = 'Saving…';
+      try { const batch = writeBatch(db); unread.forEach(r => batch.update(doc(db, 'admin_notifications', r.id), {read:true, readAt:serverTimestamp()})); await batch.commit(); }
+      catch { btn.disabled = false; btn.textContent = 'Try again'; }
+    });
+    $('dropdownLogoutBtn').addEventListener('click', async () => {
+      try { await signOut(auth); location.assign('./index.html'); }
+      catch { $('dropdownLogoutBtn').textContent = 'Sign out failed — try again'; }
+    });
+    const viewer = $('artViewer'); $('closeViewer').onclick = () => viewer.close();
+    viewer.addEventListener('click', e => { if (e.target === viewer) { const rect = viewer.getBoundingClientRect(); if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) viewer.close(); } });
+    function forSale(item) { return !!item.forSale && Number.isFinite(Number(item.price)) && Number(item.price) > 0; }
+    function artworkCard({id, item}) {
+      const title = String(item.title || 'Untitled Artwork'), artist = String(item.artist || 'Community Artist'), url = safeImage(item.imageUrl);
+      const card = document.createElement('article'); card.className = 'fanart-card';
+      const preview = document.createElement('button'); preview.type = 'button'; preview.className = 'art-preview'; preview.setAttribute('aria-label', 'View ' + title + ' full size');
+      if (url) { const img = document.createElement('img'); img.src = url; img.alt = title; img.loading = 'lazy'; img.decoding = 'async'; img.onerror = () => { preview.textContent = 'Artwork image unavailable'; preview.disabled = true; }; preview.append(img); }
+      else { preview.textContent = 'Artwork image unavailable'; preview.disabled = true; }
+      preview.onclick = () => { $('viewerTitle').textContent = title; $('viewerArtist').textContent = 'By ' + artist; $('viewerImage').src = url; $('viewerImage').alt = title; viewer.showModal(); };
+      const heading = document.createElement('h3'); heading.className = 'art-title'; heading.textContent = title;
+      const by = document.createElement('p'); by.className = 'art-artist'; by.textContent = 'By ' + artist; card.append(preview, heading, by);
+      if (forSale(item)) { const sale = document.createElement('div'); sale.className = 'art-sale'; const price = document.createElement('strong'); price.textContent = new Intl.NumberFormat('en-US', {style:'currency',currency:'USD'}).format(Number(item.price)); const link = document.createElement('a'); link.href = './book.html?' + new URLSearchParams({id, type:'fanart'}); link.textContent = 'View details →'; sale.append(price, link); card.append(sale); }
       return card;
     }
-
-    // Admin Settings -> Fanart Banner CMS: update the public banner live.
-    const fanartBanner = document.getElementById('fanartHeaderBannerImg');
-    const defaultFanartBanner = fanartBanner?.getAttribute('src') || '';
-    if (fanartBanner) {
-      fanartBanner.addEventListener('error', () => {
-        if (defaultFanartBanner && fanartBanner.src !== defaultFanartBanner) {
-          fanartBanner.src = defaultFanartBanner;
-        }
-      });
+    let artworks = [], galleryReady = false;
+    const container = $('publicFanartContainer');
+    function galleryState(message) { const p = document.createElement('p'); p.className = 'gallery-state'; p.setAttribute('role', 'status'); p.textContent = message; container.replaceChildren(p); }
+    function renderGallery() {
+      if (!galleryReady) return;
+      const term = $('gallerySearch').value.trim().toLowerCase();
+      const shown = artworks.filter(({item}) => (String(item.title || 'Untitled Artwork') + ' ' + String(item.artist || 'Community Artist')).toLowerCase().includes(term) && ($('galleryFilter').value !== 'sale' || forSale(item)));
+      container.setAttribute('aria-busy', 'false'); container.replaceChildren(...shown.map(artworkCard));
+      $('galleryCount').textContent = `${shown.length} ${shown.length === 1 ? 'artwork' : 'artworks'}${shown.length !== artworks.length ? ' of ' + artworks.length : ''}`;
+      if (!shown.length) galleryState(artworks.length ? 'No artwork matches your search. Try another title or artist, or show all artwork.' : 'Our gallery is waiting for its first artwork. Visit the Character Wall to explore the stories while you wait.');
     }
+    $('gallerySearch').addEventListener('input', renderGallery); $('galleryFilter').addEventListener('change', renderGallery);
+    onSnapshot(collection(db, 'fanart_gallery'), snap => { artworks = snap.docs.map(d => ({id:d.id,item:d.data()})); galleryReady = true; renderGallery(); }, () => { container.setAttribute('aria-busy','false'); $('galleryCount').textContent = 'Gallery unavailable'; galleryState('We couldn’t load the gallery. Please refresh the page to try again.'); });
+    const banner = $('fanartHeaderBannerImg'), originalBanner = banner.src;
+    banner.addEventListener('error', () => { if (banner.src !== originalBanner) banner.src = originalBanner; else banner.style.display = 'none'; });
+    onSnapshot(doc(db,'settings','fanart_cms'), snap => { const url = safeImage(snap.exists() ? snap.data().bannerUrl : ''); banner.style.display = ''; banner.src = url || originalBanner; }, () => console.warn('Custom gallery banner unavailable.'));
 
-    onSnapshot(doc(db, "settings", "fanart_cms"), (snap) => {
-      if (!snap.exists()) return;
-      const data = snap.data();
-      const savedBannerUrl = String(data.bannerUrl || '').trim();
-      if (fanartBanner && savedBannerUrl) fanartBanner.src = savedBannerUrl;
-    }, (error) => console.warn('Fanart CMS listener:', error?.message || error));
-
-    const container = document.getElementById('publicFanartContainer');
-    if (container) {
-      onSnapshot(collection(db, "fanart_gallery"), (snapshot) => {
-        if (!snapshot.empty) {
-          container.innerHTML = "";
-          snapshot.forEach((docSnap) => {
-            const item = docSnap.data();
-            const docId = docSnap.id;
-            const card = renderFanartGalleryItem(docId, item);
-            container.appendChild(card);
-          });
-        } else {
-          container.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No fanart gallery submissions found yet.</p>`;
-        }
-      }, (error) => {
-        console.error('Fanart gallery listener failed:', error);
-        container.innerHTML = `<p style="color:#ff6b6b; font-size:0.9rem;">Unable to load the fanart gallery right now.</p>`;
-      });
-    }
-  </script>
-
-  <!-- Shared Firebase notification sync: injected 2026-10-06 -->
-  <script type="module" id="libraryreedsSharedNotificationSync">
-    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, limit, onSnapshot, writeBatch, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
-      authDomain: "libraryreeds-638f4.firebaseapp.com",
-      projectId: "libraryreeds-638f4",
-      storageBucket: "libraryreeds-638f4.firebasestorage.app",
-      messagingSenderId: "768304310517",
-      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
-    };
-
-    const sharedApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    const sharedDb = getFirestore(sharedApp);
-    const SHARED_NOTIFICATION_LIMIT = 50;
-
-    const badge = document.getElementById('notificationBadgeCount') || document.getElementById('notificationBadge');
-    const list = document.getElementById('notificationList') || document.getElementById('notificationDropdownList');
-    const status = document.getElementById('notificationPanelStatus');
-    const markAllButton = document.getElementById('markAllNotificationsReadBtn') || document.getElementById('clearNotificationsBtn');
-
-    function escapeNotificationText(value) {
-      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
-    }
-
-    function formatNotificationTime(timestamp) {
-      try {
-        if (!timestamp) return 'Just now';
-        const date = typeof timestamp.toDate === 'function' ? timestamp.toDate() : new Date(timestamp);
-        return date.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-      } catch (_) {
-        return 'Just now';
-      }
-    }
-
-    function renderBadge(unreadCount) {
-      if (!badge) return;
-      const count = Math.max(0, Number(unreadCount) || 0);
-      badge.textContent = count > 99 ? '99+' : String(count);
-      badge.style.display = count > 0 ? 'flex' : 'none';
-      badge.setAttribute('aria-label', `${count} unread notifications`);
-      try { localStorage.setItem('libraryreeds_notification_unread_count', String(count)); } catch (_) {}
-      window.dispatchEvent(new CustomEvent('notifications-updated', { detail: { unreadCount: count } }));
-    }
-
-    function renderNotifications(rows) {
-      const unreadCount = rows.reduce((total, row) => total + (row.data.read ? 0 : 1), 0);
-      renderBadge(unreadCount);
-
-      if (markAllButton) {
-        markAllButton.textContent = unreadCount > 0 ? 'Mark All Read' : 'All Read';
-        markAllButton.disabled = unreadCount === 0;
-        markAllButton.style.opacity = unreadCount === 0 ? '0.55' : '1';
-        markAllButton.style.cursor = unreadCount === 0 ? 'default' : 'pointer';
-      }
-
-      if (!list) return;
-
-      if (!rows.length) {
-        if (list.tagName === 'UL') {
-          list.replaceChildren();
-        } else {
-          list.innerHTML = '<p style="padding:16px;color:var(--text-muted);font-size:.8rem;text-align:center;">No notifications found</p>';
-        }
-        if (status) {
-          status.hidden = false;
-          status.textContent = 'No notifications yet.';
-        }
-        return;
-      }
-
-      if (status) status.hidden = true;
-
-      if (list.tagName === 'UL') {
-        list.replaceChildren();
-        rows.forEach(({data}) => {
-          const item = document.createElement('li');
-          item.style.fontWeight = data.read ? '400' : '700';
-          item.style.opacity = data.read ? '0.72' : '1';
-          const message = document.createElement('div');
-          message.textContent = data.message || data.title || data.body || 'New activity';
-          const time = document.createElement('div');
-          time.textContent = formatNotificationTime(data.timestamp);
-          time.style.cssText = 'font-size:11px;margin-top:4px;color:var(--accent-gold,#c5a880);';
-          item.append(message, time);
-          list.appendChild(item);
-        });
-      } else {
-        list.innerHTML = rows.map(({data}) => `
-          <div style="padding:12px 16px;border-bottom:1px solid var(--border-subtle);background:${data.read ? 'transparent' : 'var(--bg-surface-elevated)'};display:flex;flex-direction:column;gap:4px;">
-            <span style="font-size:.8rem;color:var(--text-primary);line-height:1.4;font-weight:${data.read ? '400' : '700'};">${escapeNotificationText(data.message || data.title || data.body || 'New activity')}</span>
-            <span style="font-size:.65rem;color:var(--accent-gold);">${escapeNotificationText(formatNotificationTime(data.timestamp))}</span>
-          </div>
-        `).join('');
-      }
-    }
-
-    let latestRows = [];
-    const sharedNotificationQuery = query(
-      collection(sharedDb, 'admin_notifications'),
-      orderBy('timestamp', 'desc'),
-      limit(SHARED_NOTIFICATION_LIMIT)
-    );
-
-    onSnapshot(sharedNotificationQuery, snapshot => {
-      latestRows = snapshot.docs.map(snap => ({ id: snap.id, data: snap.data() }));
-      renderNotifications(latestRows);
-    }, error => {
-      console.warn('Notification sync listener:', error?.message || error);
-    });
-
-    if (markAllButton) {
-      markAllButton.addEventListener('click', async event => {
-        event.preventDefault();
-        event.stopPropagation();
-        const unreadRows = latestRows.filter(row => !row.data.read);
-        if (!unreadRows.length) return;
-
-        markAllButton.disabled = true;
-        markAllButton.textContent = 'Saving...';
-        try {
-          const batch = writeBatch(sharedDb);
-          unreadRows.forEach(row => {
-            batch.update(doc(sharedDb, 'admin_notifications', row.id), {
-              read: true,
-              readAt: serverTimestamp()
-            });
-          });
-          await batch.commit();
-        } catch (error) {
-          console.error('Could not mark notifications read:', error);
-          markAllButton.disabled = false;
-          markAllButton.textContent = 'Mark All Read';
-        }
-      });
-    }
   </script>
 
 </body>
