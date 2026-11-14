@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="./lr-maintenance-loader.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Libraryreeds | Master Admin &amp; Account Center</title>
@@ -176,6 +177,49 @@
       .sidebar-panel { position: static; }
       .dynamic-tree-row { grid-template-columns: 1fr; }
     }
+      [hidden] { display: none !important; }
+      /* Profile settings layout — scoped to protect the other dashboard panels. */
+    #panel-general.lr-profile-organized { gap: 28px; padding: 30px; }
+    #panel-general .lr-profile-heading { display: flex; flex-direction: column; gap: 10px; }
+    #panel-general .lr-profile-heading .card-title { margin: 0; }
+    #panel-general .card-desc { margin: 0; line-height: 1.65; font-size: .8rem; overflow-wrap: anywhere; }
+    #panel-general .lr-profile-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+    #panel-general .lr-profile-section { min-width: 0; padding: 24px; border: 1px solid var(--border-subtle); border-radius: 8px; background: var(--bg-base); display: flex; flex-direction: column; gap: 22px; }
+    #panel-general .lr-section-heading { display: flex; flex-direction: column; gap: 6px; }
+    #panel-general .lr-section-heading h3 { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; margin: 0; }
+    #panel-general .lr-profile-form { display: flex; flex-direction: column; gap: 24px; }
+    #panel-general .lr-photo-row { display: flex; gap: 16px; align-items: flex-start; }
+    #panel-general .lr-photo-frame { width: 88px; height: 88px; flex: 0 0 88px; border-radius: 50%; border: 1px solid var(--border-focus); background: var(--bg-surface-elevated); overflow: hidden; }
+    #panel-general #lrProfilePreview { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #panel-general .lr-photo-controls { display: flex; flex-direction: column; gap: 8px; min-width: 0; flex: 1; }
+    #panel-general .lr-optional { font-weight: 400; text-transform: none; letter-spacing: 0; }
+    #panel-general #profileImageFile { padding: 8px; font-size: .75rem; min-width: 0; background: var(--bg-surface); }
+    #panel-general #profileImageFile::file-selector-button { background: var(--bg-surface-elevated); color: var(--text-primary); border: 1px solid var(--border-focus); border-radius: 4px; padding: 7px 9px; margin-right: 8px; cursor: pointer; }
+    #panel-general .form-input { border-radius: 5px; min-height: 44px; }
+    #panel-general input[readonly] { color: var(--text-secondary); }
+    #panel-general .lr-profile-save-row { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; padding-top: 20px; border-top: 1px solid var(--border-subtle); }
+    #panel-general .btn-primary { border-radius: 5px; min-height: 44px; }
+    #panel-general .lr-outline-action { padding: 11px 14px; border: 1px solid var(--border-focus); border-radius: 5px; background: transparent; color: var(--text-primary); font: inherit; font-size: .78rem; line-height: 1.5; text-align: center; cursor: pointer; min-height: 44px; }
+    #panel-general .lr-outline-action:hover { background: var(--bg-surface-elevated); }
+    #panel-general .lr-text-action { padding: 6px 0; border: 0; background: transparent; color: var(--accent-gold); font: inherit; font-size: .78rem; line-height: 1.6; text-decoration: none; cursor: pointer; text-align: left; align-self: flex-start; min-height: 32px; }
+    #panel-general .lr-text-action:hover { text-decoration: underline; }
+    #panel-general button:disabled { opacity: .55; cursor: not-allowed; }
+    #panel-general :focus-visible { outline: 2px solid var(--accent-gold); outline-offset: 3px; }
+    #panel-general .lr-verification-label { color: var(--accent-gold); }
+    #panel-general .lr-account-meta { display: flex; flex-direction: column; gap: 6px; padding: 16px 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+    #panel-general .lr-account-meta:has(p:empty):not(:has(p:not(:empty))) { display: none; }
+    #panel-general .lr-security-actions { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+    #panel-general .lr-profile-status:empty, #panel-general #lrMembershipPanel:empty { display: none !important; }
+    #panel-general #lrMembershipPanel:not(:empty) { border-top: 1px solid var(--border-subtle); padding-top: 24px; min-width: 0; }
+    @media (max-width: 1150px) { #panel-general .lr-profile-grid { grid-template-columns: minmax(0, 1fr); } }
+    @media (max-width: 600px) {
+      #panel-general.lr-profile-organized { padding: 20px 16px; gap: 22px; }
+      #panel-general .lr-profile-section { padding: 20px 16px; }
+      #panel-general .lr-photo-row { flex-direction: column; }
+      #panel-general .lr-photo-controls { width: 100%; }
+      #panel-general .form-input { font-size: 16px; }
+      #panel-general .lr-outline-action { max-width: 100%; }
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
@@ -233,7 +277,7 @@
               <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
               <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
             </div>
-            <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+            <a href="./account.html" class="dropdown-link-item" id="lrAccountSettingsLink">User Account Settings</a>
             <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
             <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
           </div>
@@ -270,6 +314,21 @@
       </aside>
 
       <div class="content-panel">
+
+<section id="panel-maintenance" class="settings-card" style="display:none" aria-labelledby="lrMaintenanceTitle">
+ <h2 id="lrMaintenanceTitle" class="section-title">Coming Soon / Maintenance</h2>
+ <p style="color:var(--text-secondary);line-height:1.7">Show visitors a Coming Soon page while you update Library Reeds. You can keep browsing and editing while signed in as the administrator.</p>
+ <form id="lrMaintenanceForm" style="display:flex;flex-direction:column;gap:20px">
+  <label style="display:flex;gap:12px;align-items:center"><input id="lrMaintenanceEnabled" type="checkbox" style="width:20px;height:20px;accent-color:var(--accent-gold)"> Show Coming Soon page to visitors</label>
+  <label class="form-label" for="lrMaintenanceHeading">Page heading</label>
+  <input id="lrMaintenanceHeading" class="form-input" maxlength="100" required value="Coming Soon">
+  <label class="form-label" for="lrMaintenanceMessage">Visitor message</label>
+  <textarea id="lrMaintenanceMessage" class="form-input" rows="5" maxlength="1200" required>We’re making a little magic behind the scenes. Library Reeds will be back soon. Thank you for your patience!</textarea>
+  <p id="lrMaintenanceStatus" role="status" aria-live="polite" style="color:var(--text-secondary)">Loading website status…</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn-primary" id="lrMaintenanceSave" type="submit" disabled>Save website status</button><button class="btn-outline" id="lrMaintenancePreview" type="button">Preview page</button></div>
+ </form>
+</section>
+
         <!-- Stripe & MAJORITY: administrative setup only; no bank details or secret keys in client HTML. -->
         <section id="panel-payment-payouts" class="settings-card lr-payout-settings" style="display:none;" aria-labelledby="lrPayoutTitle">
           <div class="lr-payout-head">
@@ -323,23 +382,63 @@
           </div>
           <p class="lr-payout-safety">Security: Never put Stripe secret API keys, webhook signing secrets, MAJORITY routing/account numbers, or SSN into this HTML page, local storage, or client-readable Firestore documents. This panel alone does not activate Stripe payments.</p>
         </section>
-        <div id="panel-general" class="settings-card">
-          <h2 class="card-title">Profile Settings</h2>
-          
-          <section id="lrMembershipPanel" aria-label="Manage membership"></section>
-
-          <form id="profileUpdateForm" style="display: flex; flex-direction: column; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label">Display Name:</label>
-              <input type="text" class="form-input" id="profileNameInput" placeholder="Your Name">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Upload Profile Image from Device:</label>
-              <input type="file" class="form-input" id="profileImageFile" accept="image/*" style="padding: 9px; cursor: pointer;">
-            </div>
-            <button type="submit" class="btn-primary" style="align-self: flex-start;">Save Profile &amp; Upload Image</button>
-            <div id="profileSaveStatus" class="success-msg">Profile updated successfully.</div>
-          </form>
+        <div id="panel-general" class="settings-card lr-profile-organized">
+          <header class="lr-profile-heading">
+            <h2 class="card-title">Profile Settings</h2>
+            <p class="card-desc">Manage your profile and account security.</p>
+          </header>
+          <div class="lr-profile-grid">
+            <section class="lr-profile-section" aria-labelledby="lrPersonalProfileTitle">
+              <div class="lr-section-heading">
+                <h3 id="lrPersonalProfileTitle">Your profile</h3>
+                <p class="card-desc">Your name and photo across Libraryreeds.</p>
+              </div>
+              <form id="profileUpdateForm" class="lr-profile-form">
+                <div class="lr-photo-row">
+                  <div class="lr-photo-frame">
+                    <img id="lrProfilePreview" alt="Profile photo preview" width="88" height="88" hidden>
+                  </div>
+                  <div class="lr-photo-controls">
+                    <label class="form-label" for="profileImageFile">Profile photo <span class="lr-optional">(optional)</span></label>
+                    <input type="file" class="form-input" id="profileImageFile" accept="image/jpeg,image/png,image/webp" aria-describedby="lrPhotoHelp" disabled>
+                    <p id="lrPhotoHelp" class="card-desc">JPG, PNG, or WebP · Up to 5 MB</p>
+                    <button type="button" id="lrRemovePhoto" class="lr-text-action" disabled>Remove photo</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profileNameInput">Display name</label>
+                  <input type="text" class="form-input" id="profileNameInput" name="displayName" maxlength="80" required autocomplete="nickname" placeholder="Your display name" disabled>
+                </div>
+                <div class="lr-profile-save-row">
+                  <button type="submit" id="lrSaveProfile" class="btn-primary" disabled>Save profile</button>
+                  <p id="profileSaveStatus" role="status" aria-live="polite" class="card-desc lr-profile-status"></p>
+                </div>
+              </form>
+            </section>
+            <section class="lr-profile-section" aria-labelledby="lrAccountSecurityTitle">
+              <div class="lr-section-heading">
+                <h3 id="lrAccountSecurityTitle">Account &amp; security</h3>
+                <p class="card-desc">Your sign-in details and security options.</p>
+              </div>
+              <div class="form-group">
+                <label for="lrAccountEmail" class="form-label">Account email</label>
+                <input id="lrAccountEmail" class="form-input" type="email" readonly autocomplete="off" aria-describedby="lrEmailVerification">
+                <p id="lrEmailVerification" class="card-desc lr-verification-label">Loading account details…</p>
+              </div>
+              <div class="lr-account-meta">
+                <p id="lrSignInMethods" class="card-desc"></p>
+                <p id="lrAccountDates" class="card-desc"></p>
+              </div>
+              <div class="lr-security-actions">
+                <button type="button" id="lrVerifyEmail" class="lr-outline-action" hidden disabled>Send verification email</button>
+                <button type="button" id="lrRefreshVerification" class="lr-text-action" hidden disabled>I’ve verified my email</button>
+                <button type="button" id="lrResetAccountPassword" class="lr-outline-action" hidden disabled>Send password reset email</button>
+                <a id="lrGoogleSecurity" class="lr-text-action" href="https://myaccount.google.com/security" target="_blank" rel="noopener noreferrer" hidden>Manage Google account security ↗</a>
+              </div>
+              <p id="lrSecurityStatus" class="card-desc lr-profile-status" role="status" aria-live="polite"></p>
+            </section>
+          </div>
+          <section id="lrMembershipPanel" class="lr-profile-membership" aria-label="Manage membership"></section>
         </div>
 
         <div id="panel-userorders" class="settings-card" style="display: none;">
@@ -1717,36 +1816,24 @@
 
     const ADMIN_EMAIL = "firelily@libraryreeds.com";
     const LR_ADMIN_UID = "zlbkFntgN9emWShy7q5361lJncu1";
-    const lrIsAdmin = user => !!(user && (user.uid === LR_ADMIN_UID || (user.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase()));
-    const RAW_BOT_TOKEN = "8688974138:AAFW_DZq1AJm_fM4S0FvEENswninQ1–5t0";
-    const TELEGRAM_BOT_TOKEN = RAW_BOT_TOKEN.replace(/[\u2013\u2014]/g, '--').trim();
-    const TELEGRAM_CHAT_ID = "8726195655";
+    const lrIsAdmin = user => !!(user && user.uid === LR_ADMIN_UID);
+    function lrUpdateAccountSettingsLabel(user) {
+      const link = document.getElementById('lrAccountSettingsLink');
+      if (link) link.textContent = lrIsAdmin(user)
+        ? 'Admin Account Settings'
+        : 'User Account Settings';
+    }
+
+
 
     function escapeHtml(str) {
       if (!str) return '';
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
-    async function dispatchTelegramRaw(htmlMessage) {
-      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-      try {
-        const formData = new FormData();
-        formData.append('chat_id', String(TELEGRAM_CHAT_ID).trim());
-        formData.append('text', htmlMessage);
-        formData.append('parse_mode', 'HTML');
-
-        const response = await fetch(url, { method: 'POST', body: formData });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.description || `HTTP ${response.status}`);
-        return data;
-      } catch (postErr) {
-        console.warn("POST failed on iPad Safari, attempting GET fallback...", postErr);
-        const getUrl = `${url}?chat_id=${encodeURIComponent(String(TELEGRAM_CHAT_ID).trim())}&text=${encodeURIComponent(htmlMessage)}&parse_mode=HTML`;
-        const fallbackRes = await fetch(getUrl);
-        const fallbackData = await fallbackRes.json();
-        if (!fallbackRes.ok || !fallbackData.ok) throw new Error(fallbackData.description || `HTTP ${fallbackRes.status}`);
-        return fallbackData;
-      }
+    async function dispatchTelegramRaw() {
+      // Paid-order alerts are sent by the existing trusted server trigger.
+      return { ok: true, serverManaged: true };
     }
 
     async function sendBookOrderAlert(book) {
@@ -3054,6 +3141,7 @@
     }
 
     onAuthStateChanged(auth, (user) => {
+      lrUpdateAccountSettingsLabel(user);
       if (!lrIsAdmin(user)) {
         lrInventoryUnsubscribe?.(); lrInventoryUnsubscribe=null; lrInventoryListenerStarted=false;
         lrGiftUnsubscribe?.(); lrGiftUnsubscribe=null;
@@ -3064,10 +3152,6 @@
         lrBookField('giftItemSelectTarget').replaceChildren(new Option('-- Sign in as administrator --',''));
       }
       if (!user) {
-        if (window.location.protocol === 'blob:' || window.location.href.startsWith('blob:')) {
-          setupAdminInterface({ displayName: "Demo Administrator", email: "admin@example.invalid" }, true);
-          return;
-        }
         window.safeNavigate("login.html");
         return;
       }
@@ -3200,76 +3284,122 @@
     });
   </script>
   <script type="module">
-// Library Reeds shared profile synchronization • Firebase v10.8.0
-import {getApps,getApp,initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-import {getAuth,onAuthStateChanged,updateProfile} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+// LR_PROFILE_SECURITY_V1 — own-account profile settings; no client-side role assignment.
+import {getApps,initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {getAuth,onAuthStateChanged,updateProfile,sendEmailVerification,sendPasswordResetEmail,reload} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
 import {getFirestore,doc,onSnapshot,setDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 import {getStorage,ref,uploadBytes,getDownloadURL} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
-const app=getApps().find(a=>a.options.projectId==='libraryreeds-638f4')||initializeApp({apiKey:"AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",authDomain:"libraryreeds-638f4.firebaseapp.com",projectId:"libraryreeds-638f4",storageBucket:"libraryreeds-638f4.firebasestorage.app",messagingSenderId:"768304310517",appId:"1:768304310517:web:39b931e6447043d84d3dbc"});
-const auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
+const app=getApps().find(a=>a.options.projectId==='libraryreeds-638f4')||initializeApp({apiKey:'AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg',authDomain:'libraryreeds-638f4.firebaseapp.com',projectId:'libraryreeds-638f4',storageBucket:'libraryreeds-638f4.firebasestorage.app',messagingSenderId:'768304310517',appId:'1:768304310517:web:39b931e6447043d84d3dbc'});
+const auth=getAuth(app),db=getFirestore(app),storage=getStorage(app),$=id=>document.getElementById(id);
+const form=$('profileUpdateForm');
 const fallback='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="50" fill="#202b39"/><circle cx="50" cy="36" r="18" fill="#a8b6c6"/><path d="M15 100c2-30 16-44 35-44s33 14 35 44" fill="#a8b6c6"/></svg>');
-const imageSelectors=['#navUserAvatar','#sidebarAvatarImg','#formUserAvatar','.nav-user-avatar','.sidebar-avatar'];
-const nameSelectors=['#navUserName','#sidebarDisplayName','#dropdownUserName','#formUserName'];
-let stopListening=()=>{},activeUserId=null;
-function updateImages(url){
-  const resolved=typeof url==='string'&&/^https:\/\//i.test(url)?url:fallback;
-  document.querySelectorAll(imageSelectors.join(',')).forEach(el=>{
-    if(el.tagName!=='IMG')return;
-    el.onerror=()=>{el.onerror=null;el.src=fallback;};
-    el.src=resolved;
-  });
+let unsubscribe=()=>{},activeUid=null,saving=false,securityBusy=false,removePhoto=false,dirty=false,previewUrl=null,profileData=null;
+let verifyAfter=0,resetAfter=0;
+function safePhoto(value){return typeof value==='string'&&/^https:\/\//i.test(value)?value:fallback;}
+function report(message,isError=false,target='profileSaveStatus'){
+ const el=$(target);el.textContent=message;el.style.display='block';el.style.color=isError?'#ff9d9d':'var(--text-secondary)';
 }
-function updateNames(name){if(!name)return;document.querySelectorAll(nameSelectors.join(',')).forEach(el=>el.textContent=name);}
+function errorMessage(e){
+ return ({'auth/too-many-requests':'Too many attempts. Please wait and try again.', 'auth/network-request-failed':'Check your connection and try again.', 'auth/requires-recent-login':'Sign out and sign back in, then try again.', 'auth/user-token-expired':'Your session expired. Please sign in again.', 'permission-denied':'Your changes could not be synced. Please try again after the profile security update is deployed.', 'storage/unauthorized':'The photo upload was not allowed. Please try again after the profile security update is deployed.'})[e?.code]||'We could not complete this change. Please try again.';
+}
+function current(user){if(!user||activeUid!==user.uid||auth.currentUser?.uid!==user.uid)throw new Error('Account changed. Please reload this page.');}
+function clearPreview(){if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null;}}
+function setControls(){
+ form.querySelectorAll('input,button').forEach(el=>el.disabled=!activeUid||saving);
+ form.setAttribute('aria-busy',String(saving));
+ $('lrSaveProfile').textContent=saving?'Saving…':'Save profile';
+ for(const id of ['lrVerifyEmail','lrRefreshVerification','lrResetAccountPassword'])$(id).disabled=!activeUid||securityBusy;
+}
 function updateHeader(profile,user){
-  const url=profile?.photoURL||profile?.avatarUrl||profile?.profileImageUrl||user?.photoURL||'';
-  updateImages(url);
-  updateNames(profile?.displayName||user?.displayName||user?.email?.split('@')[0]||'Patron');
-  if(user?.email){const email=document.getElementById('dropdownUserEmail');if(email)email.textContent=user.email;}
+ // Explicit empty photoURL means removal; do not resurrect a legacy avatar alias.
+ const photo=profile&&Object.hasOwn(profile,'photoURL')?profile.photoURL:profile?.avatarUrl||profile?.profileImageUrl||user?.photoURL;
+ const name=profile?.displayName||user?.displayName||'Reader';
+ document.querySelectorAll('#navUserAvatar,#sidebarAvatarImg,#formUserAvatar,.nav-user-avatar,.sidebar-avatar').forEach(el=>{
+   if(el.tagName!=='IMG')return;el.referrerPolicy='no-referrer';el.onerror=()=>{el.onerror=null;el.src=fallback;};el.src=safePhoto(photo);
+ });
+ document.querySelectorAll('#navUserName,#sidebarDisplayName,#dropdownUserName,#formUserName').forEach(el=>el.textContent=name);
+ if($('dropdownUserEmail'))$('dropdownUserEmail').textContent=user?.email||'';
+ if(!dirty){$('profileNameInput').value=name;clearPreview();$('lrProfilePreview').src=safePhoto(photo);$('lrProfilePreview').hidden=false;}
+}
+function securityDetails(user){
+ $('lrAccountEmail').value=user?.email||'';
+ const providers=new Set(user?.providerData?.map(p=>p.providerId)||[]);
+ $('lrEmailVerification').textContent=user?.emailVerified?'Email verified':'Email not verified';
+ $('lrVerifyEmail').hidden=!user?.email||!!user.emailVerified;
+ $('lrRefreshVerification').hidden=!user?.email||!!user.emailVerified;
+ $('lrResetAccountPassword').hidden=!providers.has('password');
+ $('lrGoogleSecurity').hidden=!providers.has('google.com');
+ $('lrSignInMethods').textContent='Sign-in methods: '+[...providers].map(id=>({'password':'Email and password','google.com':'Google'})[id]||'Linked provider').join(', ');
+ const date=value=>{const d=new Date(value);return Number.isNaN(d.valueOf())?'':d.toLocaleDateString();};
+ const joined=date(user?.metadata?.creationTime),last=date(user?.metadata?.lastSignInTime);
+ $('lrAccountDates').textContent=[joined&&'Member since '+joined,last&&'Last sign-in '+last].filter(Boolean).join(' · ');
 }
 onAuthStateChanged(auth,user=>{
-  stopListening();stopListening=()=>{};activeUserId=user?.uid||null;
-  if(!user){updateImages('');return;}
-  updateHeader(null,user);
-  stopListening=onSnapshot(doc(db,'users',user.uid),snap=>{
-    if(activeUserId!==user.uid)return;
-    updateHeader(snap.exists()?snap.data():null,user);
-  },error=>{console.warn('Profile sync read unavailable:',error.code||error.message);updateHeader(null,user);});
+ unsubscribe();unsubscribe=()=>{};activeUid=user?.uid||null;dirty=false;removePhoto=false;profileData=null;clearPreview();
+ $('profileImageFile').value='';report('');report('',false,'lrSecurityStatus');setControls();
+ if(!user){$('lrAccountEmail').value='';$('profileNameInput').value='';$('lrProfilePreview').hidden=true;report('Sign in to manage your account.');return;}
+ securityDetails(user);updateHeader(null,user);
+ unsubscribe=onSnapshot(doc(db,'users',user.uid),snap=>{
+   if(activeUid!==user.uid)return;
+   profileData=snap.exists()?snap.data():null;updateHeader(profileData,user);
+ },()=>{if(activeUid===user.uid)report('Your sign-in profile is available, but profile sync could not load.');});
 });
-// Handles account.html profile form; other pages only read their signed-in user's profile.
-const form=document.getElementById('profileUpdateForm');
-if(form)form.addEventListener('submit',async event=>{
-  event.preventDefault();
-  const user=auth.currentUser, status=document.getElementById('profileSaveStatus');
-  const button=form.querySelector('[type="submit"]');
-  const report=message=>{if(status){status.textContent=message;status.style.display='block';}};
-  if(!user){report('Sign in to update your profile.');return;}
-  const name=document.getElementById('profileNameInput')?.value.trim()||'';
-  const file=document.getElementById('profileImageFile')?.files?.[0]||null;
-  if(!name&&!file){report('Enter a name or choose a photo.');return;}
-  if(file&&(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>5*1024*1024)){report('Select a JPG, PNG, or WebP image smaller than 5 MB.');return;}
-  if(button)button.disabled=true;
-  report('Saving your profile…');
-  try{
-    let photoURL=user.photoURL||'';
-    if(file){
-      const ext={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[file.type];
-      const uploadRef=ref(storage,`avatars/${user.uid}-${Date.now()}.${ext}`);
-      await uploadBytes(uploadRef,file,{contentType:file.type});
-      photoURL=await getDownloadURL(uploadRef);
-    }
-    const changes={};
-    if(name)changes.displayName=name;
-    if(file)changes.photoURL=photoURL;
-    await updateProfile(user,changes);
-    updateHeader({displayName:name||user.displayName,photoURL},user);
-    try{
-      await setDoc(doc(db,'users',user.uid),{...(name?{displayName:name}:{}),...(file?{photoURL,avatarUrl:photoURL}:{}),updatedAt:serverTimestamp()},{merge:true});
-      report('Profile saved. Your photo and username will sync across Library Reeds pages.');
-    }catch(e){report('Saved in Firebase Authentication, but Firestore sync failed: '+(e.code||e.message));}
-    if(file)document.getElementById('profileImageFile').value='';
-  }catch(e){console.error('Profile photo upload failed:',e);report('Could not save profile: '+(e.code||e.message));}
-  finally{if(button)button.disabled=false;}
+$('profileNameInput').addEventListener('input',()=>{dirty=true;});
+$('profileImageFile').addEventListener('change',()=>{
+ clearPreview();const file=$('profileImageFile').files?.[0];if(!file)return;
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>5*1024*1024){$('profileImageFile').value='';report('Choose a JPG, PNG, or WebP photo up to 5 MB.',true);return;}
+ dirty=true;removePhoto=false;previewUrl=URL.createObjectURL(file);$('lrProfilePreview').src=previewUrl;$('lrProfilePreview').hidden=false;report('Photo selected. Save your profile to apply it.');
 });
+$('lrRemovePhoto').addEventListener('click',()=>{dirty=true;removePhoto=true;clearPreview();$('profileImageFile').value='';$('lrProfilePreview').src=fallback;$('lrProfilePreview').hidden=false;report('Photo will be removed when you save your profile.');});
+async function resizedPhoto(file){
+ // Decode and re-encode to remove embedded metadata and reject non-image contents.
+ const image=new Image(),url=URL.createObjectURL(file);
+ try{
+  await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error('Invalid image'));image.src=url;});
+  if(!image.naturalWidth||!image.naturalHeight||image.naturalWidth*image.naturalHeight>40000000)throw new Error('Image too large');
+  const scale=Math.min(1,512/image.naturalWidth,512/image.naturalHeight),canvas=document.createElement('canvas');
+  canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
+  const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Image processing unavailable');ctx.fillStyle='#ffffff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,canvas.width,canvas.height);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.86));if(!blob||blob.size>5*1024*1024)throw new Error('Image too large');return blob;
+ }finally{URL.revokeObjectURL(url);}
+}
+form.addEventListener('submit',async event=>{
+ event.preventDefault();if(saving)return;const user=auth.currentUser;
+ if(!user){report('Sign in to update your profile.',true);return;}
+ const name=$('profileNameInput').value.trim(),file=$('profileImageFile').files?.[0];
+ if(!name||name.length>80||/[\u0000-\u001f\u007f]/.test(name)){report('Enter a display name from 1 to 80 characters without control characters.',true);return;}
+ if(file&&(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>5*1024*1024)){report('Choose a JPG, PNG, or WebP photo up to 5 MB.',true);return;}
+ saving=true;setControls();report('Saving your profile…');let authSaved=false;
+ try{
+   current(user);let photoURL=removePhoto?'':(profileData&&Object.hasOwn(profileData,'photoURL')?profileData.photoURL:profileData?.avatarUrl||user.photoURL||'');
+   if(file){const image=await resizedPhoto(file);current(user);const imageRef=ref(storage,`avatars/${user.uid}/profile`);await uploadBytes(imageRef,image,{contentType:'image/jpeg',cacheControl:'no-cache, max-age=0'});current(user);photoURL=await getDownloadURL(imageRef);}
+   current(user);await updateProfile(user,{displayName:name,photoURL:photoURL||null});authSaved=true;current(user);
+   const changes={displayName:name,updatedAt:serverTimestamp()};
+   if(file||removePhoto)Object.assign(changes,{photoURL,avatarUrl:photoURL,profileImageUrl:photoURL});
+   await setDoc(doc(db,'users',user.uid),changes,{merge:true});current(user);
+   dirty=false;removePhoto=false;$('profileImageFile').value='';profileData={...profileData,...changes};updateHeader(profileData,user);report('Profile saved. Your name and photo will sync across Libraryreeds.');
+ }catch(e){if(activeUid===user.uid)report((authSaved?'Your sign-in profile was saved, but sync did not finish. ':'')+errorMessage(e),true);}
+ finally{saving=false;setControls();}
+});
+async function securityAction(action){
+ if(securityBusy)return;const user=auth.currentUser;if(!user)return;
+ securityBusy=true;setControls();report('Please wait…',false,'lrSecurityStatus');
+ try{current(user);const message=await action(user);current(user);securityDetails(user);report(message,false,'lrSecurityStatus');}
+ catch(e){if(activeUid===user.uid)report(errorMessage(e),true,'lrSecurityStatus');}
+ finally{securityBusy=false;setControls();}
+}
+$('lrVerifyEmail').addEventListener('click',()=>securityAction(async user=>{
+ if(Date.now()<verifyAfter)return 'Please wait a minute before requesting another verification email.';
+ await sendEmailVerification(user);verifyAfter=Date.now()+60000;return 'Verification email sent. Check your inbox and spam folder, then select “I’ve verified my email.”';
+}));
+$('lrRefreshVerification').addEventListener('click',()=>securityAction(async user=>{await reload(user);await user.getIdToken(true);return user.emailVerified?'Your email is verified.':'Your email is not verified yet. Open the link in your verification email first.';}));
+$('lrResetAccountPassword').addEventListener('click',()=>securityAction(async user=>{
+ if(!user.providerData.some(p=>p.providerId==='password'))return 'Manage your password with your sign-in provider.';
+ if(Date.now()<resetAfter)return 'Please wait a minute before requesting another reset email.';
+ await sendPasswordResetEmail(auth,user.email);resetAfter=Date.now()+60000;return 'Password reset email requested. Check your inbox and spam folder.';
+}));
+window.addEventListener('pagehide',()=>{unsubscribe();clearPreview();});
+window.addEventListener('pageshow',event=>{if(event.persisted)window.location.reload();});
 
 </script>
 
@@ -3368,5 +3498,6 @@ if(form)form.addEventListener('submit',async event=>{
 })();
 
 </script>
+<script type="module" src="./lr-maintenance-admin.js"></script>
 </body>
 </html>
