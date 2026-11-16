@@ -1,1073 +1,660 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Libraryreeds | Official Archival Repository &amp; Shop</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Libraryreeds | Membership</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:        #050505;
+    --obsidian:    #09090B;
+    --slate:       #18181B;
+    --perimeter:   #27272A;
+    --zinc:        #F4F4F5;
+    --muted:       #A1A1AA;
+    --zinc-glow:   rgba(244,244,245,0.20);
+    --ease-rise:   cubic-bezier(0.16, 1, 0.3, 1);
+    --accent-gold: #c5a880;
+  }
 
-  <style>
-    :root {
-      --bg-base: #0a0c10;
-      --bg-surface: #11141c;
-      --bg-surface-elevated: #161b26;
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-focus: rgba(197, 168, 128, 0.4);
-      --text-primary: #f0f2f5;
-      --text-secondary: #9ba1b0;
-      --text-muted: #5d6373;
-      --accent-gold: #c5a880;
-      --accent-gold-hover: #d8be9b;
-      --font-serif: "Cormorant Garamond", Georgia, serif;
-      --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-    body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
+  html, body {
+    background-color: var(--void);
+    color: var(--zinc);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-    #siteAnnouncementBannerContainer {
-      overflow: hidden;
-      background: var(--accent-gold);
-      color: var(--bg-base);
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 8px 0;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      width: 100%;
-      display: none;
-      position: relative;
-      white-space: nowrap;
-    }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(800px circle at 20% 15%, #0d0d0f 0%, transparent 60%),
+      radial-gradient(900px circle at 85% 85%, #0b0b0c 0%, transparent 55%),
+      radial-gradient(1200px circle at 50% 50%, #070707 0%, transparent 70%);
+    pointer-events: none;
+    transition: background-position 0.6s ease-out;
+  }
 
-    .marquee-track {
-      display: inline-block;
-      white-space: nowrap;
-      animation: smoothMarquee 22s linear infinite;
-      padding-left: 100%;
-    }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.05;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.96 0 0 0 0 0.96 0 0 0 0 0.96 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: screen;
+  }
 
-    @keyframes smoothMarquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
+  /* Unified Top Navigation & Profile Styles */
+  .top-nav { border-bottom: 1px solid var(--perimeter, rgba(255,255,255,0.08)); background: rgba(9, 9, 11, 0.94); backdrop-filter: blur(14px); padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .brand-title { font-family: 'Fraunces', Georgia, serif; font-size: 1.35rem; font-weight: 700; color: var(--zinc); text-transform: uppercase; text-decoration: none; letter-spacing: 0.08em; }
+  .nav-actions { display: flex; gap: 24px; align-items: center; }
+  .nav-link { color: var(--muted); text-decoration: none; font-size: 0.775rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.22s ease; }
+  .nav-link:hover, .nav-link.active { color: var(--zinc); }
 
-    /* Unified Top Navigation & Profile Styles */
-    .top-nav { border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); background: rgba(10, 12, 16, 0.94); backdrop-filter: blur(14px); padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-    .nav-container { max-width: 1400px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center; }
-    .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; }
-    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
-    .brand-title { font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary, #f0f2f5); text-transform: uppercase; text-decoration: none; letter-spacing: 0.06em; }
-    
-    .nav-actions { display: flex; gap: 20px; align-items: center; }
-    .nav-link { color: var(--text-secondary, #9ba1b0); text-decoration: none; font-size: 0.775rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.2s; }
-    .nav-link:hover, .nav-link.active { color: var(--accent-gold, #c5a880); }
+  .user-profile-menu { position: relative; display: none; }
+  .profile-trigger-btn { background: var(--slate); border: 1px solid var(--perimeter); color: var(--zinc); padding: 6px 14px; border-radius: 4px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+  .nav-user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
 
-    .nav-icon-link { position: relative; display: inline-flex; align-items: center; color: var(--text-secondary, #9ba1b0); text-decoration: none; transition: color 0.2s; cursor: pointer; }
-    .nav-icon-link:hover { color: var(--accent-gold, #c5a880); }
-    .wishlist-icon-link svg { width: 20px; height: 20px; stroke: currentColor; fill: var(--accent-gold); stroke-width: 2; }
+  .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 44px; width: 220px; background: var(--slate); border: 1px solid var(--perimeter); border-radius: 4px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
+  .dropdown-user-header { padding: 14px 16px; background: var(--obsidian); border-bottom: 1px solid var(--perimeter); }
+  .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--zinc); }
+  .dropdown-user-email { font-size: 0.725rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+  .dropdown-link-item { padding: 11px 16px; color: var(--muted); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
+  .dropdown-link-item:hover { background: var(--obsidian); color: var(--accent-gold); }
+  .auth-btn-nav { background: var(--zinc); color: var(--void); padding: 8px 16px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 3px; text-decoration: none; }
 
+  .vault {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .notification-badge { position: absolute; top: -8px; right: -10px; display: none; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 50%; background: #dc2626; color: #fff; font-size: 10px; font-weight: 700; line-height: 1; align-items: center; justify-content: center; border: 1px solid var(--bg-base, #0a0c10); }
+  .entrance {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: rise 0.9s var(--ease-rise) 0.1s forwards;
+  }
 
-    .notification-widget { position: relative; display: inline-flex; }
-    button.notification-icon-link { border: 0; background: transparent; padding: 0; font: inherit; }
-    .notification-panel { position: absolute; top: 34px; right: 0; width: 300px; max-width: calc(100vw - 32px); max-height: 360px; overflow-y: auto; padding: 16px; box-sizing: border-box; background: var(--bg-surface, #11141c); color: var(--text-primary, #f0f2f5); border: 1px solid var(--border-subtle, #333); border-radius: 6px; box-shadow: 0 12px 30px rgba(0,0,0,.5); z-index: 200; }
-    .notification-panel[hidden] { display: none; }
-    .notification-panel-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    .notification-panel-header button { background: transparent; border: 0; color: inherit; font-size: 22px; cursor: pointer; }
-    #notificationPanelStatus { font-size: 13px; color: var(--text-secondary, #9ba1b0); }
-    .notification-list { list-style: none; margin: 0; padding: 0; }
-    .notification-list li { padding: 12px 0; border-top: 1px solid var(--border-subtle, #333); font-size: 13px; overflow-wrap: anywhere; }
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
 
-    /* Profile Menu Widget */
-    .user-profile-menu { position: relative; display: none; }
-    .profile-trigger-btn { background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); color: var(--text-primary, #f0f2f5); padding: 6px 14px; border-radius: 4px; font-size: 0.775rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-    .nav-user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold, #c5a880); }
+  .entrance h1 {
+    font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 5vw, 3.75rem);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    color: var(--zinc);
+  }
 
-    .dropdown-menu-popover { display: none; position: absolute; right: 0; top: 44px; width: 220px; background: var(--bg-surface, #11141c); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); border-radius: 4px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75); flex-direction: column; overflow: hidden; z-index: 200; }
-    .dropdown-user-header { padding: 14px 16px; background: var(--bg-surface-elevated, #161b26); border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); }
-    .dropdown-user-name { font-size: 0.825rem; font-weight: 600; color: var(--text-primary, #f0f2f5); }
-    .dropdown-user-email { font-size: 0.725rem; color: var(--text-muted, #5d6373); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
-    .dropdown-link-item { padding: 11px 16px; color: var(--text-secondary, #9ba1b0); text-decoration: none; font-size: 0.775rem; font-weight: 500; display: flex; align-items: center; gap: 8px; border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
-    .dropdown-link-item:hover { background: var(--bg-surface-elevated, #161b26); color: var(--accent-gold, #c5a880); }
-    .auth-btn-nav { background: var(--accent-gold, #c5a880); color: var(--bg-base, #0a0c10); padding: 8px 16px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 3px; text-decoration: none; }
+  .entrance h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+  }
 
-    /* Tracker */
-    .tracker-wrapper { max-width: 1400px; margin: 32px auto 0; padding: 0 32px; width: 100%; }
-    .tracker-container { background-color: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 32px; width: 100%; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4); }
-    .tracker-container .header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
-    .tracker-container .title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary); }
-    .tracker-container .completion-percentage { font-size: 1.5rem; font-weight: 700; color: var(--accent-gold); }
-    .tracker-container .progress-track { background-color: var(--border-subtle); border-radius: 4px; height: 10px; width: 100%; overflow: hidden; margin-bottom: 32px; }
-    .tracker-container .progress-fill { background-color: var(--accent-gold); height: 100%; width: 0%; border-radius: 4px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 12px rgba(197, 168, 128, 0.2); }
-    .tracker-container .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; border-top: 1px solid var(--border-subtle); padding-top: 24px; }
-    .tracker-container .metric-item { display: flex; flex-direction: column; gap: 6px; }
-    .tracker-container .metric-label { font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); }
-    .tracker-container .metric-value { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
-    @media(max-width: 900px) { .tracker-container .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+  .entrance .sub {
+    margin-top: 1.25rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    max-width: 38ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-    /* Main Container & Hero */
-    .hero-main { max-width: 1400px; margin: 0 auto; padding: 48px 32px 80px; width: 100%; display: flex; flex-direction: column; gap: 56px; flex: 1; }
-    .hero-banner-box { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 64px 56px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; position: relative; overflow: hidden; }
-    .hero-content { display: flex; flex-direction: column; gap: 20px; z-index: 1; }
-    .hero-title { font-family: var(--font-serif); font-size: 3rem; font-weight: 500; color: var(--text-primary); line-height: 1.2; }
-    .hero-subtitle { font-size: 1rem; color: var(--text-secondary); max-width: 700px; line-height: 1.6; }
-    .hero-cta-btn { display: inline-flex; align-items: center; justify-content: center; background: var(--accent-gold); color: var(--bg-base); padding: 12px 28px; font-size: 0.775rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border-radius: 2px; text-decoration: none; transition: var(--transition-smooth); width: fit-content; margin-top: 8px; }
-    .hero-cta-btn:hover { background: var(--accent-gold-hover); }
+  .toggle-shell {
+    margin: 2.75rem auto 0;
+    background: var(--slate);
+    border: 1px solid var(--perimeter);
+    border-radius: 4px;
+    padding: 4px;
+    display: inline-flex;
+    position: relative;
+    transition: box-shadow 0.4s ease;
+  }
+  .toggle-shell:hover { box-shadow: 0 0 20px var(--zinc-glow); }
 
-    .hero-visual { position: relative; width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; z-index: 1; }
-    .hero-visual-card { position: absolute; width: 180px; aspect-ratio: 1/1.45; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-focus); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); background: var(--bg-surface-elevated); }
-    .hero-visual-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .hero-visual-card:nth-child(1) { transform: rotate(-8deg) translateX(-60px) translateY(10px); z-index: 1; filter: brightness(0.85); }
-    .hero-visual-card:nth-child(2) { transform: rotate(6deg) translateX(40px) translateY(-15px); z-index: 2; border-color: var(--accent-gold); }
-    .hero-visual-card:hover { transform: translateY(-5px) scale(1.03); z-index: 3; }
+  .toggle-shell button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: color 0.3s ease;
+    position: relative;
+    z-index: 2;
+  }
+  .toggle-shell button.active { color: var(--void); }
+  .toggle-shell button .save {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    opacity: 0.65;
+    margin-left: 0.4rem;
+  }
 
-    @media(max-width: 900px) {
-      .hero-banner-box { grid-template-columns: 1fr; padding: 40px 24px; }
-      .hero-visual { display: none; }
-    }
+  .toggle-thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    width: 92px;
+    background: var(--zinc);
+    border-radius: 3px;
+    transition: transform 0.45s var(--ease-rise);
+    z-index: 1;
+  }
+  .toggle-shell.yearly .toggle-thumb { transform: translateX(110px); }
 
+  .trinity {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    align-items: start;
+    margin-top: 4.5rem;
+  }
 
-    /* Published Works & Book Grids */
-    .published-section { display: flex; flex-direction: column; gap: 24px; align-items: center; text-align: center; }
-    .section-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; width: 100%; }
-    .section-title { font-family: var(--font-serif); font-size: 2rem; font-weight: 500; color: var(--text-primary); }
+  .slab {
+    position: relative;
+    background: var(--obsidian);
+    border: 1px solid var(--perimeter);
+    border-radius: 6px;
+    padding: 2.5rem 2rem 2.25rem;
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    transform: translateY(40px);
+    animation: rise 0.9s var(--ease-rise) forwards;
+    transition: transform 0.5s var(--ease-rise), box-shadow 0.5s ease, border-color 0.5s ease;
+  }
+  .slab:nth-child(1) { animation-delay: 0.25s; }
+  .slab:nth-child(2) { animation-delay: 0.4s; transform: translateY(-40px); }
+  .slab:nth-child(3) { animation-delay: 0.55s; }
 
-    .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; width: 100%; text-align: left; }
-    .book-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 12px; display: flex; flex-direction: column; gap: 10px; text-decoration: none; transition: var(--transition-smooth); cursor: pointer; align-items: center; }
-    .book-card:hover { border-color: var(--border-focus); transform: translateY(-2px); }
+  .trinity .slab:nth-child(2) {
+    margin-top: -40px;
+  }
 
-    .book-cover-wrap { width: 120px; height: 175px; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; margin: 0 auto; }
-    .book-cover-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .book-cover-missing {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
-      text-align: center;
-      color: var(--text-muted);
-      background: var(--bg-surface-elevated);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
+  .slab::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 7px;
+    padding: 1px;
+    background: conic-gradient(from 140deg, transparent 0deg, var(--zinc-glow) 90deg, transparent 200deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+  .slab:hover::before { opacity: 1; }
+  .slab:hover {
+    transform: translateY(-44px) scale(1.02);
+    box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 80px rgba(244,244,245,0.06);
+  }
+  .trinity .slab:nth-child(2):hover { transform: translateY(-4px) scale(1.02); }
 
-    .book-meta { display: flex; flex-direction: column; gap: 3px; width: 100%; }
-    .book-item-title { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; color: var(--text-primary); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .book-item-author { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
-    .book-item-price { font-family: var(--font-serif); font-size: 1rem; font-weight: 700; color: var(--accent-gold); margin-top: 2px; }
+  .slab.collector { border-color: #3f3f46; }
 
-    .btn-book-details { display: inline-flex; align-items: center; justify-content: center; background: var(--bg-surface-elevated); color: var(--accent-gold); border: 1px solid var(--border-focus); padding: 6px 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-radius: 2px; text-decoration: none; transition: var(--transition-smooth); margin-top: 2px; width: 100%; }
-    .btn-book-details:hover { background: var(--accent-gold); color: var(--bg-base); }
+  .beacon {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    pointer-events: none;
+  }
+  .beacon::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 7px;
+    padding: 1.5px;
+    background: conic-gradient(from var(--beam-angle, 0deg), transparent 0deg, var(--zinc) 25deg, transparent 60deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    animation: beam 5s linear infinite;
+    opacity: 0.7;
+  }
 
-    /* Perks & Newsletter */
-    .perks-newsletter-section { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
-    .perks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .perk-item { display: flex; flex-direction: column; gap: 8px; }
-    .perk-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
-    .perk-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
-    .newsletter-box { display: flex; flex-direction: column; gap: 16px; background: var(--bg-surface-elevated); padding: 32px; border-radius: 4px; border: 1px solid var(--border-subtle); }
-    .newsletter-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 500; color: var(--text-primary); }
-    .newsletter-desc { font-size: 0.825rem; color: var(--text-secondary); line-height: 1.5; }
-    .newsletter-form { display: flex; gap: 10px; }
-    .newsletter-input { flex: 1; background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 10px 14px; font-size: 0.8rem; border-radius: 2px; outline: none; }
-    .newsletter-input:focus { border-color: var(--border-focus); }
-    .newsletter-btn { background: var(--accent-gold); color: var(--bg-base); padding: 10px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-radius: 2px; border: none; cursor: pointer; transition: var(--transition-smooth); }
-    .newsletter-btn:hover { background: var(--accent-gold-hover); }
+  @keyframes beam { to { --beam-angle: 360deg; } }
+  @property --beam-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
 
-    @media(max-width: 900px) {
-      .perks-newsletter-section { grid-template-columns: 1fr; padding: 32px 24px; }
-    }
+  .tier-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
 
-    /* Footer */
-    footer { border-top: 1px solid var(--border-subtle); background: var(--bg-surface); padding: 48px 32px 32px; margin-top: auto; }
-    .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--border-subtle); }
-    .footer-col { display: flex; flex-direction: column; gap: 14px; }
-    .footer-col-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); text-transform: uppercase; }
-    .footer-links-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; }
-    .footer-link:hover { color: var(--accent-gold); }
-    .footer-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
-    .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
-  </style>
+  .tier-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 2.1rem;
+    letter-spacing: 0.01em;
+    color: var(--zinc);
+    margin-bottom: 0.35rem;
+  }
+  .tier-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 1.1rem;
+    display: block;
+    margin-top: 0.15rem;
+  }
+
+  .tier-blurb {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin: 1rem 0 1.75rem;
+    min-height: 3.2em;
+  }
+
+  .price-frame {
+    display: flex;
+    align-items: baseline;
+    gap: 0.15rem;
+    margin-bottom: 1.75rem;
+    height: 3.2rem;
+    overflow: hidden;
+  }
+
+  .price-currency {
+    font-size: 1.1rem;
+    color: var(--muted);
+    align-self: flex-start;
+    margin-top: 0.65rem;
+    margin-right: 0.1rem;
+  }
+
+  .price-roll {
+    height: 3.2rem;
+    overflow: hidden;
+    display: inline-flex;
+    flex-direction: column;
+    font-size: 2.8rem;
+    font-weight: 500;
+    line-height: 3.2rem;
+    color: var(--zinc);
+  }
+  .price-roll .digits {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.6s var(--ease-rise), filter 0.5s ease;
+  }
+  .price-roll .digits .num { display: block; line-height: 3.2rem; }
+  .price-roll .digits.yearly { transform: translateY(-3.2rem); }
+
+  .price-frame.switching .price-roll .digits { filter: blur(3px); }
+
+  .price-cycle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-left: 0.25rem;
+    margin-bottom: 0.2rem;
+    align-self: flex-end;
+  }
+
+  .features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--perimeter);
+  }
+
+  .features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .features li .mark {
+    color: var(--zinc);
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+  .features li.off { opacity: 0.35; text-decoration: line-through; text-decoration-color: #3f3f46; }
+
+  .cta {
+    display: block;
+    width: 100%;
+    background: var(--zinc);
+    color: var(--void);
+    border: 1px solid var(--zinc);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.95rem 1.25rem;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta .cta-text { display: inline-flex; align-items: center; gap: 0.5rem; transition: transform 0.4s var(--ease-rise); }
+  .cta .arrow { display: inline-block; transition: transform 0.4s var(--ease-rise); }
+
+  .cta:hover {
+    background: transparent;
+    color: var(--zinc);
+    box-shadow: 0 0 20px var(--zinc-glow);
+  }
+  .cta:hover .cta-text { transform: translateX(4px); }
+  .cta:hover .arrow { transform: translateX(6px); }
+
+  .vault-note {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; }
+  }
+
+  @media (max-width: 900px) {
+    .trinity { grid-template-columns: 1fr; gap: 1.25rem; max-width: 420px; }
+    .trinity .slab:nth-child(2) { margin-top: 0; animation-delay: 0.25s; }
+    .slab:hover { transform: translateY(-4px) scale(1.01); }
+    .trinity .slab:nth-child(2):hover { transform: translateY(-4px) scale(1.01); }
+    .vault { padding: 4rem 1.25rem 4rem; }
+    .toggle-shell button { padding: 0.6rem 1rem; }
+    .toggle-thumb { width: 78px; }
+    .toggle-shell.yearly .toggle-thumb { transform: translateX(92px); }
+  }
+</style>
 </head>
 <body>
 
-  <div id="siteAnnouncementBannerContainer">
-    <div class="marquee-track" id="siteAnnouncementBannerText">Loading announcement...</div>
-  </div>
-
   <nav class="top-nav">
-    <div class="nav-container">
-      <a href="./index.html" class="brand-group">
-        <img src="https://www.image2url.com/r2/default/images/1787276940228-3d152a55-4616-4ab8-a015-5ae596457a4c.png" alt="Logo" class="brand-logo-img">
-        <span class="brand-title">Libraryreeds</span>
-      </a>
-      <div class="nav-actions">
-        <a href="./index.html" class="nav-link active">Home</a>
-        <a href="./shop.html" class="nav-link">Shop</a>
-        <a href="./fanart.html" class="nav-link">Fanart</a>
-        <a href="./about.html" class="nav-link">About</a>
-        <a href="./giftshop.html" class="nav-link">Gift Shop</a>
-        <a href="./membership.html" class="nav-link">Membership</a>
-        
-        <!-- Wishlist Icon -->
-        <a href="./wishlist.html" class="nav-icon-link wishlist-icon-link" title="Wishlist">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-          <span id="wishlistBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
-        </a>
-
-
-        <!-- Notification Bell and Panel -->
-        <div class="notification-widget" id="notificationWidget">
-          <button type="button" id="notificationBellBtn" aria-expanded="false" aria-controls="notificationPanel" class="nav-icon-link notification-icon-link" title="Notifications" aria-label="Notifications">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
-            <span id="notificationBadgeCount" class="notification-badge" aria-live="polite" aria-atomic="true"></span>
-          </button>
-          <section class="notification-panel" id="notificationPanel" aria-labelledby="notificationPanelTitle" hidden>
-            <div class="notification-panel-header">
-              <strong id="notificationPanelTitle">Notifications</strong>
-              <span style="display:flex;align-items:center;gap:10px;">
-                <button type="button" id="markAllNotificationsReadBtn" style="background:transparent;border:0;color:var(--accent-gold);font:inherit;font-size:11px;font-weight:700;text-transform:uppercase;cursor:pointer;">Mark All Read</button>
-                <button type="button" id="closeNotificationPanel" aria-label="Close notifications">&times;</button>
-              </span>
-            </div>
-            <p id="notificationPanelStatus">No notifications yet.</p>
-            <ul id="notificationList" class="notification-list"></ul>
-          </section>
-        </div>
-
-        <!-- Cart Icon -->
-        <a href="./cart.html" class="nav-icon-link cart-trigger-link" id="cartTriggerLink" title="Review Cart">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-          <span id="cartBadgeCount" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--accent-gold); color: var(--bg-base); font-size: 0.6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; align-items: center; justify-content: center;">0</span>
-        </a>
-
-        <!-- Sign In / User Profile Menu -->
-        <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
-        <div class="user-profile-menu" id="navProfileMenu">
-          <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
-            <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
-            <span id="navUserName">Patron</span>
-          </button>
-          <div class="dropdown-menu-popover" id="profileDropdown">
-            <div class="dropdown-user-header">
-              <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
-              <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
-            </div>
-            <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
-            <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
-            <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
+    <a href="./index.html" class="brand-title">Libraryreeds</a>
+    <div class="nav-actions">
+      <a href="./index.html" class="nav-link">Home</a>
+      <a href="./shop.html" class="nav-link">Shop</a>
+      <a href="./fanart.html" class="nav-link">Fanart</a>
+      <a href="./about.html" class="nav-link">About</a>
+      <a href="./giftshop.html" class="nav-link">Gift Shop</a>
+      <a href="./membership.html" class="nav-link active">Membership</a>
+      <a href="./login.html" class="auth-btn-nav" id="navLoginBtn">Sign In</a>
+      <div class="user-profile-menu" id="navProfileMenu">
+        <button type="button" class="profile-trigger-btn" id="profileTriggerBtn">
+          <img id="navUserAvatar" class="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+          <span id="navUserName">Patron</span>
+        </button>
+        <div class="dropdown-menu-popover" id="profileDropdown">
+          <div class="dropdown-user-header">
+            <div class="dropdown-user-name" id="dropdownUserName">Reader</div>
+            <div class="dropdown-user-email" id="dropdownUserEmail">reader@example.com</div>
           </div>
+          <a href="./account.html" class="dropdown-link-item">Account &amp; Admin Settings</a>
+          <a href="./wishlist.html" class="dropdown-link-item">My Wishlist</a>
+          <button type="button" class="dropdown-link-item" id="dropdownLogoutBtn">Sign Out</button>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Manuscript Progress Tracker -->
-  <div class="tracker-wrapper">
-    <div class="tracker-container">
-      <div class="header">
-        <span class="title" id="trackerTitleText">Manuscript Progress</span>
-        <span class="completion-percentage" id="completionPercentage">0%</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
-      <div class="metrics-grid">
-        <div class="metric-item">
-          <span class="metric-label">Current Word Count</span>
-          <span class="metric-value" id="currentWords">0 / 80,000</span>
-        </div>
-        <div class="metric-item">
-          <span class="metric-label">Current Position</span>
-          <span class="metric-value" id="currentChapter">Drafting in Progress</span>
-        </div>
-        <div class="metric-item">
-          <span class="metric-label">Project Completion</span>
-          <span class="metric-value" id="targetDate">TBD</span>
-        </div>
-        <div class="metric-item">
-          <span class="metric-label">Daily Writing Velocity</span>
-          <span class="metric-value" id="writingVelocity">-- words/day</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <main class="vault">
+    <header class="entrance">
+      <p class="eyebrow">Membership</p>
+      <h1>Join the <em>Collector's Vault</em></h1>
+      <p class="sub">A private membership for patrons of books, fanart, and tangible creation. Choose your tier of access to the archive.</p>
 
-  <main class="hero-main">
-    <!-- Hero Banner -->
-    <section class="hero-banner-box">
-      <div class="hero-content">
-        <h1 class="hero-title" id="homeHeroTitleText">Unearth Your Next Obsession.</h1>
-        <p class="hero-subtitle">Romance, mystery, magic, and modern love—bound for the discerning reader.</p>
-        <a href="./shop.html" class="hero-cta-btn">Shop the Books</a>
+      <div class="toggle-shell" id="toggle" role="tablist" aria-label="Billing cycle">
+        <span class="toggle-thumb"></span>
+        <button class="active" data-cycle="monthly" role="tab" aria-selected="true">Monthly</button>
+        <button data-cycle="yearly" role="tab" aria-selected="false">Yearly</button>
       </div>
-      <div class="hero-visual">
-        <div class="hero-visual-card">
-          <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80" alt="Dark Fantasy Volume">
+    </header>
+
+    <section id="lrMembershipPanel" aria-label="Manage membership"></section>
+    <section class="trinity" aria-label="Membership tiers">
+      <article class="slab">
+        <p class="tier-label">Tier 01</p>
+        <h2 class="tier-title">FanArt Supporter <em>The Observer</em></h2>
+        <p class="tier-blurb">For those who wish to follow the work and receive the occasional signal from the studio.</p>
+
+        <div class="price-frame">
+          <span class="price-currency">$</span>
+          <span class="price-roll"><span class="digits"><span class="num">9.99</span><span class="num">89.99</span></span></span>
+          <span class="price-cycle">/mo</span>
         </div>
-        <div class="hero-visual-card">
-          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80" alt="Archival Edition">
+
+        <ul class="features">
+          <li><span class="mark">+</span> Behind-the-scenes studio posts</li>
+          <li><span class="mark">+</span> Early access to new artwork</li>
+          <li><span class="mark">+</span> Members-only Discord channel</li>
+          <li class="off"><span class="mark">−</span> Monthly print drops</li>
+          <li class="off"><span class="mark">−</span> Signed book editions</li>
+        </ul>
+
+        <button disabled class="cta" data-tier="Fan">
+          <span class="cta-text">Select FanArt Supporter <span class="arrow">→</span></span>
+        </button>
+      </article>
+
+      <article class="slab">
+        <p class="tier-label">Tier 02 · Most Chosen</p>
+        <h2 class="tier-title">Reader <em>The Patron</em></h2>
+        <p class="tier-blurb">For the devoted reader who wants every story delivered and a place in the inner circle.</p>
+
+        <div class="price-frame">
+          <span class="price-currency">$</span>
+          <span class="price-roll"><span class="digits"><span class="num">4.00</span><span class="num">49.99</span></span></span>
+          <span class="price-cycle">/mo</span>
         </div>
-      </div>
+
+        <ul class="features">
+          <li><span class="mark">+</span> Everything in FanArt Supporter</li>
+          <li><span class="mark">+</span> Unlimited books & digital access</li>
+          <li><span class="mark">+</span> Monthly print & sticker drops</li>
+          <li><span class="mark">+</span> Digital first-reads of all chapters</li>
+          <li><span class="mark">+</span> Member name in book acknowledgements</li>
+          <li class="off"><span class="mark">−</span> Signed & numbered editions</li>
+        </ul>
+
+        <button disabled class="cta" data-tier="Reader">
+          <span class="cta-text">Select Reader <span class="arrow">→</span></span>
+        </button>
+      </article>
+
+      <article class="slab collector">
+        <span class="beacon" aria-hidden="true"></span>
+        <p class="tier-label">Tier 03 · Limited</p>
+        <h2 class="tier-title">Collector <em>The Curator</em></h2>
+        <p class="tier-blurb">For the collector who wants the physical artifacts — signed editions, exclusive fanart, and the full archive.</p>
+
+        <div class="price-frame">
+          <span class="price-currency">$</span>
+          <span class="price-roll"><span class="digits"><span class="num">14.99</span><span class="num">149.99</span></span></span>
+          <span class="price-cycle">/mo</span>
+        </div>
+
+        <ul class="features">
+          <li><span class="mark">+</span> Everything in Reader</li>
+          <li><span class="mark">+</span> Signed & numbered book editions</li>
+          <li><span class="mark">+</span> Quarterly exclusive fanart print</li>
+          <li><span class="mark">+</span> Giftshop store credit ($10/mo)</li>
+          <li><span class="mark">+</span> Annual hand-bound limited edition</li>
+        </ul>
+
+        <button disabled class="cta" data-tier="Collector">
+          <span class="cta-text">Select Collector <span class="arrow">→</span></span>
+        </button>
+      </article>
     </section>
 
-
-    <!-- Published Works Spotlight Section -->
-    <section class="published-section">
-      <h2 class="section-title">Published Works</h2>
-      <div class="books-grid" id="aboutPublishedBooksGrid">
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Loading published volumes...</p>
-      </div>
-    </section>
-
-    <!-- Featured Books -->
-    <section style="display: flex; flex-direction: column; gap: 24px;">
-      <div class="section-header">
-        <h2 class="section-title">Featured Books</h2>
-        <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View All Volumes &rarr;</a>
-      </div>
-      <div class="books-grid" id="homeJourneyGrid">
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Loading featured items...</p>
-      </div>
-    </section>
-
-    <!-- Released / New Releases -->
-    <section style="display: flex; flex-direction: column; gap: 24px;">
-      <div class="section-header">
-        <h2 class="section-title">Released / New Releases</h2>
-        <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View All Volumes &rarr;</a>
-      </div>
-      <div class="books-grid" id="homeFreshGrid">
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Loading new releases...</p>
-      </div>
-    </section>
-
-    <!-- Popular / Bestsellers -->
-    <section style="display: flex; flex-direction: column; gap: 24px;">
-      <div class="section-header">
-        <h2 class="section-title">Popular / Bestsellers</h2>
-        <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View All Volumes &rarr;</a>
-      </div>
-      <div class="books-grid" id="homeFavoritesGrid">
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Loading bestsellers...</p>
-      </div>
-    </section>
-
-    <!-- The Complete Collection -->
-    <section style="display: flex; flex-direction: column; gap: 24px;">
-      <div class="section-header">
-        <h2 class="section-title">The Complete Collection</h2>
-        <a href="./shop.html" style="color: var(--accent-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">View Full Shop Page &rarr;</a>
-      </div>
-      <div class="books-grid" id="homeCompleteGrid">
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Loading complete collection...</p>
-      </div>
-    </section>
-
-    <!-- Perks & Newsletter -->
-    <section class="perks-newsletter-section">
-      <div class="perks-grid">
-        <div class="perk-item">
-          <h4 class="perk-title">Support Independent</h4>
-          <p class="perk-desc">Direct purchases ensure authors and creators get the maximum support for future works.</p>
-        </div>
-        <div class="perk-item">
-          <h4 class="perk-title">Exclusive Editions</h4>
-          <p class="perk-desc">Access special book bindings, signed copies, and custom merchandise found nowhere else.</p>
-        </div>
-        <div class="perk-item">
-          <h4 class="perk-title">Secure Vault Shipping</h4>
-          <p class="perk-desc">Carefully packaged and tracked safely straight from our repository to your personal shelf.</p>
-        </div>
-        <div class="perk-item">
-          <h4 class="perk-title">Community Perks</h4>
-          <p class="perk-desc">Join our reader community to submit fanart, review rare volumes, and unlock insider updates.</p>
-        </div>
-      </div>
-      <div class="newsletter-box">
-        <h3 class="newsletter-title">Join the Archive Dispatch</h3>
-        <p class="newsletter-desc">Subscribe to receive early chapter previews, release date announcements, and private sales straight to your inbox.</p>
-        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to Libraryreeds!');">
-          <input type="email" class="newsletter-input" placeholder="Enter your email address..." required>
-          <button type="submit" class="newsletter-btn">Subscribe</button>
-        </form>
-      </div>
-    </section>
+    <p class="vault-note">Cancel anytime · Secure checkout · All prices in USD</p>
   </main>
 
-  <footer>
-    <div class="footer-container">
-      <div class="footer-col">
-        <h4 class="footer-col-title">Libraryreeds</h4>
-        <p class="footer-text">Official archival repository and independent publisher dedicated to preserving rare literature.</p>
-      </div>
-      <div class="footer-col">
-        <h4 class="footer-col-title">Quick Shortcuts</h4>
-        <ul class="footer-links-list">
-          <li><a href="./index.html" class="footer-link">Home</a></li>
-          <li><a href="./shop.html" class="footer-link">Browse Catalog</a></li>
-          <li><a href="./fanart.html" class="footer-link">Fanart Gallery</a></li>
-          <li><a href="./about.html" class="footer-link">About &amp; FAQ</a></li>
-          <li><a href="./giftshop.html" class="footer-link">Gift Shop</a></li>
-          <li><a href="./membership.html" class="footer-link">Membership</a></li>
-          <li><a href="./account.html" class="footer-link">Master Account Center</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>&copy; 2026 Libraryreeds. All rights reserved.</span>
-      <span>Official Archival Repository</span>
-    </div>
-  </footer>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  <script>
-    // Notification producers can call setNotificationUnreadCount(count), or
-    // dispatch CustomEvent('notifications-updated', { detail: { unreadCount: count } }).
-    (() => {
-      const storageKey = 'libraryreeds_notification_unread_count';
-      const badge = document.getElementById('notificationBadgeCount');
-      const bell = document.getElementById('notificationBellBtn');
-      const widget = document.getElementById('notificationWidget');
-      const panel = document.getElementById('notificationPanel');
-      const status = document.getElementById('notificationPanelStatus');
-      const list = document.getElementById('notificationList');
-      const closeBtn = document.getElementById('closeNotificationPanel');
-      if (!badge || !bell || !widget || !panel || !status || !list || !closeBtn) return;
-      let unreadCount = 0;
-      function updatePanelStatus() {
-        status.hidden = list.children.length > 0;
-        status.textContent = unreadCount > 0
-          ? `${unreadCount} unread notification${unreadCount === 1 ? '' : 's'}.`
-          : 'No notifications yet.';
-      }
-      function closePanel(returnFocus = false) {
-        panel.hidden = true;
-        bell.setAttribute('aria-expanded', 'false');
-        if (returnFocus) bell.focus();
-      }
-      bell.addEventListener('click', (event) => {
-        event.stopPropagation();
-        panel.hidden = !panel.hidden;
-        bell.setAttribute('aria-expanded', String(!panel.hidden));
-      });
-      panel.addEventListener('click', (event) => event.stopPropagation());
-      closeBtn.addEventListener('click', () => closePanel(true));
-      document.addEventListener('click', (event) => {
-        if (!widget.contains(event.target)) closePanel();
-      });
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && !panel.hidden) closePanel(true);
-      });
-      window.setNotificationItems = (items) => {
-        list.replaceChildren();
-        if (Array.isArray(items)) items.forEach((item) => {
-          const message = typeof item === 'string' ? item : item && (item.message || item.title || item.body);
-          if (typeof message !== 'string' || !message.trim()) return;
-          const row = document.createElement('li');
-          row.textContent = message;
-          list.appendChild(row);
-        });
-        updatePanelStatus();
-      };
-      function normalizeCount(value) {
-        const number = Number(value);
-        return Number.isFinite(number) ? Math.max(0, Math.floor(number)) : 0;
-      }
-      function renderCount(value) {
-        const count = normalizeCount(value);
-        unreadCount = count;
-        updatePanelStatus();
-        badge.textContent = count > 99 ? '99+' : String(count);
-        badge.style.display = count > 0 ? 'inline-flex' : 'none';
-        badge.setAttribute('aria-label', `${count} unread notifications`);
-        bell.setAttribute('aria-label', count > 0 ? `Notifications, ${count} unread` : 'Notifications');
-        bell.title = count > 0 ? `Notifications (${count} unread)` : 'Notifications';
-      }
-      function refreshCount() {
-        try { renderCount(localStorage.getItem(storageKey)); }
-        catch (_) { renderCount(0); }
-      }
-      window.setNotificationUnreadCount = (value) => {
-        const count = normalizeCount(value);
-        try { localStorage.setItem(storageKey, String(count)); } catch (_) {}
-        renderCount(count);
-      };
-      window.addEventListener('notifications-updated', (event) => {
-        if (event.detail && Array.isArray(event.detail.notifications)) window.setNotificationItems(event.detail.notifications);
-        const count = event.detail && event.detail.unreadCount;
-        if (count !== undefined) window.setNotificationUnreadCount(count);
-        else refreshCount();
-      });
-      window.addEventListener('storage', (event) => {
-        if (event.key === storageKey || event.key === null) refreshCount();
-      });
-      window.addEventListener('pageshow', refreshCount);
-      refreshCount();
-    })();
-  </script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
+    authDomain: "libraryreeds-638f4.firebaseapp.com",
+    projectId: "libraryreeds-638f4",
+    storageBucket: "libraryreeds-638f4.firebasestorage.app",
+    messagingSenderId: "768304310517",
+    appId: "1:768304310517:web:39b931e6447043d84d3dbc"
+  };
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, addDoc, serverTimestamp, query, orderBy, limit, updateDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
-      authDomain: "libraryreeds-638f4.firebaseapp.com",
-      projectId: "libraryreeds-638f4",
-      storageBucket: "libraryreeds-638f4.firebasestorage.app",
-      messagingSenderId: "768304310517",
-      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
-    };
+  const navLoginBtn = document.getElementById("navLoginBtn");
+  const navProfileMenu = document.getElementById("navProfileMenu");
+  const navUserName = document.getElementById("navUserName");
+  const dropdownUserName = document.getElementById("dropdownUserName");
+  const dropdownUserEmail = document.getElementById("dropdownUserEmail");
+  const profileTriggerBtn = document.getElementById("profileTriggerBtn");
+  const profileDropdown = document.getElementById("profileDropdown");
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const authorId = "primary_author";
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      if (navLoginBtn) navLoginBtn.style.display = "none";
+      if (navProfileMenu) navProfileMenu.style.display = "block";
+      const displayName = user.displayName || user.email?.split("@")[0] || "Member";
+      if (navUserName) navUserName.textContent = displayName;
+      if (dropdownUserName) dropdownUserName.textContent = displayName;
+      if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
 
-    let currentUser = null;
-
-    // Header Profile & Auth Elements
-    // Admin Settings -> Countdown Timer Control.
-    function mountAdminCountdown(prefix) {
-      let bar = document.getElementById('adminCountdownBar');
-      if (!bar) {
-        bar = document.createElement('div');
-        bar.id = 'adminCountdownBar';
-        bar.style.cssText = 'display:none;text-align:center;padding:9px 16px;background:var(--bg-surface-elevated);border-bottom:1px solid var(--border-subtle);color:var(--accent-gold);font-size:.78rem;font-weight:700;letter-spacing:.04em;';
-        const announce = document.getElementById('siteAnnouncementBannerContainer');
-        if (announce) announce.insertAdjacentElement('afterend', bar);
-        else document.body.insertAdjacentElement('afterbegin', bar);
-      }
-      let intervalId = null;
-      onSnapshot(doc(db, 'settings', `timer_${prefix}`), (snap) => {
-        if (intervalId) clearInterval(intervalId);
-        if (!snap.exists() || !snap.data().enabled) { bar.style.display='none'; return; }
-        const d=snap.data();
-        const total=((Number(d.days)||0)*86400)+((Number(d.hours)||0)*3600)+((Number(d.minutes)||0)*60)+(Number(d.seconds)||0);
-        const end=Date.now()+Math.max(0,total)*1000;
-        const draw=()=>{
-          const left=Math.max(0,Math.floor((end-Date.now())/1000));
-          const days=Math.floor(left/86400), hours=Math.floor((left%86400)/3600), mins=Math.floor((left%3600)/60), secs=left%60;
-          bar.textContent=`${d.title || 'Countdown'} — ${days}d ${String(hours).padStart(2,'0')}h ${String(mins).padStart(2,'0')}m ${String(secs).padStart(2,'0')}s`;
-          bar.style.display='block';
-          if(left<=0 && intervalId){clearInterval(intervalId); intervalId=null;}
-        };
-        draw(); intervalId=setInterval(draw,1000);
-      }, ()=>{ bar.style.display='none'; });
-    }
-    mountAdminCountdown('home');
-
-    const navLoginBtn = document.getElementById("navLoginBtn");
-    const navProfileMenu = document.getElementById("navProfileMenu");
-    const navUserName = document.getElementById("navUserName");
-    const dropdownUserName = document.getElementById("dropdownUserName");
-    const dropdownUserEmail = document.getElementById("dropdownUserEmail");
-    const profileTriggerBtn = document.getElementById("profileTriggerBtn");
-    const profileDropdown = document.getElementById("profileDropdown");
-
-    onAuthStateChanged(auth, async (user) => {
-      currentUser = user;
-
-      if (user) {
-        if (navLoginBtn) navLoginBtn.style.display = "none";
-        if (navProfileMenu) navProfileMenu.style.display = "block";
-
-        const displayName = user.displayName || user.email.split("@")[0];
-        if (navUserName) navUserName.textContent = displayName;
-        if (dropdownUserName) dropdownUserName.textContent = displayName;
-        if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
-
-        let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
-        if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
-          try {
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            if (userDoc.exists() && userDoc.data().photoURL) resolvedAvatar = userDoc.data().photoURL;
-          } catch(e) {}
-        }
-        if ((!resolvedAvatar || resolvedAvatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
-          resolvedAvatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
-        }
-        if (resolvedAvatar) {
-          localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
-          document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => { img.src = resolvedAvatar; });
-        }
-      } else {
-        localStorage.removeItem('libraryreeds_user_avatar');
-        if (navLoginBtn) navLoginBtn.style.display = "inline-block";
-        if (navProfileMenu) navProfileMenu.style.display = "none";
-      }
-    });
-
-    if (profileTriggerBtn && profileDropdown) {
-      profileTriggerBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
-      });
-      document.addEventListener("click", () => { profileDropdown.style.display = "none"; });
-    }
-
-    const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
-    if (dropdownLogoutBtn) {
-      dropdownLogoutBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
+      let resolvedAvatar = localStorage.getItem('libraryreeds_user_avatar') || user.photoURL;
+      if (!resolvedAvatar || resolvedAvatar.includes('unsplash')) {
         try {
-          await signOut(auth);
-          localStorage.clear();
-          sessionStorage.clear();
-        } finally {
-          window.location.replace("index.html");
-        }
-      });
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists() && userDoc.data().photoURL) resolvedAvatar = userDoc.data().photoURL;
+        } catch(e) {}
+      }
+      if ((!resolvedAvatar || resolvedAvatar.includes('unsplash')) && user.email && user.email.toLowerCase().includes("@gmail.com")) {
+        resolvedAvatar = `https://unavatar.io/${encodeURIComponent(user.email)}`;
+      }
+      if (resolvedAvatar) {
+        localStorage.setItem('libraryreeds_user_avatar', resolvedAvatar);
+        document.querySelectorAll('.nav-user-avatar, #navUserAvatar').forEach(img => { img.src = resolvedAvatar; });
+      }
+    } else {
+      localStorage.removeItem('libraryreeds_user_avatar');
+      if (navLoginBtn) navLoginBtn.style.display = "inline-block";
+      if (navProfileMenu) navProfileMenu.style.display = "none";
     }
+  });
 
-    // Sync Cart & Wishlist Badges
-    function syncNavBadges() {
-      const wishlist = JSON.parse(localStorage.getItem('literalis_wishlist') || '[]');
-      const wishlistBadge = document.getElementById('wishlistBadgeCount');
-      if (wishlistBadge) {
-        if (wishlist.length > 0) {
-          wishlistBadge.textContent = wishlist.length;
-          wishlistBadge.style.display = "flex";
-        } else {
-          wishlistBadge.style.display = "none";
-        }
-      }
-
-      const cart = JSON.parse(localStorage.getItem('libraryreeds_cart') || '[]');
-      let totalQty = 0;
-      cart.forEach(ci => { totalQty += parseInt(ci.quantity || 1); });
-      const cartBadge = document.getElementById('cartBadgeCount');
-      if (cartBadge) {
-        if (totalQty > 0) {
-          cartBadge.textContent = totalQty;
-          cartBadge.style.display = "flex";
-        } else {
-          cartBadge.style.display = "none";
-        }
-      }
-    }
-    syncNavBadges();
-
-    // Site Announcement Banner
-    onSnapshot(doc(db, "settings", "announcement_home"), (snap) => {
-      const container = document.getElementById('siteAnnouncementBannerContainer');
-      const textEl = document.getElementById('siteAnnouncementBannerText');
-      if (!container || !textEl) return;
-
-      if (snap.exists() && snap.data().enabled && snap.data().text) {
-        container.style.display = "block";
-        textEl.textContent = snap.data().text;
-      } else {
-        container.style.display = "none";
-      }
+  if (profileTriggerBtn && profileDropdown) {
+    profileTriggerBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      profileDropdown.style.display = profileDropdown.style.display === "flex" ? "none" : "flex";
     });
+    document.addEventListener("click", () => { profileDropdown.style.display = "none"; });
+  }
 
-    // Tracker UI updater
-    function updateTrackerUI(data) {
-      if (!data) return;
-
-      const titleEl = document.getElementById('trackerTitleText');
-      const percentageEl = document.getElementById('completionPercentage');
-      const fillEl = document.getElementById('progressFill');
-      const wordsEl = document.getElementById('currentWords');
-      const chapterEl = document.getElementById('currentChapter');
-      const targetDateEl = document.getElementById('targetDate');
-      const velocityEl = document.getElementById('writingVelocity');
-
-      const current = Number(data.currentWords || data.manualWords) || 0;
-      const target = Number(data.targetWords) || 80000;
-      const chaptersDone = data.chaptersDone !== undefined ? data.chaptersDone : 0;
-      const totalChapters = data.totalChapters !== undefined ? data.totalChapters : 0;
-
-      if (titleEl) {
-        titleEl.textContent = data.title ? `${data.title} - Progress` : 'Manuscript Progress';
-      }
-
-      let percentage = 0;
-      if (data.manualPercent !== undefined && data.manualPercent !== null && data.manualPercent !== "") {
-        percentage = Number(data.manualPercent) || 0;
-      } else if (target > 0) {
-        percentage = (current / target) * 100;
-      }
-      if (percentage > 100) percentage = 100;
-      const formattedPercent = percentage.toFixed(1);
-
-      if (percentageEl) percentageEl.textContent = formattedPercent + '%';
-      if (fillEl) fillEl.style.width = formattedPercent + '%';
-      if (wordsEl) wordsEl.textContent = `${current.toLocaleString()} / ${target.toLocaleString()} words`;
-
-      if (chapterEl) {
-        if (data.currentChapter) {
-          chapterEl.textContent = data.currentChapter;
-        } else if (chaptersDone > 0 && totalChapters > 0) {
-          chapterEl.textContent = `Chapter ${chaptersDone} of ${totalChapters}`;
-        } else if (chaptersDone > 0) {
-          chapterEl.textContent = `Chapter ${chaptersDone}`;
-        } else {
-          chapterEl.textContent = 'Drafting in Progress';
-        }
-      }
-
-      if (targetDateEl) {
-        targetDateEl.textContent = data.targetDate && data.targetDate.trim() !== "" ? data.targetDate : "TBD";
-      }
-
-      if (velocityEl) {
-        velocityEl.textContent = data.writingVelocity && data.writingVelocity.trim() !== "" ? data.writingVelocity : "-- words/day";
-      }
-    }
-
-    onSnapshot(doc(db, "site_settings", "manuscript"), (snap) => {
-      if (snap.exists()) updateTrackerUI(snap.data());
-    }, (error) => {
-      console.error("Error listening to master manuscript settings:", error);
-    });
-
-    const trackerQuery = query(collection(db, "manuscript_progress"), orderBy("updatedAt", "desc"), limit(1));
-    onSnapshot(trackerQuery, (snapshot) => {
-      if (!snapshot.empty) updateTrackerUI(snapshot.docs[0].data());
-    });
-
-
-    // CMS Text Content Listeners
-    // Current Master Admin saves its homepage controls to settings/home_content.
-    // Keep this listener in addition to home_cms so both admin versions control index.html.
-    onSnapshot(doc(db, "settings", "home_content"), (snap) => {
-      if (!snap.exists()) return;
-      const d = snap.data();
-      const heroTitle = document.getElementById('homeHeroTitleText');
-      if (heroTitle && d.heroTitle) heroTitle.textContent = d.heroTitle;
-      document.documentElement.dataset.homePromoCode = d.promoCode || '';
-      document.documentElement.dataset.homeDiscountPercent = String(d.discountPercent ?? '');
-    }, (error) => console.warn('home_content compatibility listener:', error?.message || error));
-
-    onSnapshot(doc(db, "settings", "home_cms"), (snap) => {
-      if (snap.exists()) {
-        const d = snap.data();
-        const heroTitle = document.getElementById('homeHeroTitleText');
-        if (heroTitle && d.heroTitle) heroTitle.textContent = d.heroTitle;
-      }
-    });
-
-    // Resolve book-cover images saved by Admin Settings under current or legacy field names.
-    function extractImageUrl(value) {
-      if (!value) return "";
-      if (typeof value === "string") return value.trim();
-      if (typeof value === "object") {
-        const nested = value.url || value.downloadURL || value.downloadUrl || value.src ||
-                       value.imageUrl || value.coverUrl || value.dataUrl || value.dataURL;
-        return typeof nested === "string" ? nested.trim() : "";
-      }
-      return "";
-    }
-
-    function getBookCoverUrl(book) {
-      const candidates = [
-        book.coverUrl,
-        book.imageUrl,
-        book.bookCoverUrl,
-        book.coverImageUrl,
-        book.bookCover,
-        book.coverImage,
-        book.image,
-        book.bookImageUrl,
-        book.bookImage,
-        book.cover,
-        book.coverPhoto,
-        book.coverPhotoUrl,
-        book.bookCoverImage,
-        book.bookCoverImageUrl,
-        book.bookcover,
-        book.bookcoverUrl,
-        book.bookcoverImage,
-        book.bookcoverImageUrl
-      ];
-
-      for (const value of candidates) {
-        const url = extractImageUrl(value);
-        if (url) return url;
-      }
-
-      if (Array.isArray(book.images)) {
-        for (const value of book.images) {
-          const url = extractImageUrl(value);
-          if (url) return url;
-        }
-      }
-
-      return "";
-    }
-
-    function buildBookCoverHtml(book) {
-      const coverUrl = getBookCoverUrl(book);
-      if (!coverUrl) {
-        return `<div class="book-cover-missing" aria-label="No book cover uploaded">No Cover</div>`;
-      }
-      return `<img src="${coverUrl}" alt="${book.title || 'Book'}" class="book-cover-img" referrerpolicy="no-referrer">`;
-    }
-
-    function attachBookCoverFallback(card) {
-      const img = card.querySelector(".book-cover-img");
-      if (!img) return;
-
-      img.addEventListener("error", () => {
-        const wrap = img.closest(".book-cover-wrap");
-        if (wrap) {
-          wrap.innerHTML = `<div class="book-cover-missing" aria-label="Book cover could not load">Cover unavailable</div>`;
-        }
-      }, { once: true });
-    }
-
-    // Book Cards Renderer
-    function renderBookCards(gridElement, booksArray) {
-      if (!gridElement) return;
-      if (booksArray.length > 0) {
-        gridElement.innerHTML = "";
-        booksArray.forEach((b) => {
-          const card = document.createElement('div');
-          card.className = 'book-card';
-          card.style.cursor = 'pointer';
-
-          card.innerHTML = `
-            <div class="book-cover-wrap">
-              ${buildBookCoverHtml(b)}
-            </div>
-            <div class="book-meta">
-              <span class="book-item-author">${b.author || 'Author'} (Vol. ${b.volume || b.volumeNumber || 1})</span>
-              <h3 class="book-item-title">${b.title || 'Untitled'}</h3>
-              <span class="book-item-price">$${parseFloat(b.price || 0).toFixed(2)}</span>
-            </div>
-            <a href="book.html?id=${b.id}" class="btn-book-details">View Book Details</a>
-          `;
-
-          attachBookCoverFallback(card);
-
-          card.addEventListener('click', (e) => {
-            if (!e.target.closest('a')) {
-              window.location.href = `book.html?id=${b.id}`;
-            }
-          });
-
-          gridElement.appendChild(card);
-        });
-      } else {
-        gridElement.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem;">No volumes currently available.</p>`;
-      }
-    }
-
-    const journeyGrid = document.getElementById('homeJourneyGrid');
-    const freshGrid = document.getElementById('homeFreshGrid');
-    const favoritesGrid = document.getElementById('homeFavoritesGrid');
-    const completeGrid = document.getElementById('homeCompleteGrid');
-    const publishedGrid = document.getElementById('aboutPublishedBooksGrid');
-
-    if (journeyGrid || freshGrid || favoritesGrid || completeGrid || publishedGrid) {
-      onSnapshot(collection(db, "books"), (snapshot) => {
-        if (!snapshot.empty) {
-          let booksArray = [];
-          snapshot.forEach((docSnap) => {
-            booksArray.push({ id: docSnap.id, ...docSnap.data() });
-          });
-
-          let journeyBooks = [...booksArray].sort((a, b) => (parseInt(a.volume || a.volumeNumber) || 1) - (parseInt(b.volume || b.volumeNumber) || 1));
-          renderBookCards(journeyGrid, journeyBooks.slice(0, 4));
-
-          let freshBooks = [...booksArray].reverse();
-          renderBookCards(freshGrid, freshBooks.slice(0, 4));
-
-          let favoriteBooks = [...booksArray];
-          renderBookCards(favoritesGrid, favoriteBooks.slice(0, 4));
-
-          let completeBooks = [...booksArray];
-          renderBookCards(completeGrid, completeBooks.slice(4, 8).length > 0 ? completeBooks.slice(4, 8) : completeBooks.slice(0, 4));
-
-          if (publishedGrid) {
-            renderBookCards(publishedGrid, journeyBooks);
-          }
-        }
-      });
-    }
-  </script>
-
-  <!-- Shared Firebase notification sync: injected 2026-10-06 -->
-  <script type="module" id="libraryreedsSharedNotificationSync">
-    import { getAuth as getNotificationAuth, onAuthStateChanged as onNotificationAuthChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, limit, onSnapshot, writeBatch, doc, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBqh6sJzEA5Mkg27tkXDgRTvog_QJ_zUtg",
-      authDomain: "libraryreeds-638f4.firebaseapp.com",
-      projectId: "libraryreeds-638f4",
-      storageBucket: "libraryreeds-638f4.firebasestorage.app",
-      messagingSenderId: "768304310517",
-      appId: "1:768304310517:web:39b931e6447043d84d3dbc"
-    };
-
-    const sharedApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    const sharedDb = getFirestore(sharedApp);
-    const SHARED_NOTIFICATION_LIMIT = 50;
-
-    const badge = document.getElementById('notificationBadgeCount') || document.getElementById('notificationBadge');
-    const list = document.getElementById('notificationList') || document.getElementById('notificationDropdownList');
-    const status = document.getElementById('notificationPanelStatus');
-    const markAllButton = document.getElementById('markAllNotificationsReadBtn') || document.getElementById('clearNotificationsBtn');
-
-    function escapeNotificationText(value) {
-      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
-    }
-
-    function formatNotificationTime(timestamp) {
+  const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+  if (dropdownLogoutBtn) {
+    dropdownLogoutBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
       try {
-        if (!timestamp) return 'Just now';
-        const date = typeof timestamp.toDate === 'function' ? timestamp.toDate() : new Date(timestamp);
-        return date.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-      } catch (_) {
-        return 'Just now';
+        await signOut(auth);
+        localStorage.clear();
+        sessionStorage.clear();
+      } finally {
+        window.location.replace("index.html");
       }
-    }
-
-    function renderBadge(unreadCount) {
-      if (!badge) return;
-      const count = Math.max(0, Number(unreadCount) || 0);
-      badge.textContent = count > 99 ? '99+' : String(count);
-      badge.style.display = count > 0 ? 'flex' : 'none';
-      badge.setAttribute('aria-label', `${count} unread notifications`);
-      try { localStorage.setItem('libraryreeds_notification_unread_count', String(count)); } catch (_) {}
-      window.dispatchEvent(new CustomEvent('notifications-updated', { detail: { unreadCount: count } }));
-    }
-
-    function renderNotifications(rows) {
-      const unreadCount = rows.reduce((total, row) => total + (row.data.read ? 0 : 1), 0);
-      renderBadge(unreadCount);
-
-      if (markAllButton) {
-        markAllButton.textContent = unreadCount > 0 ? 'Mark All Read' : 'All Read';
-        markAllButton.disabled = unreadCount === 0;
-        markAllButton.style.opacity = unreadCount === 0 ? '0.55' : '1';
-        markAllButton.style.cursor = unreadCount === 0 ? 'default' : 'pointer';
-      }
-
-      if (!list) return;
-
-      if (!rows.length) {
-        if (list.tagName === 'UL') {
-          list.replaceChildren();
-        } else {
-          list.innerHTML = '<p style="padding:16px;color:var(--text-muted);font-size:.8rem;text-align:center;">No notifications found</p>';
-        }
-        if (status) {
-          status.hidden = false;
-          status.textContent = 'No notifications yet.';
-        }
-        return;
-      }
-
-      if (status) status.hidden = true;
-
-      if (list.tagName === 'UL') {
-        list.replaceChildren();
-        rows.forEach(({data}) => {
-          const item = document.createElement('li');
-          item.style.fontWeight = data.read ? '400' : '700';
-          item.style.opacity = data.read ? '0.72' : '1';
-          const message = document.createElement('div');
-          message.textContent = data.message || data.title || data.body || 'New activity';
-          const time = document.createElement('div');
-          time.textContent = formatNotificationTime(data.timestamp);
-          time.style.cssText = 'font-size:11px;margin-top:4px;color:var(--accent-gold,#c5a880);';
-          item.append(message, time);
-          list.appendChild(item);
-        });
-      } else {
-        list.innerHTML = rows.map(({data}) => `
-          <div style="padding:12px 16px;border-bottom:1px solid var(--border-subtle);background:${data.read ? 'transparent' : 'var(--bg-surface-elevated)'};display:flex;flex-direction:column;gap:4px;">
-            <span style="font-size:.8rem;color:var(--text-primary);line-height:1.4;font-weight:${data.read ? '400' : '700'};">${escapeNotificationText(data.message || data.title || data.body || 'New activity')}</span>
-            <span style="font-size:.65rem;color:var(--accent-gold);">${escapeNotificationText(formatNotificationTime(data.timestamp))}</span>
-          </div>
-        `).join('');
-      }
-    }
-
-    // Limit notifications to the signed-in owner; admin stream to admin only.
-    let latestRows = [];
-    let notificationCollection = null;
-    let stopNotificationSync = null;
-    const notificationAuth = getNotificationAuth(sharedApp);
-    const NOTIFICATION_ADMIN_UID = 'zlbkFntgN9emWShy7q5361lJncu1';
-
-    onNotificationAuthChanged(notificationAuth, user => {
-      if (stopNotificationSync) { stopNotificationSync(); stopNotificationSync = null; }
-      latestRows = [];
-      notificationCollection = null;
-      renderNotifications([]);
-      if (!user) {
-        if (status) { status.hidden = false; status.textContent = 'Sign in to see notifications.'; }
-        return;
-      }
-      const isNotificationAdmin = user.uid === NOTIFICATION_ADMIN_UID;
-      notificationCollection = isNotificationAdmin ? 'admin_notifications' : 'notifications';
-      const notificationQuery = isNotificationAdmin
-        ? query(collection(sharedDb, 'admin_notifications'), orderBy('timestamp', 'desc'), limit(SHARED_NOTIFICATION_LIMIT))
-        : query(collection(sharedDb, 'notifications'), where('userId', '==', user.uid), limit(SHARED_NOTIFICATION_LIMIT));
-      stopNotificationSync = onSnapshot(notificationQuery, snapshot => {
-        latestRows = snapshot.docs.map(snap => ({ id: snap.id, data: snap.data() }));
-        if (!isNotificationAdmin) {
-          const millis = value => value?.toMillis?.() || (typeof value === 'number' ? value : 0);
-          latestRows.sort((a, b) => millis(b.data.timestamp) - millis(a.data.timestamp));
-        }
-        renderNotifications(latestRows);
-      }, error => {
-        latestRows = [];
-        renderNotifications([]);
-        if (status) {
-          status.hidden = false;
-          status.textContent = error?.code === 'permission-denied'
-            ? 'Your account cannot access notifications with the current Firebase permissions.'
-            : 'Notifications could not be loaded.';
-        }
-        console.warn('Notification sync listener:', error?.code || error?.message || error);
-      });
     });
+  }
 
-    if (markAllButton) {
-      markAllButton.addEventListener('click', async event => {
-        event.preventDefault();
-        event.stopPropagation();
-        const unreadRows = latestRows.filter(row => !row.data.read);
-        if (!unreadRows.length) return;
+  const toggleShell = document.getElementById('toggle');
+  const buttons = toggleShell.querySelectorAll('button');
+  const priceFrames = document.querySelectorAll('.price-frame');
+  const cycles = document.querySelectorAll('.price-cycle');
 
-        markAllButton.disabled = true;
-        markAllButton.textContent = 'Saving...';
-        try {
-          const batch = writeBatch(sharedDb);
-          unreadRows.forEach(row => {
-            batch.update(doc(sharedDb, notificationCollection, row.id), {
-              read: true,
-              readAt: serverTimestamp()
-            });
-          });
-          await batch.commit();
-        } catch (error) {
-          console.error('Could not mark notifications read:', error);
-          markAllButton.disabled = false;
-          markAllButton.textContent = 'Mark All Read';
-        }
+  function setCycle(cycle) {
+    buttons.forEach(b => {
+      const active = b.dataset.cycle === cycle;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active);
+    });
+    toggleShell.classList.toggle('yearly', cycle === 'yearly');
+
+    priceFrames.forEach(f => f.classList.add('switching'));
+    setTimeout(() => {
+      document.querySelectorAll('.price-roll .digits').forEach(d => {
+        d.classList.toggle('yearly', cycle === 'yearly');
       });
-    }
-  </script>
+      cycles.forEach(c => c.textContent = cycle === 'yearly' ? '/yr' : '/mo');
+      setTimeout(() => priceFrames.forEach(f => f.classList.remove('switching')), 200);
+    }, 250);
+  }
 
+  buttons.forEach(b => b.addEventListener('click', () => setCycle(b.dataset.cycle)));
+
+  let raf = null;
+  document.addEventListener('mousemove', (e) => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      document.body.style.setProperty('background-position', `${x}% ${y}%`);
+      raf = null;
+    });
+  });
+</script>
+<script type="module" src="./membership-controls.js"></script>
 </body>
 </html>
