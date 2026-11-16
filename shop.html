@@ -58,55 +58,6 @@
       100% { transform: translateX(-100%); }
     }
 
-    /* Ultra-Wide Horizontal Banner Carousel */
-    .banner-carousel-container {
-      width: 100%;
-      max-width: 1400px;
-      margin: 24px auto 0;
-      padding: 0 32px;
-    }
-    .banner-carousel {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4 / 1;
-      height: auto;
-      border-radius: 6px;
-      overflow: hidden;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-    }
-    .banner-slide {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .banner-slide.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .banner-slide img,
-    .banner-img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center;
-      display: block;
-      background: var(--bg-surface);
-    }
-    .banner-slide.banner-image-error img {
-      display: none;
-    }
-    .banner-slide.banner-image-error {
-      display: none;
-    }
-
     /* Unified Top Navigation & Profile Styles */
     .top-nav { border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); background: rgba(10, 12, 16, 0.94); backdrop-filter: blur(14px); padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
     .brand-title { font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif); font-size: 1.5rem; font-weight: 600; color: var(--text-primary, #f0f2f5); text-transform: uppercase; text-decoration: none; letter-spacing: 0.06em; }
@@ -237,21 +188,6 @@
     </div>
   </nav>
 
-  <!-- Image Banner Carousel Container (Ultra-Wide Horizontal) -->
-  <div class="banner-carousel-container">
-    <div class="banner-carousel" id="imageCarousel">
-      <div class="banner-slide active">
-        <img class="banner-img" src="https://cdn.phototourl.com/member/2026-09-17-02df5ed0-e313-4033-a6da-3cc1c09fa9cd.jpg" alt="Libraryreeds Banner 1">
-      </div>
-      <div class="banner-slide">
-        <img class="banner-img" src="https://cdn.phototourl.com/free/2026-09-17-54cec8fa-b257-4ee6-b58f-a734ac91c4e5.jpg" alt="Libraryreeds Banner 2">
-      </div>
-      <div class="banner-slide">
-        <img class="banner-img" src="https://cdn.phototourl.com/member/2026-09-17-96e233ba-51ee-4b68-a82d-cea4c5483727.jpg" alt="Libraryreeds Banner 3">
-      </div>
-    </div>
-  </div>
-
   <main class="main-container">
     <h1 class="section-title">Complete Catalog</h1>
     <div class="books-grid" id="fullCatalogGrid">
@@ -372,51 +308,6 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
-    // Automatic Banner Rotation Script
-    document.addEventListener("DOMContentLoaded", () => {
-      const allSlides = Array.from(document.querySelectorAll('.banner-slide'));
-
-      allSlides.forEach((slide) => {
-        const img = slide.querySelector('img');
-        if (!img) return;
-
-        img.addEventListener('error', () => {
-          slide.classList.remove('active');
-          slide.classList.add('banner-image-error');
-
-          const visibleSlides = allSlides.filter(s => !s.classList.contains('banner-image-error'));
-          if (visibleSlides.length > 0 && !visibleSlides.some(s => s.classList.contains('active'))) {
-            visibleSlides[0].classList.add('active');
-          }
-        });
-      });
-
-      let currentIndex = 0;
-
-      function getVisibleSlides() {
-        return allSlides.filter(slide => !slide.classList.contains('banner-image-error'));
-      }
-
-      function showSlide(index) {
-        const slides = getVisibleSlides();
-        if (slides.length === 0) return;
-
-        allSlides.forEach(slide => slide.classList.remove('active'));
-        const safeIndex = index % slides.length;
-        slides[safeIndex].classList.add('active');
-        currentIndex = safeIndex;
-      }
-
-      function nextSlide() {
-        const slides = getVisibleSlides();
-        if (slides.length <= 1) return;
-        showSlide(currentIndex + 1);
-      }
-
-      showSlide(0);
-      setInterval(nextSlide, 5000);
-    });
 
     onSnapshot(doc(db, "settings", "announcement_shop"), (snap) => {
         const container = document.getElementById('siteAnnouncementBannerContainer');
@@ -731,5 +622,7 @@
   </script>
 
 <script type="module" src="./libraryreeds-bookmarks.js"></script>
+<link rel="stylesheet" href="./lr-shop-banners.css">
+<script type="module" src="./lr-shop-banners.js"></script>
 </body>
 </html>
